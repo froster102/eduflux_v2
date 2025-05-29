@@ -1,0 +1,486 @@
+name: eduflux
+
+services:
+  kong:
+    image: kong:latest
+    container_name: kong
+    networks:
+      - eduflux-network
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
+    volumes:
+      - ./services/gateway/kong.yml:/usr/local/kong/declarative/kong.yml:ro
+    ports:
+      - "8000:8000" # Proxy
+      - "8443:8443" # Proxy SSL
+      - "8001:8001" # Admin API
+      - "8444:8444" # Admin API SSL
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: on-failure
+  # gateway:
+  #   container_name: gateway
+  #   build:
+  #     context: ./services/gateway
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./services/gateway/.env
+  #   volumes:
+  #     - ./services/gateway:/app
+  #     - gateway_modules:/app/node_modules
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /etc/timezone:/etc/timezone:ro
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - eduflux-network
+  #   depends_on:
+  #     - auth-service
+  #     - course-service
+  #     - email-service
+  #     - note-service
+  #     - user-service
+  #     - notification-service
+  #     - meeting-service
+  #     - transcode-service
+  #     - chatbot-service
+  #     - progress-service
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - 4983:4983
+    restart: unless-stopped
+    env_file:
+      - ./services/auth-service/.env
+    networks:
+      - eduflux-network
+    volumes:
+      - ./services/auth-service:/app
+      - auth_service_modules:/app/node_modules
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    depends_on:
+      auth-db:
+        condition: service_started
+        restart: true
+      # rabbitmq:
+      #   condition: service_healthy
+      #   restart: true
+      # user-service:
+      #   condition: service_started
+
+  # course-service:
+  #   container_name: course-service
+  #   build:
+  #     context: ./services/course-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./services/course-service/.env
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - ./services/course-service:/app
+  #     - course_service_modules:/app/node_modules
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /etc/timezone:/etc/timezone:ro
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+  #     course-db:
+  #       condition: service_started
+
+  # email-service:
+  #   container_name: email-service
+  #   build:
+  #     context: ./services/email-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/email-service/.env
+  #   volumes:
+  #     - ./services/email-service:/app
+  #     - email_service_modules:/app/node_modules
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+
+  # note-service:
+  #   container_name: note-service
+  #   build:
+  #     context: ./services/note-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/note-service/.env
+  #   volumes:
+  #     - ./services/note-service:/app
+  #     - note_service_modules:/app/node_modules
+  #   depends_on:
+  #     - note-db
+  # user-service:
+  #   container_name: user-service
+  #   build:
+  #     context: ./services/user-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/user-service/.env
+  #   volumes:
+  #     - ./services/user-service:/app
+  #     - user_service_modules:/app/node_modules
+  #   depends_on:
+  #     user-db:
+  #       condition: service_started
+  #     email-service:
+  #       condition: service_started
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+  # notification-service:
+  #   container_name: notification-service
+  #   build:
+  #     context: ./services/notification-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   ports:
+  #     - 8080:8080
+  #   env_file:
+  #     - ./services/notification-service/.env
+  #   volumes:
+  #     - ./services/notification-service:/app
+  #     - notification_service_modules:/app/node_modules
+  #   depends_on:
+  #     notification-db:
+  #       condition: service_started
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+  # meeting-service:
+  #   container_name: meeting-service
+  #   build:
+  #     context: ./services/meeting-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   ports:
+  #     - 8081:8081
+  #   env_file:
+  #     - ./services/meeting-service/.env
+  #   volumes:
+  #     - ./services/meeting-service:/app
+  #     - meeting_service_node_modules:/app/node_modules
+  # transcode-service:
+  #   container_name: transcode-service
+  #   build:
+  #     context: ./services/transcode-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/transcode-service/.env
+  #   volumes:
+  #     - ./services/transcode-service:/app
+  #     - transcode_service_node_modules:/app/node_modules
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+  # chatbot-service:
+  #   container_name: chatbot-service
+  #   build:
+  #     context: ./services/chatbot-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/chatbot-service/.env
+  #   volumes:
+  #     - ./services/chatbot-service:/app
+  #     - chatbot_service_node_modules:/app/node_modules
+  # progress-service:
+  #   container_name: progress-service
+  #   build:
+  #     context: ./services/progress-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/progress-service/.env
+  #   volumes:
+  #     - ./services/progress-service:/app
+  #     - progress_service_node_modules:/app/node_modules
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+  # analytics-service:
+  #   container_name: analytics-service
+  #   build:
+  #     context: ./services/analytics-service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #     - eduflux-network
+  #   env_file:
+  #     - ./services/analytics-service/.env
+  #   volumes:
+  #     - ./services/analytics-service:/app
+  #     - analytics_service_node_modules:/app/node_modules
+  #   depends_on:
+  #     kafka:
+  #       condition: service_healthy
+  #       restart: true
+  # user-db:
+  #   container_name: user-db
+  #   image: postgres:17
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=userdb
+  #     - POSTGRES_DB=eduflux_user_db
+  #   networks:
+  #     - eduflux-network
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - userdb_data:/var/lib/postgresql/data
+  #   depends_on:
+  #     rabbitmq:
+  #       condition: service_healthy
+  #       restart: true
+
+  auth-db:
+    container_name: auth-db
+    image: postgres:17
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespass
+      - POSTGRES_DB=eduflux_auth_db
+    networks:
+      - eduflux-network
+    volumes:
+      - authdb_data:/var/lib/postgresql/data
+
+  # course-db:
+  #   container_name: course-db
+  #   image: mongo:8.0
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root_user
+  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - coursedb_data:/data/db
+  # note-db:
+  #   container_name: note-db
+  #   image: mongo:8.0
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root_user
+  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - notedb_data:/data/db
+
+  # notification-db:
+  #   container_name: notification-db
+  #   image: mongo:8.0
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root_user
+  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - notificationdb_data:/data/db
+  # progress-db:
+  #   container_name: progress-db
+  #   image: mongo:8.0
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root_user
+  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - progressdb_data:/data/db
+  # analytics-db:
+  #   container_name: analytics-db
+  #   image: mongo:8.0
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root_user
+  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - analytics_data:/data/db
+  # rabbitmq:
+  #   container_name: rabbitmq
+  #   image: rabbitmq:3-management
+  #   ports:
+  #     - 5672:5672
+  #     - 15672:15672
+  #   networks:
+  #     - eduflux-network
+  #   volumes:
+  #     - rabbitmq_data:/var/lib/rabbitmq
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=root_user
+  #     - RABBITMQ_DEFAULT_PASS=root_password
+  #   healthcheck:
+  #     test: [ "CMD", "rabbitmq-diagnostics", "status" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  redis:
+    container_name: redis
+    image: redis:8.0-M04-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_ARGS="--requirepass root_password"
+    networks:
+      - eduflux-network
+
+  # meeting-db:
+  #   container_name: meeting-db
+  #   image: redis:8.0-M04-alpine
+  #   ports:
+  #     - 6380:6379
+  #   volumes:
+  #     - meeting_data:/data
+  #   environment:
+  #     - REDIS_ARGS="--requirepass root_password"
+  #   networks:
+  #     - eduflux-network
+
+  # loki:
+  #   container_name: loki
+  #   image: grafana/loki:latest
+  #   ports:
+  #     - "3100:3100"
+  #   command: -config.file=/etc/loki/local-config.yaml
+  #   networks:
+  #     - eduflux-network
+
+  # promtail:
+  #   container_name: promtail
+  #   image: grafana/promtail:latest
+  #   volumes:
+  #     - /var/log:/var/log
+  #   command: -config.file=/etc/promtail/config.yml
+  #   networks:
+  #     - eduflux-network
+  kafka:
+    container_name: kafka
+    image: 'bitnami/kafka:latest'
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    networks:
+      - eduflux-network
+    volumes:
+    - kafka_data:/bitnami/kafka
+    healthcheck:
+      test: ["CMD", "kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  # grafana:
+  #   container_name: grafana
+  #   environment:
+  #     - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+  #     - GF_AUTH_ANONYMOUS_ENABLED=true
+  #     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+  #     - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
+  #   entrypoint:
+  #     - sh
+  #     - -euc
+  #     - |
+  #       mkdir -p /etc/grafana/provisioning/datasources
+  #       cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+  #       apiVersion: 1
+  #       datasources:
+  #       - name: Loki
+  #         type: loki
+  #         access: proxy 
+  #         orgId: 1
+  #         url: http://loki:3100
+  #         basicAuth: false
+  #         isDefault: true
+  #         version: 1
+  #         editable: false
+  #       EOF
+  #       /run.sh
+  #   image: grafana/grafana:latest
+  #   ports:
+  #     - "4000:4000"
+  #   networks:
+  #     - eduflux-network
+
+volumes:
+  gateway_modules:
+  auth_service_modules:
+  # course_service_modules:
+  # note_service_modules:
+  # user_service_modules:
+  # email_service_modules:
+  # notification_service_modules:
+  # meeting_service_node_modules:
+  # transcode_service_node_modules:
+  # chatbot_service_node_modules:
+  # progress_service_node_modules:
+  # analytics_service_node_modules:
+  # rabbitmq_data:
+  # userdb_data:
+  # notedb_data:
+  # coursedb_data:
+  authdb_data:
+  # notificationdb_data:
+  # progressdb_data:
+  # analytics_data:
+  redis_data:
+  # meeting_data:
+  kafka_data:
+
+
+networks:
+  eduflux-network:
+    driver: bridge

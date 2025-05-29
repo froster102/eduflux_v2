@@ -1,0 +1,9 @@
+export type SiteConfig = typeof siteConfig;
+
+export const siteConfig = {};
+
+export const roleBasedRoutes: Record<Role, string> = {
+  ADMIN: "/admin",
+  STUDENT: "/",
+  INSTRUCTOR: "/tutor",
+};
