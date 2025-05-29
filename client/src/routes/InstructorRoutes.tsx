@@ -9,14 +9,14 @@ import NotesListPage from "@/pages/tutor/NotesList";
 import SessionsPage from "@/pages/tutor/Sessions";
 import Meeting from "@/features/components/Meeting";
 import { MeetingProvider } from "@/context/MeetingContext";
-import InstructorDashboard from "@/features/instructor/layouts/InstructorDashboard";
+import InstructorDashboardLayout from "@/features/instructor/layouts/InstructorDashboardLayout";
 
 export default function TutorRoutes() {
   return (
     <Routes>
       <Route element={<PersistSignin />}>
         <Route element={<RequireAuth allowedRoles={["INSTRUCTOR"]} />}>
-          <Route element={<InstructorDashboard />}>
+          <Route element={<InstructorDashboardLayout />}>
             <Route index element={<OverviewPage />} />
             <Route element={<AccountPage />} path="/account" />
             <Route element={<NotesListPage />} path="/notes" />

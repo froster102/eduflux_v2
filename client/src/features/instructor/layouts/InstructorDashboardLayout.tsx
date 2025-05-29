@@ -1,53 +1,49 @@
 import { Card, CardBody } from "@heroui/card";
 import { Outlet } from "react-router";
-import { Icon } from "@iconify/react";
-import { User } from "@heroui/user";
+import React from "react";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 import Sidebar from "@/components/Sidebar";
-import Notifications from "@/components/Notifications";
-import { useAuthStore } from "@/store/auth-store";
 
-export default function StudentDashboardLayout() {
-  const { user } = useAuthStore();
+export default function InstructorDashboardLayout() {
+  const topContent = (
+    // <Card className="w-full bg-transparent" shadow="none">
+    //   <User
+    //     className="text-default-500"
+    //     description="Product Designer"
+    //     name="Jane Doe"
+    //   />
+    // </Card>
+    <></>
+  );
+
   const navItems = [
     {
-      path: "/",
+      path: "/instructor",
       icon: <Icon icon="solar:home-2-outline" width={24} />,
       label: "Home",
     },
+    // {
+    //   path: "/instructor/courses",
+    //   icon: <Icon icon="solar:notebook-bookmark-line-duotone" width={24} />,
+    //   label: "Courses",
+    // },
     {
-      path: "/courses",
-      icon: <Icon icon="solar:notebook-bookmark-line-duotone" width={24} />,
-      label: "Courses",
-    },
-    {
-      path: "/sessions",
+      path: "/instructor/sessions",
       icon: <Icon icon="solar:calendar-outline" width={24} />,
       label: "Sessions",
     },
     {
-      path: "/chat-bot",
-      icon: <Icon icon="solar:chat-round-line-line-duotone" width={24} />,
-      label: "Assistance",
-    },
-    {
-      path: "/notes",
+      path: "/instructor/notes",
       icon: <Icon icon="solar:notebook-line-duotone" width={24} />,
       label: "Notes",
     },
     {
-      path: "/account",
+      path: "/instructor/account",
       icon: <Icon icon="solar:user-circle-outline" width={24} />,
       label: "Account",
     },
   ];
-
-  const topContent = (
-    <div className="flex justify-between w-full px-2">
-      <User className="text-default-500" name={user && user.name} />
-      <Notifications />
-    </div>
-  );
 
   return (
     <>

@@ -4,25 +4,22 @@ import { Input } from "@heroui/input";
 import { Link } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import React from "react";
-import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { SignUpData } from "../types/auth";
 import { signUpSchema } from "../validations/sign-up-schema";
+import { useSignUp } from "../hooks/mutations";
 
 import { authClient } from "@/lib/auth-client";
 
 export default function SignUpForm() {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const navigate = useNavigate();
+  const signUp = useSignUp();
 
   const {
     register,
     handleSubmit,
     reset,
-    setError,
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
@@ -37,48 +34,7 @@ export default function SignUpForm() {
   };
 
   const onSubmit: SubmitHandler<SignUpData> = async (formData) => {
-    setIsLoading(true);
-    const { data, error } = await authClient.signUp.email({
-      email: formData.email,
-      name: formData.name,
-      password: formData.password,
-    });
-
-    setIsLoading(false);
-
-    if (error) {
-      if (
-        error.code === "INVALID_REQUEST" &&
-        Array.isArray((error as any).errors)
-      ) {
-        (error as any).errors.forEach(
-          (err: { path: string; message: string }) => {
-            setError(err.path as keyof SignUpData, {
-              type: "server_error",
-              message: err.message,
-            });
-          },
-        );
-      } else {
-        addToast({
-          title: "Sign up",
-          description: error.message,
-          color: "danger",
-        });
-      }
-
-      return;
-    }
-
-    if (data) {
-      navigate("/auth/verify", {
-        replace: true,
-        state: {
-          verificationEmail: data.user.email,
-        },
-      });
-    }
-
+    signUp.mutate(formData);
     reset();
   };
 
@@ -140,8 +96,8 @@ export default function SignUpForm() {
           <Button
             className="w-full"
             color="primary"
-            isDisabled={isLoading}
-            isLoading={isLoading}
+            isDisabled={signUp.isPending}
+            isLoading={signUp.isPending}
             type="submit"
           >
             Sign up

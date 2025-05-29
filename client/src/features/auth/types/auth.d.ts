@@ -20,7 +20,3 @@ export interface ResetPasswordData {
   newPassword: string;
   confirmPassword: string;
 }
-
-export interface ResetPasswordReq extends ResetPasswordData {
-  token: string;
-}

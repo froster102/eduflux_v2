@@ -12,15 +12,18 @@ import {
 } from "@heroui/drawer";
 
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import ConfirmationModal from "./ConfirmationModal";
+
+import { useLogout } from "@/features/auth/hooks/mutations";
 
 interface SidebarProps {
-  topContent: React.ReactNode;
+  topContent?: React.ReactNode;
   navItems: Array<{
     path: string;
     icon: JSX.Element;
     label: string;
   }>;
-  bottomContent: React.ReactNode;
+  bottomContent?: React.ReactNode;
 }
 
 export default function Sidebar({
@@ -30,13 +33,21 @@ export default function Sidebar({
 }: SidebarProps) {
   const [selected, setSelected] = React.useState<string>("home");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [openLogoutConfirmation, setOpenLogoutConfirmation] =
+    React.useState(false);
+  const logout = useLogout();
+
+  async function handleLogout() {
+    logout.mutate();
+    setOpenLogoutConfirmation(false);
+  }
 
   return (
     <>
       <Card className="hidden lg:flex max-w-52 w-full h-full dark:bg-secondary-700 bg-secondary-500">
         <CardHeader className="relative">
           <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" />
-          <div>{topContent}</div>
+          <div className="w-full">{topContent}</div>
         </CardHeader>
         <CardBody className="flex flex-col justify-center gap-4 overflow-hidden">
           <div className="flex flex-col gap-4">
@@ -62,7 +73,20 @@ export default function Sidebar({
         </CardBody>
         <CardFooter>
           <div className="w-full">
-            <div className="pt-4">{bottomContent}</div>
+            <div className="pt-4">
+              {bottomContent}
+              <Card
+                isPressable
+                className={`text-base font-medium transition-colors text-default-600 bg-transparent hover:bg-secondary-600 w-full`}
+                shadow="none"
+                onPress={() => setOpenLogoutConfirmation(true)}
+              >
+                <CardHeader className="flex gap-2 text-nowrap">
+                  <Icon icon="solar:minus-circle-linear" width={24} />
+                  Logout
+                </CardHeader>
+              </Card>
+            </div>
           </div>
         </CardFooter>
       </Card>
@@ -95,7 +119,7 @@ export default function Sidebar({
             <>
               <DrawerHeader className="flex gap-1 relative">
                 <ThemeSwitcher className="absolute top-0 left-0 bg-transparent" />
-                <div className="pt-8">{topContent}</div>
+                {/* <div>{topContent}</div> */}
               </DrawerHeader>
               <DrawerBody className="flex flex-col justify-center">
                 <div className="flex flex-col gap-4">
@@ -124,13 +148,33 @@ export default function Sidebar({
               </DrawerBody>
               <DrawerFooter>
                 <div className="w-full">
-                  <div className="pt-4">{bottomContent}</div>
+                  <div className="pt-4">
+                    {bottomContent}
+                    <Card
+                      isPressable
+                      className={`text-base font-medium transition-colors text-default-600 bg-transparent hover:bg-secondary-600 w-full`}
+                      shadow="none"
+                      onPress={() => setOpenLogoutConfirmation(true)}
+                    >
+                      <CardHeader className="flex gap-2 text-nowrap">
+                        <Icon icon="solar:minus-circle-linear" width={24} />
+                        Logout
+                      </CardHeader>
+                    </Card>
+                  </div>
                 </div>
               </DrawerFooter>
             </>
           )}
         </DrawerContent>
       </Drawer>
+      <ConfirmationModal
+        confirmText="Logout"
+        isOpen={openLogoutConfirmation}
+        message="Are you sure that you want to logout"
+        onClose={() => setOpenLogoutConfirmation(false)}
+        onConfirm={handleLogout}
+      />
     </>
   );
 }

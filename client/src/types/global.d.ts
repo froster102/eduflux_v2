@@ -179,6 +179,13 @@ declare global {
     metrics: Record<string, any>;
     graphs?: Record<string, GraphData[]>;
   };
+
+  export type BetterAuthError = {
+    code?: string | undefined;
+    message?: string | undefined;
+    status: number;
+    statusText: string;
+  };
 }
 
 export {};

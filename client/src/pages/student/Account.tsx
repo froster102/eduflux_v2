@@ -2,7 +2,7 @@ import { Divider } from "@heroui/divider";
 import { Skeleton } from "@heroui/skeleton";
 
 import { useAuthStore } from "@/store/auth-store";
-import ProfileForm from "@/components/ProfileForm";
+import PasswordForm from "@/components/PasswordForm";
 
 export default function AccountPage() {
   const { user, session } = useAuthStore() as { user: User; session: Session };
@@ -57,19 +57,19 @@ export default function AccountPage() {
         </div>
         <div className="w-full max-h-screen pt-4 md:pt-0 md:overflow-y-auto scrollbar-hide">
           <Skeleton className="rounded-lg bg-background" isLoaded={true}>
-            <ProfileForm initialValues={} onSubmitHandler={onSubmit} />
+            {/* <ProfileForm initialValues={} onSubmitHandler={onSubmit} /> */}
           </Skeleton>
           <div className="pt-4">
             <PasswordForm />
           </div>
           <div className="pt-4 block md:hidden">
-            {session && (
+            {/* {session && (
               <RecentDevicesCard
                 activeSession={session}
                 isLoading={false}
                 userSessions={userSessions?.sessions!}
               />
-            )}
+            )} */}
           </div>
         </div>
       </div>

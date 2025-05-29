@@ -3,9 +3,8 @@ import { Form } from "@heroui/form";
 import { InputOtp } from "@heroui/input-otp";
 import { Navigate, useLocation, useNavigate } from "react-router";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { addToast } from "@heroui/toast";
 
-import { authClient } from "@/lib/auth-client";
+import { useVerifyOtp } from "../hooks/mutations";
 
 interface FormValues {
   otp: string;
@@ -23,6 +22,7 @@ export default function VerifyOtpForm() {
   });
   const location = useLocation();
   const navigate = useNavigate();
+  const verifyOtp = useVerifyOtp(navigate);
 
   if (!location.state?.verificationEmail) {
     return <Navigate to={location.state?.from || "/auth/signin"} />;
@@ -31,22 +31,7 @@ export default function VerifyOtpForm() {
   const verificationEmail = location.state.verificationEmail as string;
 
   const onSubmit: SubmitHandler<FormValues> = async (formData) => {
-    const { error } = await authClient.emailOtp.verifyEmail({
-      email: verificationEmail,
-      otp: formData.otp,
-    });
-
-    if (error) {
-      addToast({
-        title: "Email verification",
-        description: error.message,
-        color: "danger",
-      });
-
-      return;
-    }
-
-    navigate("/auth/signin", { replace: true });
+    verifyOtp.mutate({ ...formData, email: verificationEmail });
   };
 
   return (
@@ -81,7 +66,13 @@ export default function VerifyOtpForm() {
             },
           }}
         />
-        <Button className="max-w-fit" color="primary" type="submit">
+        <Button
+          className="max-w-fit"
+          color="primary"
+          isDisabled={verifyOtp.isPending}
+          isLoading={verifyOtp.isPending}
+          type="submit"
+        >
           Verify OTP
         </Button>
       </Form>

@@ -1,25 +1,110 @@
-import { ResetPasswordReq, SignInData, SignUpData } from "../types/auth";
+import { SignInData, SignUpData } from "../types/auth";
 
+import { authClient } from "@/lib/auth-client";
 import api from "@/lib/axios";
 
-export function signIn(signInData: SignInData) {
-  return api.post("/auth/signin", signInData);
+export async function signIn(signInData: SignInData) {
+  const { data, error } = await authClient.signIn.email({
+    email: signInData.email,
+    password: signInData.password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
-export function forgotPassword(email: string) {
-  return api.post("/auth/forgot-password", { email });
+export async function signUp(signUpData: SignUpData) {
+  const { data, error } = await authClient.signUp.email({
+    email: signUpData.email,
+    name: signUpData.name,
+    password: signUpData.password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
-export function signUp(signUpData: SignUpData) {
-  return api.post("/auth/signup", signUpData);
+export async function verifyOtp({
+  otp,
+  email,
+}: {
+  otp: string;
+  email: string;
+}) {
+  const { data, error } = await authClient.emailOtp.verifyEmail({
+    email,
+    otp,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
-export function resetPassword(resetPasswordData: ResetPasswordReq) {
-  return api.post("/auth/reset-password", resetPasswordData);
+export async function forgotPassword(email: string) {
+  const { data, error } = await authClient.emailOtp.sendVerificationOtp({
+    email: email,
+    type: "forget-password",
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
-export function googleSignIn(authCode: string) {
-  return api.post("/auth/google/verify-user", { authCode });
+export async function resetPassword({
+  email,
+  otp,
+  password,
+}: {
+  email: string;
+  otp: string;
+  password: string;
+}) {
+  const { data, error } = await authClient.emailOtp.resetPassword({
+    email,
+    otp,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function resendOtp(email: string) {
+  const { data, error } = await authClient.emailOtp.sendVerificationOtp({
+    email,
+    type: "forget-password",
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function logout() {
+  const { data, error } = await authClient.signOut();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
 export function getUserSessions() {

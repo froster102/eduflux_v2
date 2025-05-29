@@ -12,7 +12,6 @@ export default function PersistSignin() {
 
   React.useEffect(() => {
     const verifyAuthStatus = async () => {
-      console.log("calling session");
       try {
         await authClient.getSession({
           fetchOptions: {
@@ -20,7 +19,6 @@ export default function PersistSignin() {
               const jwt = ctx.response.headers.get("set-auth-jwt");
 
               if (ctx.data === null) {
-                console.log("session not found");
                 signout();
                 navigate("/auth/signin");
               }

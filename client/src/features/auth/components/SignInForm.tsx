@@ -5,27 +5,19 @@ import { Link } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { useLocation, useNavigate } from "react-router";
-import { addToast } from "@heroui/toast";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { SignInData } from "../types/auth";
 import { signInSchema } from "../validations/sign-in-schema";
-import { useSignInMutation } from "../hooks/mutations";
+import { useSignIn } from "../hooks/mutations";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "./ResetPasswordForm";
 
 import { authClient } from "@/lib/auth-client";
-import { useAuthStore } from "@/store/auth-store";
-import { roleBasedRoutes } from "@/config/site";
 
 export default function SignInForm() {
-  const [isLoading, setIsLoading] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { setAuthData } = useAuthStore();
-  const signInMutation = useSignInMutation(navigate, location);
+  const signIn = useSignIn();
   const {
     handleSubmit,
     register,
@@ -43,59 +35,7 @@ export default function SignInForm() {
   };
 
   const onSubmit: SubmitHandler<SignInData> = async (formData) => {
-    setIsLoading(true);
-    const { data, error } = await authClient.signIn.email({
-      email: formData.email,
-      password: formData.password,
-    });
-
-    if (error) {
-      switch (error.code) {
-        case "EMAIL_NOT_VERIFIED": {
-          await authClient.emailOtp.sendVerificationOtp({
-            email: formData.email,
-            type: "email-verification",
-          });
-          setIsLoading(false);
-          navigate("/auth/verify", {
-            state: { verificationEmail: formData.email },
-          });
-          break;
-        }
-        default: {
-          setIsLoading(false);
-          addToast({
-            title: "Authentication",
-            description: error.message,
-            color: "danger",
-          });
-        }
-      }
-    }
-
-    if (data) {
-      await authClient.getSession({
-        fetchOptions: {
-          onSuccess: (ctx) => {
-            const jwt = ctx.response.headers.get("set-auth-jwt");
-
-            setAuthData(
-              ctx.data.user as User,
-              ctx.data.session as Session,
-              jwt!,
-            );
-          },
-        },
-      });
-
-      setIsLoading(false);
-
-      const from =
-        location.state?.from?.pathname ||
-        roleBasedRoutes[(data.user as User).roles[0]];
-
-      navigate(from, { replace: true });
-    }
+    signIn.mutate(formData);
 
     reset();
   };
@@ -154,8 +94,8 @@ export default function SignInForm() {
           <Button
             className="w-full"
             color="primary"
-            isDisabled={signInMutation.isPending}
-            isLoading={isLoading}
+            isDisabled={signIn.isPending}
+            isLoading={signIn.isPending}
             type="submit"
           >
             Sign in

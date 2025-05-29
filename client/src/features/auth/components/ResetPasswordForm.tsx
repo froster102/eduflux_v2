@@ -5,13 +5,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import React, { SVGProps, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import { addToast } from "@heroui/toast";
+import { Link, Navigate, useLocation } from "react-router";
 import { Loader } from "lucide-react";
 
 import { ResetPasswordData } from "../types/auth";
-
-import { authClient } from "@/lib/auth-client";
+import { useResendOtp, useResetPassword } from "../hooks/mutations";
 
 export const EyeSlashFilledIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
@@ -92,7 +90,20 @@ const resetPasswordFormSchema = z
 
 export default function ResetPasswordForm() {
   const [resendTimer, setResendTimer] = React.useState(30);
-  const [isResending, setIsResending] = React.useState(false);
+  const {
+    register,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = useForm<ResetPasswordData>({
+    resolver: zodResolver(resetPasswordFormSchema),
+  });
+  const [isVisible, setIsVisible] = useState({
+    newPassword: false,
+    confirmPassword: false,
+  });
+  const location = useLocation();
+  const resetPassword = useResetPassword();
+  const resendOtp = useResendOtp(() => setResendTimer(30));
 
   React.useEffect(() => {
     const timeOut = setTimeout(() => {
@@ -110,74 +121,20 @@ export default function ResetPasswordForm() {
     };
   }, [resendTimer]);
 
-  const navigate = useNavigate();
-
-  const location = useLocation();
-
-  const {
-    register,
-    formState: { errors, isSubmitting },
-    handleSubmit,
-  } = useForm<ResetPasswordData>({
-    resolver: zodResolver(resetPasswordFormSchema),
-  });
-  const [isVisible, setIsVisible] = useState({
-    newPassword: false,
-    confirmPassword: false,
-  });
-
   if (!location.state?.email) {
     return <Navigate to={location.state?.from || "/auth/signin"} />;
   }
 
   const onSubmit: SubmitHandler<ResetPasswordData> = async (formData) => {
-    const { error } = await authClient.emailOtp.resetPassword({
+    resetPassword.mutate({
+      ...formData,
       email: location.state.email,
-      otp: formData.otp,
       password: formData.newPassword,
     });
-
-    if (error) {
-      addToast({
-        title: "Reset Password",
-        description: error.message,
-        color: "danger",
-      });
-    }
-
-    addToast({
-      title: "Reset Password",
-      description: "Password reset successful. Please sign in.",
-      color: "success",
-    });
-    navigate("/auth/signin", { replace: true });
   };
 
   async function handleResendOtp() {
-    setIsResending(true);
-    const { error } = await authClient.emailOtp.sendVerificationOtp({
-      email: location.state.email,
-      type: "forget-password",
-    });
-
-    setIsResending(false);
-    if (error) {
-      addToast({
-        title: "Resend OTP",
-        description: error.message,
-        color: "danger",
-      });
-
-      return;
-    }
-
-    addToast({
-      title: "OTP Sent",
-      description: "A new OTP has been sent to your email.",
-      color: "success",
-    });
-
-    setResendTimer(30);
+    resendOtp.mutate(location.state.email);
   }
 
   const toggleVisibility = (token: "newPassword" | "confirmPassword") =>
@@ -215,7 +172,7 @@ export default function ResetPasswordForm() {
             type="button"
             onClick={handleResendOtp}
           >
-            {isResending ? (
+            {resendOtp.isPending ? (
               <Loader className=" w-4 h-4 animate-spin" />
             ) : (
               <p>Resend OTP {resendTimer > 0 ? `in ${resendTimer}s` : ""}</p>
@@ -285,6 +242,9 @@ export default function ResetPasswordForm() {
             Submit
           </Button>
         </div>
+        <p className="text-sm hover:underline text-right w-full">
+          <Link to={"/auth/signin"}>Back to sign in</Link>
+        </p>
       </Form>
     </div>
   );

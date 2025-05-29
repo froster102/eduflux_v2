@@ -5,10 +5,8 @@ import { Link } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "react-router";
-import { addToast } from "@heroui/toast";
 
-import { authClient } from "@/lib/auth-client";
+import { useForgotPassword } from "../hooks/mutations";
 
 interface Formdata {
   email: string;
@@ -22,36 +20,14 @@ export default function ForgotPasswordForm() {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<Formdata>({
     resolver: zodResolver(forgotPasswordSchema),
   });
-  const navigate = useNavigate();
+  const forgotPassword = useForgotPassword();
 
   const onSubmit: SubmitHandler<Formdata> = async (formData) => {
-    const { error } = await authClient.emailOtp.sendVerificationOtp({
-      email: formData.email,
-      type: "forget-password",
-    });
-
-    if (error) {
-      addToast({
-        title: "Forgot Password",
-        description: "Something went wrong",
-        color: "danger",
-      });
-
-      return;
-    }
-
-    addToast({
-      title: "Forgot Password",
-      description:
-        "If an account with that email exists, you’ll receive a one-time password (OTP) shortly.",
-      color: "success",
-    });
-
-    navigate("/auth/reset-password", { state: { email: formData.email } });
+    forgotPassword.mutate(formData.email);
   };
 
   return (
@@ -80,8 +56,8 @@ export default function ForgotPasswordForm() {
         <Button
           className="w-full"
           color="primary"
-          isDisabled={isSubmitting}
-          isLoading={isSubmitting}
+          isDisabled={forgotPassword.isPending}
+          isLoading={forgotPassword.isPending}
           type="submit"
         >
           Submit
