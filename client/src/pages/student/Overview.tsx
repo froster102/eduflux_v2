@@ -12,8 +12,6 @@ export default function OverviewPage() {
   // const { data: coursesData, isLoading: isCoursesLoading } =
   //   useGetAllAvailableCoursesQuery();
 
-  console.log(user, session, authToken);
-
   return (
     <>
       <div className="flex gap-4 w-full h-full pt-4">

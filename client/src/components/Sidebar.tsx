@@ -11,7 +11,6 @@ import {
   DrawerHeader,
 } from "@heroui/drawer";
 
-import { ThemeSwitcher } from "./ThemeSwitcher";
 import ConfirmationModal from "./ConfirmationModal";
 
 import { useLogout } from "@/features/auth/hooks/mutations";
@@ -46,7 +45,7 @@ export default function Sidebar({
     <>
       <Card className="hidden lg:flex max-w-52 w-full h-full dark:bg-secondary-700 bg-secondary-500">
         <CardHeader className="relative">
-          <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" />
+          {/* <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" /> */}
           <div className="w-full">{topContent}</div>
         </CardHeader>
         <CardBody className="flex flex-col justify-center gap-4 overflow-hidden">
@@ -118,8 +117,8 @@ export default function Sidebar({
           {(onClose) => (
             <>
               <DrawerHeader className="flex gap-1 relative">
-                <ThemeSwitcher className="absolute top-0 left-0 bg-transparent" />
-                {/* <div>{topContent}</div> */}
+                {/* <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" /> */}
+                <div className="w-full">{topContent}</div>
               </DrawerHeader>
               <DrawerBody className="flex flex-col justify-center">
                 <div className="flex flex-col gap-4">

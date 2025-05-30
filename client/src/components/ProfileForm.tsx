@@ -19,10 +19,8 @@ interface ProfileFormProps {
 
 interface ProfileFormData {
   email: string;
-  lastName: string;
-  firstName: string;
-  contactNumber: string;
-  address: string;
+  fullname: string;
+  headline: string;
 }
 
 export default function ProfileForm({
@@ -70,37 +68,19 @@ export default function ProfileForm({
           <div className="flex w-full gap-4">
             <Controller
               control={control}
-              name={"firstName"}
+              name={"fullname"}
               render={({ field }) => (
                 <Input
                   {...field}
                   color="default"
-                  errorMessage={errors.firstName?.message}
-                  isInvalid={!!errors.firstName}
+                  errorMessage={errors.fullname?.message}
+                  isInvalid={!!errors.fullname}
                   label="First Name"
                   labelPlacement="outside"
                   name="firstName"
                   placeholder="First name"
                   radius="sm"
                   readOnly={action === "view"}
-                />
-              )}
-            />
-            <Controller
-              control={control}
-              name="lastName"
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  errorMessage={errors.lastName?.message}
-                  isInvalid={!!errors.lastName}
-                  label="Last Name"
-                  labelPlacement="outside"
-                  name="lastName"
-                  placeholder="Last name"
-                  radius="sm"
-                  readOnly={action === "view"}
-                  type="text"
                 />
               )}
             />
@@ -123,43 +103,6 @@ export default function ProfileForm({
               />
             )}
           />
-          <Controller
-            control={control}
-            name="address"
-            render={({ field }) => (
-              <Input
-                {...field}
-                errorMessage={errors.address?.message}
-                isInvalid={!!errors.address}
-                label="Address"
-                labelPlacement="outside"
-                name="address"
-                placeholder="Address"
-                radius="sm"
-                readOnly={action === "view"}
-                type="text"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="contactNumber"
-            render={({ field }) => (
-              <Input
-                {...field}
-                errorMessage={errors.contactNumber?.message}
-                isInvalid={!!errors.contactNumber}
-                label="Contact Number"
-                labelPlacement="outside"
-                name="email"
-                placeholder="Contact Number"
-                radius="sm"
-                readOnly={action === "view"}
-                type="text"
-              />
-            )}
-          />
-
           <div className="w-full flex flex-col gap-4">
             <div className="flex gap-4">
               <Input

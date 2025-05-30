@@ -71,7 +71,6 @@ export const auth = betterAuth({
     after: createAuthMiddleware(async (ctx) => {
       if (ctx.path === '/sign-in/email') {
         const newSession = ctx.context.newSession;
-        ctx.getCookie('set');
         const returned = ctx.context.returned as Record<string, any>;
         if (returned.user) {
           return {

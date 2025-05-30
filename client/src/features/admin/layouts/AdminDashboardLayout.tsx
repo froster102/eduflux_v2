@@ -26,11 +26,6 @@ export default function AdminDashboardLayout() {
       icon: <Icon icon="solar:notebook-bookmark-linear" width={24} />,
       label: "Courses",
     },
-    // {
-    //   path: "/admin/sessions",
-    //   icon: <Icon icon="solar:notebook-bookmark-linear" width={24} />,
-    //   label: "Sessions",
-    // },
     {
       path: "/admin/enrollments",
       icon: <Icon icon="solar:user-check-rounded-outline" width={24} />,

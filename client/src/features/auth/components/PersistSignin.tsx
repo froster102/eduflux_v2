@@ -35,6 +35,8 @@ export default function PersistSignin() {
       } catch {
         signout();
         navigate("/auth/signin");
+      } finally {
+        setIsLoading(false);
       }
     };
 
