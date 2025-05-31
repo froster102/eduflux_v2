@@ -25,20 +25,9 @@ export function useSignIn() {
   return useMutation({
     mutationFn: signIn,
     onSuccess: async (data) => {
-      await authClient.getSession({
-        fetchOptions: {
-          onSuccess: (ctx) => {
-            const jwt = ctx.response.headers.get("set-auth-jwt");
-            const setAuthData = useAuthStore.getState().setAuthData;
+      const setUser = useAuthStore.getState().setUser;
 
-            setAuthData(
-              ctx.data.user as User,
-              ctx.data.session as Session,
-              jwt!,
-            );
-          },
-        },
-      });
+      setUser(data.user as User);
 
       const from =
         location.state?.from?.pathname ||

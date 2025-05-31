@@ -4,7 +4,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '@/infrastructure/database/db';
 import * as schema from '@/infrastructure/database/schema';
 import { signUpSchema } from '@/infrastructure/validation/sign-up.schema';
-import { emailOTP, jwt } from 'better-auth/plugins';
+import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
 import { NodeMailerService } from '@/infrastructure/external/nodemailer.service';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
@@ -67,10 +67,26 @@ export const auth = betterAuth({
       }
     }),
 
-    // eslint-disable-next-line @typescript-eslint/require-await
     after: createAuthMiddleware(async (ctx) => {
       if (ctx.path === '/sign-in/email') {
         const newSession = ctx.context.newSession;
+        const jwtToken = await getJwtToken(ctx, {
+          jwt: {
+            definePayload() {
+              return {
+                ...newSession.user,
+                sessionId: newSession.session.id,
+              };
+            },
+            getSubject: () => newSession.user.id,
+          },
+        });
+        ctx.setCookie('user_jwt', jwtToken, {
+          httpOnly: true,
+          sameSite: 'None',
+          secure: true,
+          path: '/',
+        });
         const returned = ctx.context.returned as Record<string, any>;
         if (returned.user) {
           return {
@@ -83,6 +99,15 @@ export const auth = betterAuth({
           };
         }
         return returned;
+      }
+      if (ctx.path === '/sign-out') {
+        ctx.setCookie('user_jwt', '', {
+          httpOnly: true,
+          sameSite: 'None',
+          secure: true,
+          path: '/',
+          maxAge: 0,
+        });
       }
     }),
   },

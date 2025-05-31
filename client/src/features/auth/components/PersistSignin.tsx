@@ -7,31 +7,20 @@ import { authClient } from "@/lib/auth-client";
 
 export default function PersistSignin() {
   const [isLoading, setIsLoading] = React.useState(true);
-  const { user, authToken, setAuthData, signout } = useAuthStore();
+  const { user, setUser, signout } = useAuthStore();
   const navigate = useNavigate();
 
   React.useEffect(() => {
     const verifyAuthStatus = async () => {
       try {
-        await authClient.getSession({
-          fetchOptions: {
-            onSuccess: (ctx) => {
-              const jwt = ctx.response.headers.get("set-auth-jwt");
+        const { data } = await authClient.getSession();
 
-              if (ctx.data === null) {
-                signout();
-                navigate("/auth/signin");
-              }
-              if (ctx.data?.user && jwt) {
-                setAuthData(
-                  ctx.data.user as User,
-                  ctx.data.session as Session,
-                  jwt,
-                );
-              }
-            },
-          },
-        });
+        if (data === null) {
+          signout();
+          navigate("/auth/signin");
+        } else {
+          setUser(data.user as User);
+        }
       } catch {
         signout();
         navigate("/auth/signin");
@@ -40,12 +29,12 @@ export default function PersistSignin() {
       }
     };
 
-    if (!user && !authToken) {
+    if (!user) {
       verifyAuthStatus();
     } else {
       setIsLoading(false);
     }
-  }, [user, authToken, setAuthData, signout, navigate]);
+  }, [user, signout, navigate]);
 
   return isLoading ? <ScreenLoader /> : <Outlet />;
 }
