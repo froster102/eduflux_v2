@@ -1,3 +1,4 @@
+import './src/shared/polyfills/compression-polyfill';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
