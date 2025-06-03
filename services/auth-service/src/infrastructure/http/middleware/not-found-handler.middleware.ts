@@ -1,10 +1,11 @@
-import { Request, Response } from 'express';
+import { Context } from 'hono';
 import httpStatus from 'http-status';
 
-export function notFoundHandler(req: Request, res: Response): void {
-  res.status(httpStatus.NOT_EXTENDED).json({
+export function notFoundHandler(c: Context) {
+  c.status(httpStatus.NOT_EXTENDED);
+  return c.json({
     statusCode: httpStatus.NOT_FOUND,
     message: httpStatus[httpStatus.NOT_FOUND],
-    path: req.originalUrl,
+    path: c.req.url,
   });
 }
