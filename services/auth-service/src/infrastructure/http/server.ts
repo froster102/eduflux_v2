@@ -17,10 +17,10 @@ export class Server {
   }
 
   private _setup(): void {
+    this._app.use(httpLoggerMiddleware);
     this._app.on(['POST', 'GET'], '/api/auth/*', (c) => {
       return auth.handler(c.req.raw);
     });
-    this._app.use(httpLoggerMiddleware);
     this._app.notFound(notFoundHandler);
   }
 
