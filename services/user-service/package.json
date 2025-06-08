@@ -1,0 +1,33 @@
+{
+  "name": "user-service",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/main.ts"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.28.0",
+    "cloudinary": "^2.6.1",
+    "dotenv": "^16.5.0",
+    "elysia": "latest",
+    "globals": "^16.2.0",
+    "http-status": "^2.1.0",
+    "inversify": "^7.0.0-alpha.5",
+    "jose": "^6.0.11",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^8.15.1",
+    "reflect-metadata": "^0.2.2",
+    "winston": "^3.17.0",
+    "zod": "^3.25.55"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "@types/mongoose": "^5.11.97",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "typescript-eslint": "^8.32.1"
+  },
+  "module": "src/main.js"
+}
