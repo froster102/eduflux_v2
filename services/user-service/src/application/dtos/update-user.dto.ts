@@ -5,7 +5,7 @@ export class UpdateUserDto {
   imageUrl?: string;
   bio?: string;
   socialLinks?: {
-    plattform: string;
+    platform: string;
     url: string;
   }[];
 }

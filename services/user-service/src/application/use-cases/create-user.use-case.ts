@@ -19,7 +19,7 @@ export class CreateUserUseCase {
       throw new UserAlreadyExistsException(user.firstName);
     }
 
-    const newUser = new User(
+    const newUser = User.create(
       createUserDto.id,
       createUserDto.firstName,
       createUserDto.lastName,

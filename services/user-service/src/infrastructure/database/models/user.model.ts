@@ -2,7 +2,7 @@ import mongoose, { Model, Schema } from 'mongoose';
 
 const SocialLinkSchema = new Schema(
   {
-    plattform: {
+    platform: {
       type: String,
       required: true,
       enum: ['x', 'facebook', 'instagram', 'linkedin', 'youtube', 'website'],
@@ -43,7 +43,7 @@ export interface IMongoUser extends Document {
   imageUrl?: string;
   bio?: string;
   socialLinks?: {
-    plattform: string;
+    platform: string;
     url: string;
   }[];
   createdAt: Date;

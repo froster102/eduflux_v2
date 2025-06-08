@@ -18,16 +18,19 @@ export abstract class BaseMongoRepositoryImpl<TPersistence, TDomain>
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
-    return this.mapper.toDomain(saved);
+    return this.mapper.toDomain(saved.toObject());
   }
 
   async update(id: string, data: Partial<TDomain>): Promise<TDomain | null> {
     const updated = await this.model
-      .findOneAndUpdate({ id }, data as unknown as TPersistence)
+      .findOneAndUpdate(
+        { id },
+        this.mapper.toPersistance(data as unknown as TDomain),
+      )
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
-    return updated ? this.mapper.toDomain(updated) : null;
+    return updated ? this.mapper.toDomain(updated.toObject()) : null;
   }
 
   async findById(id: string): Promise<TDomain | null> {
@@ -36,6 +39,6 @@ export abstract class BaseMongoRepositoryImpl<TPersistence, TDomain>
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
-    return found ? this.mapper.toDomain(found) : null;
+    return found ? this.mapper.toDomain(found.toObject()) : null;
   }
 }

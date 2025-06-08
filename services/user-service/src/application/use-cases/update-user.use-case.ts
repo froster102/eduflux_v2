@@ -18,9 +18,12 @@ export class UpdateUserUseCase {
       throw new UserNotFoundException(updateUserDto.id);
     }
 
-    const updatedUser = Object.assign(user, updateUserDto);
+    user.update(updateUserDto);
 
-    await this.userRepository.update(updateUserDto.id, updatedUser);
+    const updatedUser = await this.userRepository.update(
+      updateUserDto.id,
+      user,
+    );
 
     return updatedUser;
   }
