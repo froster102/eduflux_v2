@@ -9,7 +9,7 @@ import { User } from '@/domain/entities/user.entity';
 import httpStatus from 'http-status';
 import { UpdateUserDto } from '@/application/dtos/update-user.dto';
 import { updateUserSchema } from '@/shared/validation/schema/update-user';
-import { ISignedUploadUrlResponse } from '@/domain/services/file-storage.service';
+import { ISignedUploadUrlResponse } from '@/application/ports/file-storage.service';
 import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
 
 @injectable()

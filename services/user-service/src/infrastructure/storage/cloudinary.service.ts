@@ -1,7 +1,7 @@
 import {
   IFileStorageService,
   ISignedUploadUrlResponse,
-} from '@/domain/services/file-storage.service';
+} from '@/application/ports/file-storage.service';
 import { cloudinaryConfig } from '@/shared/config/cloudinary.config';
 import { v2 as cloudinary } from 'cloudinary';
 

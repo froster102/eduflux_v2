@@ -1,7 +1,7 @@
 import type {
   IFileStorageService,
   ISignedUploadUrlResponse,
-} from '@/domain/services/file-storage.service';
+} from '@/application/ports/file-storage.service';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 

@@ -8,7 +8,7 @@ import { UpdateUserUseCase } from '@/application/use-cases/update-user.use-case'
 import { UserEventsConsumer } from '@/interface/consumers/user-events.consumer';
 import { GetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { UserRoutes } from '@/interface/routes/user.routes';
-import { IFileStorageService } from '@/domain/services/file-storage.service';
+import { IFileStorageService } from '@/application/ports/file-storage.service';
 import { CloudinaryService } from '@/infrastructure/storage/cloudinary.service';
 import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
 
