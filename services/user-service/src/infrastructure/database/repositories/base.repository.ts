@@ -1,4 +1,4 @@
-import { DatabaseException } from '@/domain/exceptions/database.exception';
+import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
 import { IBaseRepository } from '@/domain/repositories/base.repository';
 import { IMapper } from '@/infrastructure/mappers/mapper.interface';
 import { Model } from 'mongoose';

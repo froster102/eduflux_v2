@@ -3,7 +3,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { TYPES } from '@/shared/di/types';
 import type { IUserRepository } from '@/domain/repositories/user.repository';
 import { User } from '@/domain/entities/user.entity';
-import { UserAlreadyExistsException } from '@/domain/exceptions/user.exception';
+import { ConflictException } from '@/application/exceptions/conflict-exception';
 
 @injectable()
 export class CreateUserUseCase {
@@ -16,7 +16,7 @@ export class CreateUserUseCase {
     const user = await this.userRepository.findById(createUserDto.id);
 
     if (user) {
-      throw new UserAlreadyExistsException(user.firstName);
+      throw new ConflictException(`User already exists.`);
     }
 
     const newUser = User.create(

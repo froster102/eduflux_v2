@@ -1,10 +1,11 @@
-export class DomainException extends Error {
+import { BaseException } from '@/shared/exceptions/base.exception';
+
+export class DomainException extends BaseException {
   constructor(
     message: string,
     public readonly code: string,
   ) {
     super(message);
-    this.name = this.constructor.name;
-    Object.setPrototypeOf(this, new.target.prototype);
+    this.name = 'DomainException';
   }
 }

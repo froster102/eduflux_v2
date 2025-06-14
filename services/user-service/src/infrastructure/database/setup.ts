@@ -1,4 +1,4 @@
-import { DatabaseException } from '@/domain/exceptions/database.exception';
+import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
 import { dbConfig } from '@/shared/config/db.config';
 import { Logger } from '@/shared/utils/logger';
 import mongoose from 'mongoose';

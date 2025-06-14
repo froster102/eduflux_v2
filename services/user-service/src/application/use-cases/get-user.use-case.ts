@@ -1,8 +1,8 @@
 import { User } from '@/domain/entities/user.entity';
-import { UserNotFoundException } from '@/domain/exceptions/user.exception';
 import type { IUserRepository } from '@/domain/repositories/user.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
+import { NotFoundException } from '../exceptions/not-found.exception';
 
 export class GetUserUseCase {
   constructor(
@@ -14,7 +14,7 @@ export class GetUserUseCase {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new UserNotFoundException(id);
+      throw new NotFoundException(`User with ID:${id} not found`);
     }
 
     return user;

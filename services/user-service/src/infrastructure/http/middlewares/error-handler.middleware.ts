@@ -1,36 +1,32 @@
-import { UnauthorizedException } from '@/application/exceptions/unauthorised.execption';
 import { Elysia } from 'elysia';
 import httpStatus from 'http-status';
 import { HttpResponse } from '../interfaces/http-response.interface';
-import { InvalidTokenException } from '@/application/exceptions/invalid-token.exception';
+import { ApplicationException } from '@/application/exceptions/application.exception';
+import { getHttpErrorCode } from '@/shared/errors/error-code';
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, request, error }): HttpResponse<any> => {
     if (code === 'NOT_FOUND') {
       set.status = httpStatus.NOT_FOUND;
       return {
-        statusCode: httpStatus.NOT_FOUND,
         message: httpStatus[httpStatus.NOT_FOUND],
         path: request.url,
       };
     }
 
-    if (error instanceof UnauthorizedException) {
-      set.status = httpStatus.UNAUTHORIZED;
+    if (error instanceof ApplicationException) {
+      set.status = getHttpErrorCode(error.code);
 
       return {
-        statusCode: httpStatus.UNAUTHORIZED,
         message: error.message,
         path: request.url,
       };
     }
 
-    if (error instanceof InvalidTokenException) {
-      set.status = httpStatus.UNAUTHORIZED;
-      return {
-        statusCode: httpStatus.UNAUTHORIZED,
-        message: error.message,
-      };
-    }
+    set.status = httpStatus.INTERNAL_SERVER_ERROR;
+    return {
+      message: httpStatus[httpStatus.INTERNAL_SERVER_ERROR],
+      path: request.url,
+    };
   })
   .as('global');

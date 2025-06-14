@@ -1,10 +1,12 @@
-export class ApplicationException extends Error {
+import { BaseException } from '@/shared/exceptions/base.exception';
+import { AppErrorCode } from '@/shared/errors/error-code';
+
+export class ApplicationException extends BaseException {
   constructor(
     message: string,
-    public readonly code: string,
+    public readonly code: AppErrorCode,
   ) {
     super(message);
-    this.name = this.constructor.name;
-    Object.setPrototypeOf(this, new.target.prototype);
+    this.name = 'ApplicationException';
   }
 }

@@ -2,8 +2,8 @@ import type { IUserRepository } from '@/domain/repositories/user.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { UpdateUserDto } from '../dtos/update-user.dto';
-import { UserNotFoundException } from '@/domain/exceptions/user.exception';
 import { User } from '@/domain/entities/user.entity';
+import { NotFoundException } from '../exceptions/not-found.exception';
 
 export class UpdateUserUseCase {
   constructor(
@@ -15,7 +15,7 @@ export class UpdateUserUseCase {
     const user = await this.userRepository.findById(updateUserDto.id);
 
     if (!user) {
-      throw new UserNotFoundException(updateUserDto.id);
+      throw new NotFoundException(`User with ID:${updateUserDto.id} not found`);
     }
 
     user.update(updateUserDto);
