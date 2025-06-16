@@ -31,7 +31,6 @@ export class UserRoutes {
           const foundUser = await this.getUserUseCase.execute(user.id);
           set.status = httpStatus.OK;
           return {
-            statusCode: httpStatus.OK,
             data: foundUser,
           };
         })
@@ -48,7 +47,7 @@ export class UserRoutes {
               imageUrl,
               socialLinks,
             });
-            return { statusCode: httpStatus.OK, data: updatedUser };
+            return { data: updatedUser };
           },
           {
             body: updateUserSchema,
@@ -61,7 +60,6 @@ export class UserRoutes {
               user.id,
             );
             return {
-              statusCode: httpStatus.OK,
               data: signedUrlsResponse,
             };
           },
