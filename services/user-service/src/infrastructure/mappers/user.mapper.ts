@@ -1,11 +1,11 @@
 import { User } from '@/domain/entities/user.entity';
 import { IMapper } from './mapper.interface';
-import { IMongoUser } from '../database/models/user.model';
+import { IMongoUser } from '../database/schema/user.schema';
 
 export class UserMapper implements IMapper<User, IMongoUser> {
   toDomain(raw: IMongoUser): User {
     return User.fromPersistence(
-      raw.id,
+      (raw._id as string).toString(),
       raw.firstName,
       raw.lastName,
       raw.createdAt,
@@ -18,7 +18,7 @@ export class UserMapper implements IMapper<User, IMongoUser> {
 
   toPersistance(raw: User): Partial<IMongoUser> {
     return {
-      id: raw.id,
+      _id: raw.id,
       firstName: raw.firstName,
       lastName: raw.lastName,
       imageUrl: raw.imageUrl,

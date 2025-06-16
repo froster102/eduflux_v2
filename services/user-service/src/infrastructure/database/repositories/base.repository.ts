@@ -35,7 +35,7 @@ export abstract class BaseMongoRepositoryImpl<TPersistence, TDomain>
 
   async findById(id: string): Promise<TDomain | null> {
     const found = await this.model
-      .findOne({ id })
+      .findOne({ _id: id })
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
