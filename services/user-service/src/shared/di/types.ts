@@ -22,4 +22,8 @@ export const TYPES = {
 
   //Services
   FileStorageService: Symbol.for('FileStorageService'),
+
+  //Grpc Services
+  UserGrpcService: Symbol.for('UserGrpcService'),
+  GrpcServer: Symbol.for('GrpcServer'),
 };

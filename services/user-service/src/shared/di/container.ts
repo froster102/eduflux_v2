@@ -11,6 +11,8 @@ import { UserRoutes } from '@/interface/routes/user.routes';
 import { IFileStorageService } from '@/application/ports/file-storage.service';
 import { CloudinaryService } from '@/infrastructure/storage/cloudinary.service';
 import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
+import { UserGrpcService } from '@/infrastructure/grpc/services/user.service';
+import { GrpcServer } from '@/infrastructure/grpc/grpc.server';
 
 const container = new Container();
 
@@ -49,5 +51,9 @@ container.bind<UserRoutes>(TYPES.UserRoutes).to(UserRoutes);
 container
   .bind<IFileStorageService>(TYPES.FileStorageService)
   .to(CloudinaryService);
+
+//Grpc
+container.bind<UserGrpcService>(TYPES.UserGrpcService).to(UserGrpcService);
+container.bind<GrpcServer>(TYPES.GrpcServer).to(GrpcServer);
 
 export { container };
