@@ -1,15 +1,7 @@
 _format_version: "3.0"
 _transform: true
 
-services:
-  - name: auth-service
-    url: http://auth-service:3001
-    routes:
-      - name: auth-route
-        paths:
-          - /api/auth
-        strip_path: false
-    plugins:
+plugins:
       - name: cors
         config:
           origins:
@@ -22,4 +14,30 @@ services:
             - PATCH
             - DELETE
           credentials: true
+
+services:
+  - name: auth-service
+    url: http://auth-service:3001
+    routes:
+      - name: auth-route
+        paths:
+          - /api/auth
+        strip_path: false
+
+  - name: user-service
+    url: http://user-service:3002
+    routes:
+      - name: user-route
+        paths:
+          - /api/users
+        strip_path: false
+
+  - name: course-service
+    url: http://course-service:3003
+    routes:
+      - name: course-route
+        paths:
+          - /api/courses
+        strip_path: false
+   
           
