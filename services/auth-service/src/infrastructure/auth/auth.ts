@@ -145,6 +145,8 @@ export const auth = betterAuth({
     }),
     jwt({
       jwt: {
+        issuer: process.env.JWT_ISS,
+        audience: process.env.JWT_AUD,
         definePayload: ({ user, session }) => ({
           ...user,
           sessionId: session.id,
