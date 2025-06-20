@@ -1,4 +1,4 @@
-import { betterAuth } from 'better-auth';
+import { betterAuth, User } from 'better-auth';
 import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '@/infrastructure/database/db';
@@ -8,6 +8,11 @@ import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
 import { NodeMailerService } from '@/infrastructure/external/nodemailer.service';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
+import { IEvent } from '@/shared/interfaces/event.interface';
+import { AUTH_SERVICE } from '@/shared/constants/services';
+import { container } from '@/shared/di/container';
+import { IEventPublisher } from '@/domain/services/event-publisher.service';
+import { TYPES } from '@/shared/di/types';
 import { addRole } from './plugins/add-role';
 import { Role } from '@/shared/constants/role';
 
@@ -117,6 +122,22 @@ export const auth = betterAuth({
         const user = (ctx.context.returned as Record<string, any>).user as User;
         if (user) {
           const [firstName, lastName] = user.name.split(' ');
+          const userCreatedEvent: IEvent = {
+            type: 'user.created',
+            payload: {
+              id: user.id,
+              firstName,
+              lastName,
+            },
+            metadata: {
+              serviceId: AUTH_SERVICE,
+              timestamp: new Date().toISOString(),
+            },
+          };
+          const kafkaProducer = container.get<IEventPublisher>(
+            TYPES.EventPublisher,
+          );
+          await kafkaProducer.publish('user-events', userCreatedEvent);
         }
       }
     }),
