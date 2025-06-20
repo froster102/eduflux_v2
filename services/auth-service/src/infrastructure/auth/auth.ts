@@ -71,6 +71,7 @@ export const auth = betterAuth({
     after: createAuthMiddleware(async (ctx) => {
       if (ctx.path === '/sign-in/email') {
         const newSession = ctx.context.newSession;
+        if (newSession) {
         const jwtToken = await getJwtToken(ctx, {
           jwt: {
             definePayload() {
@@ -88,6 +89,7 @@ export const auth = betterAuth({
           secure: true,
           path: '/',
         });
+        }
         const returned = ctx.context.returned as Record<string, any>;
         if (returned.user) {
           return {
@@ -109,6 +111,12 @@ export const auth = betterAuth({
           path: '/',
           maxAge: 0,
         });
+      }
+      if (ctx.path === '/sign-up/email') {
+        const user = (ctx.context.returned as Record<string, any>).user as User;
+        if (user) {
+          const [firstName, lastName] = user.name.split(' ');
+        }
       }
     }),
   },
