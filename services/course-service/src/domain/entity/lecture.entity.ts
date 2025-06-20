@@ -78,7 +78,7 @@ export class Lecture {
   }
 
   get courseId(): string {
-    return this.courseId;
+    return this._courseId;
   }
 
   get title(): string {
