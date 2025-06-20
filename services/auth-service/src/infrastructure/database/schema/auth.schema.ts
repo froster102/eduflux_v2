@@ -1,3 +1,4 @@
+import { Role } from '@/shared/constants/role';
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {
@@ -14,7 +15,7 @@ export const user = pgTable('user', {
   updatedAt: timestamp('updated_at')
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
-  roles: text('roles').array().default(['STUDENT']).notNull(),
+  roles: text('roles').array().default([Role.LEARNER]).notNull(),
 });
 
 export const session = pgTable('session', {
