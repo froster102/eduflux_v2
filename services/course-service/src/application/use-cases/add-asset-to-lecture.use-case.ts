@@ -8,7 +8,7 @@ import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
 
-export interface AddAssetToLessonDto {
+export interface AddAssetToLectureDto {
   courseId: string;
   lectureId: string;
   assetId: string;
@@ -26,7 +26,7 @@ export class AddAssetToLectureUseCase {
   ) {}
 
   async execute(
-    dto: AddAssetToLessonDto,
+    dto: AddAssetToLectureDto,
     actor: AuthenticatedUserDto,
   ): Promise<void> {
     const course = await this.courseRepository.findById(dto.courseId);

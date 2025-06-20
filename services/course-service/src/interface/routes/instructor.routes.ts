@@ -1,5 +1,5 @@
 import { IUploadCredentialsResponse } from '@/application/ports/file-storage.gateway';
-import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-lesson.use-case';
+import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-lecture.use-case';
 import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use-case';
 import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
 import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
@@ -41,7 +41,7 @@ export class InstructorRoutes {
     @inject(TYPES.GetCourseAssetsUploadUrlUseCase)
     private readonly getCourseAssetsUploadUrlUseCase: GetCourseAssetsUploadUrlUseCase,
     @inject(TYPES.AddAssetToLectureUseCase)
-    private readonly addAssetToLessonUseCase: AddAssetToLectureUseCase,
+    private readonly addAssetToLectureUseCase: AddAssetToLectureUseCase,
     @inject(TYPES.SubmitForReviewUseCase)
     private readonly submitForReviewUseCase: SubmitForReviewUseCase,
   ) {}
@@ -137,7 +137,7 @@ export class InstructorRoutes {
           '/:courseId/lectures/:lectureId/assets',
           async ({ body, user, params }): Promise<HttpResponse<void>> => {
             const parsedBody = addAssetToLectureSchema.parse(body);
-            await this.addAssetToLessonUseCase.execute(
+            await this.addAssetToLectureUseCase.execute(
               {
                 assetId: parsedBody.assetId,
                 courseId: params.courseId,

@@ -34,7 +34,7 @@ import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use
 import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
 import { DeleteLectureUseCase } from '@/application/use-cases/delete-lecture.use-case';
-import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-lesson.use-case';
+import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-lecture.use-case';
 import { IChapter } from '@/infrastructure/database/schema/chapter.schema';
 import { ChapterMapper } from '@/infrastructure/mappers/chapter.mapper';
 import { Chapter } from '@/domain/entity/chapter.entity';
