@@ -8,6 +8,7 @@ import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
 import { NodeMailerService } from '@/infrastructure/external/nodemailer.service';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
+import { addRole } from './plugins/add-role';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,
@@ -153,5 +154,6 @@ export const auth = betterAuth({
         }),
       },
     }),
+    addRole(),
   ],
 });
