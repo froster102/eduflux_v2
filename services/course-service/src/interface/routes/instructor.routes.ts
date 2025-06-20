@@ -7,6 +7,7 @@ import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-cou
 import { GetInstructorCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
+import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
 import { ResourceType } from '@/domain/entity/asset.entity';
 import { Chapter } from '@/domain/entity/chapter.entity';
 import { Course } from '@/domain/entity/course.entity';
@@ -20,6 +21,7 @@ import {
   createCourseSchema,
   getUploadUrlSchema,
   updateChapterSchema,
+  updateLessonSchema,
 } from '@/infrastructure/http/schema/course.schema';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
@@ -38,6 +40,8 @@ export class InstructorRoutes {
     private readonly updateChapterUseCase: UpdateChapterUseCase,
     @inject(TYPES.CreateLectureUseCase)
     private readonly createLectureUseCase: CreateLectureUseCase,
+    @inject(TYPES.UpdateLectureUseCase)
+    private readonly updateLectureUseCase: UpdateLectureUseCase,
     @inject(TYPES.GetCourseAssetsUploadUrlUseCase)
     private readonly getCourseAssetsUploadUrlUseCase: GetCourseAssetsUploadUrlUseCase,
     @inject(TYPES.AddAssetToLectureUseCase)
@@ -106,6 +110,23 @@ export class InstructorRoutes {
             const lecture = await this.createLectureUseCase.execute(
               {
                 courseId: params.courseId,
+                description: parsedBody.description,
+                preview: parsedBody.preview,
+                title: parsedBody.title,
+              },
+              user,
+            );
+            return { data: lecture };
+          },
+        )
+        .put(
+          '/:courseId/lectures/:lectureId',
+          async ({ params, body, user }): Promise<HttpResponse<Lecture>> => {
+            const parsedBody = updateLessonSchema.parse(body);
+            const lecture = await this.updateLectureUseCase.execute(
+              {
+                courseId: params.courseId,
+                lectureId: params.lectureId,
                 description: parsedBody.description,
                 preview: parsedBody.preview,
                 title: parsedBody.title,

@@ -8,7 +8,7 @@ import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Lecture } from '@/domain/entity/lecture.entity';
 import { CreateLectureDto } from './create-lecture.use-case';
 
-export interface UpdateLectureDto extends CreateLectureDto {
+export interface UpdateLectureDto extends Partial<CreateLectureDto> {
   courseId: string;
   lectureId: string;
 }

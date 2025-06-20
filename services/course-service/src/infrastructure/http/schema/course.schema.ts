@@ -97,6 +97,8 @@ export const addLessonSchema = z.object({
   preview: z.boolean(),
 });
 
+export const updateLessonSchema = addLessonSchema.partial();
+
 export const getUploadUrlSchema = z.object({
   resourceType: z.enum(resourceTypeEnum, {
     error: `Resource type should be either ${resourceTypeEnum.join(',')}`,
