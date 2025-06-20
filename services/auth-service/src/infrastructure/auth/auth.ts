@@ -3,7 +3,7 @@ import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { db } from '@/infrastructure/database/db';
 import * as schema from '@/infrastructure/database/schema';
-import { signUpSchema } from '@/infrastructure/validation/sign-up.schema';
+import { signUpSchema } from '@/infrastructure/http/schema/sign-up.schema';
 import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
 import { NodeMailerService } from '@/infrastructure/external/nodemailer.service';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
