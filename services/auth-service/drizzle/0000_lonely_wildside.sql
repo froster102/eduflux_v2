@@ -41,7 +41,7 @@ CREATE TABLE "user" (
 	"image" text,
 	"created_at" timestamp NOT NULL,
 	"updated_at" timestamp NOT NULL,
-	"role" text[] DEFAULT '{"STUDENT"}' NOT NULL,
+	"roles" text[] DEFAULT '{"LEARNER"}' NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

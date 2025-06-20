@@ -1,5 +1,5 @@
 {
-  "id": "76a63026-0685-4980-8d35-589fe42c278a",
+  "id": "cc955ae9-d0e4-4a00-9d73-55b2913eb7f8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -275,12 +275,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "role": {
-          "name": "role",
+        "roles": {
+          "name": "roles",
           "type": "text[]",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{\"STUDENT\"}'"
+          "default": "'{\"LEARNER\"}'"
         }
       },
       "indexes": {},
