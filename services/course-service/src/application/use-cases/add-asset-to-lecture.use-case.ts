@@ -63,7 +63,7 @@ export class AddAssetToLectureUseCase {
 
     lecture.assignMedia(dto.assetId);
 
-    await this.courseRepository.update(course.id, course);
+    await this.lectureRepository.update(dto.lectureId, lecture);
 
     return;
   }
