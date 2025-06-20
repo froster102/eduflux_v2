@@ -80,6 +80,8 @@ export const auth = betterAuth({
         if (newSession) {
         const jwtToken = await getJwtToken(ctx, {
           jwt: {
+              issuer: process.env.JWT_ISS,
+              audience: process.env.JWT_AUD,
             definePayload() {
               return {
                 ...newSession.user,
