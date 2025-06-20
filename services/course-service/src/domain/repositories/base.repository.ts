@@ -1,3 +1,5 @@
+import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+
 export interface IBaseRepository<TDomain> {
   save(entity: TDomain): Promise<TDomain>;
   update(id: string, data: Partial<TDomain>): Promise<TDomain | null>;
@@ -18,5 +20,8 @@ export interface IBaseRepository<TDomain> {
         }[];
     include?: Array<any>;
   }): Promise<TDomain[]>;
+  findWithPaginationAndFilter(
+    paginationQueryParams: PaginationQueryParams,
+  ): Promise<TDomain[]>;
   getTotalItems(): Promise<number>;
 }

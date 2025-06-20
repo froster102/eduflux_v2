@@ -3,6 +3,7 @@ import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-l
 import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use-case';
 import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
 import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
+import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
 import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url';
 import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
@@ -48,12 +49,21 @@ export class InstructorRoutes {
     private readonly addAssetToLectureUseCase: AddAssetToLectureUseCase,
     @inject(TYPES.SubmitForReviewUseCase)
     private readonly submitForReviewUseCase: SubmitForReviewUseCase,
+    @inject(TYPES.GetAllInstructorCoursesUseCase)
+    private readonly getAllInstructorCoursesUseCase: GetAllInstructorCoursesUseCase,
   ) {}
 
   register(): Elysia {
     return new Elysia().group('/api/courses', (group) =>
       group
         .use(authenticaionMiddleware)
+        .get('/me/taught-courses', async ({ user }) => {
+          const courses = await this.getAllInstructorCoursesUseCase.execute(
+            user.id,
+            {},
+          );
+          return courses;
+        })
         .get(
           '/me/taught-courses/:courseId/instructor-curriculum',
           async ({

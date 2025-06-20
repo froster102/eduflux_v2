@@ -6,6 +6,7 @@ import { ICourseRepository } from '@/domain/repositories/course.repository';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import type { IMapper } from '@/infrastructure/mappers/mapper.interface';
+import { PaginationQueryParams } from '@/application/dto/pagination.dto';
 
 @injectable()
 export class MongoCourseRepository
@@ -36,5 +37,56 @@ export class MongoCourseRepository
     });
 
     return course ? this.courseMapper.toDomain(course) : null;
+  }
+
+  async findAllInstructorCourses(
+    instructorId: string,
+    paginationQueryParams: PaginationQueryParams,
+  ): Promise<Course[]> {
+    const {
+      page = 1,
+      limit = 10,
+      searchQuery,
+      searchFields,
+      filters,
+      sortBy,
+      sortOrder = 'asc',
+    } = paginationQueryParams;
+
+    const query: Record<string, any> = {};
+    const options: Record<string, any> = {};
+
+    query['instructor.id'] = instructorId;
+
+    if (searchQuery && searchFields && searchFields.length > 0) {
+      query.$or = searchFields.map((field) => ({
+        [field]: { $regex: searchQuery, $options: 'i' },
+      }));
+    }
+
+    if (filters) {
+      for (const key in filters) {
+        if (Object.prototype.hasOwnProperty.call(filters, key)) {
+          const value = filters[key];
+          if (Array.isArray(value)) {
+            query[key] = { $in: value };
+          } else {
+            query[key] = value;
+          }
+        }
+      }
+    }
+
+    const skip = (page - 1) * limit;
+    options.skip = skip;
+    options.limit = limit;
+
+    if (sortBy) {
+      options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+    }
+
+    const result = await CourseModel.find(query, null, options);
+
+    return result ? this.courseMapper.toDomainArray(result) : [];
   }
 }

@@ -2,6 +2,7 @@ import type { IMapper } from '@/infrastructure/mappers/mapper.interface';
 import { Model } from 'mongoose';
 import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
 import type { IBaseRepository } from '@/domain/repositories/base.repository';
+import { PaginationQueryParams } from '@/application/dto/pagination.dto';
 
 export abstract class MongoBaseRepository<TDomain, TPersistence>
   implements IBaseRepository<TDomain>
@@ -89,6 +90,54 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
       .limit(limit);
 
     return enities ? this.mapper.toDomainArray(enities) : [];
+  }
+
+  async findWithPaginationAndFilter(
+    paginationQueryParams: PaginationQueryParams,
+  ): Promise<TDomain[]> {
+    const {
+      page = 1,
+      limit = 10,
+      searchQuery,
+      searchFields,
+      filters,
+      sortBy,
+      sortOrder = 'asc',
+    } = paginationQueryParams;
+
+    const query: Record<string, any> = {};
+    const options: Record<string, any> = {};
+
+    if (searchQuery && searchFields && searchFields.length > 0) {
+      query.$or = searchFields.map((field) => ({
+        [field]: { $regex: searchQuery, $options: 'i' },
+      }));
+    }
+
+    if (filters) {
+      for (const key in filters) {
+        if (Object.prototype.hasOwnProperty.call(filters, key)) {
+          const value = filters[key];
+          if (Array.isArray(value)) {
+            query[key] = { $in: value };
+          } else {
+            query[key] = value;
+          }
+        }
+      }
+    }
+
+    const skip = (page - 1) * limit;
+    options.skip = skip;
+    options.limit = limit;
+
+    if (sortBy) {
+      options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+    }
+
+    const result = await this.model.find(query, null, options);
+
+    return result ? this.mapper.toDomainArray(result) : [];
   }
 
   async deleteById(id: string): Promise<boolean> {
