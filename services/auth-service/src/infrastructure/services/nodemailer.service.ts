@@ -1,10 +1,12 @@
-import { IEmailService } from '@/application/services/email.service';
 import nodemailer from 'nodemailer';
 import { emailConfig } from '@/shared/config/email.config';
 import { Logger } from '@/shared/utils/logger';
 import { EMAIL_SERVICE } from '@/shared/constants/services';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { injectable } from 'inversify';
+import { IEmailService } from '@/application/ports/email.service';
 
+@injectable()
 export class NodeMailerService implements IEmailService {
   private _transporter: nodemailer.Transporter;
   private _logger = new Logger(EMAIL_SERVICE);
