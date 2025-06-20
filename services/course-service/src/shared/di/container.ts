@@ -14,7 +14,7 @@ import { UpdateCourseUseCase } from '@/application/use-cases/update-course.use-c
 import { ApproveCourseUseCase } from '@/application/use-cases/approve-course.use-case';
 import { RejectCourseUseCase } from '@/application/use-cases/reject-course.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
-import { GetInstructorCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
+import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
 import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url';
 import { PublishCourseUseCase } from '@/application/use-cases/publish-course.use-case';
 import { IFileStorageGateway } from '@/application/ports/file-storage.gateway';
@@ -68,10 +68,10 @@ container
   .bind<SubmitForReviewUseCase>(TYPES.SubmitForReviewUseCase)
   .to(SubmitForReviewUseCase);
 container
-  .bind<GetInstructorCurriculumUseCase>(
+  .bind<GetInstructorCourseCurriculumUseCase>(
     TYPES.GetInstructorCourseCurriculumUseCase,
   )
-  .to(GetInstructorCurriculumUseCase);
+  .to(GetInstructorCourseCurriculumUseCase);
 container
   .bind<GetCourseAssetsUploadUrlUseCase>(TYPES.GetCourseAssetsUploadUrlUseCase)
   .to(GetCourseAssetsUploadUrlUseCase);

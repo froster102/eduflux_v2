@@ -1,15 +1,22 @@
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
-import { Course } from '@/domain/entity/course.entity';
+import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { Chapter } from '@/domain/entity/chapter.entity';
+import { Lecture } from '@/domain/entity/lecture.entity';
+import { Asset } from '@/domain/entity/asset.entity';
+
+export type CurriculumItemWithAsset =
+  | Chapter
+  | (Lecture & { asset?: Partial<Asset> });
 
 @injectable()
-export class GetInstructorCurriculumUseCase {
+export class GetInstructorCourseCurriculumUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -17,9 +24,14 @@ export class GetInstructorCurriculumUseCase {
     private readonly chapterRepository: IChapterRepository,
     @inject(TYPES.LectureRepository)
     private readonly lectureRepository: ILectureRepository,
+    @inject(TYPES.AssetRepository)
+    private readonly assetRepository: IAssetRepository,
   ) {}
 
-  async execute(id: string, actor: AuthenticatedUserDto): Promise<Course> {
+  async execute(
+    id: string,
+    actor: AuthenticatedUserDto,
+  ): Promise<CurriculumItemWithAsset[]> {
     const course = await this.courseRepository.findById(id);
 
     if (!course) {
@@ -32,10 +44,47 @@ export class GetInstructorCurriculumUseCase {
       );
     }
 
-    if (!course) {
-      throw new NotFoundException(`Course with ID:${id} not found.`);
+    const chapters = await this.chapterRepository.findByCourseId(id);
+    const lectures = await this.lectureRepository.findByCourseId(id);
+
+    const assetIdsToFetch = lectures
+      .map((lecture) => lecture.assetId)
+      .filter((assetId): assetId is string => assetId !== null);
+
+    const assetMap = new Map<string, Asset>();
+
+    if (assetIdsToFetch.length > 0) {
+      const fetchedAssets =
+        await this.assetRepository.findByIds(assetIdsToFetch);
+      fetchedAssets.forEach((asset) => assetMap.set(asset.id, asset));
     }
 
-    return course;
+    const curriculumItems: CurriculumItemWithAsset[] = [...chapters];
+
+    lectures.forEach((lecture) => {
+      const lectureWithAsset: Lecture & { asset?: Partial<Asset> } = {
+        ...lecture,
+      } as Lecture;
+
+      if (lecture.assetId && assetMap.has(lecture.assetId)) {
+        const asset = assetMap.get(lecture.assetId);
+        lectureWithAsset.asset = {
+          id: asset!.id,
+          provider: asset!.provider,
+          providerSpecificId: asset!.providerSpecificId,
+          resourceType: asset!.resourceType,
+          accessType: asset!.accessType,
+          originalFileName: asset!.originalFileName,
+          duration: asset!.duration,
+          status: asset!.status,
+          mediaSources: asset!.mediaSources,
+        };
+      }
+      curriculumItems.push(lectureWithAsset);
+    });
+
+    curriculumItems.sort((a, b) => a.sortOrder - b.sortOrder);
+
+    return curriculumItems;
   }
 }

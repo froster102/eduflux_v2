@@ -42,6 +42,11 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
     return found ? this.mapper.toDomain(found.toObject()) : null;
   }
 
+  async findByIds(ids: string[]): Promise<TDomain[]> {
+    const enities = await this.model.find({ _id: { $in: ids } });
+    return enities ? this.mapper.toDomainArray(enities) : [];
+  }
+
   async getTotalItems(): Promise<number> {
     const total = await this.model.countDocuments();
     return total;

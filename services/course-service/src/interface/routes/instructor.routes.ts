@@ -4,7 +4,7 @@ import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use
 import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
 import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
 import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url';
-import { GetInstructorCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
+import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
@@ -33,7 +33,7 @@ export class InstructorRoutes {
     @inject(TYPES.CreateCourseUseCase)
     private readonly creatCourseUseCase: CreateCourseUseCase,
     @inject(TYPES.GetInstructorCourseCurriculumUseCase)
-    private readonly getInstructorCourseCurriculum: GetInstructorCurriculumUseCase,
+    private readonly getInstructorCourseCurriculum: GetInstructorCourseCurriculumUseCase,
     @inject(TYPES.CreateChapterUseCase)
     private readonly createChapterUseCase: CreateChapterUseCase,
     @inject(TYPES.UpdateChapterUseCase)
@@ -56,12 +56,16 @@ export class InstructorRoutes {
         .use(authenticaionMiddleware)
         .get(
           '/me/taught-courses/:courseId/instructor-curriculum',
-          async ({ params, user }): Promise<HttpResponse<Course>> => {
-            const course = await this.getInstructorCourseCurriculum.execute(
-              params.courseId,
-              user,
-            );
-            return { data: course };
+          async ({
+            params,
+            user,
+          }): Promise<HttpResponse<(Chapter | Lecture)[]>> => {
+            const curriculumItems =
+              await this.getInstructorCourseCurriculum.execute(
+                params.courseId,
+                user,
+              );
+            return { data: curriculumItems };
           },
         )
         .post('/', async ({ body, user }): Promise<HttpResponse<Course>> => {
