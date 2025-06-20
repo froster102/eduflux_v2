@@ -5,7 +5,7 @@ import { db } from '@/infrastructure/database/db';
 import * as schema from '@/infrastructure/database/schema';
 import { signUpSchema } from '@/infrastructure/http/schema/sign-up.schema';
 import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
-import { NodeMailerService } from '@/infrastructure/external/nodemailer.service';
+import { NodeMailerService } from '@/infrastructure/services/nodemailer.service';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
 import { IEvent } from '@/shared/interfaces/event.interface';
@@ -78,25 +78,25 @@ export const auth = betterAuth({
       if (ctx.path === '/sign-in/email') {
         const newSession = ctx.context.newSession;
         if (newSession) {
-        const jwtToken = await getJwtToken(ctx, {
-          jwt: {
+          const jwtToken = await getJwtToken(ctx, {
+            jwt: {
               issuer: process.env.JWT_ISS,
               audience: process.env.JWT_AUD,
-            definePayload() {
-              return {
-                ...newSession.user,
-                sessionId: newSession.session.id,
-              };
+              definePayload() {
+                return {
+                  ...newSession.user,
+                  sessionId: newSession.session.id,
+                };
+              },
+              getSubject: () => newSession.user.id,
             },
-            getSubject: () => newSession.user.id,
-          },
-        });
-        ctx.setCookie('user_jwt', jwtToken, {
-          httpOnly: true,
-          sameSite: 'None',
-          secure: true,
-          path: '/',
-        });
+          });
+          ctx.setCookie('user_jwt', jwtToken, {
+            httpOnly: true,
+            sameSite: 'None',
+            secure: true,
+            path: '/',
+          });
         }
         const returned = ctx.context.returned as Record<string, any>;
         if (returned.user) {
