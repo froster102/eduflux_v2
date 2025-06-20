@@ -5,6 +5,7 @@ import { Logger } from 'src/shared/utils/logger';
 import { notFoundHandler } from './middleware/not-found-handler.middleware';
 import { httpLoggerMiddleware } from './middleware/http-logger.middleware';
 import Bun from 'bun';
+import { errorHandler } from './middleware/error-handler.middleware';
 
 export class Server {
   private _app: Hono;
@@ -22,6 +23,7 @@ export class Server {
       return auth.handler(c.req.raw);
     });
     this._app.notFound(notFoundHandler);
+    this._app.onError(errorHandler);
   }
 
   private _setupRoutes(): void {}
