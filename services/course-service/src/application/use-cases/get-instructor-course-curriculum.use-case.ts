@@ -63,7 +63,7 @@ export class GetInstructorCourseCurriculumUseCase {
 
     lectures.forEach((lecture) => {
       const lectureWithAsset: Lecture & { asset?: Partial<Asset> } = {
-        ...lecture,
+        ...lecture.toJSON(),
       } as Lecture;
 
       if (lecture.assetId && assetMap.has(lecture.assetId)) {

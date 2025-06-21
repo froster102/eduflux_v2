@@ -137,6 +137,7 @@ export class Lecture {
 
   toJSON(): object {
     return {
+      _class: this._class,
       id: this._id,
       title: this.title,
       courseId: this._courseId,
