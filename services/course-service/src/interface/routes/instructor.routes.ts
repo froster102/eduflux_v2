@@ -24,6 +24,7 @@ import {
   updateChapterSchema,
   updateLessonSchema,
 } from '@/infrastructure/http/schema/course.schema';
+import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination.schema';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
@@ -57,10 +58,11 @@ export class InstructorRoutes {
     return new Elysia().group('/api/courses', (group) =>
       group
         .use(authenticaionMiddleware)
-        .get('/me/taught-courses', async ({ user }) => {
+        .get('/me/taught-courses', async ({ user, query }) => {
+          const paredQuery = paginationQuerySchema.parse(query);
           const courses = await this.getAllInstructorCoursesUseCase.execute(
             user.id,
-            {},
+            paredQuery,
           );
           return courses;
         })
