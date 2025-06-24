@@ -11,6 +11,7 @@ const courseLevelEnum: Array<'beginner' | 'intermediate' | 'advanced'> = [
 const rejectionFeedbackMinLength = 20;
 const noLeadingSpecialCharRegex = /^[a-zA-Z0-9].*/;
 const resourceTypeEnum = ['image', 'video', 'raw'];
+const classEnum = ['chapter', 'lecture'];
 
 export const createCourseSchema = z.object({
   title: z
@@ -113,4 +114,13 @@ export const rejectCourseSchema = z.object({
   feedback: z.string().min(rejectionFeedbackMinLength, {
     error: `Feedback must be at least ${rejectionFeedbackMinLength} characters`,
   }),
+});
+
+export const reorderCurriculumSchema = z.object({
+  items: z.array(
+    z.object({
+      class: z.enum(classEnum),
+      id: z.string(),
+    }),
+  ),
 });

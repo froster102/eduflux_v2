@@ -47,9 +47,7 @@ export class MongoLectureRepository
         },
       }),
     );
-    if (operations.length > 0) {
-      await LectureModel.bulkWrite(operations);
-    }
+    await LectureModel.bulkWrite(operations);
   }
 
   async getMaxObjectIndex(courseId: string): Promise<number> {

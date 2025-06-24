@@ -23,6 +23,7 @@ export const TYPES = {
   CompleteAssetUploadUseCase: Symbol.for('CompleteAssetUploadUseCase'),
   AddAssetToLectureUseCase: Symbol.for('AddAssetToLessonUseCase'),
   GetAllInstructorCoursesUseCase: Symbol.for('GetAllInstructorCoursesUseCase'),
+  ReorderCurriculumUseCase: Symbol.for('ReorderCurriculumUseCase'),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),

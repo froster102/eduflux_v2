@@ -35,7 +35,7 @@ export class ReorderCurriculumUseCase {
       throw new NotFoundException(`Course with ID:${courseId} not found.`);
     }
 
-    if (course.id !== actor.id) {
+    if (course.instructor.id !== actor.id) {
       throw new ForbiddenException(
         `You are not authorized to modify this course.`,
       );
@@ -60,12 +60,11 @@ export class ReorderCurriculumUseCase {
     const updatedChapters: Chapter[] = [];
     const updatedLectures: Lecture[] = [];
 
-    let currentChapterObjectIndex = 0;
-    let currentLectureObjectIndex = 0;
-
+    let currentChapterObjectIndex = 1;
+    let currentLectureObjectIndex = 1;
     for (let i = 0; i < orderedItems.length; i++) {
       const item = orderedItems[i];
-      const newSortOrder = i;
+      const newSortOrder = i + 1;
 
       if (item.class === 'chapter') {
         const chapter = chapterMap.get(item.id);
@@ -73,6 +72,7 @@ export class ReorderCurriculumUseCase {
           chapter.setSortOrder(newSortOrder);
           chapter.setObjectIndex(currentChapterObjectIndex++);
           updatedChapters.push(chapter);
+          chapter.toJSON();
         } else {
           throw new InvalidInputException(
             `Invalid curriculum items structure.`,
@@ -84,6 +84,7 @@ export class ReorderCurriculumUseCase {
           lecture.setSortOrder(newSortOrder);
           lecture.setObjectIndex(currentLectureObjectIndex++);
           updatedLectures.push(lecture);
+          lecture.toJSON();
         } else {
           throw new InvalidInputException(
             `Invalid curriculum items structure.`,

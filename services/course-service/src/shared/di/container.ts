@@ -46,6 +46,7 @@ import { MongoChapterRepository } from '@/infrastructure/database/repositories/c
 import { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import { MongoLectureRepository } from '@/infrastructure/database/repositories/lecture.repository';
 import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
+import { ReorderCurriculumUseCase } from '@/application/use-cases/reorder-curriculum.use-case';
 
 const container = new Container();
 
@@ -106,6 +107,9 @@ container
 container
   .bind<GetAllInstructorCoursesUseCase>(TYPES.GetAllInstructorCoursesUseCase)
   .to(GetAllInstructorCoursesUseCase);
+container
+  .bind<ReorderCurriculumUseCase>(TYPES.ReorderCurriculumUseCase)
+  .to(ReorderCurriculumUseCase);
 
 //Http Routes
 container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);

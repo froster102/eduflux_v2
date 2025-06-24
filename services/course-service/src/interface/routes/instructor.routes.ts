@@ -6,6 +6,10 @@ import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use
 import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
 import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url';
 import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
+import {
+  ReorderCurriculumDto,
+  ReorderCurriculumUseCase,
+} from '@/application/use-cases/reorder-curriculum.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
@@ -21,6 +25,7 @@ import {
   createChapterSchema,
   createCourseSchema,
   getUploadUrlSchema,
+  reorderCurriculumSchema,
   updateChapterSchema,
   updateLessonSchema,
 } from '@/infrastructure/http/schema/course.schema';
@@ -52,6 +57,8 @@ export class InstructorRoutes {
     private readonly submitForReviewUseCase: SubmitForReviewUseCase,
     @inject(TYPES.GetAllInstructorCoursesUseCase)
     private readonly getAllInstructorCoursesUseCase: GetAllInstructorCoursesUseCase,
+    @inject(TYPES.ReorderCurriculumUseCase)
+    private readonly reorderCurriculumUseCase: ReorderCurriculumUseCase,
   ) {}
 
   register(): Elysia {
@@ -68,16 +75,28 @@ export class InstructorRoutes {
         })
         .get(
           '/me/taught-courses/:courseId/instructor-curriculum',
-          async ({
-            params,
-            user,
-          }): Promise<HttpResponse<(Chapter | Lecture)[]>> => {
+          async ({ params, user }) => {
             const curriculumItems =
               await this.getInstructorCourseCurriculum.execute(
                 params.courseId,
                 user,
               );
             return { data: curriculumItems };
+          },
+        )
+        .put(
+          '/me/taught-courses/:courseId/instructor-curriculum',
+          async ({ body, params, user }) => {
+            const parsedBody = reorderCurriculumSchema.parse(
+              body,
+            ) as ReorderCurriculumDto;
+            await this.reorderCurriculumUseCase.execute(
+              {
+                courseId: params.courseId,
+                items: parsedBody.items,
+              },
+              user,
+            );
           },
         )
         .post('/', async ({ body, user }): Promise<HttpResponse<Course>> => {

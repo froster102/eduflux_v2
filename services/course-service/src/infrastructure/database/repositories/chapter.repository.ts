@@ -26,27 +26,27 @@ export class MongoChapterRepository
 
   async updateAll(chapters: Chapter[]): Promise<void> {
     const operations: AnyBulkWriteOperation<IChapter>[] = chapters.map(
-      (chapter) => ({
-        updateOne: {
-          filter: {
-            _id: chapter.id,
-          },
-          update: {
-            $set: {
-              courseId: chapter.courseId,
-              title: chapter.title,
-              description: chapter.description,
-              sortOrder: chapter.sortOrder,
-              objectIndex: chapter.objectIndex,
+      (chapter) => {
+        return {
+          updateOne: {
+            filter: {
+              _id: chapter.id,
+            },
+            update: {
+              $set: {
+                courseId: chapter.courseId,
+                title: chapter.title,
+                description: chapter.description,
+                sortOrder: chapter.sortOrder,
+                objectIndex: chapter.objectIndex,
+              },
             },
           },
-        },
-      }),
+        };
+      },
     );
 
-    if (operations.length > 0) {
-      await ChapterModel.bulkWrite(operations);
-    }
+    await ChapterModel.bulkWrite(operations);
   }
 
   async getMaxObjectIndex(courseId: string): Promise<number> {
