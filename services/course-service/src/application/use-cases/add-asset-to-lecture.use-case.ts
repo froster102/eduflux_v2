@@ -7,6 +7,7 @@ import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface AddAssetToLectureDto {
   courseId: string;
@@ -14,8 +15,15 @@ export interface AddAssetToLectureDto {
   assetId: string;
 }
 
+export interface AddAssetToLectureInput {
+  addAssetToLectureDto: AddAssetToLectureDto;
+  actor: AuthenticatedUserDto;
+}
+
 @injectable()
-export class AddAssetToLectureUseCase {
+export class AddAssetToLectureUseCase
+  implements IUseCase<AddAssetToLectureInput, void>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -25,20 +33,21 @@ export class AddAssetToLectureUseCase {
     private readonly lectureRepository: ILectureRepository,
   ) {}
 
-  async execute(
-    dto: AddAssetToLectureDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<void> {
-    const course = await this.courseRepository.findById(dto.courseId);
+  async execute(addAssetToLectureInput: AddAssetToLectureInput): Promise<void> {
+    const { addAssetToLectureDto, actor } = addAssetToLectureInput;
 
-    const asset = await this.assetRepository.findById(dto.assetId);
+    const { assetId, courseId, lectureId } = addAssetToLectureDto;
+
+    const course = await this.courseRepository.findById(courseId);
+
+    const asset = await this.assetRepository.findById(assetId);
 
     if (!asset) {
-      throw new NotFoundException(`Asset with ID:${dto.assetId} not found.`);
+      throw new NotFoundException(`Asset with ID:${assetId} not found.`);
     }
 
     if (!course) {
-      throw new NotFoundException(`Course with ID:${dto.courseId} not found.`);
+      throw new NotFoundException(`Course with ID:${courseId} not found.`);
     }
 
     if (course.instructor.id !== actor.id) {
@@ -47,11 +56,11 @@ export class AddAssetToLectureUseCase {
       );
     }
 
-    const lecture = await this.lectureRepository.findById(dto.lectureId);
+    const lecture = await this.lectureRepository.findById(lectureId);
 
     if (!lecture) {
       throw new NotFoundException(
-        `Lecture with ID:${dto.lectureId} not found in the course.`,
+        `Lecture with ID:${lectureId} not found in the course.`,
       );
     }
 
@@ -61,9 +70,9 @@ export class AddAssetToLectureUseCase {
       );
     }
 
-    lecture.assignMedia(dto.assetId);
+    lecture.assignMedia(assetId);
 
-    await this.lectureRepository.update(dto.lectureId, lecture);
+    await this.lectureRepository.update(lectureId, lecture);
 
     return;
   }

@@ -10,13 +10,22 @@ import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Chapter } from '@/domain/entity/chapter.entity';
 import { Lecture } from '@/domain/entity/lecture.entity';
 import { Asset } from '@/domain/entity/asset.entity';
+import { IUseCase } from './interface/use-case.interface';
 
 export type CurriculumItemWithAsset =
   | Chapter
   | (Lecture & { asset?: Partial<Asset> });
 
+export interface GetInstructorCourseCurriculumInput {
+  id: string;
+  actor: AuthenticatedUserDto;
+}
+
 @injectable()
-export class GetInstructorCourseCurriculumUseCase {
+export class GetInstructorCourseCurriculumUseCase
+  implements
+    IUseCase<GetInstructorCourseCurriculumInput, CurriculumItemWithAsset[]>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -29,9 +38,9 @@ export class GetInstructorCourseCurriculumUseCase {
   ) {}
 
   async execute(
-    id: string,
-    actor: AuthenticatedUserDto,
+    getInstructorCourseCurriculumInput: GetInstructorCourseCurriculumInput,
   ): Promise<CurriculumItemWithAsset[]> {
+    const { id, actor } = getInstructorCourseCurriculumInput;
     const course = await this.courseRepository.findById(id);
 
     if (!course) {

@@ -6,18 +6,24 @@ import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Course } from '@/domain/entity/course.entity';
 import { RejectCourseDto } from '../dto/reject-course.dto';
+import { IUseCase } from './interface/use-case.interface';
+
+export interface RejectCourseInput {
+  rejectCourseDto: RejectCourseDto;
+  actor: AuthenticatedUserDto;
+}
 
 @injectable()
-export class RejectCourseUseCase {
+export class RejectCourseUseCase
+  implements IUseCase<RejectCourseInput, Course>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
   ) {}
 
-  async execute(
-    rejectCourseDto: RejectCourseDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<Course> {
+  async execute(rejectCourseInput: RejectCourseInput): Promise<Course> {
+    const { rejectCourseDto, actor } = rejectCourseInput;
     const { courseId, feedback } = rejectCourseDto;
     const foundCourse = await this.courseRepository.findById(courseId);
 

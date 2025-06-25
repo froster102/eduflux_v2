@@ -3,6 +3,7 @@ import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface CompleteAssetUploadDto {
   providerSpecificId: string;
@@ -14,32 +15,34 @@ export interface CompleteAssetUploadDto {
 }
 
 @injectable()
-export class CompleteAssetUploadUseCase {
+export class CompleteAssetUploadUseCase
+  implements IUseCase<CompleteAssetUploadDto, Asset>
+{
   constructor(
     @inject(TYPES.AssetRepository)
     private readonly assetRepository: IAssetRepository,
   ) {}
 
-  async execute(dto: CompleteAssetUploadDto): Promise<Asset> {
-    const asset = await this.assetRepository.findByProvideSpecificId(
-      dto.providerSpecificId,
-    );
+  async execute(
+    completeAssetUploadDto: CompleteAssetUploadDto,
+  ): Promise<Asset> {
+    const { additionalMetadata, duration, mediaSource, providerSpecificId } =
+      completeAssetUploadDto;
+
+    const asset =
+      await this.assetRepository.findByProvideSpecificId(providerSpecificId);
 
     if (!asset) {
       throw new NotFoundException(
-        `Asset with ID:${dto.providerSpecificId} not found`,
+        `Asset with ID:${providerSpecificId} not found`,
       );
     }
 
-    if (dto.mediaSource) {
-      asset.addMediaSource(dto.mediaSource);
+    if (mediaSource) {
+      asset.addMediaSource(mediaSource);
     }
 
-    asset.confirmUpload(
-      dto.providerSpecificId,
-      dto.duration,
-      dto.additionalMetadata,
-    );
+    asset.confirmUpload(providerSpecificId, duration, additionalMetadata);
 
     await this.assetRepository.update(asset.id, asset);
 

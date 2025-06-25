@@ -1,5 +1,6 @@
 import type { IUserServiceGateway } from '../ports/user-service.gateway';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type { ICategoryRepository } from '@/domain/repositories/category.repository';
 import { Course } from '@/domain/entity/course.entity';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { inject, injectable } from 'inversify';
@@ -8,21 +9,29 @@ import { NotFoundException } from '../exceptions/not-found.exception';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Role } from '@/shared/constants/roles';
-import { ConflictException } from '../exceptions/conflict.exception';
+import { IUseCase } from './interface/use-case.interface';
+
+export interface CreateCourseInput {
+  createCourseDto: CreateCourseDto;
+  actor: AuthenticatedUserDto;
+}
 
 @injectable()
-export class CreateCourseUseCase {
+export class CreateCourseUseCase
+  implements IUseCase<CreateCourseInput, Course>
+{
   constructor(
     @inject(TYPES.UserServiceGateway)
     private readonly userServiceGateway: IUserServiceGateway,
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
+    @inject(TYPES.CategoryRepository)
+    private readonly categoryRepository: ICategoryRepository,
   ) {}
 
-  async execute(
-    createCourseDto: CreateCourseDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<Course> {
+  async execute(createCourseInput: CreateCourseInput): Promise<Course> {
+    const { createCourseDto, actor } = createCourseInput;
+
     const isAuthorized = actor.hasRole(Role.INSTRUCTOR);
     if (!isAuthorized) {
       throw new ForbiddenException(

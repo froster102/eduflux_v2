@@ -13,6 +13,11 @@ export interface UpdateLectureDto extends Partial<CreateLectureDto> {
   lectureId: string;
 }
 
+export interface UpdateLectureInput {
+  updateLectureDto: UpdateLectureDto;
+  actor: AuthenticatedUserDto;
+}
+
 export class UpdateLectureUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
@@ -21,10 +26,8 @@ export class UpdateLectureUseCase {
     private readonly lectureRepository: ILectureRepository,
   ) {}
 
-  async execute(
-    dto: UpdateLectureDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<Lecture> {
+  async execute(updateLectureInput: UpdateLectureInput): Promise<Lecture> {
+    const { updateLectureDto: dto, actor } = updateLectureInput;
     const { courseId, lectureId } = dto;
     const course = await this.courseRepository.findById(courseId);
 

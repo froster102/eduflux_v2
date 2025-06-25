@@ -15,6 +15,11 @@ export interface ReorderCurriculumDto {
   items: { class: ClassType; id: string }[];
 }
 
+export interface ReorderCurriculumInput {
+  reorderCurriculumDto: ReorderCurriculumDto;
+  actor: AuthenticatedUserDto;
+}
+
 @injectable()
 export class ReorderCurriculumUseCase {
   constructor(
@@ -26,7 +31,8 @@ export class ReorderCurriculumUseCase {
     private readonly chapterRepository: IChapterRepository,
   ) {}
 
-  async execute(dto: ReorderCurriculumDto, actor: AuthenticatedUserDto) {
+  async execute(reorderCurriculumInput: ReorderCurriculumInput) {
+    const { reorderCurriculumDto: dto, actor } = reorderCurriculumInput;
     const { courseId, items: orderedItems } = dto;
 
     const course = await this.courseRepository.findById(courseId);

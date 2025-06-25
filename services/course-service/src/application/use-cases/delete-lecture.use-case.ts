@@ -5,14 +5,22 @@ import { inject, injectable } from 'inversify';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface DeleteLectureDto {
   courseId: string;
   lectureId: string;
 }
 
+export interface DeleteLectureInput {
+  deleteLectureDto: DeleteLectureDto;
+  actor: AuthenticatedUserDto;
+}
+
 @injectable()
-export class DeleteLectureUseCase {
+export class DeleteLectureUseCase
+  implements IUseCase<DeleteLectureInput, void>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -20,11 +28,10 @@ export class DeleteLectureUseCase {
     private readonly lectureRepository: ILectureRepository,
   ) {}
 
-  async execute(
-    dto: DeleteLectureDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<void> {
-    const { courseId, lectureId } = dto;
+  async execute(deleteLectureInput: DeleteLectureInput): Promise<void> {
+    const { deleteLectureDto, actor } = deleteLectureInput;
+
+    const { courseId, lectureId } = deleteLectureDto;
 
     const foundCourse = await this.courseRepository.findById(courseId);
 

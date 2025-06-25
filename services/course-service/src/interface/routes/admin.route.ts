@@ -80,10 +80,10 @@ export class AdminRoutes {
         .patch(
           '/:courseId/approve',
           async ({ params, user }): Promise<HttpResponse<Course>> => {
-            const course = await this.approveCourseUseCase.execute(
-              params.courseId,
-              user,
-            );
+            const course = await this.approveCourseUseCase.execute({
+              courseId: params.courseId,
+              actor: user,
+            });
             return { data: course };
           },
         )
@@ -91,10 +91,13 @@ export class AdminRoutes {
           '/:courseId/reject',
           async ({ params, user, body }): Promise<HttpResponse<Course>> => {
             const paredBody = rejectCourseSchema.parse(body);
-            const course = await this.rejectCourseUseCase.execute(
-              { courseId: params.courseId, feedback: paredBody.feedback },
-              user,
-            );
+            const course = await this.rejectCourseUseCase.execute({
+              actor: user,
+              rejectCourseDto: {
+                courseId: params.courseId,
+                feedback: paredBody.feedback,
+              },
+            });
             return { data: course };
           },
         ),

@@ -5,18 +5,25 @@ import { inject, injectable } from 'inversify';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { IUseCase } from './interface/use-case.interface';
+
+export interface SubmitForReviewInput {
+  courseId: string;
+  actor: AuthenticatedUserDto;
+}
 
 @injectable()
-export class SubmitForReviewUseCase {
+export class SubmitForReviewUseCase
+  implements IUseCase<SubmitForReviewInput, Course>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
   ) {}
 
-  async execute(
-    courseId: string,
-    actor: AuthenticatedUserDto,
-  ): Promise<Course> {
+  async execute(submitForReviewInput: SubmitForReviewInput): Promise<Course> {
+    const { courseId, actor } = submitForReviewInput;
+
     const foundCourse = await this.courseRepository.findById(courseId);
 
     if (!foundCourse) {

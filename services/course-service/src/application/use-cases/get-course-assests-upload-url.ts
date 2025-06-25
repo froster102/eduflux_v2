@@ -11,14 +11,21 @@ import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Asset, ResourceType } from '@/domain/entity/asset.entity';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import { v4 as uuidV4 } from 'uuid';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface GetCourseAssetsUploadUrlDto {
   courseId: string;
   resourceType: ResourceType;
 }
+export interface GetCourseAssetsUploadUrlInput {
+  getCourseAssetsUploadUrlDto: GetCourseAssetsUploadUrlDto;
+  actor: AuthenticatedUserDto;
+}
 
 @injectable()
-export class GetCourseAssetsUploadUrlUseCase {
+export class GetCourseAssetsUploadUrlUseCase
+  implements IUseCase<GetCourseAssetsUploadUrlInput, IUploadCredentialsResponse>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -29,9 +36,10 @@ export class GetCourseAssetsUploadUrlUseCase {
   ) {}
 
   async execute(
-    dto: GetCourseAssetsUploadUrlDto,
-    actor: AuthenticatedUserDto,
+    getCourseAssetsUploadUrlInput: GetCourseAssetsUploadUrlInput,
   ): Promise<IUploadCredentialsResponse> {
+    const { getCourseAssetsUploadUrlDto: dto, actor } =
+      getCourseAssetsUploadUrlInput;
     const course = await this.courseRepository.findById(dto.courseId);
 
     if (!course) {

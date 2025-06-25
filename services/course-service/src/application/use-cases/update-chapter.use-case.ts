@@ -7,14 +7,22 @@ import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Chapter } from '@/domain/entity/chapter.entity';
 import { CreateChapterDto } from './create-chapter.use-case';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface UpdateChapterDto extends Partial<CreateChapterDto> {
   courseId: string;
   chapterId: string;
 }
 
+export interface UpdateChapterInput {
+  updateChapterDto: UpdateChapterDto;
+  actor: AuthenticatedUserDto;
+}
+
 @injectable()
-export class UpdateChapterUseCase {
+export class UpdateChapterUseCase
+  implements IUseCase<UpdateChapterInput, Chapter>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -22,10 +30,8 @@ export class UpdateChapterUseCase {
     private readonly chapterRepository: IChapterRepository,
   ) {}
 
-  async execute(
-    dto: UpdateChapterDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<Chapter> {
+  async execute(updateChapterInput: UpdateChapterInput): Promise<Chapter> {
+    const { updateChapterDto: dto, actor } = updateChapterInput;
     const foundCourse = await this.courseRepository.findById(dto.courseId);
 
     if (!foundCourse) {

@@ -7,6 +7,7 @@ import { inject } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface CreateChapterDto {
   courseId: string;
@@ -14,7 +15,14 @@ export interface CreateChapterDto {
   description: string;
 }
 
-export class CreateChapterUseCase {
+export interface CreateChapterInput {
+  createChapterDto: CreateChapterDto;
+  actor: AuthenticatedUserDto;
+}
+
+export class CreateChapterUseCase
+  implements IUseCase<CreateChapterInput, Chapter>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -24,10 +32,9 @@ export class CreateChapterUseCase {
     private readonly lectureRepository: ILectureRepository,
   ) {}
 
-  async execute(
-    dto: CreateChapterDto,
-    actor: AuthenticatedUserDto,
-  ): Promise<Chapter> {
+  async execute(createChapterInput: CreateChapterInput): Promise<Chapter> {
+    const { createChapterDto: dto, actor } = createChapterInput;
+
     const course = await this.courseRepository.findById(dto.courseId);
 
     if (!course) {
