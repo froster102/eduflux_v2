@@ -33,17 +33,14 @@ export const CourseSchema = new Schema<ICourse>(
   {
     _id: {
       type: String,
-      required: true,
     },
 
     title: {
       type: String,
-      required: true,
     },
 
     description: {
       type: String,
-      required: true,
     },
 
     thumbnail: {
@@ -53,7 +50,6 @@ export const CourseSchema = new Schema<ICourse>(
 
     level: {
       type: String,
-      required: true,
     },
 
     price: {
