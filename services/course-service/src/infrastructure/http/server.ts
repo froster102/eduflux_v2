@@ -8,6 +8,7 @@ import { AdminRoutes } from '@/interface/routes/admin.route';
 import { TYPES } from '@/shared/di/types';
 import { InstructorRoutes } from '@/interface/routes/instructor.routes';
 import { LearnerRoutes } from '@/interface/routes/learner.routes';
+import { CourseRoutes } from '@/interface/routes/course.routes';
 
 export class Server {
   private app: Elysia;
@@ -30,10 +31,12 @@ export class Server {
     const instructorRoutes = container.get<InstructorRoutes>(
       TYPES.InstructorRoutes,
     );
+    const courseRoutes = container.get<CourseRoutes>(TYPES.CourseRoutes);
     const learnerRoutes = container.get<LearnerRoutes>(TYPES.LearnerRoutes);
     this.app.use(adminRoutes.register());
     this.app.use(instructorRoutes.register());
     this.app.use(learnerRoutes.register());
+    this.app.use(courseRoutes.register());
   }
 
   start(): void {

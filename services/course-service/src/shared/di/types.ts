@@ -24,6 +24,7 @@ export const TYPES = {
   AddAssetToLectureUseCase: Symbol.for('AddAssetToLessonUseCase'),
   GetAllInstructorCoursesUseCase: Symbol.for('GetAllInstructorCoursesUseCase'),
   ReorderCurriculumUseCase: Symbol.for('ReorderCurriculumUseCase'),
+  GetCourseCategoriesUseCase: Symbol.for('GetCourseCategoriesUseCase'),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),
@@ -40,6 +41,7 @@ export const TYPES = {
   AdminRoutes: Symbol.for('AdminRoutes'),
   InstructorRoutes: Symbol.for('InstructorRoutes'),
   LearnerRoutes: Symbol.for('LearnerRoutes'),
+  CourseRoutes: Symbol.for('CourseRoutes'),
 
   //Mappers
   CourseMapper: Symbol.for('CourseMapper'),

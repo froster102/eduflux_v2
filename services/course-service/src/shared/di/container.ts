@@ -52,6 +52,8 @@ import { ICategory } from '@/infrastructure/database/schema/category.schema';
 import { CategoryMapper } from '@/infrastructure/mappers/category.mapper';
 import { ICategoryRepository } from '@/domain/repositories/category.repository';
 import { MongoCategoryRepository } from '@/infrastructure/database/repositories/category.repository';
+import { GetCourseCategoriesUseCase } from '@/application/use-cases/get-course-categories.use-case';
+import { CourseRoutes } from '@/interface/routes/course.routes';
 
 const container = new Container();
 
@@ -115,11 +117,15 @@ container
 container
   .bind<ReorderCurriculumUseCase>(TYPES.ReorderCurriculumUseCase)
   .to(ReorderCurriculumUseCase);
+container
+  .bind<GetCourseCategoriesUseCase>(TYPES.GetCourseCategoriesUseCase)
+  .to(GetCourseCategoriesUseCase);
 
 //Http Routes
 container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);
 container.bind<LearnerRoutes>(TYPES.LearnerRoutes).to(LearnerRoutes);
 container.bind<InstructorRoutes>(TYPES.InstructorRoutes).to(InstructorRoutes);
+container.bind<CourseRoutes>(TYPES.CourseRoutes).to(CourseRoutes);
 
 //Ports
 container
