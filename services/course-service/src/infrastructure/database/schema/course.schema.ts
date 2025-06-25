@@ -1,3 +1,4 @@
+import { CourseLevel } from '@/domain/entity/course.entity';
 import { Schema } from 'mongoose';
 
 type Status =
@@ -14,7 +15,7 @@ export interface ICourse extends Document {
   title: string;
   description: string;
   thumbnail: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  level: CourseLevel | null;
   price: string | null;
   isFree: boolean;
   status: Status;

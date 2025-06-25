@@ -45,15 +45,14 @@ export class CreateCourseUseCase {
       );
     }
 
-    const course = Course.create(
-      createCourseDto.title,
-      createCourseDto.description,
-      createCourseDto.level,
-      {
+    const course = Course.create({
+      title: createCourseDto.title,
+      instructor: {
         id: instructor.id,
         name: instructor.name,
       },
     );
+    });
 
     const savedCourse = await this.courseRepository.save(course);
 

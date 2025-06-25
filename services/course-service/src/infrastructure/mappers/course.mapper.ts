@@ -4,6 +4,13 @@ import { ICourse } from '../database/schema/course.schema';
 
 export class CourseMapper implements IMapper<Course, ICourse> {
   toDomain(raw: ICourse): Course {
+    return Course.fromPersistence({
+      id: (raw._id as string).toString(),
+      title: raw.title,
+      description: raw.description,
+      thumbnail: raw.thumbnail,
+      level: raw.level,
+      price: raw.price,
     return Course.fromPersistence(
       (raw._id as string).toString(),
       raw.title,
@@ -21,6 +28,16 @@ export class CourseMapper implements IMapper<Course, ICourse> {
       raw.publishedAt,
       raw.updatedAt,
     );
+      isFree: raw.isFree,
+      status: raw.status,
+      feedback: raw.feedback,
+      instructor: raw.instructor,
+      averageRating: raw.averageRating,
+      ratingCount: raw.ratingCount,
+      createdAt: raw.createdAt,
+      publishedAt: raw.publishedAt,
+      updatedAt: raw.updatedAt,
+    });
   }
 
   toPersistence(raw: Course): Partial<ICourse> {
@@ -29,6 +46,7 @@ export class CourseMapper implements IMapper<Course, ICourse> {
       title: raw.title,
       description: raw.description,
       level: raw.level,
+      price: raw.price,
       price: raw.priceTierId,
       isFree: raw.isFree,
       status: raw.status,

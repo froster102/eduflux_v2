@@ -34,12 +34,12 @@ export class UpdateCourseUseCase {
       );
     }
 
-    foundCourse.updateDetails(
-      updateCourseDto.title ?? foundCourse.title,
-      updateCourseDto.description ?? foundCourse.description,
-      updateCourseDto.thumbnail ?? foundCourse.thumbnail,
-      updateCourseDto.level ?? foundCourse.level,
-    );
+    foundCourse.updateDetails({
+      title: updateCourseDto.title ?? foundCourse.title,
+description: updateCourseDto.description ?? foundCourse.description,
+thumbnail: updateCourseDto.thumbnail ?? foundCourse.thumbnail,
+level: updateCourseDto.level ?? foundCourse.level,
+});
 
     const updatedCourse = await this.courseRepository.update(
       updateCourseDto.courseId,
