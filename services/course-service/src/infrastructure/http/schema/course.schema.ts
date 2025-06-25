@@ -25,14 +25,7 @@ export const createCourseSchema = z.object({
     .regex(noLeadingSpecialCharRegex, {
       error: 'Title cannot start with a special character or space',
     }),
-
-  description: z.string().min(descriptionMinLength, {
-    error: `Description must be at least ${descriptionMinLength} characters`,
-  }),
-
-  level: z.enum(courseLevelEnum, {
-    error: `Level should be any of ${courseLevelEnum.join(',')}`,
-  }),
+  categoryId: z.string({ error: 'A valid category ID is required' }),
 });
 
 export const getCourseParams = z.object({
@@ -77,6 +70,16 @@ export const updateChapterSchema = z.object({
       error: `Description must be at least ${descriptionMinLength} characters`,
     })
     .optional(),
+
+  thumbnail: z.url().optional(),
+
+  category: z.string().optional(),
+
+  price: z.number().optional(),
+
+  isFree: z.boolean().optional(),
+
+  level: z.enum(courseLevelEnum).optional(),
 });
 
 export const addLessonSchema = z.object({

@@ -47,6 +47,11 @@ import { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import { MongoLectureRepository } from '@/infrastructure/database/repositories/lecture.repository';
 import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
 import { ReorderCurriculumUseCase } from '@/application/use-cases/reorder-curriculum.use-case';
+import { Category } from '@/domain/entity/category.entity';
+import { ICategory } from '@/infrastructure/database/schema/category.schema';
+import { CategoryMapper } from '@/infrastructure/mappers/category.mapper';
+import { ICategoryRepository } from '@/domain/repositories/category.repository';
+import { MongoCategoryRepository } from '@/infrastructure/database/repositories/category.repository';
 
 const container = new Container();
 
@@ -137,6 +142,9 @@ container
 container
   .bind<ILectureRepository>(TYPES.LectureRepository)
   .to(MongoLectureRepository);
+container
+  .bind<ICategoryRepository>(TYPES.CategoryRepository)
+  .to(MongoCategoryRepository);
 
 //mappers
 container
@@ -154,6 +162,10 @@ container
 container
   .bind<IMapper<Asset, IAsset>>(TYPES.AssetMapper)
   .to(AssetMapper)
+  .inSingletonScope();
+container
+  .bind<IMapper<Category, ICategory>>(TYPES.CategoryMapper)
+  .to(CategoryMapper)
   .inSingletonScope();
 
 export { container };

@@ -17,6 +17,7 @@ export interface ICourse extends Document {
   thumbnail: string;
   level: CourseLevel | null;
   price: string | null;
+  categoryId: string;
   isFree: boolean;
   status: Status;
   feedback: string | null;
@@ -57,6 +58,11 @@ export const CourseSchema = new Schema<ICourse>(
 
     price: {
       type: String,
+    },
+
+    categoryId: {
+      type: String,
+      ref: 'Category',
     },
 
     isFree: {

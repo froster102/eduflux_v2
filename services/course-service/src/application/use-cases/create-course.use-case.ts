@@ -44,15 +44,27 @@ export class CreateCourseUseCase
       throw new NotFoundException(`Instructor with ID:${actor.id} not found`);
     }
 
-    const existingCourse = await this.courseRepository.findCourseByTitle(
-      createCourseDto.title,
+    const category = await this.categoryRepository.findById(
+      createCourseDto.categoryId,
     );
 
-    if (existingCourse) {
-      throw new ConflictException(
-        `Course with title ${createCourseDto.title} already exists.`,
+    if (!category) {
+      throw new NotFoundException(
+        `Category with ${createCourseDto.categoryId} not found.`,
       );
     }
+
+    // currently not checking for duplicate title
+
+    // const existingCourse = await this.courseRepository.findCourseByTitle(
+    //   createCourseDto.title,
+    // );
+
+    // if (existingCourse) {
+    //   throw new ConflictException(
+    //     `Course with title ${createCourseDto.title} already exists.`,
+    //   );
+    // }
 
     const course = Course.create({
       title: createCourseDto.title,
@@ -60,7 +72,7 @@ export class CreateCourseUseCase
         id: instructor.id,
         name: instructor.name,
       },
-    );
+      categoryId: category.id,
     });
 
     const savedCourse = await this.courseRepository.save(course);

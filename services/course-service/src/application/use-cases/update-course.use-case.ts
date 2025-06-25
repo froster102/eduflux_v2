@@ -46,6 +46,9 @@ export class UpdateCourseUseCase
       description: updateCourseDto.description ?? foundCourse.description,
       thumbnail: updateCourseDto.thumbnail ?? foundCourse.thumbnail,
       level: updateCourseDto.level ?? foundCourse.level,
+      categoryId: updateCourseDto.categoryId ?? foundCourse.categoryId,
+      isFree: updateCourseDto.isFree ?? foundCourse.isFree,
+      price: updateCourseDto.price ?? foundCourse.price,
     });
 
     const updatedCourse = await this.courseRepository.update(

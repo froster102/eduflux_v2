@@ -18,6 +18,7 @@ export interface Instructor {
 
 interface CreateCourseProps {
   title: string;
+  categoryId: string;
   instructor: Instructor;
 }
 
@@ -27,6 +28,7 @@ interface PersistedCourseProps {
   description: string;
   thumbnail: string | null;
   level: CourseLevel | null;
+  categoryId: string;
   price: string | null;
   isFree: boolean;
   status: CourseStatus;
@@ -44,7 +46,8 @@ interface UpdateCourseDetailsProps {
   description?: string;
   thumbnail?: string | null;
   level?: CourseLevel;
-  price?: string | null;
+  categoryId?: string;
+  price?: number | null;
   isFree?: boolean;
 }
 
@@ -54,8 +57,8 @@ export class Course {
   private _description: string;
   private _thumbnail: string | null;
   private _level: CourseLevel | null;
-  private _level: 'beginner' | 'intermediate' | 'advanced';
-  private _price: string | null;
+  private _categoryId: string;
+  private _price: number | null;
   private _isFree: boolean;
   private _status: CourseStatus;
   private _feedback: string | null;
@@ -72,38 +75,7 @@ export class Course {
     this._description = props.description;
     this._thumbnail = props.thumbnail;
     this._level = props.level;
-  private constructor(
-    id: string,
-    title: string,
-    description: string,
-    thumbnail: string | null = null,
-    level: 'beginner' | 'intermediate' | 'advanced',
-    price: string | null = null,
-    isFree: boolean = false,
-    status: Status = 'draft',
-    feedback: string | null = null,
-    instructor: { id: string; name: string },
-    averageRating: number,
-    ratingCount: number,
-    publishedAt: Date | null,
-    createdAt: Date,
-    updatedAt: Date,
-  ) {
-    this._id = id;
-    this._title = title;
-    this._description = description;
-    this._thumbnail = thumbnail;
-    this._level = level;
-    this._price = price;
-    this._isFree = isFree;
-    this._status = status;
-    this._feedback = feedback;
-    this._instructor = instructor;
-    this._averageRating = averageRating;
-    this._ratingCount = ratingCount;
-    this._publishedAt = publishedAt;
-    this._createdAt = createdAt;
-    this._updatedAt = updatedAt;
+    this._categoryId = props.categoryId;
     this._price = props.price;
     this._isFree = props.isFree;
     this._status = props.status;
@@ -125,59 +97,7 @@ export class Course {
       description: '',
       thumbnail: null,
       level: null,
-    return new Course(
-      uuidv4(),
-      title,
-      description,
-      null,
-      level,
-      null,
-      false,
-      'draft',
-      null,
-      instructor,
-      0,
-      0,
-      null,
-      now,
-      now,
-    );
-  }
-
-  static fromPersistence(
-    id: string,
-    title: string,
-    description: string,
-    thumbnail: string,
-    level: 'beginner' | 'intermediate' | 'advanced',
-    price: string | null,
-    isFree: boolean,
-    status: Status = 'draft',
-    feedback: string | null,
-    instructor: { id: string; name: string },
-    averageRating: number,
-    ratingCount: number,
-    createdAt: Date,
-    publishedAt: Date | null = null,
-    updatedAt: Date,
-  ): Course {
-    return new Course(
-      id,
-      title,
-      description,
-      thumbnail,
-      level,
-      price,
-      isFree,
-      status,
-      feedback,
-      instructor,
-      averageRating,
-      ratingCount,
-      publishedAt,
-      createdAt,
-      updatedAt,
-    );
+      categoryId: props.categoryId,
       price: null,
       isFree: false,
       status: 'draft',
@@ -210,9 +130,10 @@ export class Course {
   get level(): CourseLevel | null {
     return this._level;
   }
-
-  get priceTierId(): string | null {
-  get price(): string | null {
+  get categoryId(): string {
+    return this._categoryId;
+  }
+  get price(): number | null {
     return this._price;
   }
   get isFree(): boolean {
@@ -265,17 +186,13 @@ export class Course {
       this._level = props.level;
       changed = true;
     }
-
-  updateDetails(
-    newTitle: string,
-    newDescription: string,
-    newThumbnail: string,
-    newLevel: 'beginner' | 'intermediate' | 'advanced',
-  ): void {
-    this._title = newTitle;
-    this._description = newDescription;
-    this._thumbnail = newThumbnail;
-    this._level = newLevel;
+    if (
+      props.categoryId !== undefined &&
+      props.categoryId !== this._categoryId
+    ) {
+      this._categoryId = props.categoryId;
+      changed = true;
+    }
     if (props.isFree !== undefined && props.isFree !== this._isFree) {
       this._isFree = props.isFree;
       changed = true;
@@ -330,8 +247,6 @@ export class Course {
     if (this._status === 'published') {
       this._status = 'unpublished';
       this._updatedAt = new Date();
-    } else {
-      console.warn(`Cannot unpublish course from status: ${this._status}`);
     }
   }
 
@@ -361,6 +276,7 @@ export class Course {
       description: this._description,
       thumbnail: this._thumbnail,
       level: this._level,
+      categoryId: this._categoryId,
       price: this._price,
       isFree: this._isFree,
       status: this._status,

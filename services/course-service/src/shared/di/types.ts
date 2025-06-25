@@ -34,6 +34,7 @@ export const TYPES = {
   AssetRepository: Symbol.for('AssetRepository'),
   ChapterRepository: Symbol.for('ChapterRepository'),
   LectureRepository: Symbol.for('LectureRepository'),
+  CategoryRepository: Symbol.for('CategoryRepository'),
 
   //Http Routes
   AdminRoutes: Symbol.for('AdminRoutes'),
@@ -45,5 +46,5 @@ export const TYPES = {
   ChapterMapper: Symbol.for('SectionMapper'),
   LectureMapper: Symbol.for('LessonMapper'),
   AssetMapper: Symbol.for('AssetMapper'),
-  PriceTierMapper: Symbol.for('PriceTierMapper'),
+  CategoryMapper: Symbol.for('CategoryMapper'),
 };
