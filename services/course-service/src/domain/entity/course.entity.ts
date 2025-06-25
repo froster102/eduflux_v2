@@ -29,7 +29,7 @@ interface PersistedCourseProps {
   thumbnail: string | null;
   level: CourseLevel | null;
   categoryId: string;
-  price: string | null;
+  price: number | null;
   isFree: boolean;
   status: CourseStatus;
   feedback: string | null;

@@ -16,7 +16,7 @@ export interface ICourse extends Document {
   description: string;
   thumbnail: string;
   level: CourseLevel | null;
-  price: string | null;
+  price: number | null;
   categoryId: string;
   isFree: boolean;
   status: Status;
