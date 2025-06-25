@@ -4,7 +4,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun --watch src/main.ts & bun run tsc --watch"
+    "dev": "bun --watch src/main.ts & bun run tsc --watch",
+    "seed": "bun src/shared/seed/seed-categories.ts"
   },
   "dependencies": {
     "@eslint/js": "^9.28.0",
