@@ -11,7 +11,8 @@ export interface GetAllInstructorCoursesInput {
 }
 
 export class GetAllInstructorCoursesUseCase
-  implements IUseCase<GetAllInstructorCoursesInput, Course[]>
+  implements
+    IUseCase<GetAllInstructorCoursesInput, { courses: Course[]; total: number }>
 {
   constructor(
     @inject(TYPES.CourseRepository)
@@ -20,13 +21,14 @@ export class GetAllInstructorCoursesUseCase
 
   async execute(
     getAllInstructorCoursesInput: GetAllInstructorCoursesInput,
-  ): Promise<Course[]> {
+  ): Promise<{ courses: Course[]; total: number }> {
     const { actorId, paginationQueryParams } = getAllInstructorCoursesInput;
-    const courses = await this.courseRepository.findAllInstructorCourses(
-      actorId,
-      paginationQueryParams,
-    );
+    const { courses, total } =
+      await this.courseRepository.findAllInstructorCourses(
+        actorId,
+        paginationQueryParams,
+      );
 
-    return courses;
+    return { courses, total };
   }
 }

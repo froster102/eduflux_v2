@@ -42,7 +42,7 @@ export class MongoCourseRepository
   async findAllInstructorCourses(
     instructorId: string,
     paginationQueryParams: PaginationQueryParams,
-  ): Promise<Course[]> {
+  ): Promise<{ courses: Course[]; total: number }> {
     const {
       page = 1,
       limit = 10,
@@ -85,8 +85,15 @@ export class MongoCourseRepository
       options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
     }
 
+    const total = await CourseModel.countDocuments();
+
     const result = await CourseModel.find(query, null, options);
 
-    return result ? this.courseMapper.toDomainArray(result) : [];
+    return result
+      ? {
+          courses: this.courseMapper.toDomainArray(result),
+          total,
+        }
+      : { courses: [], total };
   }
 }

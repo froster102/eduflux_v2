@@ -67,11 +67,11 @@ export class InstructorRoutes {
         .use(authenticaionMiddleware)
         .get('/me/taught-courses', async ({ user, query }) => {
           const paredQuery = paginationQuerySchema.parse(query);
-          const courses = await this.getAllInstructorCoursesUseCase.execute({
+          const response = await this.getAllInstructorCoursesUseCase.execute({
             actorId: user.id,
             paginationQueryParams: paredQuery,
           });
-          return courses;
+          return response;
         })
         .get(
           '/me/taught-courses/:courseId/instructor-curriculum',
