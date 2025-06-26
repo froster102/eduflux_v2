@@ -4,6 +4,7 @@ import { HttpResponse } from '../interfaces/http-response.interface';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { getHttpErrorCode } from '@/shared/errors/error-code';
 import z, { ZodError } from 'zod/v4';
+import { serverConfig } from '@/shared/config/server.config';
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, error }): HttpResponse<object> => {
@@ -36,6 +37,7 @@ export const errorHandler = new Elysia()
     return {
       message: 'Internal server error',
       code: 'INTERNAL_SERVER_ERROR',
+      error: serverConfig.NODE_ENV === 'development' ? error : {},
     };
   })
   .as('global');
