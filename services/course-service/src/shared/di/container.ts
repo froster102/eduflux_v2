@@ -54,6 +54,7 @@ import { ICategoryRepository } from '@/domain/repositories/category.repository';
 import { MongoCategoryRepository } from '@/infrastructure/database/repositories/category.repository';
 import { GetCourseCategoriesUseCase } from '@/application/use-cases/get-course-categories.use-case';
 import { CourseRoutes } from '@/interface/routes/course.routes';
+import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
 
 const container = new Container();
 
@@ -120,6 +121,9 @@ container
 container
   .bind<GetCourseCategoriesUseCase>(TYPES.GetCourseCategoriesUseCase)
   .to(GetCourseCategoriesUseCase);
+container
+  .bind<GetInstructorCourseUseCase>(TYPES.GetInstructorCourseUseCase)
+  .to(GetInstructorCourseUseCase);
 
 //Http Routes
 container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);

@@ -6,6 +6,7 @@ import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use
 import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
 import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url';
 import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
+import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
 import {
   ReorderCurriculumDto,
   ReorderCurriculumUseCase,
@@ -59,6 +60,8 @@ export class InstructorRoutes {
     private readonly getAllInstructorCoursesUseCase: GetAllInstructorCoursesUseCase,
     @inject(TYPES.ReorderCurriculumUseCase)
     private readonly reorderCurriculumUseCase: ReorderCurriculumUseCase,
+    @inject(TYPES.GetInstructorCourseUseCase)
+    private readonly getInstructorCourseUseCase: GetInstructorCourseUseCase,
   ) {}
 
   register(): Elysia {
@@ -72,6 +75,13 @@ export class InstructorRoutes {
             paginationQueryParams: paredQuery,
           });
           return response;
+        })
+        .get('/me/taught-courses/:courseId/', async ({ params, user }) => {
+          const course = await this.getInstructorCourseUseCase.execute({
+            id: params.courseId,
+            actor: user,
+          });
+          return course.toJSON();
         })
         .get(
           '/me/taught-courses/:courseId/instructor-curriculum',
