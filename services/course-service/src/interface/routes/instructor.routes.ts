@@ -13,6 +13,7 @@ import {
 } from '@/application/use-cases/reorder-curriculum.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
+import { UpdateCourseUseCase } from '@/application/use-cases/update-course.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
 import { ResourceType } from '@/domain/entity/asset.entity';
 import { Chapter } from '@/domain/entity/chapter.entity';
@@ -28,18 +29,26 @@ import {
   getUploadUrlSchema,
   reorderCurriculumSchema,
   updateChapterSchema,
+  updateCourseSchema,
   updateLessonSchema,
 } from '@/infrastructure/http/schema/course.schema';
 import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination.schema';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
+import DOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+
+const window = new JSDOM('').window;
+const purify = DOMPurify(window);
 
 @injectable()
 export class InstructorRoutes {
   constructor(
     @inject(TYPES.CreateCourseUseCase)
     private readonly creatCourseUseCase: CreateCourseUseCase,
+    @inject(TYPES.UpdateCourseUseCase)
+    private readonly updateCourseUseCase: UpdateCourseUseCase,
     @inject(TYPES.GetInstructorCourseCurriculumUseCase)
     private readonly getInstructorCourseCurriculum: GetInstructorCourseCurriculumUseCase,
     @inject(TYPES.CreateChapterUseCase)
@@ -80,6 +89,19 @@ export class InstructorRoutes {
           const course = await this.getInstructorCourseUseCase.execute({
             id: params.courseId,
             actor: user,
+          });
+          return course.toJSON();
+        })
+        .put('/:courseId', async ({ params, user, body }) => {
+          const parsedBody = updateCourseSchema.parse(body);
+
+          const course = await this.updateCourseUseCase.execute({
+            actor: user,
+            updateCourseDto: {
+              ...parsedBody,
+              courseId: params.courseId,
+              description: purify.sanitize(parsedBody.description ?? ''),
+            },
           });
           return course.toJSON();
         })

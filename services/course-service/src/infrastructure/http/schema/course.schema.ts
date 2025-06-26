@@ -3,7 +3,7 @@ import z from 'zod/v4';
 const titleMinLength = 5;
 const titleMaxLength = 100;
 const descriptionMinLength = 20;
-const courseLevelEnum: Array<'beginner' | 'intermediate' | 'advanced'> = [
+const courseLevelEnum: ('beginner' | 'intermediate' | 'advanced')[] = [
   'beginner',
   'intermediate',
   'advanced',
@@ -27,6 +27,30 @@ export const createCourseSchema = z.object({
     }),
   categoryId: z.string({ error: 'A valid category ID is required' }),
 });
+
+export const updateCourseSchema = z
+  .object({
+    title: z
+      .string()
+      .min(titleMinLength, {
+        error: `Title should be at least ${titleMinLength} character`,
+      })
+      .max(titleMaxLength, {
+        error: `Title cannot exceed ${titleMaxLength} characters`,
+      })
+      .regex(noLeadingSpecialCharRegex, {
+        error: 'Title cannot start with a special character or space',
+      }),
+    description: z.string().min(descriptionMinLength, {
+      error: `Description must be at least ${descriptionMinLength} characters`,
+    }),
+    categoryId: z.string({ error: 'A valid category ID is required' }),
+    thumbanil: z.string({ error: 'Thumbail is required' }),
+    level: z.enum(courseLevelEnum),
+    price: z.number({ error: 'Course pricing is required' }),
+    isFree: z.boolean(),
+  })
+  .partial();
 
 export const getCourseParams = z.object({
   id: z.uuid({ error: 'Invalid course id' }),

@@ -45,7 +45,7 @@ interface UpdateCourseDetailsProps {
   title?: string;
   description?: string;
   thumbnail?: string | null;
-  level?: CourseLevel;
+  level?: CourseLevel | null;
   categoryId?: string;
   price?: number | null;
   isFree?: boolean;

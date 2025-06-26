@@ -1,11 +1,12 @@
 import { CourseLevel } from '@/domain/entity/course.entity';
-import { CreateCourseDto } from './create-course.dto';
 
-export type UpdateCourseDto = Partial<CreateCourseDto> & {
+export type UpdateCourseDto = {
   courseId: string;
-  thumbnail: string;
-  description: string;
-  level: CourseLevel;
-  price: number;
-  isFree: boolean;
+  title?: string;
+  description?: string;
+  thumbnail?: string;
+  level?: CourseLevel;
+  price?: number;
+  isFree?: boolean;
+  categoryId?: string;
 };
