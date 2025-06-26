@@ -68,34 +68,31 @@ export class InstructorRoutes {
     return new Elysia().group('/api/courses', (group) =>
       group
         .use(authenticaionMiddleware)
-        .get('/me/taught-courses', async ({ user, query }) => {
-          const paredQuery = paginationQuerySchema.parse(query);
-          const response = await this.getAllInstructorCoursesUseCase.execute({
-            actorId: user.id,
-            paginationQueryParams: paredQuery,
+        .post('/', async ({ body, user }): Promise<HttpResponse<Course>> => {
+          const parsedBody = createCourseSchema.parse(body);
+          const course = await this.creatCourseUseCase.execute({
+            createCourseDto: parsedBody,
+            actor: user,
           });
-          return response;
+          return { data: course };
         })
-        .get('/me/taught-courses/:courseId/', async ({ params, user }) => {
+        .get('/:courseId/', async ({ params, user }) => {
           const course = await this.getInstructorCourseUseCase.execute({
             id: params.courseId,
             actor: user,
           });
           return course.toJSON();
         })
-        .get(
-          '/me/taught-courses/:courseId/instructor-curriculum',
-          async ({ params, user }) => {
-            const curriculumItems =
-              await this.getInstructorCourseCurriculum.execute({
-                id: params.courseId,
-                actor: user,
-              });
-            return { data: curriculumItems };
-          },
-        )
+        .get('/:courseId/instructor-curriculum', async ({ params, user }) => {
+          const curriculumItems =
+            await this.getInstructorCourseCurriculum.execute({
+              id: params.courseId,
+              actor: user,
+            });
+          return { data: curriculumItems };
+        })
         .put(
-          '/me/taught-courses/:courseId/instructor-curriculum',
+          '/:courseId/instructor-curriculum',
           async ({ body, params, user }) => {
             const parsedBody = reorderCurriculumSchema.parse(
               body,
@@ -109,14 +106,6 @@ export class InstructorRoutes {
             });
           },
         )
-        .post('/', async ({ body, user }): Promise<HttpResponse<Course>> => {
-          const parsedBody = createCourseSchema.parse(body);
-          const course = await this.creatCourseUseCase.execute({
-            createCourseDto: parsedBody,
-            actor: user,
-          });
-          return { data: course };
-        })
         .post(
           '/:courseId/chapters/',
           async ({ params, user, body }): Promise<HttpResponse<Chapter>> => {
@@ -225,7 +214,15 @@ export class InstructorRoutes {
             });
             return { data: course };
           },
-        ),
+        )
+        .get('/me/taught-courses', async ({ user, query }) => {
+          const paredQuery = paginationQuerySchema.parse(query);
+          const response = await this.getAllInstructorCoursesUseCase.execute({
+            actorId: user.id,
+            paginationQueryParams: paredQuery,
+          });
+          return response;
+        }),
     );
   }
 }

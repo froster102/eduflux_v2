@@ -7,7 +7,6 @@ import z, { ZodError } from 'zod/v4';
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, error }): HttpResponse<object> => {
-    console.log(error);
     if (error instanceof ZodError) {
       set.status = httpStatus.BAD_REQUEST;
       return {
