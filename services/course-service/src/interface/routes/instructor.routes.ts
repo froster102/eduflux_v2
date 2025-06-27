@@ -4,7 +4,7 @@ import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use
 import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
 import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
 import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
-import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url';
+import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url.use-case';
 import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
 import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
 import {
