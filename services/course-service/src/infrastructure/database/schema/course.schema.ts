@@ -14,7 +14,7 @@ export interface ICourse extends Document {
   _id: Schema.Types.ObjectId | string;
   title: string;
   description: string;
-  thumbnail: string;
+  thumbnail: string | null;
   level: CourseLevel | null;
   price: number | null;
   categoryId: string;

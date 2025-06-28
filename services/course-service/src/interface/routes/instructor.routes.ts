@@ -94,7 +94,6 @@ export class InstructorRoutes {
         })
         .put('/:courseId', async ({ params, user, body }) => {
           const parsedBody = updateCourseSchema.parse(body);
-
           const course = await this.updateCourseUseCase.execute({
             actor: user,
             updateCourseDto: {

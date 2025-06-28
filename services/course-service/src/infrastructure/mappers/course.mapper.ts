@@ -29,6 +29,7 @@ export class CourseMapper implements IMapper<Course, ICourse> {
       _id: raw.id,
       title: raw.title,
       description: raw.description,
+      thumbnail: raw.thumbnail,
       level: raw.level,
       price: raw.price,
       categoryId: raw.categoryId,

@@ -45,7 +45,7 @@ export const updateCourseSchema = z
       error: `Description must be at least ${descriptionMinLength} characters`,
     }),
     categoryId: z.string({ error: 'A valid category ID is required' }),
-    thumbanil: z.string({ error: 'Thumbail is required' }),
+    thumbnail: z.string({ error: 'Thumbnail is required' }),
     level: z.enum(courseLevelEnum),
     price: z.number({ error: 'Course pricing is required' }),
     isFree: z.boolean(),
