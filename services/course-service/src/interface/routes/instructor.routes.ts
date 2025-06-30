@@ -1,4 +1,3 @@
-import { IUploadCredentialsResponse } from '@/application/ports/file-storage.gateway';
 import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-lecture.use-case';
 import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use-case';
 import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
@@ -16,7 +15,6 @@ import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use
 import { UpdateCourseUseCase } from '@/application/use-cases/update-course.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
 import { ResourceType } from '@/domain/entity/asset.entity';
-import { Chapter } from '@/domain/entity/chapter.entity';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -126,24 +124,21 @@ export class InstructorRoutes {
             });
           },
         )
-        .post(
-          '/:courseId/chapters/',
-          async ({ params, user, body }): Promise<HttpResponse<Chapter>> => {
-            const parsedBody = createChapterSchema.parse(body);
-            const chapter = await this.createChapterUseCase.execute({
-              createChapterDto: {
-                courseId: params.courseId,
-                title: parsedBody.title,
-                description: parsedBody.description,
-              },
-              actor: user,
-            });
-            return { data: chapter };
-          },
-        )
+        .post('/:courseId/chapters/', async ({ params, user, body }) => {
+          const parsedBody = createChapterSchema.parse(body);
+          const chapter = await this.createChapterUseCase.execute({
+            createChapterDto: {
+              courseId: params.courseId,
+              title: parsedBody.title,
+              description: parsedBody.description,
+            },
+            actor: user,
+          });
+          return chapter.toJSON();
+        })
         .put(
           '/:courseId/chapters/:chapterId',
-          async ({ params, user, body }): Promise<HttpResponse<Chapter>> => {
+          async ({ params, user, body }) => {
             const parsedBody = updateChapterSchema.parse(body);
             const chapter = await this.updateChapterUseCase.execute({
               updateChapterDto: {
@@ -154,25 +149,25 @@ export class InstructorRoutes {
               },
               actor: user,
             });
-            return { data: chapter };
+            return chapter.toJSON();
           },
         )
         .post('/:courseId/lectures/', async ({ params, body, user }) => {
           const parsedBody = createLectureSchema.parse(body);
-            const lecture = await this.createLectureUseCase.execute({
-              createLectureDto: {
-                courseId: params.courseId,
-                description: parsedBody.description,
-                preview: parsedBody.preview,
-                title: parsedBody.title,
-              },
-              actor: user,
-            });
+          const lecture = await this.createLectureUseCase.execute({
+            createLectureDto: {
+              courseId: params.courseId,
+              description: parsedBody.description,
+              preview: parsedBody.preview,
+              title: parsedBody.title,
+            },
+            actor: user,
+          });
           return lecture.toJSON();
         })
         .put(
           '/:courseId/lectures/:lectureId',
-          async ({ params, body, user }): Promise<HttpResponse<Lecture>> => {
+          async ({ params, body, user }) => {
             const parsedBody = updateLessonSchema.parse(body);
             const lecture = await this.updateLectureUseCase.execute({
               updateLectureDto: {
@@ -184,16 +179,12 @@ export class InstructorRoutes {
               },
               actor: user,
             });
-            return { data: lecture };
+            return lecture.toJSON();
           },
         )
         .get(
           '/:courseId/assets/get-upload-url',
-          async ({
-            params,
-            query,
-            user,
-          }): Promise<HttpResponse<IUploadCredentialsResponse>> => {
+          async ({ params, query, user }) => {
             const parsedQuery = getUploadUrlSchema.parse(query);
             const response = await this.getCourseAssetsUploadUrlUseCase.execute(
               {
@@ -204,12 +195,12 @@ export class InstructorRoutes {
                 actor: user,
               },
             );
-            return { data: response };
+            return response;
           },
         )
         .post(
           '/:courseId/lectures/:lectureId/assets',
-          async ({ body, user, params }): Promise<HttpResponse<void>> => {
+          async ({ body, user, params }) => {
             const parsedBody = addAssetToLectureSchema.parse(body);
             await this.addAssetToLectureUseCase.execute({
               addAssetToLectureDto: {
@@ -222,16 +213,13 @@ export class InstructorRoutes {
             return {};
           },
         )
-        .post(
-          '/:courseId/submit-for-review',
-          async ({ user, params }): Promise<HttpResponse<Course>> => {
-            const course = await this.submitForReviewUseCase.execute({
-              courseId: params.courseId,
-              actor: user,
-            });
-            return { data: course };
-          },
-        )
+        .post('/:courseId/submit-for-review', async ({ user, params }) => {
+          const course = await this.submitForReviewUseCase.execute({
+            courseId: params.courseId,
+            actor: user,
+          });
+          return { data: course };
+        })
         .get('/me/taught-courses', async ({ user, query }) => {
           const paredQuery = paginationQuerySchema.parse(query);
           const response = await this.getAllInstructorCoursesUseCase.execute({
