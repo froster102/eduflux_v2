@@ -1,20 +1,17 @@
 import { betterAuth, User } from 'better-auth';
 import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { db } from '@/infrastructure/database/db';
-import * as schema from '@/infrastructure/database/schema';
-import { signUpSchema } from '@/infrastructure/http/schema/sign-up.schema';
+import * as schema from '@/database/schema';
 import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
-import { NodeMailerService } from '@/infrastructure/services/nodemailer.service';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
-import { IEvent } from '@/shared/interfaces/event.interface';
+import { IEventPayload } from '@/shared/interfaces/event.interface';
 import { AUTH_SERVICE } from '@/shared/constants/services';
-import { container } from '@/shared/di/container';
-import { IEventPublisher } from '@/domain/services/event-publisher.service';
-import { TYPES } from '@/shared/di/types';
 import { addRole } from './plugins/add-role';
 import { Role } from '@/shared/constants/role';
+import { db } from '@/database/db';
+import { signUpSchema } from '@/shared/validation/schema/sign-up.schema';
+import { emailService, kafkaService } from '@/services';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,
@@ -124,7 +121,7 @@ export const auth = betterAuth({
         const user = (ctx.context.returned as Record<string, any>).user as User;
         if (user) {
           const [firstName, lastName] = user.name.split(' ');
-          const userCreatedEvent: IEvent = {
+          const userCreatedEvent: IEventPayload = {
             type: 'user.created',
             payload: {
               id: user.id,
@@ -136,10 +133,8 @@ export const auth = betterAuth({
               timestamp: new Date().toISOString(),
             },
           };
-          const kafkaProducer = container.get<IEventPublisher>(
-            TYPES.EventPublisher,
-          );
-          await kafkaProducer.publish('user-events', userCreatedEvent);
+
+          await kafkaService.publishEvent('user-events', userCreatedEvent);
         }
       }
     }),
@@ -151,8 +146,7 @@ export const auth = betterAuth({
       sendVerificationOnSignUp: true,
       async sendVerificationOTP({ email, otp, type }) {
         if (type === 'email-verification') {
-          const nodemailer = new NodeMailerService();
-          await nodemailer.sendEmail(
+          await emailService.sendEmail(
             email,
             'Verification email',
             `Your otp to verify is ${otp}`,
@@ -166,8 +160,7 @@ export const auth = betterAuth({
           // if (!(user.length > 0)) {
           //   throw new APIError('BAD_REQUEST', { message: '' });
           // }
-          const nodemailer = new NodeMailerService();
-          await nodemailer.sendEmail(
+          await emailService.sendEmail(
             email,
             'Reset your password',
             `Your otp for resetting your password is ${otp}`,

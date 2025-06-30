@@ -2,10 +2,12 @@ import * as winston from 'winston';
 
 const { combine, timestamp, printf, colorize } = winston.format;
 
-const customFormat = printf(({ level, message, timestamp, context,...info }) => {
-  const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : '';
-  return `[${timestamp}] [${context ?? 'App'}] ${level}: ${message} ${meta}`;
-});
+const customFormat = printf(
+  ({ level, message, timestamp, context, ...info }) => {
+    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : '';
+    return `[${timestamp as string}] [${(context as string) ?? 'APP'}] ${level}: ${message as string} ${meta}`;
+  },
+);
 
 export class Logger {
   private _logger: winston.Logger;

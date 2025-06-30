@@ -4,7 +4,7 @@
   "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun --watch src/main.ts",
+    "dev": "bun --watch src/main.ts & bun run tsc --watch",
     "start": "bun src/main.ts"
   },
   "keywords": [],
@@ -12,9 +12,6 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/cors": "^2.8.18",
-    "@types/express": "^5.0.2",
-    "@types/node": "^22.15.21",
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.15.2",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
@@ -23,9 +20,6 @@
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1"

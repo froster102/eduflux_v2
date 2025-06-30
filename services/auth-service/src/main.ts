@@ -1,24 +1,17 @@
-import 'reflect-metadata';
-import { Server } from './infrastructure/http/server';
-import { serverConfig } from './shared/config/server.config';
-import { container } from './shared/di/container';
-import { KafkaEventPublisher } from './infrastructure/messaging/kafka/producer/kafka-event.publisher';
-import { TYPES } from './shared/di/types';
+import { startServer } from './http/server';
+import { connectKafkaProducer } from './messaging/kafka/kafka';
+import { tryCatch } from './shared/utils/try-catch';
 
-const server = new Server(serverConfig.PORT);
+async function boostrap(): Promise<void> {
+  startServer();
 
-async function bootstrap() {
-  try {
-    const kafkaEventPublisher = container.get<KafkaEventPublisher>(
-      TYPES.EventPublisher,
-    );
-    await kafkaEventPublisher.connect();
+  const { error: kafkaProducerConnectionError } = await tryCatch(
+    connectKafkaProducer(),
+  );
 
-    server.start();
-  } catch (error) {
-    console.error(`Failed to start the server:`, error);
+  if (kafkaProducerConnectionError) {
     process.exit(1);
   }
 }
 
-void bootstrap();
+void boostrap();

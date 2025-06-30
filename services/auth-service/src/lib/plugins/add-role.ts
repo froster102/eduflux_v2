@@ -1,5 +1,5 @@
-import { db } from '@/infrastructure/database/db';
-import { user } from '@/infrastructure/database/schema';
+import { db } from '@/database/db';
+import { user } from '@/database/schema';
 import {
   APIError,
   createAuthEndpoint,
