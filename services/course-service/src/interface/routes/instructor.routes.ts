@@ -18,12 +18,11 @@ import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use
 import { ResourceType } from '@/domain/entity/asset.entity';
 import { Chapter } from '@/domain/entity/chapter.entity';
 import { Course } from '@/domain/entity/course.entity';
-import { Lecture } from '@/domain/entity/lecture.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import {
   addAssetToLectureSchema,
-  addLessonSchema,
+  createLectureSchema,
   createChapterSchema,
   createCourseSchema,
   getUploadUrlSchema,
@@ -158,10 +157,8 @@ export class InstructorRoutes {
             return { data: chapter };
           },
         )
-        .post(
-          '/:courseId/lectures/',
-          async ({ params, body, user }): Promise<HttpResponse<Lecture>> => {
-            const parsedBody = addLessonSchema.parse(body);
+        .post('/:courseId/lectures/', async ({ params, body, user }) => {
+          const parsedBody = createLectureSchema.parse(body);
             const lecture = await this.createLectureUseCase.execute({
               createLectureDto: {
                 courseId: params.courseId,
@@ -171,9 +168,8 @@ export class InstructorRoutes {
               },
               actor: user,
             });
-            return { data: lecture };
-          },
-        )
+          return lecture.toJSON();
+        })
         .put(
           '/:courseId/lectures/:lectureId',
           async ({ params, body, user }): Promise<HttpResponse<Lecture>> => {

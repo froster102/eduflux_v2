@@ -74,39 +74,9 @@ export const createChapterSchema = z.object({
   }),
 });
 
-export const updateChapterSchema = z.object({
-  title: z
-    .string()
-    .min(titleMinLength, {
-      error: `Title should be at least ${titleMinLength} character`,
-    })
-    .max(titleMaxLength, {
-      error: `Title cannot exceed ${titleMaxLength} characters`,
-    })
-    .regex(noLeadingSpecialCharRegex, {
-      error: 'Title cannot start with a special character or space',
-    })
-    .optional(),
+export const updateChapterSchema = createChapterSchema.partial();
 
-  description: z
-    .string()
-    .min(descriptionMinLength, {
-      error: `Description must be at least ${descriptionMinLength} characters`,
-    })
-    .optional(),
-
-  thumbnail: z.url().optional(),
-
-  category: z.string().optional(),
-
-  price: z.number().optional(),
-
-  isFree: z.boolean().optional(),
-
-  level: z.enum(courseLevelEnum).optional(),
-});
-
-export const addLessonSchema = z.object({
+export const createLectureSchema = z.object({
   title: z
     .string()
     .min(titleMinLength, {
@@ -125,7 +95,7 @@ export const addLessonSchema = z.object({
   preview: z.boolean(),
 });
 
-export const updateLessonSchema = addLessonSchema.partial();
+export const updateLessonSchema = createLectureSchema.partial();
 
 export const getUploadUrlSchema = z.object({
   resourceType: z.enum(resourceTypeEnum, {
