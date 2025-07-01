@@ -4,6 +4,8 @@ import { Chip } from "@heroui/chip";
 import { Image } from "@heroui/image";
 import { useNavigate } from "@tanstack/react-router";
 
+import { IMAGE_BASE_URL } from "@/config/image";
+
 export default function CourseListCard({ course }: { course: Course }) {
   const navigate = useNavigate();
 
@@ -14,7 +16,11 @@ export default function CourseListCard({ course }: { course: Course }) {
           <Image
             alt="Thumbnail"
             height={100}
-            src={course.thumbnail ? course.thumbnail : "/placeholder.png"}
+            src={
+              course.thumbnail
+                ? `${IMAGE_BASE_URL}/${course.thumbnail}`
+                : "/placeholder.png"
+            }
             width={200}
           />
         </div>

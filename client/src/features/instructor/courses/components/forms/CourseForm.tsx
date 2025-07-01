@@ -13,6 +13,7 @@ import { useGetCourseCategories } from "../../hooks/queries";
 import Uploader from "@/components/FileUploader";
 import { updateCourseSchema } from "@/validations/course";
 import RichTextEditor from "@/components/text-editor/RichTextEditor";
+import { IMAGE_BASE_URL } from "@/config/image";
 
 export default function CourseForm({
   onSubmitHandler,
@@ -154,7 +155,7 @@ export default function CourseForm({
               acceptedFileType="image"
               maxFiles={1}
               maxSize={5 * 1024 * 1024}
-              value={field.value ?? null}
+              value={field.value ? `${IMAGE_BASE_URL}/${field.value}` : null}
               onSuccess={field.onChange}
             />
           )}

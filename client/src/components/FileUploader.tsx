@@ -27,7 +27,7 @@ interface UploaderProps {
   maxSize: number;
   maxFiles: number;
   enableMultipleFile?: boolean;
-  onSuccess: (url: string) => void;
+  onSuccess: (fileKey: string) => void;
   value: string | null;
 }
 
@@ -125,7 +125,7 @@ export default function FileUploader({
 
       if (response.status === 200) {
         setFileState((prev) => ({ ...prev, uploading: false, progress: 0 }));
-        onSuccess(response.data.secure_url);
+        onSuccess(`${response.data.public_id}.${response.data.format}`);
       }
     } catch {
       setFileState((prev) => ({
