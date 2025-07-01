@@ -23,7 +23,7 @@ services:
         paths:
           - /api/auth
         strip_path: false
-
+        
   - name: user-service
     url: http://user-service:3002
     routes:
@@ -38,6 +38,14 @@ services:
       - name: course-route
         paths:
           - /api/courses
+        strip_path: false
+
+  - name: upload-service
+    url: http://upload-service:3004
+    routes:
+      - name: upload-route
+        paths:
+          - /api/uploads
         strip_path: false
    
           
