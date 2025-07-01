@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation, useNavigate } from "react-router";
 import { addToast } from "@heroui/toast";
+import { useNavigate } from "@tanstack/react-router";
 
 import {
   forgotPassword,
@@ -12,15 +12,14 @@ import {
   terminateSession,
   updateUserPassword,
   verifyOtp,
-} from "../services/auth-services";
+} from "../services/auth";
 
-import { authClient } from "@/lib/auth-client";
 import { useAuthStore } from "@/store/auth-store";
-import { roleBasedRoutes } from "@/config/site";
+import { useVerificationStore } from "@/store/verification-store";
+import { auth } from "@/lib/better-auth/auth";
 
 export function useSignIn() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   return useMutation({
     mutationFn: signIn,
@@ -29,17 +28,15 @@ export function useSignIn() {
 
       setUser(data.user as User);
 
-      const from =
-        location.state?.from?.pathname ||
-        roleBasedRoutes[(data.user as User).roles[0]];
-
-      navigate(from, { replace: true });
+      navigate({
+        to: "/learner",
+      });
     },
 
     onError: async (error: BetterAuthError, request) => {
       switch (error.code) {
         case "EMAIL_NOT_VERIFIED": {
-          await authClient.emailOtp.sendVerificationOtp({
+          await auth.emailOtp.sendVerificationOtp({
             email: request.email,
             type: "email-verification",
           });
@@ -49,8 +46,8 @@ export function useSignIn() {
               "Please verify your email to sign in, An OTP have been sent to your registered email",
             color: "warning",
           });
-          navigate("/auth/verify", {
-            state: { verificationEmail: request.email },
+          navigate({
+            to: "/auth/sign-in",
           });
           break;
         }
@@ -68,9 +65,11 @@ export function useSignIn() {
 
 export function useSignUp() {
   const navigate = useNavigate();
+  const { setVerificationEmail } = useVerificationStore();
 
   return useMutation({
     mutationFn: signUp,
+
     onSuccess: (data) => {
       if (data) {
         addToast({
@@ -78,12 +77,10 @@ export function useSignUp() {
           description: "A verification code has been sent to your email.",
           color: "success",
         });
-        navigate("/auth/verify", {
-          replace: true,
-          state: {
-            verificationEmail: data.user.email,
-          },
-        });
+
+        setVerificationEmail(data.user.email);
+
+        navigate({ to: "/auth/sign-in", from: "/auth/sign-up" });
       }
     },
     onError: (error: BetterAuthError) => {
@@ -108,7 +105,7 @@ export function useVerifyOtp() {
           "Your OTP have been verified successfully,Please sign in to continue",
         color: "success",
       });
-      navigate("/auth/signin", { replace: true });
+      navigate({ to: "/auth/sign-in" });
     },
     onError: (error: BetterAuthError) => {
       addToast({
@@ -125,7 +122,7 @@ export function useForgotPassword() {
 
   return useMutation({
     mutationFn: forgotPassword,
-    onSuccess: (_data, email) => {
+    onSuccess: () => {
       addToast({
         title: "Forgot Password",
         description:
@@ -133,7 +130,7 @@ export function useForgotPassword() {
         color: "success",
       });
 
-      navigate("/auth/reset-password", { state: { email } });
+      navigate({ to: "/auth/reset-password" });
     },
     onError: (_error: BetterAuthError) => {
       addToast({
@@ -156,7 +153,7 @@ export function useResetPassword() {
         description: "Password reset successful. Please sign in.",
         color: "success",
       });
-      navigate("/auth/signin", { replace: true });
+      navigate({ to: "/auth/sign-in" });
     },
     onError: (error: BetterAuthError) => {
       addToast({
@@ -198,7 +195,7 @@ export function useLogout() {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      navigate("/auth/signin");
+      navigate({ to: "/auth/sign-in" });
       useAuthStore.getState().signout();
       addToast({
         title: "Logout",

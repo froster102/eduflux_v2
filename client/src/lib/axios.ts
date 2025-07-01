@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { BACKEND_URL } from "./constants";
+import { auth } from "./better-auth/auth";
 
 import { useAuthStore } from "@/store/auth-store";
 
@@ -30,18 +31,12 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-api.interceptors.request.use(
-  async (config) => {
-    const accessToken = useAuthStore.getState().user.accessToken;
-
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+// api.interceptors.request.use(
+//   async (config) => {
+//     return config;
+//   },
+//   (error) => Promise.reject(error),
+// );
 
 api.interceptors.response.use(
   (response) => response,
@@ -70,23 +65,18 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshResponse = await axios.get(`${BACKEND_URL}/auth/refresh`, {
-          withCredentials: true,
-        });
-        const { accessToken, userId, role } = refreshResponse.data;
+        const { data } = await auth.getSession();
 
-        useAuthStore.getState().setAuth({
-          accessToken,
-          role,
-          userId,
-        });
-        error.config.headers["Authorization"] = `Bearer ${accessToken}`;
-        processQueue(null, accessToken);
+        if (!data) {
+          throw new Error("Invalid session");
+        }
+
+        processQueue(null, null);
 
         return api(error.config);
       } catch (refreshError) {
         useAuthStore.getState().signout();
-        window.location.replace("/auth/signin");
+        window.location.replace("/auth/sign-in");
         processQueue(refreshError);
 
         return Promise.reject(refreshError);

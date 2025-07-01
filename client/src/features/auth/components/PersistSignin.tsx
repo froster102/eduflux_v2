@@ -17,13 +17,13 @@ export default function PersistSignin() {
 
         if (data === null) {
           signout();
-          navigate("/auth/signin");
+          navigate("/auth/sign-in");
         } else {
           setUser(data.user as User);
         }
       } catch {
         signout();
-        navigate("/auth/signin");
+        navigate("/auth/sign-in");
       } finally {
         setIsLoading(false);
       }

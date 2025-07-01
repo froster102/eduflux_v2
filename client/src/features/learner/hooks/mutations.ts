@@ -1,0 +1,34 @@
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { addToast } from "@heroui/toast";
+
+import { becomeAInstructor } from "../services/learner";
+
+import { useAuthStore } from "@/store/auth-store";
+
+export function useBecomeAInstructor() {
+  const navigate = useNavigate();
+  const { addUserRole } = useAuthStore();
+
+  return useMutation({
+    mutationFn: becomeAInstructor,
+
+    onSuccess: () => {
+      addUserRole("INSTRUCTOR");
+      addToast({
+        color: "success",
+        title: "Instructor",
+        description: "Congratulations! You are now an instructor.",
+      });
+      navigate({ to: "/instructor" });
+    },
+
+    onError: () => {
+      addToast({
+        color: "danger",
+        title: "Instructor",
+        description: "Failed to become instructor",
+      });
+    },
+  });
+}

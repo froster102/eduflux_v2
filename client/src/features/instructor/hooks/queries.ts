@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getEnrolledStudents,
   getTutorDetails,
-} from "../services/tutor-services";
+} from "../services/instructor";
 
 export function useGetTutorQuery(tutorId: string) {
   return useQuery({

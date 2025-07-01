@@ -4,7 +4,7 @@ import { addToast } from "@heroui/toast";
 import {
   cancelStudentSession,
   markStudentSessionAsComplete,
-} from "../student/services/student-services";
+} from "../learner/services/learner";
 
 export function useCancelSessionMutaion(queryParams: QueryParams) {
   const queryClient = useQueryClient();

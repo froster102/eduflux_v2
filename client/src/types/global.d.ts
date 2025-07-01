@@ -26,33 +26,51 @@ declare global {
     url: string | File;
   };
 
-  export type Lesson = {
-    id: string;
-    title: string;
-    description: string;
-    video: string | File;
-    preview: boolean;
-  };
-
-  export type Section = {
-    id: string;
-    title: string;
-    description: string;
-    lessons: Lesson[];
-  };
-
   export type Course = {
     id: string;
     title: string;
     description: string;
-    thumbnail: string | File;
-    difficulty: "beginner" | "intermediate" | "advanced";
-    status: "draft" | "published";
-    sections: Section[];
-    totalEnrollments?: number;
-    createdBy: string;
-    processing: boolean;
+    thumbnail: string | null;
+    categoryId: string;
+    level: "beginner" | "intermediate" | "advanced";
+    price: number;
+    isFree: boolean;
+    status: Status;
+    feedback: string | null;
+    instructor: { id: string; name: string };
+    averageRating: number;
+    ratingCount: number;
+    publishedAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
   };
+
+  export type Chapter = {
+    assetId: boolean;
+    _class: "chapter";
+    id: string;
+    courseId: string;
+    title: string;
+    description: string;
+    sortOrder: number;
+    objectIndex: number;
+  };
+
+  export type Lecture = {
+    _class: "lecture";
+    id: string;
+    courseId: string;
+    title: string;
+    description: string;
+    assetId: string | null;
+    preview: boolean;
+    sortOrder: number;
+    objectIndex: number;
+  };
+
+  export type CurriculumItem = Chapter | Lecture;
+
+  export type CurriculumItems = (Chapter | Lecture)[];
 
   export type ErrorResponse = {
     status: string;
@@ -81,35 +99,6 @@ declare global {
     id: string;
   };
 
-  export type Student = {
-    id: string;
-    userId: string;
-    enrolledCourses: string[];
-    user?: User;
-    enrollments?: Enrollment[];
-  };
-
-  export type Tutor = {
-    id: string;
-    userId: string;
-    lastName: string;
-    courses: string[];
-    user?: User;
-  };
-
-  export type QueryParams = {
-    searchKey?: string;
-    searchQuery?: string;
-    page?: number;
-    pageSize?: number;
-    filters?: Filter[];
-  };
-
-  export type Filter = {
-    key: string;
-    value: string;
-  };
-
   export type Enrollment = {
     id: string;
     studentId: string;
@@ -122,7 +111,7 @@ declare global {
     student?: Student;
   };
 
-  export type Role = "ADMIN" | "STUDENT" | "INSTRUCTOR";
+  export type Role = "ADMIN" | "LEARNER" | "INSTRUCTOR";
 
   export type Note = {
     id: string;
@@ -185,6 +174,26 @@ declare global {
     message?: string | undefined;
     status: number;
     statusText: string;
+  };
+
+  export type PaginationQueryParams = {
+    page?: number;
+    limit?: number;
+    searchQuery?: string;
+    searchFields?: string[];
+    filters?: {
+      [key: string]: string | number | boolean | string[] | number[];
+    };
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  };
+
+  export type DefaultFormProps<TFormData> = {
+    onSubmitHandler(data: TFormData): void;
+    isPending?: boolean;
+    onCancel?: () => void;
+    mode?: "create" | "edit";
+    initialValue?: TFormData;
   };
 }
 

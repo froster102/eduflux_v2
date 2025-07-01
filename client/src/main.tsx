@@ -1,17 +1,23 @@
+import "@/styles/globals.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 
-import App from "./App.tsx";
+import { routeTree } from "./routeTree.gen.ts";
 import { Provider } from "./Provider.tsx";
-import "@/styles/globals.css";
+
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Provider>
-        <App />
-      </Provider>
-    </BrowserRouter>
+    <Provider>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 );

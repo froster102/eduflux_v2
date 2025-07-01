@@ -27,7 +27,7 @@ export default function WarningModal({ isOpen }: { isOpen: boolean }) {
             <Button
               as={Link}
               className="bg-zinc-800 text-zinc-100"
-              href="/auth/signin"
+              href="/auth/sign-in"
             >
               Back to sign in
             </Button>

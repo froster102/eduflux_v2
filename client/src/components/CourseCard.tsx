@@ -6,7 +6,7 @@ import React from "react";
 
 import CoursePreviewModal from "./CoursePreviewModal";
 
-import { useEnrollForCourseMutaion } from "@/features/student/courses/hooks/mutations";
+import { useEnrollForCourseMutaion } from "@/features/learner/courses/hooks/mutations";
 
 interface CourseCardProps {
   course: Course;

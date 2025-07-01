@@ -1,5 +1,6 @@
 import { heroui } from "@heroui/theme";
 import scrollbarHide from "tailwind-scrollbar-hide";
+import tailwindCssTypography from "@tailwindcss/typography";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -17,6 +18,7 @@ module.exports = {
   },
   darkMode: "class",
   plugins: [
+    tailwindCssTypography,
     scrollbarHide,
     heroui({
       prefix: "nextui", // prefix for themes variables

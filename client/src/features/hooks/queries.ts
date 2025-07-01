@@ -1,9 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  getStudentSession,
-  getUser,
-} from "../student/services/student-services";
+import { getStudentSession, getUser } from "../learner/services/learner";
 
 export function useGetStudentSessionQuery(queryParams: QueryParams) {
   return useQuery({

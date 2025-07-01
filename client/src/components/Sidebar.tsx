@@ -1,5 +1,4 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Link } from "react-router";
 import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDisclosure } from "@heroui/modal";
@@ -10,8 +9,10 @@ import {
   DrawerFooter,
   DrawerHeader,
 } from "@heroui/drawer";
+import { Link } from "@tanstack/react-router";
 
 import ConfirmationModal from "./ConfirmationModal";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 import { useLogout } from "@/features/auth/hooks/mutations";
 
@@ -45,7 +46,7 @@ export default function Sidebar({
     <>
       <Card className="hidden lg:flex max-w-52 w-full h-full dark:bg-secondary-700 bg-secondary-500">
         <CardHeader className="relative">
-          {/* <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" /> */}
+          <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" />
           <div className="w-full">{topContent}</div>
         </CardHeader>
         <CardBody className="flex flex-col justify-center gap-4 overflow-hidden">

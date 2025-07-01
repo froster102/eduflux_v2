@@ -20,7 +20,7 @@ export default function RequireAuth({
     <Navigate
       replace
       state={{ from: location, role: allowedRoles }}
-      to={"/auth/signin"}
+      to={"/auth/sign-in"}
     />
   );
 }

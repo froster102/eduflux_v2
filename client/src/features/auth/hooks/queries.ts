@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getUserSessions } from "../services/auth-services";
+import { getUserSessions } from "../services/auth";
 
 export function useGetUserSessionsQuery() {
   return useQuery({

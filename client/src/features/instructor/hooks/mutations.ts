@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToast } from "@heroui/toast";
 
-import { createStudentSession } from "../services/tutor-services";
+import { createStudentSession } from "../services/instructor";
 
 export function useCreateStudentSessionMutation(queryParams: QueryParams) {
   const queryClient = useQueryClient();
