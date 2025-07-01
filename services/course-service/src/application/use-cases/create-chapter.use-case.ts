@@ -1,6 +1,5 @@
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
-import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import { Chapter } from '@/domain/entity/chapter.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
@@ -28,8 +27,6 @@ export class CreateChapterUseCase
     private readonly courseRepository: ICourseRepository,
     @inject(TYPES.ChapterRepository)
     private readonly chapterRepository: IChapterRepository,
-    @inject(TYPES.LectureRepository)
-    private readonly lectureRepository: ILectureRepository,
   ) {}
 
   async execute(createChapterInput: CreateChapterInput): Promise<Chapter> {
@@ -47,26 +44,7 @@ export class CreateChapterUseCase
       );
     }
 
-    const totalChapeter = await this.chapterRepository.getTotalItems();
-    const totalLectures = await this.lectureRepository.getTotalItems();
-
-    const maxSortOrder = totalChapeter + totalLectures;
-
-    const newSortOrder = Math.max(maxSortOrder, -1) + 1;
-
-    const maxObjectIndex = await this.chapterRepository.getMaxObjectIndex(
-      dto.courseId,
-    );
-
-    const newObjectIndex = maxObjectIndex + 1;
-
-    const chapter = Chapter.create(
-      course.id,
-      dto.title,
-      dto.description,
-      newSortOrder,
-      newObjectIndex,
-    );
+    const chapter = Chapter.create(course.id, dto.title, dto.description, 0, 0);
 
     const savedChapter = await this.chapterRepository.save(chapter);
 
