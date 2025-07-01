@@ -35,6 +35,8 @@ import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
 import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
+import { DeleteChapterUseCase } from '@/application/use-cases/delete-chapter.use-case';
+import { DeleteLectureUseCase } from '@/application/use-cases/delete-lecture.use-case';
 
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
@@ -68,6 +70,10 @@ export class InstructorRoutes {
     private readonly reorderCurriculumUseCase: ReorderCurriculumUseCase,
     @inject(TYPES.GetInstructorCourseUseCase)
     private readonly getInstructorCourseUseCase: GetInstructorCourseUseCase,
+    @inject(TYPES.DeleteChapterUseCase)
+    private readonly deleteChapterUseCase: DeleteChapterUseCase,
+    @inject(TYPES.DeleteLectureUseCase)
+    private readonly deleteLectureUseCase: DeleteLectureUseCase,
   ) {}
 
   register(): Elysia {
@@ -152,6 +158,16 @@ export class InstructorRoutes {
             return chapter.toJSON();
           },
         )
+        .delete('/:courseId/chapters/:chapterId', async ({ params, user }) => {
+          await this.deleteChapterUseCase.execute({
+            deleteChapterDto: {
+              chapterId: params.chapterId,
+              courseId: params.courseId,
+            },
+            actor: user,
+          });
+          return;
+        })
         .post('/:courseId/lectures/', async ({ params, body, user }) => {
           const parsedBody = createLectureSchema.parse(body);
           const lecture = await this.createLectureUseCase.execute({
@@ -182,6 +198,15 @@ export class InstructorRoutes {
             return lecture.toJSON();
           },
         )
+        .delete('/:courseId/lectures/:lectureId', async ({ params, user }) => {
+          await this.deleteLectureUseCase.execute({
+            actor: user,
+            deleteLectureDto: {
+              courseId: params.courseId,
+              lectureId: params.lectureId,
+            },
+          });
+        })
         .get(
           '/:courseId/assets/get-upload-url',
           async ({ params, query, user }) => {
