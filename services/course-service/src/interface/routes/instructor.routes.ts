@@ -9,7 +9,6 @@ import {
   ReorderCurriculumDto,
   ReorderCurriculumUseCase,
 } from '@/application/use-cases/reorder-curriculum.use-case';
-import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
 import { UpdateCourseUseCase } from '@/application/use-cases/update-course.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
@@ -34,6 +33,7 @@ import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 import { DeleteChapterUseCase } from '@/application/use-cases/delete-chapter.use-case';
 import { DeleteLectureUseCase } from '@/application/use-cases/delete-lecture.use-case';
+import { PublishCourseUseCase } from '@/application/use-cases/publish-course.use-case';
 
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
@@ -57,8 +57,8 @@ export class InstructorRoutes {
     private readonly updateLectureUseCase: UpdateLectureUseCase,
     @inject(TYPES.AddAssetToLectureUseCase)
     private readonly addAssetToLectureUseCase: AddAssetToLectureUseCase,
-    @inject(TYPES.SubmitForReviewUseCase)
-    private readonly submitForReviewUseCase: SubmitForReviewUseCase,
+    // @inject(TYPES.SubmitForReviewUseCase)
+    // private readonly submitForReviewUseCase: SubmitForReviewUseCase,
     @inject(TYPES.GetAllInstructorCoursesUseCase)
     private readonly getAllInstructorCoursesUseCase: GetAllInstructorCoursesUseCase,
     @inject(TYPES.ReorderCurriculumUseCase)
@@ -69,6 +69,8 @@ export class InstructorRoutes {
     private readonly deleteChapterUseCase: DeleteChapterUseCase,
     @inject(TYPES.DeleteLectureUseCase)
     private readonly deleteLectureUseCase: DeleteLectureUseCase,
+    @inject(TYPES.PublishCourseUseCase)
+    private readonly publishCourseUseCase: PublishCourseUseCase,
   ) {}
 
   register(): Elysia {
@@ -220,13 +222,20 @@ export class InstructorRoutes {
             return {};
           },
         )
-        .post('/:courseId/submit-for-review', async ({ user, params }) => {
-          const course = await this.submitForReviewUseCase.execute({
-            courseId: params.courseId,
+        .post(`/:courseId/publish`, async ({ params, user }) => {
+          await this.publishCourseUseCase.execute({
             actor: user,
+            courseId: params.courseId,
           });
-          return { data: course };
+          return { published: true };
         })
+        // .post('/:courseId/submit-for-review', async ({ user, params }) => {
+        //   const course = await this.submitForReviewUseCase.execute({
+        //     courseId: params.courseId,
+        //     actor: user,
+        //   });
+        //   return { data: course };
+        // })
         .get('/me/taught-courses', async ({ user, query }) => {
           const paredQuery = paginationQuerySchema.parse(query);
           const response = await this.getAllInstructorCoursesUseCase.execute({

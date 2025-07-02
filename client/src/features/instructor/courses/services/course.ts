@@ -146,3 +146,9 @@ export async function addAssetToLecture(data: {
 
   return response.data;
 }
+
+export async function publishCourse(courseId: string) {
+  const response = await api.post(`/courses/${courseId}/publish`);
+
+  return response.data;
+}

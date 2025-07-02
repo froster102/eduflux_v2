@@ -2,6 +2,7 @@ import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Button } from "@heroui/button";
+import React from "react";
 
 import {
   useGetInstructorCourse,
@@ -10,6 +11,8 @@ import {
 } from "@/features/instructor/courses/hooks/queries";
 import DroppableCurriculumItems from "@/features/instructor/courses/components/DroppableCurriculumItems";
 import CourseForm from "@/features/instructor/courses/components/forms/CourseForm";
+import { usePublishCourse } from "@/features/instructor/courses/hooks/mutations";
+import CourseErrorModal from "@/features/instructor/courses/components/CourseErrorModal";
 
 export const Route = createFileRoute(
   "/instructor/_layout/courses/$courseId/manage",
@@ -24,6 +27,16 @@ function Manage() {
   const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetInstructorCourseCurriculum(courseId);
   const updateCourse = useUpdateInstructorCourse();
+  const [openCourseErrorModal, setOpenCourseErrorModal] = React.useState<{
+    isOpen: boolean;
+    error: string;
+  }>({ isOpen: false, error: "" });
+
+  const publishCourse = usePublishCourse({
+    onError: (error: string) => {
+      setOpenCourseErrorModal({ isOpen: true, error });
+    },
+  });
 
   function onSubmitHandler(data: UpdateCourseFormData) {
     updateCourse.mutate({
@@ -42,7 +55,14 @@ function Manage() {
           </small>
         </div>
         <div className="self-end">
-          <Button color="primary">Submit for Review</Button>
+          <Button
+            color="primary"
+            isDisabled={publishCourse.isPending}
+            isLoading={publishCourse.isPending}
+            onPress={() => publishCourse.mutate(courseId)}
+          >
+            Publish
+          </Button>
         </div>
       </div>
       <div className="py-4">
@@ -88,6 +108,12 @@ function Manage() {
           </div>
         </Tab>
       </Tabs>
+
+      <CourseErrorModal
+        error={openCourseErrorModal.error}
+        isOpen={openCourseErrorModal.isOpen}
+        onClose={() => setOpenCourseErrorModal({ isOpen: false, error: "" })}
+      />
     </div>
   );
 }

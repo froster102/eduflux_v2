@@ -70,7 +70,7 @@ export class CreateCourseUseCase
       title: createCourseDto.title,
       instructor: {
         id: instructor.id,
-        name: instructor.name,
+        name: instructor.firstName + ' ' + instructor.lastName,
       },
       categoryId: category.id,
     });

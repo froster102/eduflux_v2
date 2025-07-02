@@ -26,7 +26,7 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
     );
   }
 
-  getUserDetails(userId: string): Promise<{ id: string; name: string }> {
+  getUserDetails(userId: string): Promise<UserProfile> {
     const request: GetUserDetailsRequest = { userId };
 
     return new Promise((resolve, reject) => {
@@ -38,10 +38,7 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
             reject(new Error(error.message));
           }
           if (response) {
-            resolve({
-              id: response.id,
-              name: response.firstName + ' ' + response.lastName,
-            });
+            resolve(response);
           }
         },
       );

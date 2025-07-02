@@ -30,7 +30,13 @@ export default function CourseListCard({ course }: { course: Course }) {
               <p className="font-semibold">{course.title}</p>
             </div>
             <div>
-              <Chip variant="flat">{course.status}</Chip>
+              <Chip
+                className="capitalize"
+                color={course.status === "published" ? "success" : "default"}
+                variant="flat"
+              >
+                {course.status}
+              </Chip>
             </div>
           </div>
           {/* <div>Earnings</div>

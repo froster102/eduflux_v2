@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToast } from "@heroui/toast";
+import { AxiosError } from "axios";
 
 import {
   addAssetToLecture,
@@ -8,6 +9,7 @@ import {
   createLecture,
   deleteChapter,
   deleteLecture,
+  publishCourse,
   updateChapter,
   updateCurriculumItems,
   updateLecture,
@@ -122,6 +124,28 @@ export function useAddContentToLecture() {
         title: "Content upload",
         description: "Failed to content to lecture",
         color: "danger",
+      });
+    },
+  });
+}
+
+export function usePublishCourse(options?: {
+  onError: (errorMessage: string) => void;
+}) {
+  return useMutation({
+    mutationFn: publishCourse,
+
+    onError: (error: AxiosError<Record<string, any>>) => {
+      if (options?.onError) {
+        options.onError(error.response?.data.message);
+      }
+    },
+
+    onSuccess: () => {
+      addToast({
+        title: "Course published",
+        description: "Your course has been successfully published",
+        color: "success",
       });
     },
   });

@@ -236,11 +236,11 @@ export class Course {
   }
 
   publish(): void {
-    if (this._status === 'approved') {
-      this._status = 'published';
-      this._updatedAt = new Date();
-      this._publishedAt = new Date();
-    }
+    // if (this._status === 'approved') {
+    this._status = 'published';
+    this._updatedAt = new Date();
+    this._publishedAt = new Date();
+    // }
   }
 
   unpublish(): void {
