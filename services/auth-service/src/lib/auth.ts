@@ -137,6 +137,30 @@ export const auth = betterAuth({
           await kafkaService.publishEvent('user-events', userCreatedEvent);
         }
       }
+      if (ctx.path === '/get-session') {
+        const session = ctx.context.session;
+        if (session) {
+          const jwtToken = await getJwtToken(ctx, {
+            jwt: {
+              issuer: process.env.JWT_ISS,
+              audience: process.env.JWT_AUD,
+              definePayload() {
+                return {
+                  ...session.user,
+                  sessionId: session.session.id,
+                };
+              },
+              getSubject: () => session.user.id,
+            },
+          });
+          ctx.setCookie('user_jwt', jwtToken, {
+            httpOnly: true,
+            sameSite: 'None',
+            secure: true,
+            path: '/',
+          });
+        }
+      }
     }),
   },
   trustedOrigins: ['http://localhost:5173'],
