@@ -3,7 +3,6 @@ import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use
 import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
 import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
 import { GetAllInstructorCoursesUseCase } from '@/application/use-cases/get-all-instructor-course.use-case';
-import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url.use-case';
 import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
 import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
 import {
@@ -14,7 +13,6 @@ import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-revie
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
 import { UpdateCourseUseCase } from '@/application/use-cases/update-course.use-case';
 import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
-import { ResourceType } from '@/domain/entity/asset.entity';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -23,7 +21,6 @@ import {
   createLectureSchema,
   createChapterSchema,
   createCourseSchema,
-  getUploadUrlSchema,
   reorderCurriculumSchema,
   updateChapterSchema,
   updateCourseSchema,
@@ -58,8 +55,6 @@ export class InstructorRoutes {
     private readonly createLectureUseCase: CreateLectureUseCase,
     @inject(TYPES.UpdateLectureUseCase)
     private readonly updateLectureUseCase: UpdateLectureUseCase,
-    @inject(TYPES.GetCourseAssetsUploadUrlUseCase)
-    private readonly getCourseAssetsUploadUrlUseCase: GetCourseAssetsUploadUrlUseCase,
     @inject(TYPES.AddAssetToLectureUseCase)
     private readonly addAssetToLectureUseCase: AddAssetToLectureUseCase,
     @inject(TYPES.SubmitForReviewUseCase)
@@ -207,29 +202,16 @@ export class InstructorRoutes {
             },
           });
         })
-        .get(
-          '/:courseId/assets/get-upload-url',
-          async ({ params, query, user }) => {
-            const parsedQuery = getUploadUrlSchema.parse(query);
-            const response = await this.getCourseAssetsUploadUrlUseCase.execute(
-              {
-                getCourseAssetsUploadUrlDto: {
-                  courseId: params.courseId,
-                  resourceType: parsedQuery.resourceType as ResourceType,
-                },
-                actor: user,
-              },
-            );
-            return response;
-          },
-        )
         .post(
           '/:courseId/lectures/:lectureId/assets',
           async ({ body, user, params }) => {
             const parsedBody = addAssetToLectureSchema.parse(body);
             await this.addAssetToLectureUseCase.execute({
               addAssetToLectureDto: {
-                assetId: parsedBody.assetId,
+                resourceType: parsedBody.resourceType as 'image' | 'video',
+                key: parsedBody.key,
+                fileName: parsedBody.fileName,
+                uuid: parsedBody.uuid,
                 courseId: params.courseId,
                 lectureId: params.lectureId,
               },

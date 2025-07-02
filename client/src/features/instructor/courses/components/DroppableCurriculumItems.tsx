@@ -16,6 +16,7 @@ import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 
 import {
+  useAddContentToLecture,
   useCreateChapter,
   useCreateLecture,
   useDeleteChapter,
@@ -30,11 +31,11 @@ import SortableChapterItem from "./SortableChapterItem";
 import SortableLectureItem from "./SortableLectureItem";
 import LectureForm from "./forms/LectureForm";
 import ChapterForm from "./forms/ChapterForm";
+import FileUploadModal from "./FileUploadModal";
 
 import { useCurriculumStore } from "@/store/curriculum-store";
 import FormModal from "@/components/FormModal";
 import { tryCatch } from "@/utils/try-catch";
-
 interface DroppableCurriculumItemsProps {
   courseId: string;
   curriculumItems: CurriculumItem[];
@@ -68,6 +69,8 @@ export default function DroppableCurriculumItems({
     updateLectureItem,
     insertCurriculumItem,
     deleteLectureItem,
+    openFileUploadModal,
+    setOpenFileUploadModal,
   } = useCurriculumStore();
   const createLecture = useCreateLecture();
   const updateLecture = useUpdateLecture();
@@ -75,6 +78,7 @@ export default function DroppableCurriculumItems({
   const createChapter = useCreateChapter();
   const updateChapter = useUpdateChapter();
   const deleteChapter = useDeleteChapter();
+  const addContentToLecture = useAddContentToLecture();
 
   React.useEffect(() => {
     if (initialCurriculumItems) {
@@ -229,6 +233,28 @@ export default function DroppableCurriculumItems({
     }
   }
 
+  function onContentUploadSuccessHandler(
+    key: string,
+    resourceType: "image" | "video",
+    uuid: string,
+  ) {
+    if (selectedLecture) {
+      addContentToLecture.mutate({
+        courseId,
+        lectureId: selectedLecture.id,
+        key,
+        uuid,
+        fileName: "null",
+        resourceType,
+      });
+    }
+  }
+
+  function handleLectureContentUpload(lecture: Lecture) {
+    setOpenFileUploadModal(true);
+    setSelectedLecture(lecture);
+  }
+
   return (
     <>
       <div>
@@ -291,6 +317,7 @@ export default function DroppableCurriculumItems({
                                 index={i}
                                 isLastItemInChapter={isLastItemInChapter}
                                 lecture={item}
+                                onAddContent={handleLectureContentUpload}
                                 onAddLecture={handleCreateLecture}
                                 onDelete={handleDeleteLecture}
                                 onEdit={handleEditLecture}
@@ -345,20 +372,37 @@ export default function DroppableCurriculumItems({
                 : updateLecture.isPending
             }
             mode={openLectureFormModal.mode}
+            previewContent={
+              selectedLecture && selectedLecture.asset ? true : false
+            }
+            previewContentSrc={
+              selectedLecture && selectedLecture.asset
+                ? {
+                    type: selectedLecture.asset.mediaSources[0].type,
+                    src: selectedLecture.asset.mediaSources[0].src,
+                  }
+                : null
+            }
+            showFileUploader={
+              selectedLecture && selectedLecture.assetId ? true : false
+            }
             onCancel={() => {
               setOpenLectureFormModal({
                 ...openLectureFormModal,
                 isOpen: false,
               });
+              setSelectedLecture(null);
             }}
+            onContentUploadHander={onContentUploadSuccessHandler}
             onSubmitHandler={lectureOnSubmitHandler}
           />
         }
         isOpen={openLectureFormModal.isOpen}
         title={`${openLectureFormModal.mode === "edit" ? "Update" : "Create"} lecture`}
-        onClose={() =>
-          setOpenLectureFormModal({ ...openLectureFormModal, isOpen: false })
-        }
+        onClose={() => {
+          setOpenLectureFormModal({ ...openLectureFormModal, isOpen: false });
+          setSelectedLecture(null);
+        }}
       />
 
       <FormModal
@@ -385,6 +429,14 @@ export default function DroppableCurriculumItems({
         onClose={() =>
           setOpenChapterFormModal({ ...openChapterFormModal, isOpen: false })
         }
+      />
+
+      <FileUploadModal
+        isOpen={openFileUploadModal}
+        onClose={() => {
+          setOpenFileUploadModal(false);
+        }}
+        onSuccess={onContentUploadSuccessHandler}
       />
     </>
   );

@@ -1,18 +1,22 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
+import type { IFileStorageGateway } from '../ports/file-storage.gateway';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { InvalidInputException } from '../exceptions/invalid-input.exception';
 import { IUseCase } from './interface/use-case.interface';
+import { Asset, ResourceType } from '@/domain/entity/asset.entity';
 
 export interface AddAssetToLectureDto {
   courseId: string;
   lectureId: string;
-  assetId: string;
+  key: string;
+  resourceType: ResourceType;
+  fileName: string;
+  uuid: string;
 }
 
 export interface AddAssetToLectureInput {
@@ -31,20 +35,17 @@ export class AddAssetToLectureUseCase
     private readonly assetRepository: IAssetRepository,
     @inject(TYPES.LectureRepository)
     private readonly lectureRepository: ILectureRepository,
+    @inject(TYPES.FileStorageGateway)
+    private readonly fileStorageGateway: IFileStorageGateway,
   ) {}
 
   async execute(addAssetToLectureInput: AddAssetToLectureInput): Promise<void> {
     const { addAssetToLectureDto, actor } = addAssetToLectureInput;
 
-    const { assetId, courseId, lectureId } = addAssetToLectureDto;
+    const { courseId, lectureId, key, resourceType, uuid } =
+      addAssetToLectureDto;
 
     const course = await this.courseRepository.findById(courseId);
-
-    const asset = await this.assetRepository.findById(assetId);
-
-    if (!asset) {
-      throw new NotFoundException(`Asset with ID:${assetId} not found.`);
-    }
 
     if (!course) {
       throw new NotFoundException(`Course with ID:${courseId} not found.`);
@@ -64,13 +65,35 @@ export class AddAssetToLectureUseCase
       );
     }
 
-    if (lecture.assetId) {
-      throw new InvalidInputException(
-        `Lesson already has a video assigned (mediaId: ${lecture.assetId}). Use the replace video flow if you want to change it.`,
-      );
+    // if (lecture.assetId) {
+    //   throw new InvalidInputException(
+    //     `Lesson already has a video assigned (mediaId: ${lecture.assetId}). Use the replace video flow if you want to change it.`,
+    //   );
+    // }
+
+    const data = await this.fileStorageGateway.verifyAssetExists(
+      key,
+      resourceType,
+    );
+
+    if (!data.exists) {
+      throw new NotFoundException(`Asset not found.`);
     }
 
-    lecture.assignMedia(assetId);
+    const asset = Asset.create(
+      uuid,
+      'cloudinary',
+      key,
+      'public',
+      data.mediaSource ? [data.mediaSource] : [],
+      'uploaded',
+      data.originalFilename,
+      data.resourceType,
+    );
+
+    const createdAsset = await this.assetRepository.save(asset);
+
+    lecture.assignMedia(createdAsset.id);
 
     await this.lectureRepository.update(lectureId, lecture);
 

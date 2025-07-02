@@ -2,7 +2,6 @@ import type { IFileStorageGateway } from '@/application/ports/file-storage.gatew
 import { ApproveCourseUseCase } from '@/application/use-cases/approve-course.use-case';
 import { CompleteAssetUploadUseCase } from '@/application/use-cases/complete-asset-upload.use-case';
 import { RejectCourseUseCase } from '@/application/use-cases/reject-course.use-case';
-import { ResourceType } from '@/domain/entity/asset.entity';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -30,52 +29,6 @@ export class AdminRoutes {
   register(): Elysia {
     return new Elysia().group('/api/courses', (group) =>
       group
-        .post(
-          '/webhooks/cloudinary/uploads',
-          async ({ headers, body, set }) => {
-            const signature = headers['x-cld-signature'] as string;
-
-            const timestamp = headers['x-cld-timestamp'] as string;
-
-            const payload = body;
-
-            if (!signature || !timestamp || !payload) {
-              set.status = 400;
-
-              this.logger.warn('Missing webhook header or payload');
-              return 'Missing webhook header or payload';
-            }
-
-            const isVerified = this.fileStorageGateway.verifyWebhookSignature({
-              signature,
-              timestamp,
-              payload,
-            });
-
-            if (!isVerified) {
-              set.status = 403;
-              return 'Invalid webhook signature';
-            }
-
-            await this.completeAssetUploadUseCase.execute({
-              additionalMetadata: (payload as Record<string, any>) || null,
-              duration:
-                ((payload as Record<string, any>).duration as number) || null,
-              providerSpecificId: (payload as Record<string, any>)
-                .public_id as string,
-              originalFileName: (payload as Record<string, any>)
-                .original_filename as string,
-              mediaSource: {
-                type: 'application/x-mpegURL',
-                src: (payload as Record<string, any>).secure_url as string,
-              },
-              resourseType: (payload as Record<string, any>)
-                .resource_type as ResourceType,
-            });
-
-            return;
-          },
-        )
         .use(authenticaionMiddleware)
         .patch(
           '/:courseId/approve',

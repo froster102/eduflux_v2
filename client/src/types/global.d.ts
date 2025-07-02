@@ -66,6 +66,24 @@ declare global {
     preview: boolean;
     sortOrder: number;
     objectIndex: number;
+    asset?: Asset;
+  };
+
+  export type Asset = {
+    id: string;
+    provider: string;
+    providerSpecificId: string;
+    resourceType: null;
+    accessType: string;
+    originalFileName: string | null;
+    duration: null;
+    status: "pending";
+    mediaSources: [
+      {
+        type: "application/x-mpegURL";
+        src: "https://res.cloudinary.com/drdphexjc/video/upload/sp_auto/v1751448526/5c8d0c8a-0775-4371-beee-d4e38b74cb61.m3u8";
+      },
+    ];
   };
 
   export type CurriculumItem = Chapter | Lecture;

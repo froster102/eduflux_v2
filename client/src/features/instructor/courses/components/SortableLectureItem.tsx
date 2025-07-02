@@ -13,6 +13,7 @@ interface SortableLectureItemProps {
   onEdit: (lecture: Lecture, index: number) => void;
   onDelete: (id: string) => void;
   onAddLecture: (index: number) => void;
+  onAddContent: (lecture: Lecture) => void;
 }
 
 export default function SortableLectureItem({
@@ -20,6 +21,7 @@ export default function SortableLectureItem({
   onDelete,
   onEdit,
   onAddLecture,
+  onAddContent,
   index,
   isLastItemInChapter,
 }: SortableLectureItemProps) {
@@ -62,7 +64,15 @@ export default function SortableLectureItem({
             </div>
             <div className="flex items-center">
               {!lecture.assetId && (
-                <Button size="sm" startContent={<AddIcon width={12} />}>
+                <Button
+                  size="sm"
+                  startContent={<AddIcon width={12} />}
+                  onPress={() => {
+                    if (lecture._class === "lecture") {
+                      onAddContent(lecture);
+                    }
+                  }}
+                >
                   Content
                 </Button>
               )}

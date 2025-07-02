@@ -27,7 +27,11 @@ interface UploaderProps {
   maxSize: number;
   maxFiles: number;
   enableMultipleFile?: boolean;
-  onSuccess: (fileKey: string) => void;
+  onSuccess: (
+    fileKey: string,
+    resourceType: "video" | "image",
+    uuid: string,
+  ) => void;
   value: string | null;
 }
 
@@ -40,7 +44,7 @@ export default function FileUploader({
   onSuccess,
 }: UploaderProps) {
   const accept: Record<string, any> =
-    acceptedFileType === "image" ? { "image/*": [] } : {};
+    acceptedFileType === "image" ? { "image/*": [] } : { "video/mp4": [] };
 
   const [fileState, setFileState] = React.useState<UploaderState>({
     error: false,
@@ -125,9 +129,14 @@ export default function FileUploader({
 
       if (response.status === 200) {
         setFileState((prev) => ({ ...prev, uploading: false, progress: 0 }));
-        onSuccess(`${response.data.public_id}.${response.data.format}`);
+        onSuccess(
+          `${response.data.public_id}.${response.data.format}`,
+          response.data.resource_type,
+          response.data.public_id,
+        );
       }
-    } catch {
+    } catch (e) {
+      console.log(e);
       setFileState((prev) => ({
         ...prev,
         error: true,

@@ -13,6 +13,7 @@ interface InitialState {
   selectedIndex: number | null;
   selectedLecture: Lecture | null;
   selectedChapter: Chapter | null;
+  openFileUploadModal: boolean;
 }
 
 interface CurriculumStore extends InitialState {
@@ -37,6 +38,7 @@ interface CurriculumStore extends InitialState {
   setSelectedIndex: (index: number) => void;
   setSelectedChapter: (chapter: Chapter | null) => void;
   setSelectedLecture: (lecture: Lecture | null) => void;
+  setOpenFileUploadModal: (open: boolean) => void;
 }
 
 const initialState: InitialState = {
@@ -44,6 +46,7 @@ const initialState: InitialState = {
   curriculumItems: [],
   openChapterFormModal: { isOpen: false, mode: "create" },
   openLectureFormModal: { isOpen: false, mode: "create" },
+  openFileUploadModal: false,
   activeId: null,
   selectedIndex: null,
   activeItem: null,
@@ -189,6 +192,11 @@ export const useCurriculumStore = create<CurriculumStore>()(
     setSelectedLecture: (lecture: Lecture | null) => {
       set((state) => {
         state.selectedLecture = lecture;
+      });
+    },
+    setOpenFileUploadModal: (open) => {
+      set((state) => {
+        state.openFileUploadModal = open;
       });
     },
   })),

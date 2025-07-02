@@ -130,3 +130,19 @@ export async function getUploadCredentials(data: {
 
   return response.data;
 }
+
+export async function addAssetToLecture(data: {
+  key: string;
+  uuid: string;
+  fileName: string;
+  courseId: string;
+  lectureId: string;
+  resourceType: "image" | "video";
+}) {
+  const response = await api.post(
+    `/courses/${data.courseId}/lectures/${data.lectureId}/assets`,
+    data,
+  );
+
+  return response.data;
+}

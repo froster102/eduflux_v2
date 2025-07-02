@@ -4,27 +4,44 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Form } from "@heroui/form";
 import { Input, Textarea } from "@heroui/input";
+import React from "react";
 
 import { lectureSchema } from "@/validations/course";
 import FileUploader from "@/components/FileUploader";
+import HLSPlayer from "@/components/HLSPlayer";
 
 export default function LectureForm({
   onSubmitHandler,
   isPending,
   mode,
   initialValue,
-  showFileUploader,
   onCancel,
-}: DefaultFormProps<LectureFormData> & { showFileUploader?: boolean }) {
+  onContentUploadHander,
+  previewContent,
+  previewContentSrc,
+}: DefaultFormProps<LectureFormData> & {
+  showFileUploader?: boolean;
+  previewContent?: boolean;
+  previewContentSrc?: {
+    type: string;
+    src: string;
+  } | null;
+  onContentUploadHander: (
+    key: string,
+    resourseType: "image" | "video",
+    uuid: string,
+  ) => void;
+}) {
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<LectureFormData>({
     resolver: zodResolver(lectureSchema),
     defaultValues: mode === "edit" ? initialValue : {},
   });
+  const [updateContent, setUpdateContent] = React.useState(false);
 
   return (
     <Form
@@ -50,7 +67,36 @@ export default function LectureForm({
         labelPlacement="outside"
         placeholder="What is this lecture about"
       />
-      {showFileUploader && (
+      {!updateContent ? (
+        previewContent &&
+        previewContentSrc && (
+          <>
+            <div className="w-full flex flex-col gap-2 rounded-md overflow-hidden">
+              <HLSPlayer
+                options={{
+                  autoplay: true,
+                  controls: true,
+                  responsive: true,
+                  sources: [
+                    {
+                      type: previewContentSrc.type,
+                      src: previewContentSrc.src,
+                    },
+                  ],
+                }}
+              />
+              <Button
+                className="ml-auto"
+                color="primary"
+                size="sm"
+                onPress={() => setUpdateContent(true)}
+              >
+                Update content
+              </Button>
+            </div>
+          </>
+        )
+      ) : (
         <div className="w-full">
           <p className="text-sm pb-2">Upload your video</p>
           <FileUploader
@@ -58,7 +104,7 @@ export default function LectureForm({
             maxFiles={1}
             maxSize={1024 * 1024 * 1024}
             value={null}
-            onSuccess={() => {}}
+            onSuccess={onContentUploadHander}
           />
         </div>
       )}
@@ -87,7 +133,7 @@ export default function LectureForm({
         <Button
           className="ml-2"
           color="primary"
-          isDisabled={isPending}
+          isDisabled={isPending || !isDirty}
           isLoading={isPending}
           type="submit"
         >

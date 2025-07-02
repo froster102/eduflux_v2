@@ -1,11 +1,56 @@
-import {
-  IFileStorageGateway,
-  IUploadCredentialsOptions,
-  IUploadCredentialsResponse,
-} from '@/application/ports/file-storage.gateway';
-import { Asset } from '@/domain/entity/asset.entity';
+import { NotFoundException } from '@/application/exceptions/not-found.exception';
+import { IFileStorageGateway } from '@/application/ports/file-storage.gateway';
+import { Asset, MediaSource, ResourceType } from '@/domain/entity/asset.entity';
 import { cloudinaryConfig } from '@/shared/config/cloudinary.config';
 import { v2 as cloudinary } from 'cloudinary';
+
+export type CloudinaryUploadResponseType = {
+  asset_id: string;
+  public_id: string;
+  version: number;
+  version_id: string;
+  signature: string;
+  width: number;
+  height: number;
+  format: string;
+  resource_type: string;
+  created_at: string;
+  tags: string[];
+  pages: number;
+  bytes: number;
+  type: string;
+  etag: string;
+  placeholder: boolean;
+  url: string;
+  secure_url: string;
+  playback_url: string;
+  asset_folder: string;
+  display_name: string;
+  audio?: {
+    codec: string;
+    bit_rate: string;
+    frequency: number;
+    channels: number;
+    channel_layout: string;
+  };
+  video?: {
+    pix_format: string;
+    codec: string;
+    level: number;
+    profile: string;
+    bit_rate: string;
+    dar: string;
+    time_base: string;
+  };
+  is_audio?: boolean;
+  frame_rate?: number;
+  bit_rate?: number;
+  duration?: number;
+  rotation?: number;
+  original_filename: string;
+  nb_frames?: number;
+  api_key: string;
+};
 
 export class CloudinaryService implements IFileStorageGateway {
   constructor() {
@@ -14,56 +59,6 @@ export class CloudinaryService implements IFileStorageGateway {
       api_key: cloudinaryConfig.API_KEY,
       api_secret: cloudinaryConfig.API_SECRET,
     });
-  }
-  getUploadCredentials(
-    options: IUploadCredentialsOptions,
-  ): IUploadCredentialsResponse {
-    const timestamp = Math.round(new Date().getTime() / 1000);
-
-    const paramsToSign: Record<string, any> = {
-      timestamp,
-      public_id: options.assetId,
-      folder: options.folderPath,
-      type: options.accessType === 'private' ? 'authenticated' : 'upload',
-    };
-
-    const signature = cloudinary.utils.api_sign_request(
-      paramsToSign,
-      cloudinaryConfig.API_SECRET,
-    );
-
-    let uploadEnpoint: string;
-
-    switch (options.resourceType) {
-      case 'image': {
-        uploadEnpoint = 'image/upload';
-        break;
-      }
-      case 'video': {
-        uploadEnpoint = 'video/upload';
-        break;
-      }
-      case 'raw': {
-        uploadEnpoint = 'raw/upload';
-        break;
-      }
-      default: {
-        uploadEnpoint = 'raw/upload';
-      }
-    }
-
-    return {
-      uploadUrl: `https://api.cloudinary.com/v1_1/${cloudinaryConfig.CLOUD_NAME}/${uploadEnpoint}`,
-      uploadParams: {
-        api_key: cloudinaryConfig.API_KEY,
-        timestamp,
-        signature,
-        public_id: options.assetId,
-        type: options.accessType === 'private' ? 'authenticated' : 'upload',
-        folder: options.folderPath,
-      },
-      providerSpecificAssetId: options.providerSpecificId,
-    };
   }
 
   getAccessUrl(
@@ -106,18 +101,37 @@ export class CloudinaryService implements IFileStorageGateway {
     return isVerified;
   }
 
-  // verifyAssetExists(
-  //   providerSpecificId: string,
-  //   resourceType: ResourceType,
-  //   accessType: AccessType,
-  // ): Promise<{
-  //   exists: boolean;
-  //   duration?: number;
-  //   originalFilename?: string;
-  //   additionalMetadata?: Record<string, any>;
-  // }> {
-  //   throw new Error('Method not implemented.');
-  // }
+  async verifyAssetExists(
+    key: string,
+    resourceType: ResourceType,
+  ): Promise<{
+    exists: boolean;
+    originalFilename: string;
+    additionalMetadata?: Record<string, any>;
+    resourceType: ResourceType;
+    mediaSource?: MediaSource | null;
+  }> {
+    try {
+      const result = (await cloudinary.uploader.explicit(key.split('.')[0], {
+        resource_type: resourceType,
+        type: 'upload',
+      })) as CloudinaryUploadResponseType;
+      return {
+        exists: true,
+        originalFilename: result.original_filename,
+        resourceType: result.resource_type as ResourceType,
+        mediaSource:
+          result.resource_type === 'video'
+            ? {
+                type: 'application/x-mpegURL',
+                src: result.playback_url,
+              }
+            : null,
+      };
+    } catch {
+      throw new NotFoundException(`Asset not found.`);
+    }
+  }
 
   // deleteAsset(
   //   providerSpecificId: string,

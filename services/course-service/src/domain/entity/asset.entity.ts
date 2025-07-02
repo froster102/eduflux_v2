@@ -2,6 +2,7 @@ export type StorageProvider = 'cloudinary' | 's3' | 'gcs';
 export type ResourceType = 'image' | 'video' | 'raw';
 export type AccessType = 'public' | 'private';
 export type MediaStatus =
+  | 'processing'
   | 'pending'
   | 'uploaded'
   | 'failed'
@@ -51,17 +52,21 @@ export class Asset {
     provider: StorageProvider = 'cloudinary',
     providerSpecificAssetId: string,
     accessType: AccessType,
+    mediaSources: MediaSource[],
+    status?: MediaStatus,
+    originalFileName?: string,
+    resourceType?: ResourceType,
   ): Asset {
     return new Asset(
       id,
       provider,
       providerSpecificAssetId,
-      null,
+      resourceType ?? null,
       accessType,
+      originalFileName ?? null,
       null,
-      null,
-      'pending',
-      [],
+      status ?? 'pending',
+      mediaSources ?? [],
       null,
     );
   }

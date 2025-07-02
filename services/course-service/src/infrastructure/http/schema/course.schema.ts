@@ -104,7 +104,10 @@ export const getUploadUrlSchema = z.object({
 });
 
 export const addAssetToLectureSchema = z.object({
-  assetId: z.string(),
+  key: z.string(),
+  fileName: z.string(),
+  resourceType: z.enum(resourceTypeEnum),
+  uuid: z.uuidv4(),
 });
 
 export const rejectCourseSchema = z.object({

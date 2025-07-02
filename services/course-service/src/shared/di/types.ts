@@ -9,9 +9,6 @@ export const TYPES = {
   RejectCourseUseCase: Symbol.for('RejectCourseUseCase'),
   SubmitForReviewUseCase: Symbol.for('SubmitForReviewUseCase'),
   GetInstructorCourseCurriculumUseCase: Symbol.for('GetCourseByIdUseCase'),
-  GetCourseAssetsUploadUrlUseCase: Symbol.for(
-    'GetCourseAssetsUploadUrlUseCase',
-  ),
   UpdatePriceTierUseCase: Symbol.for('UpdatePriceTierUseCase'),
   CreateChapterUseCase: Symbol.for('CreateChapterUseCase'),
   DeleteChapterUseCase: Symbol.for('DeleteSectionUseCase'),

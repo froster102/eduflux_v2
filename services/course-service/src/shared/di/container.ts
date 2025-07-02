@@ -15,7 +15,6 @@ import { ApproveCourseUseCase } from '@/application/use-cases/approve-course.use
 import { RejectCourseUseCase } from '@/application/use-cases/reject-course.use-case';
 import { SubmitForReviewUseCase } from '@/application/use-cases/submit-for-review.use-case';
 import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
-import { GetCourseAssetsUploadUrlUseCase } from '@/application/use-cases/get-course-assests-upload-url.use-case';
 import { PublishCourseUseCase } from '@/application/use-cases/publish-course.use-case';
 import { IFileStorageGateway } from '@/application/ports/file-storage.gateway';
 import { CloudinaryService } from '@/infrastructure/storage/cloudinary.service';
@@ -82,9 +81,6 @@ container
     TYPES.GetInstructorCourseCurriculumUseCase,
   )
   .to(GetInstructorCourseCurriculumUseCase);
-container
-  .bind<GetCourseAssetsUploadUrlUseCase>(TYPES.GetCourseAssetsUploadUrlUseCase)
-  .to(GetCourseAssetsUploadUrlUseCase);
 container
   .bind<CreateChapterUseCase>(TYPES.CreateChapterUseCase)
   .to(CreateChapterUseCase);
