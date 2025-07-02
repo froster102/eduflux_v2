@@ -24,7 +24,7 @@ export abstract class BaseMongoRepositoryImpl<TPersistence, TDomain>
   async update(id: string, data: Partial<TDomain>): Promise<TDomain | null> {
     const updated = await this.model
       .findOneAndUpdate(
-        { id },
+        { _id: id },
         this.mapper.toPersistance(data as unknown as TDomain),
       )
       .catch((error: Record<string, any>) => {
