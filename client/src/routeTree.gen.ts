@@ -19,14 +19,21 @@ import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
+import { Route as LearnerLayoutRouteRouteImport } from './routes/learner/_layout/route'
 import { Route as InstructorLayoutRouteRouteImport } from './routes/instructor/_layout/route'
 import { Route as LearnerLayoutIndexRouteImport } from './routes/learner/_layout/index'
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
 
+const LearnerRouteImport = createFileRoute('/learner')()
 const InstructorRouteImport = createFileRoute('/instructor')()
 
+const LearnerRoute = LearnerRouteImport.update({
+  id: '/learner',
+  path: '/learner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InstructorRoute = InstructorRouteImport.update({
   id: '/instructor',
   path: '/instructor',
@@ -72,14 +79,18 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const LearnerLayoutRouteRoute = LearnerLayoutRouteRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => LearnerRoute,
+} as any)
 const InstructorLayoutRouteRoute = InstructorLayoutRouteRouteImport.update({
   id: '/_layout',
   getParentRoute: () => InstructorRoute,
 } as any)
 const LearnerLayoutIndexRoute = LearnerLayoutIndexRouteImport.update({
-  id: '/learner/_layout/',
-  path: '/learner/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => LearnerLayoutRouteRoute,
 } as any)
 const InstructorLayoutIndexRoute = InstructorLayoutIndexRouteImport.update({
   id: '/',
@@ -103,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/instructor': typeof InstructorLayoutRouteRouteWithChildren
+  '/learner': typeof LearnerLayoutRouteRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -110,20 +122,20 @@ export interface FileRoutesByFullPath {
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
   '/instructor/': typeof InstructorLayoutIndexRoute
-  '/learner': typeof LearnerLayoutIndexRoute
+  '/learner/': typeof LearnerLayoutIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/instructor': typeof InstructorLayoutIndexRoute
+  '/learner': typeof LearnerLayoutIndexRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
-  '/learner': typeof LearnerLayoutIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
 }
@@ -133,6 +145,8 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/instructor': typeof InstructorRouteWithChildren
   '/instructor/_layout': typeof InstructorLayoutRouteRouteWithChildren
+  '/learner': typeof LearnerRouteWithChildren
+  '/learner/_layout': typeof LearnerLayoutRouteRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -150,6 +164,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/instructor'
+    | '/learner'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
@@ -157,20 +172,20 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/auth/'
     | '/instructor/'
-    | '/learner'
+    | '/learner/'
     | '/instructor/courses'
     | '/instructor/courses/$courseId/manage'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/instructor'
+    | '/learner'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth'
-    | '/learner'
     | '/instructor/courses'
     | '/instructor/courses/$courseId/manage'
   id:
@@ -179,6 +194,8 @@ export interface FileRouteTypes {
     | '/auth'
     | '/instructor'
     | '/instructor/_layout'
+    | '/learner'
+    | '/learner/_layout'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
@@ -195,11 +212,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   InstructorRoute: typeof InstructorRouteWithChildren
-  LearnerLayoutIndexRoute: typeof LearnerLayoutIndexRoute
+  LearnerRoute: typeof LearnerRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/learner': {
+      id: '/learner'
+      path: '/learner'
+      fullPath: '/learner'
+      preLoaderRoute: typeof LearnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/instructor': {
       id: '/instructor'
       path: '/instructor'
@@ -263,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/learner/_layout': {
+      id: '/learner/_layout'
+      path: '/learner'
+      fullPath: '/learner'
+      preLoaderRoute: typeof LearnerLayoutRouteRouteImport
+      parentRoute: typeof LearnerRoute
+    }
     '/instructor/_layout': {
       id: '/instructor/_layout'
       path: '/instructor'
@@ -272,10 +303,10 @@ declare module '@tanstack/react-router' {
     }
     '/learner/_layout/': {
       id: '/learner/_layout/'
-      path: '/learner'
-      fullPath: '/learner'
+      path: '/'
+      fullPath: '/learner/'
       preLoaderRoute: typeof LearnerLayoutIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LearnerLayoutRouteRoute
     }
     '/instructor/_layout/': {
       id: '/instructor/_layout/'
@@ -353,11 +384,33 @@ const InstructorRouteWithChildren = InstructorRoute._addFileChildren(
   InstructorRouteChildren,
 )
 
+interface LearnerLayoutRouteRouteChildren {
+  LearnerLayoutIndexRoute: typeof LearnerLayoutIndexRoute
+}
+
+const LearnerLayoutRouteRouteChildren: LearnerLayoutRouteRouteChildren = {
+  LearnerLayoutIndexRoute: LearnerLayoutIndexRoute,
+}
+
+const LearnerLayoutRouteRouteWithChildren =
+  LearnerLayoutRouteRoute._addFileChildren(LearnerLayoutRouteRouteChildren)
+
+interface LearnerRouteChildren {
+  LearnerLayoutRouteRoute: typeof LearnerLayoutRouteRouteWithChildren
+}
+
+const LearnerRouteChildren: LearnerRouteChildren = {
+  LearnerLayoutRouteRoute: LearnerLayoutRouteRouteWithChildren,
+}
+
+const LearnerRouteWithChildren =
+  LearnerRoute._addFileChildren(LearnerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   InstructorRoute: InstructorRouteWithChildren,
-  LearnerLayoutIndexRoute: LearnerLayoutIndexRoute,
+  LearnerRoute: LearnerRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

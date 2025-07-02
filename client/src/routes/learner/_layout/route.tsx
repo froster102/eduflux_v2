@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/auth-store";
 import RoleSwitcher from "@/components/RoleSwitcher";
 import DefaultLayout from "@/components/DefaultLayout";
 
-export const Route = createFileRoute("/instructor/_layout")({
+export const Route = createFileRoute("/learner/_layout")({
   component: Layout,
 });
 
@@ -25,17 +25,17 @@ function Layout() {
 
   const navItems = [
     {
-      path: "/instructor",
+      path: "/learner",
       icon: <Icon icon="solar:home-2-outline" width={24} />,
       label: "Home",
     },
     {
-      path: "/instructor/courses",
+      path: "/learner/courses",
       icon: <Icon icon="solar:notebook-bookmark-line-duotone" width={24} />,
       label: "Courses",
     },
     {
-      path: "/instructor/sessions",
+      path: "/learner/sessions",
       icon: <Icon icon="solar:calendar-outline" width={24} />,
       label: "Sessions",
     },
