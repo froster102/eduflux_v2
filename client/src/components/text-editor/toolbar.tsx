@@ -1,7 +1,17 @@
-import { Icon } from "@iconify/react";
 import { Editor } from "@tiptap/react";
 import { Button, ButtonGroup } from "@heroui/button";
 import { Tooltip } from "@heroui/tooltip";
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  Italic,
+  List,
+  ListOrdered,
+  Underline,
+} from "lucide-react";
+
+import BoldIcon from "@/assets/icons/BoldIcon";
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -22,7 +32,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive("bold") ? "solid" : "flat"}
             onPress={() => editor.chain().focus().toggleBold().run()}
           >
-            <Icon icon="lucide:bold" />
+            <BoldIcon width={20} />
           </Button>
         </Tooltip>
         <Tooltip className="text-xs" content="Italic" placement="bottom">
@@ -32,7 +42,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive("italic") ? "solid" : "flat"}
             onPress={() => editor.chain().focus().toggleItalic().run()}
           >
-            <Icon icon="lucide:italic" />
+            <Italic width={20} />
           </Button>
         </Tooltip>
         <Tooltip className="text-xs" content="Underline" placement="bottom">
@@ -42,7 +52,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive("underline") ? "solid" : "flat"}
             onPress={() => editor.chain().focus().toggleUnderline().run()}
           >
-            <Icon icon="lucide:underline" />
+            <Underline width={20} />
           </Button>
         </Tooltip>
       </ButtonGroup>
@@ -55,7 +65,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive("bulletList") ? "solid" : "flat"}
             onPress={() => editor.chain().focus().toggleBulletList().run()}
           >
-            <Icon icon="lucide:list" />
+            <List width={20} />
           </Button>
         </Tooltip>
         <Tooltip className="text-xs" content="Ordered list" placement="bottom">
@@ -65,7 +75,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive("orderedList") ? "solid" : "flat"}
             onPress={() => editor.chain().focus().toggleOrderedList().run()}
           >
-            <Icon icon="lucide:list-ordered" />
+            <ListOrdered width={20} />
           </Button>
         </Tooltip>
       </ButtonGroup>
@@ -78,7 +88,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive({ textAlign: "left" }) ? "solid" : "flat"}
             onPress={() => editor.chain().focus().setTextAlign("left").run()}
           >
-            <Icon icon="lucide:align-left" />
+            <AlignLeft width={20} />
           </Button>
         </Tooltip>
         <Tooltip className="text-xs" content="Align center" placement="bottom">
@@ -90,7 +100,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             }
             onPress={() => editor.chain().focus().setTextAlign("center").run()}
           >
-            <Icon icon="lucide:align-center" />
+            <AlignCenter width={20} />
           </Button>
         </Tooltip>
         <Tooltip className="text-xs" content="Align right" placement="bottom">
@@ -100,7 +110,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
             variant={editor.isActive({ textAlign: "right" }) ? "solid" : "flat"}
             onPress={() => editor.chain().focus().setTextAlign("right").run()}
           >
-            <Icon icon="lucide:align-right" />
+            <AlignRight width={20} />
           </Button>
         </Tooltip>
       </ButtonGroup>

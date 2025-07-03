@@ -1,6 +1,5 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import React from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDisclosure } from "@heroui/modal";
 import {
   Drawer,
@@ -15,6 +14,8 @@ import ConfirmationModal from "./ConfirmationModal";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
 import { useLogout } from "@/features/auth/hooks/mutations";
+import MenuIcon from "@/assets/icons/MenuIcon";
+import LogoutIcon from "@/assets/icons/LogoutIcon";
 
 interface SidebarProps {
   topContent?: React.ReactNode;
@@ -82,7 +83,7 @@ export default function Sidebar({
                 onPress={() => setOpenLogoutConfirmation(true)}
               >
                 <CardHeader className="flex gap-2 text-nowrap">
-                  <Icon icon="solar:minus-circle-linear" width={24} />
+                  <LogoutIcon width={24} />
                   Logout
                 </CardHeader>
               </Card>
@@ -100,7 +101,7 @@ export default function Sidebar({
         >
           <CardBody>
             <div className="flex">
-              <Icon icon="solar:reorder-outline" width={24} />
+              <MenuIcon width={24} />
               <p className="pl-2 capitalize">{selected}</p>
             </div>
           </CardBody>
@@ -157,7 +158,7 @@ export default function Sidebar({
                       onPress={() => setOpenLogoutConfirmation(true)}
                     >
                       <CardHeader className="flex gap-2 text-nowrap">
-                        <Icon icon="solar:minus-circle-linear" width={24} />
+                        <LogoutIcon width={24} />
                         Logout
                       </CardHeader>
                     </Card>

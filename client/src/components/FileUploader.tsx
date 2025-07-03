@@ -1,7 +1,6 @@
 import { Card, CardBody } from "@heroui/card";
 import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { addToast } from "@heroui/toast";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
@@ -9,6 +8,8 @@ import { Image } from "@heroui/image";
 import { Progress } from "@heroui/progress";
 
 import { getUploadCredentials } from "@/features/instructor/courses/services/course";
+import CloseBoldIcon from "@/assets/icons/CloseBoldIcon";
+import UploadIcon from "@/assets/icons/UploadIcon";
 
 interface UploaderState {
   id: string | null;
@@ -198,11 +199,7 @@ export default function FileUploader({
     if (fileState.error) {
       return (
         <div className="flex flex-col items-center">
-          <Icon
-            className="text-red-500"
-            icon="solar:close-circle-bold"
-            width={32}
-          />
+          <CloseBoldIcon className="text-red-500" width={32} />
           <p className="text-red-500">File upload failed.Please try again.</p>
         </div>
       );
@@ -221,11 +218,7 @@ export default function FileUploader({
 
     return (
       <>
-        <Icon
-          className="text-default-500"
-          icon="solar:upload-minimalistic-bold"
-          width={28}
-        />
+        <UploadIcon className="text-default-500" width={28} />
         <p className="text-sm">
           <span className="underline">Click to upload</span> or drag and drop
         </p>

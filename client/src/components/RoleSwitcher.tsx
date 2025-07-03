@@ -1,5 +1,4 @@
 import { Select, SelectItem } from "@heroui/select";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
 import { Selection } from "@heroui/table";
 import { useLocation, useNavigate } from "@tanstack/react-router";
@@ -8,6 +7,8 @@ import ConfirmationModal from "./ConfirmationModal";
 
 import { useAuthStore } from "@/store/auth-store";
 import { useBecomeAInstructor } from "@/features/learner/hooks/mutations";
+import AcademicIcon from "@/assets/icons/AcademicIcon";
+import LearnerIcon from "@/assets/icons/LearnerIcon";
 
 export default function RoleSwitcher() {
   const location = useLocation();
@@ -27,12 +28,12 @@ export default function RoleSwitcher() {
     {
       key: "LEARNER",
       label: "Learner",
-      icon: <Icon icon="solar:user-broken" width={24} />,
+      icon: <LearnerIcon width={24} />,
     },
     {
       key: "INSTRUCTOR",
       label: "Instructor",
-      icon: <Icon icon="solar:square-academic-cap-2-line-duotone" width={24} />,
+      icon: <AcademicIcon width={24} />,
     },
   ];
 

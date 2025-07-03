@@ -23,6 +23,7 @@ import { Route as LearnerLayoutRouteRouteImport } from './routes/learner/_layout
 import { Route as InstructorLayoutRouteRouteImport } from './routes/instructor/_layout/route'
 import { Route as LearnerLayoutIndexRouteImport } from './routes/learner/_layout/index'
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
+import { Route as LearnerLayoutCoursesIndexRouteImport } from './routes/learner/_layout/courses/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
 
@@ -97,6 +98,12 @@ const InstructorLayoutIndexRoute = InstructorLayoutIndexRouteImport.update({
   path: '/',
   getParentRoute: () => InstructorLayoutRouteRoute,
 } as any)
+const LearnerLayoutCoursesIndexRoute =
+  LearnerLayoutCoursesIndexRouteImport.update({
+    id: '/courses/',
+    path: '/courses/',
+    getParentRoute: () => LearnerLayoutRouteRoute,
+  } as any)
 const InstructorLayoutCoursesIndexRoute =
   InstructorLayoutCoursesIndexRouteImport.update({
     id: '/courses/',
@@ -124,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/instructor/': typeof InstructorLayoutIndexRoute
   '/learner/': typeof LearnerLayoutIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
+  '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
 }
 export interface FileRoutesByTo {
@@ -137,6 +145,7 @@ export interface FileRoutesByTo {
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
+  '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
 }
 export interface FileRoutesById {
@@ -156,6 +165,7 @@ export interface FileRoutesById {
   '/instructor/_layout/': typeof InstructorLayoutIndexRoute
   '/learner/_layout/': typeof LearnerLayoutIndexRoute
   '/instructor/_layout/courses/': typeof InstructorLayoutCoursesIndexRoute
+  '/learner/_layout/courses/': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/_layout/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
 }
 export interface FileRouteTypes {
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/instructor/'
     | '/learner/'
     | '/instructor/courses'
+    | '/learner/courses'
     | '/instructor/courses/$courseId/manage'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/auth'
     | '/instructor/courses'
+    | '/learner/courses'
     | '/instructor/courses/$courseId/manage'
   id:
     | '__root__'
@@ -205,6 +217,7 @@ export interface FileRouteTypes {
     | '/instructor/_layout/'
     | '/learner/_layout/'
     | '/instructor/_layout/courses/'
+    | '/learner/_layout/courses/'
     | '/instructor/_layout/courses/$courseId/manage'
   fileRoutesById: FileRoutesById
 }
@@ -315,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
+    '/learner/_layout/courses/': {
+      id: '/learner/_layout/courses/'
+      path: '/courses'
+      fullPath: '/learner/courses'
+      preLoaderRoute: typeof LearnerLayoutCoursesIndexRouteImport
+      parentRoute: typeof LearnerLayoutRouteRoute
+    }
     '/instructor/_layout/courses/': {
       id: '/instructor/_layout/courses/'
       path: '/courses'
@@ -386,10 +406,12 @@ const InstructorRouteWithChildren = InstructorRoute._addFileChildren(
 
 interface LearnerLayoutRouteRouteChildren {
   LearnerLayoutIndexRoute: typeof LearnerLayoutIndexRoute
+  LearnerLayoutCoursesIndexRoute: typeof LearnerLayoutCoursesIndexRoute
 }
 
 const LearnerLayoutRouteRouteChildren: LearnerLayoutRouteRouteChildren = {
   LearnerLayoutIndexRoute: LearnerLayoutIndexRoute,
+  LearnerLayoutCoursesIndexRoute: LearnerLayoutCoursesIndexRoute,
 }
 
 const LearnerLayoutRouteRouteWithChildren =

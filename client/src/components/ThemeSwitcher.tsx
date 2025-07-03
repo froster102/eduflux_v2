@@ -1,7 +1,9 @@
 import { Button } from "@heroui/button";
 import { Tooltip } from "@heroui/tooltip";
 import { useTheme } from "@heroui/use-theme";
-import { Icon } from "@iconify/react/dist/iconify.js";
+
+import SunIcon from "@/assets/icons/SunIcon";
+import MoonIcon from "@/assets/icons/MoonIcon";
 
 interface ThemeSwitcherProps {
   className?: string;
@@ -17,11 +19,11 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
       startContent={
         theme === "dark" ? (
           <Tooltip content="Light mode">
-            <Icon icon="solar:sun-bold" width={20} />
+            <SunIcon width={20} />
           </Tooltip>
         ) : (
           <Tooltip closeDelay={50} content="Dark mode">
-            <Icon icon="solar:moon-bold" width={20} />
+            <MoonIcon width={20} />
           </Tooltip>
         )
       }
