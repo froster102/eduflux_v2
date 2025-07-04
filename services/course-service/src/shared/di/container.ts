@@ -54,6 +54,9 @@ import { MongoCategoryRepository } from '@/infrastructure/database/repositories/
 import { GetCourseCategoriesUseCase } from '@/application/use-cases/get-course-categories.use-case';
 import { CourseRoutes } from '@/interface/routes/course.routes';
 import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
+import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-published-courses.use-case';
+import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';
+import { GetPublishedCourseCurriculumUseCase } from '@/application/use-cases/get-published-course-curriculum';
 
 const container = new Container();
 
@@ -120,6 +123,17 @@ container
 container
   .bind<GetInstructorCourseUseCase>(TYPES.GetInstructorCourseUseCase)
   .to(GetInstructorCourseUseCase);
+container
+  .bind<GetPublishedCoursesUseCase>(TYPES.GetPublishedCoursesUseCase)
+  .to(GetPublishedCoursesUseCase);
+container
+  .bind<GetPublishedCourseInfoUseCase>(TYPES.GetPublishedCourseInfoUseCase)
+  .to(GetPublishedCourseInfoUseCase);
+container
+  .bind<GetPublishedCourseCurriculumUseCase>(
+    TYPES.GetPublishedCourseCurriculumUseCase,
+  )
+  .to(GetPublishedCourseCurriculumUseCase);
 
 //Http Routes
 container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);

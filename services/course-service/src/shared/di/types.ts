@@ -23,6 +23,11 @@ export const TYPES = {
   ReorderCurriculumUseCase: Symbol.for('ReorderCurriculumUseCase'),
   GetCourseCategoriesUseCase: Symbol.for('GetCourseCategoriesUseCase'),
   GetInstructorCourseUseCase: Symbol.for('GetInstructorCourseUseCase'),
+  GetPublishedCoursesUseCase: Symbol.for('GetAllPublishedCoursesUseCase'),
+  GetPublishedCourseInfoUseCase: Symbol.for('GetPublishedCourseInfoUseCase'),
+  GetPublishedCourseCurriculumUseCase: Symbol.for(
+    'GetPublishedCourseCurriculumUseCase',
+  ),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),

@@ -1,40 +1,30 @@
 import { useQuery } from "@tanstack/react-query";
 
 import {
-  getAllAvailableCourse,
-  getAllStudentEnrollments,
-  getEnrolledCourse,
-} from "../services/course-services";
+  getPublishedCourseCurriculum,
+  getPublishedCourseInfo,
+  getPublishedCourses,
+} from "../services/course";
 
-export function useGetAllAvailableCoursesQuery(queryParams?: QueryParams) {
+export function useGetPublishedCourses(
+  paginationQueryParams: PaginationQueryParams,
+) {
   return useQuery({
-    queryKey: ["availableCourses", queryParams],
-    queryFn: async () => {
-      const response = await getAllAvailableCourse(queryParams);
-
-      return response.data;
-    },
+    queryKey: ["published-courses", paginationQueryParams],
+    queryFn: () => getPublishedCourses(paginationQueryParams),
   });
 }
 
-export function useGetAllStudentEnrollmentsQuery(studentId: string) {
+export function useGetPublishedCourseInfo(courseId: string) {
   return useQuery({
-    queryKey: ["studentEnrollments"],
-    queryFn: async () => {
-      const response = await getAllStudentEnrollments(studentId);
-
-      return response.data;
-    },
+    queryKey: [`published-course-${courseId}`],
+    queryFn: () => getPublishedCourseInfo(courseId),
   });
 }
 
-export function useGetEnrolledCourseQuery(studentId: string, courseId: string) {
+export function useGetPublishedCourseCurriculum(courseId: string) {
   return useQuery({
-    queryKey: [`course:${courseId}:student:${studentId}`],
-    queryFn: async () => {
-      const response = await getEnrolledCourse(studentId, courseId);
-
-      return response.data;
-    },
+    queryKey: [`published-course-curriculum-${courseId}`],
+    queryFn: () => getPublishedCourseCurriculum(courseId),
   });
 }

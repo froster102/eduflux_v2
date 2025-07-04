@@ -96,4 +96,65 @@ export class MongoCourseRepository
         }
       : { courses: [], total };
   }
+
+  async findAllPublishedCourses(
+    paginationQueryParams: PaginationQueryParams,
+  ): Promise<{ courses: Course[]; total: number }> {
+    const {
+      page = 1,
+      limit = 10,
+      searchQuery,
+      searchFields,
+      filters,
+      sortBy,
+      sortOrder = 'asc',
+    } = paginationQueryParams;
+
+    const query: Record<string, any> = {};
+    const options: Record<string, any> = {};
+
+    query['status'] = 'published';
+
+    const allowedFilters = ['category', 'level', 'language'];
+
+    if (filters) {
+      for (const key in filters) {
+        if (
+          Object.prototype.hasOwnProperty.call(filters, key) &&
+          allowedFilters.includes(key)
+        ) {
+          const value = filters[key];
+          if (Array.isArray(value)) {
+            query[key] = { $in: value };
+          } else {
+            query[key] = value;
+          }
+        }
+      }
+    }
+
+    if (searchQuery && searchFields && searchFields.length > 0) {
+      query.$or = searchFields.map((field) => ({
+        [field]: { $regex: searchQuery, $options: 'i' },
+      }));
+    }
+
+    const skip = (page - 1) * limit;
+    options.skip = skip;
+    options.limit = limit;
+
+    if (sortBy) {
+      options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+    }
+
+    const total = await CourseModel.countDocuments(query);
+    const result = await CourseModel.find(query, null, options);
+
+    return result
+      ? {
+          courses: this.courseMapper.toDomainArray(result),
+          total,
+        }
+      : { courses: [], total: 0 };
+  }
 }

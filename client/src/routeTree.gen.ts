@@ -25,6 +25,7 @@ import { Route as LearnerLayoutIndexRouteImport } from './routes/learner/_layout
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
 import { Route as LearnerLayoutCoursesIndexRouteImport } from './routes/learner/_layout/courses/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
+import { Route as LearnerLayoutCoursesCourseIdIndexRouteImport } from './routes/learner/_layout/courses/$courseId/index'
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
 
 const LearnerRouteImport = createFileRoute('/learner')()
@@ -110,6 +111,12 @@ const InstructorLayoutCoursesIndexRoute =
     path: '/courses/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
+const LearnerLayoutCoursesCourseIdIndexRoute =
+  LearnerLayoutCoursesCourseIdIndexRouteImport.update({
+    id: '/courses/$courseId/',
+    path: '/courses/$courseId/',
+    getParentRoute: () => LearnerLayoutRouteRoute,
+  } as any)
 const InstructorLayoutCoursesCourseIdManageRoute =
   InstructorLayoutCoursesCourseIdManageRouteImport.update({
     id: '/courses/$courseId/manage',
@@ -133,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
   '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
+  '/learner/courses/$courseId': typeof LearnerLayoutCoursesCourseIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -147,6 +155,7 @@ export interface FileRoutesByTo {
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
   '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
+  '/learner/courses/$courseId': typeof LearnerLayoutCoursesCourseIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -167,6 +176,7 @@ export interface FileRoutesById {
   '/instructor/_layout/courses/': typeof InstructorLayoutCoursesIndexRoute
   '/learner/_layout/courses/': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/_layout/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
+  '/learner/_layout/courses/$courseId/': typeof LearnerLayoutCoursesCourseIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/instructor/courses'
     | '/learner/courses'
     | '/instructor/courses/$courseId/manage'
+    | '/learner/courses/$courseId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/instructor/courses'
     | '/learner/courses'
     | '/instructor/courses/$courseId/manage'
+    | '/learner/courses/$courseId'
   id:
     | '__root__'
     | '/'
@@ -219,6 +231,7 @@ export interface FileRouteTypes {
     | '/instructor/_layout/courses/'
     | '/learner/_layout/courses/'
     | '/instructor/_layout/courses/$courseId/manage'
+    | '/learner/_layout/courses/$courseId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -342,6 +355,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutCoursesIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
+    '/learner/_layout/courses/$courseId/': {
+      id: '/learner/_layout/courses/$courseId/'
+      path: '/courses/$courseId'
+      fullPath: '/learner/courses/$courseId'
+      preLoaderRoute: typeof LearnerLayoutCoursesCourseIdIndexRouteImport
+      parentRoute: typeof LearnerLayoutRouteRoute
+    }
     '/instructor/_layout/courses/$courseId/manage': {
       id: '/instructor/_layout/courses/$courseId/manage'
       path: '/courses/$courseId/manage'
@@ -407,11 +427,14 @@ const InstructorRouteWithChildren = InstructorRoute._addFileChildren(
 interface LearnerLayoutRouteRouteChildren {
   LearnerLayoutIndexRoute: typeof LearnerLayoutIndexRoute
   LearnerLayoutCoursesIndexRoute: typeof LearnerLayoutCoursesIndexRoute
+  LearnerLayoutCoursesCourseIdIndexRoute: typeof LearnerLayoutCoursesCourseIdIndexRoute
 }
 
 const LearnerLayoutRouteRouteChildren: LearnerLayoutRouteRouteChildren = {
   LearnerLayoutIndexRoute: LearnerLayoutIndexRoute,
   LearnerLayoutCoursesIndexRoute: LearnerLayoutCoursesIndexRoute,
+  LearnerLayoutCoursesCourseIdIndexRoute:
+    LearnerLayoutCoursesCourseIdIndexRoute,
 }
 
 const LearnerLayoutRouteRouteWithChildren =
