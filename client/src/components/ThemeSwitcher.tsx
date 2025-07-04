@@ -1,5 +1,4 @@
 import { Button } from "@heroui/button";
-import { Tooltip } from "@heroui/tooltip";
 import { useTheme } from "@heroui/use-theme";
 
 import SunIcon from "@/assets/icons/SunIcon";
@@ -17,15 +16,7 @@ export const ThemeSwitcher = ({ className }: ThemeSwitcherProps) => {
       isIconOnly
       className={`${className}`}
       startContent={
-        theme === "dark" ? (
-          <Tooltip content="Light mode">
-            <SunIcon width={20} />
-          </Tooltip>
-        ) : (
-          <Tooltip closeDelay={50} content="Dark mode">
-            <MoonIcon width={20} />
-          </Tooltip>
-        )
+        theme === "dark" ? <SunIcon width={20} /> : <MoonIcon width={20} />
       }
       onPress={() => setTheme(theme === "dark" ? "light" : "dark")}
     />
