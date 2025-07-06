@@ -80,7 +80,7 @@ export function useSignUp() {
 
         setVerificationEmail(data.user.email);
 
-        navigate({ to: "/auth/sign-in", from: "/auth/sign-up" });
+        navigate({ to: "/auth/verify", from: "/auth/sign-up" });
       }
     },
     onError: (error: BetterAuthError) => {

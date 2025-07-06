@@ -3,12 +3,12 @@ import { Form } from "@heroui/form";
 import { Input } from "@heroui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "@tanstack/react-router";
 
 import { signUpSchema } from "../../validations/auth";
 
 import { auth } from "@/lib/better-auth/auth";
+import GoogleIcon from "@/assets/icons/GoogleIcon";
 
 export default function SignUpForm({
   onSubmitHandler,
@@ -84,7 +84,6 @@ export default function SignUpForm({
             isDisabled={isPending}
             isLoading={isPending}
             type="submit"
-            onPress={() => reset()}
           >
             Sign up
           </Button>
@@ -94,7 +93,7 @@ export default function SignUpForm({
         </div>
         <Button
           className="w-full"
-          startContent={<Icon icon="flat-color-icons:google" width={24} />}
+          startContent={<GoogleIcon width={24} />}
           variant="bordered"
           onPress={googleLogin}
         >

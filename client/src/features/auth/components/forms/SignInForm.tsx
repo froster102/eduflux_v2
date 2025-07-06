@@ -4,13 +4,13 @@ import { Input } from "@heroui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "@tanstack/react-router";
 
 import { signInSchema } from "../../validations/auth";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
 import { auth } from "@/lib/better-auth/auth";
+import GoogleIcon from "@/assets/icons/GoogleIcon";
 
 export default function SignInForm({
   onSubmitHandler,
@@ -100,7 +100,7 @@ export default function SignInForm({
 
         <Button
           className="w-full"
-          startContent={<Icon icon="flat-color-icons:google" width={24} />}
+          startContent={<GoogleIcon width={24} />}
           variant="bordered"
           onPress={googleLogin}
         >
