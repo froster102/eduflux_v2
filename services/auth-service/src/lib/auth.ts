@@ -5,13 +5,15 @@ import * as schema from '@/database/schema';
 import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
-import { IEventPayload } from '@/shared/interfaces/event.interface';
-import { AUTH_SERVICE } from '@/shared/constants/services';
 import { addRole } from './plugins/add-role';
 import { Role } from '@/shared/constants/role';
 import { db } from '@/database/db';
 import { signUpSchema } from '@/shared/validation/schema/sign-up.schema';
-import { emailService, kafkaService } from '@/services';
+import { emailService } from '@/services';
+import { container } from '@/shared/di/container';
+import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
+import { TYPES } from '@/shared/di/types';
+import { tryCatch } from '@/shared/utils/try-catch';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,
@@ -121,20 +123,22 @@ export const auth = betterAuth({
         const user = (ctx.context.returned as Record<string, any>).user as User;
         if (user) {
           const [firstName, lastName] = user.name.split(' ');
-          const userCreatedEvent: IEventPayload = {
-            type: 'user.created',
-            payload: {
+          const userGrpcService = container.get<IUserGrpcService>(
+            TYPES.UserGrpcService,
+          );
+          const { error } = await tryCatch(
+            userGrpcService.createUserProfile({
               id: user.id,
               firstName,
               lastName,
-            },
-            metadata: {
-              serviceId: AUTH_SERVICE,
-              timestamp: new Date().toISOString(),
-            },
-          };
+              roles: [Role.LEARNER],
+            }),
+          );
 
-          await kafkaService.publishEvent('user-events', userCreatedEvent);
+          if (error) {
+            await ctx.context.internalAdapter.deleteUser(user.id);
+            throw new Error('Internal server error');
+          }
         }
       }
       if (ctx.path === '/get-session') {

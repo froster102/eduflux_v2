@@ -10,6 +10,7 @@ export const TYPES = {
   UpdateUserUseCase: Symbol.for('UpdateUserUseCase'),
   GetUserUseCase: Symbol.for('GetUserUseCase'),
   GetUploadUrlUseCase: Symbol.for('GetUploadUrlUseCase'),
+  GetInstructorProfileUseCase: Symbol.for('GetInstructorProfileUseCase'),
 
   //Consumers
   UserEventsConsumer: Symbol.for('UserEventsConsumer'),

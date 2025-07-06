@@ -1,9 +1,11 @@
+import { Role } from '@/shared/types/role';
 import { Schema } from 'mongoose';
 
 export interface IMongoUser extends Document {
   _id: Schema.Types.ObjectId | string;
   firstName: string;
   lastName: string;
+  roles: Role[];
   imageUrl?: string;
   bio?: string;
   socialLinks?: {
@@ -26,7 +28,7 @@ const SocialLinkSchema = new Schema(
   { _id: false },
 );
 
-export const UserSchema = new Schema(
+export const UserSchema = new Schema<IMongoUser>(
   {
     _id: {
       type: String,
@@ -45,6 +47,7 @@ export const UserSchema = new Schema(
     bio: {
       type: String,
     },
+    roles: [],
     socialLinks: [SocialLinkSchema],
   },
   { timestamps: true },

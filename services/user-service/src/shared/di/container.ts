@@ -13,6 +13,7 @@ import { CloudinaryService } from '@/infrastructure/storage/cloudinary.service';
 import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
 import { UserGrpcService } from '@/infrastructure/grpc/services/user.service';
 import { GrpcServer } from '@/infrastructure/grpc/grpc.server';
+import { GetInstructorProfileUseCase } from '@/application/use-cases/get-instructor-profile.use-case';
 
 const container = new Container();
 
@@ -38,6 +39,9 @@ container.bind<GetUserUseCase>(TYPES.GetUserUseCase).to(GetUserUseCase);
 container
   .bind<GetUploadUrlUseCase>(TYPES.GetUploadUrlUseCase)
   .to(GetUploadUrlUseCase);
+container
+  .bind<GetInstructorProfileUseCase>(TYPES.GetInstructorProfileUseCase)
+  .to(GetInstructorProfileUseCase);
 
 //Consumers
 container

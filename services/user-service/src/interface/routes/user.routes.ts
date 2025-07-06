@@ -11,6 +11,7 @@ import { UpdateUserDto } from '@/application/dtos/update-user.dto';
 import { updateUserSchema } from '@/shared/validation/schema/update-user';
 import { ISignedUploadUrlResponse } from '@/application/ports/file-storage.service';
 import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
+import { GetInstructorProfileUseCase } from '@/application/use-cases/get-instructor-profile.use-case';
 
 @injectable()
 export class UserRoutes {
@@ -21,6 +22,8 @@ export class UserRoutes {
     private readonly updateUserUseCase: UpdateUserUseCase,
     @inject(TYPES.GetUploadUrlUseCase)
     private readonly getUploadUrlUseCase: GetUploadUrlUseCase,
+    @inject(TYPES.GetInstructorProfileUseCase)
+    private readonly getInstructorProfileUseCase: GetInstructorProfileUseCase,
   ) {}
 
   setupRoutes(): Elysia {
@@ -63,7 +66,13 @@ export class UserRoutes {
               data: signedUrlsResponse,
             };
           },
-        ),
+        )
+        .get('/:id', async ({ params }) => {
+          const user = await this.getInstructorProfileUseCase.execute(
+            params.id,
+          );
+          return user.toJSON();
+        }),
     );
   }
 }

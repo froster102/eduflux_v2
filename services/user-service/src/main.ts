@@ -17,10 +17,10 @@ async function bootstrap() {
   await databaseClient.connect();
 
   //kafka consumer
-  const userEventsConsumer = container.get<UserEventsConsumer>(
-    TYPES.UserEventsConsumer,
-  );
-  await userEventsConsumer.connect();
+  // const userEventsConsumer = container.get<UserEventsConsumer>(
+  //   TYPES.UserEventsConsumer,
+  // );
+  // await userEventsConsumer.connect();
 
   //grpc
   const grpcServer = container.get<GrpcServer>(TYPES.GrpcServer);

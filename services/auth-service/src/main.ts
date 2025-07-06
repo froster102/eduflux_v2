@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { startServer } from './http/server';
 import { connectKafkaProducer } from './messaging/kafka/kafka';
 import { tryCatch } from './shared/utils/try-catch';

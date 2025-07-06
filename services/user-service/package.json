@@ -3,7 +3,7 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/main.ts",
+    "dev": "bun run --watch src/main.ts & bun run tsc --watch",
     "proto:gen": "grpc_tools_node_protoc  --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto  --ts_proto_out=./src/infrastructure/grpc/generated  --ts_proto_opt=outputServices=grpc-js  --proto_path=./src/proto  ./src/proto/user.proto"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "zod": "^3.25.55"
   },
   "devDependencies": {
+    "@bufbuild/protobuf": "^2.6.0",
     "@types/google-protobuf": "^3.15.12",
     "@types/mongoose": "^5.11.97",
     "@typescript-eslint/eslint-plugin": "^8.32.1",

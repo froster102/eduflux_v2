@@ -1,7 +1,10 @@
+import { Role } from '@/shared/types/role';
+
 export class CreateUserDto {
   id: string;
   firstName: string;
   lastName: string;
+  roles: Role[];
   bio?: string;
   socialLinks?: {
     platform: string;

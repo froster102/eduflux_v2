@@ -1,8 +1,11 @@
+import { Role } from '@/shared/types/role';
+
 export class User {
   private readonly _id: string;
   private _firstName: string;
   private _lastName: string;
   private _imageUrl?: string;
+  private _roles: Role[];
   private _bio?: string;
   private _socialLinks?: {
     platform: string;
@@ -15,6 +18,7 @@ export class User {
     id: string,
     firstName: string,
     lastName: string,
+    roles: Role[],
     createdAt: Date,
     updatedAt: Date,
     imageUrl?: string,
@@ -27,6 +31,7 @@ export class User {
     this._id = id;
     this._firstName = firstName;
     this._lastName = lastName;
+    this._roles = roles;
     this._imageUrl = imageUrl;
     this._bio = bio;
     this._socialLinks = socialLinks;
@@ -38,6 +43,7 @@ export class User {
     id: string,
     firstName: string,
     lastName: string,
+    roles: Role[],
     bio?: string,
     socialLinks?: {
       platform: string;
@@ -49,6 +55,7 @@ export class User {
       id,
       firstName,
       lastName,
+      roles,
       now,
       now,
       undefined,
@@ -61,6 +68,7 @@ export class User {
     id: string,
     firstName: string,
     lastName: string,
+    roles: Role[],
     createdAt: Date,
     updatedAt: Date,
     imageUrl?: string,
@@ -74,6 +82,7 @@ export class User {
       id,
       firstName,
       lastName,
+      roles,
       createdAt,
       updatedAt,
       imageUrl,
@@ -112,6 +121,10 @@ export class User {
 
   public get updatedAt(): Date {
     return this._updatedAt;
+  }
+
+  public get roles(): Role[] {
+    return this._roles;
   }
 
   public updateFirstName(firstName: string): void {
