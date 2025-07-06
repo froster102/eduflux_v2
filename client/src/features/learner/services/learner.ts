@@ -44,3 +44,11 @@ export async function becomeAInstructor() {
 
   return response.data;
 }
+
+export async function getInstructorProfile(
+  userId: string,
+): Promise<UserProfile> {
+  const response = await api.get(`/users/${userId}`);
+
+  return response.data;
+}

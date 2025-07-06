@@ -117,6 +117,16 @@ declare global {
     id: string;
   };
 
+  export type UserProfile = {
+    firstName: string;
+    lastName: string;
+    imageUrl?: string;
+    bio: string;
+    socialLinks: { platform: string; url: string }[];
+    createdAt: string;
+    updatedAt: string;
+  };
+
   export type Enrollment = {
     id: string;
     studentId: string;

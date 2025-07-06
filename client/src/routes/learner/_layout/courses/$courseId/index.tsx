@@ -1,10 +1,12 @@
 import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Skeleton } from "@heroui/skeleton";
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import Dompurify from "dompurify";
 import { Image } from "@heroui/image";
 import { Button } from "@heroui/button";
+import React from "react";
+import { Avatar } from "@heroui/avatar";
 
 import {
   useGetPublishedCourseCurriculum,
@@ -13,6 +15,8 @@ import {
 import CourseIcon from "@/assets/icons/CourseIcon";
 import { IMAGE_BASE_URL } from "@/config/image";
 import PlayIcon from "@/assets/icons/PlayIcon";
+import PreviewLectureModal from "@/features/learner/courses/components/PreviewLectureModal";
+import { useGetInstructorProfile } from "@/features/learner/hooks/queries";
 
 export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -24,12 +28,33 @@ function RouteComponent() {
     useGetPublishedCourseInfo(courseId);
   const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetPublishedCourseCurriculum(courseId);
+  const { data: instructorProfile, isLoading: isInstructorProfileLoading } =
+    useGetInstructorProfile(courseInfo?.instructor.id!);
+  const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
+  const [selectedPreviewLecture, setSelectedPreviewLecture] =
+    React.useState<Lecture | null>(null);
 
   const descriptionHtml = {
     __html: Dompurify.sanitize(
       (courseInfo && courseInfo.description) as string,
     ),
   };
+
+  const previewLectures: Lecture[] = React.useMemo(() => {
+    if (isCourseCurriculumLoading || !courseCurriculum) {
+      return [];
+    }
+
+    return courseCurriculum.filter(
+      (curriculum): curriculum is Lecture =>
+        curriculum._class === "lecture" && !!curriculum.asset,
+    );
+  }, [isCourseCurriculumLoading, courseCurriculum]);
+
+  function handleLecturePreview(lecture: Lecture) {
+    setSelectedPreviewLecture(lecture);
+    setOpenPreviewModal(true);
+  }
 
   return (
     <>
@@ -42,7 +67,7 @@ function RouteComponent() {
       <div className="py-4">
         <Divider />
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col md:flex-row gap-4 w-full">
         <div>
           <div className="relative h-[60vh] w-full">
             <Image
@@ -105,6 +130,9 @@ function RouteComponent() {
                                 <Button
                                   className="bg-transparent flex text-xs items-center gap-2"
                                   size="sm"
+                                  onPress={() =>
+                                    handleLecturePreview(curriculum)
+                                  }
                                 >
                                   <span>
                                     <PlayIcon width={12} />
@@ -122,11 +150,47 @@ function RouteComponent() {
             </Skeleton>
           </div>
         </div>
-        <Card className="max-w-lg w-full h-fit">
-          <CardHeader className="text-xl font-semibold">Instructor</CardHeader>
-          <CardBody>Instructor description</CardBody>
-        </Card>
+        <Skeleton
+          className="w-full max-w-lg"
+          isLoaded={!isInstructorProfileLoading}
+        >
+          <Card className="max-w-lg w-full h-fit">
+            <CardHeader className="text-lg font-medium flex pb-0">
+              <div>
+                <p>Instructor</p>
+                <div className="flex items-center gap-2 py-2">
+                  <Avatar
+                    isBordered
+                    radius="full"
+                    size="md"
+                    src={instructorProfile?.imageUrl}
+                  />
+                  <p className="text-xl font-semibold">
+                    {instructorProfile?.firstName} {instructorProfile?.lastName}
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody className="pt-0">
+              <p className="text-sm">{instructorProfile?.bio}</p>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button color="primary">Learn more..</Button>
+            </CardFooter>
+          </Card>
+        </Skeleton>
       </div>
+
+      {!isCourseInfoLoading && (
+        <PreviewLectureModal
+          isOpen={openPreviewModal}
+          lectures={previewLectures}
+          selectedLecture={selectedPreviewLecture}
+          onClose={() => {
+            setOpenPreviewModal(false);
+          }}
+        />
+      )}
     </>
   );
 }

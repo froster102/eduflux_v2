@@ -1,12 +1,11 @@
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-// export function useGetStudentQuery(studentId: string) {
-//   return useQuery({
-//     queryKey: [`user`],
-//     queryFn: async () => {
-//       const response = await getStudentData(studentId);
+import { getInstructorProfile } from "../services/learner";
 
-//       return response.data;
-//     },
-//   });
-// }
+export function useGetInstructorProfile(userId: string) {
+  return useQuery({
+    queryKey: [`instructor-${userId}`],
+    queryFn: async () => await getInstructorProfile(userId),
+    enabled: !!userId,
+  });
+}
