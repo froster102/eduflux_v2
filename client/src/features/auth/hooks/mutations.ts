@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { addToast } from "@heroui/toast";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -9,8 +9,6 @@ import {
   resetPassword,
   signIn,
   signUp,
-  terminateSession,
-  updateUserPassword,
   verifyOtp,
 } from "../services/auth";
 
@@ -207,42 +205,6 @@ export function useLogout() {
       addToast({
         title: "Logout",
         description: "Failed to logout user",
-        color: "danger",
-      });
-    },
-  });
-}
-
-export function useTerminateSessionMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: terminateSession,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["sessions"] });
-      addToast({
-        title: "Session terminated",
-        description: "Session terminated successfuly",
-        color: "success",
-      });
-    },
-  });
-}
-
-export function useUpdatePasswordMutation() {
-  return useMutation({
-    mutationFn: updateUserPassword,
-    onSuccess: () => {
-      addToast({
-        title: "Update Password",
-        description: "Your password has been updated sucessfully",
-        color: "success",
-      });
-    },
-    onError: (error: any) => {
-      addToast({
-        title: "Update Password",
-        description: error.response.data.message,
         color: "danger",
       });
     },

@@ -2,23 +2,18 @@ import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { Input } from "@heroui/input";
 import { Form } from "@heroui/form";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@heroui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 
-import { useUpdatePasswordMutation } from "@/features/auth/hooks/mutations";
-import { updatePasswordSchema } from "@/validations/update-password";
-import { useAuthStore } from "@/store/auth-store";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
+import { updatePasswordSchema } from "@/features/auth/validations/auth";
 
-interface UpdatePasswordFormData {
-  currentPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-}
-
-export default function PasswordForm() {
+export default function PasswordForm({
+  onSubmitHandler,
+  isPending,
+}: DefaultFormProps<UpdatePasswordFormData>) {
   const {
     register,
     reset,
@@ -41,16 +36,10 @@ export default function PasswordForm() {
     newPassword: false,
     confirmNewPassword: false,
   });
-  const { user } = useAuthStore();
-  const updatePasswordMutation = useUpdatePasswordMutation();
 
-  const onSubmit: SubmitHandler<UpdatePasswordFormData> = (data) => {
-    updatePasswordMutation.mutate({
-      userId: user.userId,
-      newPassword: data.newPassword,
-      currentPassword: data.currentPassword,
-    });
-    reset();
+  const onSubmit = (data: UpdatePasswordFormData) => {
+    onSubmitHandler(data);
+    // reset();
   };
 
   return (
@@ -157,12 +146,13 @@ export default function PasswordForm() {
               placeholder="Confirm New Password"
               type={passwordVisible.confirmNewPassword ? "text" : "password"}
             />
-            <div className="ml-auto">
+            <div className="ml-auto space-x-2">
               {isDirty && (
                 <Button
-                  className="bg-zinc-800 text-zinc-100"
+                  color="danger"
                   size="sm"
                   type="reset"
+                  variant="flat"
                   onPress={() => {
                     reset();
                   }}
@@ -171,8 +161,9 @@ export default function PasswordForm() {
                 </Button>
               )}
               <Button
-                className="bg-zinc-900 text-white ml-2"
-                isDisabled={!isDirty}
+                color="primary"
+                isDisabled={!isDirty || isPending}
+                isLoading={isPending}
                 size="sm"
                 type="submit"
               >

@@ -3,20 +3,19 @@ import { Chip } from "@heroui/chip";
 import { Divider } from "@heroui/divider";
 import { User } from "@heroui/user";
 
+import { formatTo12HourWithDate } from "@/utils/date";
+
 interface ProfileCardProps {
   email: string;
   name: string;
-  accountStatus: boolean;
-  lastLogin: string;
-  id?: string;
+  imageUrl?: string;
+  lastLogin?: Date;
 }
 
 export default function ProfileCard({
   email,
   name,
-  accountStatus,
   lastLogin,
-  id,
 }: ProfileCardProps) {
   return (
     <Card className="bg-background " radius="sm" shadow="sm">
@@ -37,17 +36,13 @@ export default function ProfileCard({
       <CardBody className="flex flex-col gap-2">
         <div className="flex justify-between text-sm text-zinc-600 dark:text-zinc-300 font-medium">
           <p>Account Status</p>
-          <Chip color="success" variant="flat">
-            {accountStatus ? "Active" : "Blocked"}
+          <Chip className="text-xs" color="success" variant="flat">
+            Active
           </Chip>
         </div>
         <div className="flex justify-between text-sm text-zinc-600 dark:text-zinc-300 font-medium">
           <p>Last Login</p>
-          <p>{lastLogin}</p>
-        </div>
-        <div className="flex justify-between text-sm text-zinc-600 dark:text-zinc-300 font-medium">
-          <p>Id</p>
-          <p>{id}</p>
+          <p>{formatTo12HourWithDate(new Date(lastLogin!))}</p>
         </div>
       </CardBody>
     </Card>

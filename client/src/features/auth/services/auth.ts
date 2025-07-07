@@ -1,5 +1,4 @@
 import { auth } from "@/lib/better-auth/auth";
-import api from "@/lib/axios";
 
 export async function signIn(signInData: SignInFormData) {
   const { data, error } = await auth.signIn.email({
@@ -103,30 +102,4 @@ export async function logout() {
   }
 
   return data;
-}
-
-export function getUserSessions() {
-  return api.get<{ sessions: Session[]; currentSession: string }>(
-    "/auth/sessions",
-  );
-}
-
-export function terminateSession(sessionId: string) {
-  return api.delete<Session>(`/auth/sessions/${sessionId}`);
-}
-
-export function updateUserPassword({
-  newPassword,
-  currentPassword,
-  userId,
-}: {
-  newPassword: string;
-  currentPassword: string;
-  userId: string;
-}) {
-  return api.put(`/auth/users/${userId}/update-password`, {
-    newPassword,
-    currentPassword,
-    userId,
-  });
 }

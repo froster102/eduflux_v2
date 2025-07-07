@@ -44,12 +44,12 @@ function Layout() {
       label: "Sessions",
     },
     {
-      path: "/instructor/messages",
+      path: "/learner/messages",
       icon: <MessageIcon width={24} />,
       label: "Messages",
     },
     {
-      path: "/instructor/account",
+      path: "/learner/account",
       icon: <AccountIcon width={24} />,
       label: "Account",
     },
