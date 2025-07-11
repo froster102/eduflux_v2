@@ -85,7 +85,7 @@ export class MongoCourseRepository
       options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
     }
 
-    const total = await CourseModel.countDocuments();
+    const total = await CourseModel.countDocuments(query);
 
     const result = await CourseModel.find(query, null, options);
 
