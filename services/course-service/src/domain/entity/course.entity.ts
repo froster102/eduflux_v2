@@ -36,6 +36,7 @@ interface PersistedCourseProps {
   instructor: Instructor;
   averageRating: number;
   ratingCount: number;
+  enrollmentCount: number;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -65,6 +66,7 @@ export class Course {
   private _instructor: Instructor;
   private _averageRating: number;
   private _ratingCount: number;
+  private _enrollmentCount: number;
   private _createdAt: Date;
   private _updatedAt: Date;
   private _publishedAt: Date | null;
@@ -83,6 +85,7 @@ export class Course {
     this._instructor = { ...props.instructor };
     this._averageRating = props.averageRating;
     this._ratingCount = props.ratingCount;
+    this._enrollmentCount = props.enrollmentCount;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;
     this._publishedAt = props.publishedAt;
@@ -105,6 +108,7 @@ export class Course {
       instructor: props.instructor,
       averageRating: 0,
       ratingCount: 0,
+      enrollmentCount: 0,
       createdAt: now,
       updatedAt: now,
       publishedAt: null,
@@ -153,6 +157,9 @@ export class Course {
   }
   get ratingCount(): number {
     return this._ratingCount;
+  }
+  get enrollmentCount(): number {
+    return this._enrollmentCount;
   }
   get createdAt(): Date {
     return this._createdAt;
@@ -284,6 +291,7 @@ export class Course {
       instructor: { id: this._instructor.id, name: this._instructor.name },
       averageRating: this._averageRating,
       ratingCount: this._ratingCount,
+      enrollmentCount: this._enrollmentCount,
       publishedAt: this._publishedAt?.toISOString() ?? null,
       createdAt: this._createdAt.toISOString(),
       updatedAt: this._updatedAt.toISOString(),

@@ -1,0 +1,44 @@
+{
+  "name": "enrollment-service",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type:check": "bun run tsc --watch",
+    "dev": "bun --watch src/main.ts",
+    "proto:gen": "grpc_tools_node_protoc  --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto  --ts_proto_out=./src/infrastructure/grpc/generated  --ts_proto_opt=outputServices=grpc-js,snakeToCamel=true  --proto_path=./src/proto  ./src/proto/enrollment.proto"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.28.0",
+    "@grpc/grpc-js": "^1.13.4",
+    "@grpc/proto-loader": "^0.7.15",
+    "grpc-tools": "^1.13.0",
+    "dotenv": "^16.5.0",
+    "elysia": "latest",
+    "globals": "^16.2.0",
+    "http-status": "^2.1.0",
+    "inversify": "^7.0.0-alpha.5",
+    "jose": "^6.0.11",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^8.16.1",
+    "pg": "^8.16.2",
+    "reflect-metadata": "^0.2.2",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/google-protobuf": "^3.15.12",
+    "@types/mongoose": "^5.11.97",
+    "@types/pg": "^8.15.4",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "bun-types": "latest",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "ts-proto": "^2.7.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1"
+  },
+  "module": "src/main.js"
+}

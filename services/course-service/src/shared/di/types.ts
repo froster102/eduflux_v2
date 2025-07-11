@@ -46,6 +46,9 @@ export const TYPES = {
   LearnerRoutes: Symbol.for('LearnerRoutes'),
   CourseRoutes: Symbol.for('CourseRoutes'),
 
+  //Grpc Services
+  GrpcCourseService: Symbol.for('GrpcCourseService'),
+
   //Mappers
   CourseMapper: Symbol.for('CourseMapper'),
   ChapterMapper: Symbol.for('SectionMapper'),

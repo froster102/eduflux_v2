@@ -4,11 +4,16 @@ import { serverConfig } from './shared/config/server.config';
 import { container } from './shared/di/container';
 import { DatabaseClient } from './infrastructure/database/setup';
 import { TYPES } from './shared/di/types';
+import { GrpcServer } from './infrastructure/grpc/grpc.server';
 
 async function bootstrap() {
   //http
-  const server = new Server(serverConfig.PORT);
-  server.start();
+  const httpServer = new Server(serverConfig.PORT);
+  httpServer.start();
+
+  //gRPC
+  const grpcServer = new GrpcServer();
+  grpcServer.start();
 
   //database
   const databaseClient = container.get<DatabaseClient>(TYPES.DatabaseClient);

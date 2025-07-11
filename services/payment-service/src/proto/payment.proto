@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package payment;
+
+service PaymentService {
+    rpc InitiatePayment(InitiatePaymentRequest) returns (InitiatePaymentResponse);
+}
+
+message InitiatePaymentRequest {
+    int32 amount = 1;           
+    string currency = 2;
+    string payerId = 3;       
+    string paymentPurpose = 4; 
+    string payment_provider = 5; 
+    string success_url = 6;     
+    string cancel_url = 7;
+    string customer_email = 8; 
+    map<string, string> metadata = 9;
+}
+
+message InitiatePaymentResponse {
+    string paymentId = 1;     
+    string checkoutUrl = 2;   
+}

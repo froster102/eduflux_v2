@@ -31,3 +31,11 @@ export async function getPublishedCourseCurriculum(
 
   return response.data;
 }
+
+export async function enrollForCourse(
+  courseId: string,
+): Promise<{ checkoutUrl: string }> {
+  const response = await api.post(`/enrollments/`, { courseId });
+
+  return response.data;
+}

@@ -7,6 +7,7 @@ import { Image } from "@heroui/image";
 import { Button } from "@heroui/button";
 import React from "react";
 import { Avatar } from "@heroui/avatar";
+import { addToast } from "@heroui/toast";
 
 import {
   useGetPublishedCourseCurriculum,
@@ -17,6 +18,8 @@ import { IMAGE_BASE_URL } from "@/config/image";
 import PlayIcon from "@/assets/icons/PlayIcon";
 import PreviewLectureModal from "@/features/learner/courses/components/PreviewLectureModal";
 import { useGetInstructorProfile } from "@/features/learner/hooks/queries";
+import { useEnrollForCourse } from "@/features/learner/courses/hooks/mutations";
+import { tryCatch } from "@/utils/try-catch";
 
 export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -33,6 +36,7 @@ function RouteComponent() {
   const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
+  const enrollForCourse = useEnrollForCourse();
 
   const descriptionHtml = {
     __html: Dompurify.sanitize(
@@ -54,6 +58,24 @@ function RouteComponent() {
   function handleLecturePreview(lecture: Lecture) {
     setSelectedPreviewLecture(lecture);
     setOpenPreviewModal(true);
+  }
+
+  async function handleEnrollForCourse() {
+    const { data, error } = await tryCatch(
+      enrollForCourse.mutateAsync(courseId),
+    );
+
+    if (data) {
+      window.location.assign(data.checkoutUrl);
+    }
+
+    if (error) {
+      addToast({
+        title: "Enrollment",
+        description: "Failed to enroll for course.",
+        color: "danger",
+      });
+    }
   }
 
   return (
@@ -89,7 +111,9 @@ function RouteComponent() {
                 </CardHeader>
                 <CardBody className="py-2 pt-0">
                   <p className="text-xl font-semibold">$ {courseInfo?.price}</p>
-                  <Button color="primary">Enroll</Button>
+                  <Button color="primary" onPress={handleEnrollForCourse}>
+                    Enroll
+                  </Button>
                 </CardBody>
               </Card>
             </div>
@@ -103,7 +127,7 @@ function RouteComponent() {
             <p className="text-xl font-semibold">Course Curriculum</p>
             <Skeleton isLoaded={!isCourseCurriculumLoading}>
               <div className="pt-2">
-                <Card className=" bg-secondary-600" shadow="sm">
+                <Card className="bg-secondary-600" shadow="sm">
                   <CardBody>
                     {courseCurriculum &&
                       courseCurriculum.map((curriculum, index) => (
@@ -154,7 +178,7 @@ function RouteComponent() {
           className="w-full max-w-lg"
           isLoaded={!isInstructorProfileLoading}
         >
-          <Card className="max-w-lg w-full h-fit">
+          <Card className="max-w-lg w-full h-fit bg-secondary-600">
             <CardHeader className="text-lg font-medium flex pb-0">
               <div>
                 <p>Instructor</p>

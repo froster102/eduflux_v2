@@ -30,12 +30,10 @@ export class UserRoutes {
     return new Elysia().group('/api/users', (group) =>
       group
         .use(authenticaionMiddleware)
-        .get('/me', async ({ user, set }): Promise<HttpResponse<User>> => {
+        .get('/me', async ({ user, set }) => {
           const foundUser = await this.getUserUseCase.execute(user.id);
           set.status = httpStatus.OK;
-          return {
-            data: foundUser,
-          };
+          return foundUser.toJSON();
         })
         .put(
           '/me',
@@ -56,6 +54,7 @@ export class UserRoutes {
             body: updateUserSchema,
           },
         )
+        .get('/me/subscribed-courses', () => {})
         .get(
           '/get-upload-url',
           ({ user }): HttpResponse<ISignedUploadUrlResponse> => {

@@ -24,6 +24,7 @@ export interface ICourse extends Document {
   instructor: { id: string; name: string };
   averageRating: number;
   ratingCount: number;
+  enrollmentCount: number;
   publishedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -53,7 +54,7 @@ export const CourseSchema = new Schema<ICourse>(
     },
 
     price: {
-      type: String,
+      type: Number,
     },
 
     categoryId: {
@@ -98,6 +99,10 @@ export const CourseSchema = new Schema<ICourse>(
       type: Number,
       required: true,
       alias: 'rating_course',
+    },
+
+    enrollmentCount: {
+      type: Number,
     },
 
     publishedAt: {

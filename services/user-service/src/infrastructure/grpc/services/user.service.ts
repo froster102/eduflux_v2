@@ -89,7 +89,7 @@ export class UserGrpcService implements UserServiceServer {
     call: ServerUnaryCall<GetUserDetailsRequest, UserResponse>,
     callback: sendUnaryData<UserResponse>,
   ): void {
-    this.logger.info(`Received request for userId: ${call.request.userId}`);
+    this.logger.info(`Received request for userID: ${call.request.userId}`);
     this.getUserUseCase
       .execute(call.request.userId)
       .then((user) => {

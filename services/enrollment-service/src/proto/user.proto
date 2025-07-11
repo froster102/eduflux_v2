@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package users;
+
+service UserService {
+  rpc CreateUserProfile(CreateUserProfileRequest) returns (UserResponse);
+  rpc GetUserDetails(GetUserDetailsRequest) returns (UserResponse);
+}
+
+message CreateUserProfileRequest {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  repeated string roles = 4;
+}
+
+message GetUserDetailsRequest {
+  string userId = 1; 
+}
+
+message UserResponse { 
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  repeated string roles = 4;
+  string imageUrl = 5;
+  string bio = 6;
+  repeated SocialLinks socialLinks = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+}
+
+message SocialLinks {
+  string platform = 1;
+  string url = 2;
+}

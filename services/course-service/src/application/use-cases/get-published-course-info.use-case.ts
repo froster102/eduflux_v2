@@ -17,6 +17,7 @@ export interface PublishedCourseDto {
   isFree: boolean;
   status: CourseStatus;
   instructor: { id: string; name: string };
+  enrollmentCount: number;
   averageRating: number;
   ratingCount: number;
   publishedAt: string;
@@ -58,6 +59,7 @@ export class GetPublishedCourseInfoUseCase
       status: course.status,
       publishedAt: course.publishedAt!.toString(),
       ratingCount: course.ratingCount,
+      enrollmentCount: course.enrollmentCount,
       updatedAt: course.updatedAt.toString(),
       averageRating: course.averageRating,
       createdAt: course.createdAt.toString(),

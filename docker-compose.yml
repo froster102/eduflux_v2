@@ -15,7 +15,7 @@ services:
     depends_on:
       - kong 
     restart: "no"
-  
+
   kong:
     image: kong:latest
     container_name: kong
@@ -105,40 +105,61 @@ services:
     depends_on:
       course-db:
         condition: service_started
+  
+  upload-service:
+    container_name: upload-service
+    build:
+      context: ./services/upload-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./services/upload-service/.env
+    networks:
+      - eduflux-network
+    volumes:
+      - ./services/upload-service:/app
+      - upload_service_modules:/app/node_modules
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
-  # email-service:
-  #   container_name: email-service
-  #   build:
-  #     context: ./services/email-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   env_file:
-  #     - ./services/email-service/.env
-  #   volumes:
-  #     - ./services/email-service:/app
-  #     - email_service_modules:/app/node_modules
-  #   depends_on:
-  #     rabbitmq:
-  #       condition: service_healthy
-  #       restart: true
+  enrollment-service:
+    container_name: enrollment-service
+    build:
+      context: ./services/enrollment-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - eduflux-network
+    env_file:
+      - ./services/enrollment-service/.env
+    volumes:
+      - ./services/enrollment-service:/app
+      - enrollment_service_modules:/app/node_modules
+    depends_on:
+      enrollment-db:
+        condition: service_started
+      kafka:
+        condition: service_healthy
 
-  # note-service:
-  #   container_name: note-service
-  #   build:
-  #     context: ./services/note-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   env_file:
-  #     - ./services/note-service/.env
-  #   volumes:
-  #     - ./services/note-service:/app
-  #     - note_service_modules:/app/node_modules
-  #   depends_on:
-  #     - note-db
+  payment-service:
+    container_name: payment-service
+    build:
+      context: ./services/payment-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - eduflux-network
+    env_file:
+      - ./services/payment-service/.env
+    volumes:
+      - ./services/payment-service:/app
+      - payment_service_modules:/app/node_modules
+    depends_on:
+      payment-db:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+
 
   # notification-service:
   #   container_name: notification-service
@@ -176,23 +197,7 @@ services:
   #   volumes:
   #     - ./services/meeting-service:/app
   #     - meeting_service_node_modules:/app/node_modules
-  # transcode-service:
-  #   container_name: transcode-service
-  #   build:
-  #     context: ./services/transcode-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   env_file:
-  #     - ./services/transcode-service/.env
-  #   volumes:
-  #     - ./services/transcode-service:/app
-  #     - transcode_service_node_modules:/app/node_modules
-  #   depends_on:
-  #     rabbitmq:
-  #       condition: service_healthy
-  #       restart: true
+
   # chatbot-service:
   #   container_name: chatbot-service
   #   build:
@@ -206,23 +211,7 @@ services:
   #   volumes:
   #     - ./services/chatbot-service:/app
   #     - chatbot_service_node_modules:/app/node_modules
-  # progress-service:
-  #   container_name: progress-service
-  #   build:
-  #     context: ./services/progress-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   env_file:
-  #     - ./services/progress-service/.env
-  #   volumes:
-  #     - ./services/progress-service:/app
-  #     - progress_service_node_modules:/app/node_modules
-  #   depends_on:
-  #     rabbitmq:
-  #       condition: service_healthy
-  #       restart: true
+ 
   # analytics-service:
   #   container_name: analytics-service
   #   build:
@@ -279,16 +268,31 @@ services:
     volumes:
       - coursedb_data:/data/db
 
-  # note-db:
-  #   container_name: note-db
-  #   image: mongo:8.0
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=root_user
-  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
-  #   networks:
-  #     - eduflux-network
-  #   volumes:
-  #     - notedb_data:/data/db
+  enrollment-db:
+    container_name: enrollment-db
+    image: mongo:8.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root_user
+      - MONGO_INITDB_ROOT_PASSWORD=super_root
+    ports:
+      - 27019:27017
+    networks:
+      - eduflux-network
+    volumes:
+      - enrollmentdb_data:/data/db
+
+  payment-db:
+    container_name: payment-db
+    image: mongo:8.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root_user
+      - MONGO_INITDB_ROOT_PASSWORD=super_root
+    ports:
+      - 27020:27017
+    networks:
+      - eduflux-network
+    volumes:
+      - paymentdb_data:/data/db
 
   # notification-db:
   #   container_name: notification-db
@@ -300,16 +304,7 @@ services:
   #     - eduflux-network
   #   volumes:
   #     - notificationdb_data:/data/db
-  # progress-db:
-  #   container_name: progress-db
-  #   image: mongo:8.0
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=root_user
-  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
-  #   networks:
-  #     - eduflux-network
-  #   volumes:
-  #     - progressdb_data:/data/db
+
   # analytics-db:
   #   container_name: analytics-db
   #   image: mongo:8.0
@@ -320,24 +315,6 @@ services:
   #     - eduflux-network
   #   volumes:
   #     - analytics_data:/data/db
-  # rabbitmq:
-  #   container_name: rabbitmq
-  #   image: rabbitmq:3-management
-  #   ports:
-  #     - 5672:5672
-  #     - 15672:15672
-  #   networks:
-  #     - eduflux-network
-  #   volumes:
-  #     - rabbitmq_data:/var/lib/rabbitmq
-  #   environment:
-  #     - RABBITMQ_DEFAULT_USER=root_user
-  #     - RABBITMQ_DEFAULT_PASS=root_password
-  #   healthcheck:
-  #     test: [ "CMD", "rabbitmq-diagnostics", "status" ]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
 
   redis:
     container_name: redis
@@ -447,21 +424,19 @@ volumes:
   auth_service_modules:
   user_service_modules:
   course_service_modules:
-  # note_service_modules:
-  # email_service_modules:
+  upload_service_modules:
+  enrollment_service_modules:
+  payment_service_modules:
   # notification_service_modules:
   # meeting_service_node_modules:
-  # transcode_service_node_modules:
   # chatbot_service_node_modules:
-  # progress_service_node_modules:
   # analytics_service_node_modules:
-  # rabbitmq_data:
   authdb_data:
   userdb_data:
   coursedb_data:
-  # notedb_data:
+  enrollmentdb_data:
+  paymentdb_data:
   # notificationdb_data:
-  # progressdb_data:
   # analytics_data:
   redis_data:
   # meeting_data:

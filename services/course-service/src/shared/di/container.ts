@@ -57,6 +57,7 @@ import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instruct
 import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-published-courses.use-case';
 import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';
 import { GetPublishedCourseCurriculumUseCase } from '@/application/use-cases/get-published-course-curriculum';
+import { GrpcCourseService } from '@/infrastructure/grpc/services/course.service';
 
 const container = new Container();
 
@@ -140,6 +141,11 @@ container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);
 container.bind<LearnerRoutes>(TYPES.LearnerRoutes).to(LearnerRoutes);
 container.bind<InstructorRoutes>(TYPES.InstructorRoutes).to(InstructorRoutes);
 container.bind<CourseRoutes>(TYPES.CourseRoutes).to(CourseRoutes);
+
+//Grpc Service
+container
+  .bind<GrpcCourseService>(TYPES.GrpcCourseService)
+  .to(GrpcCourseService);
 
 //Ports
 container

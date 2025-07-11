@@ -20,7 +20,7 @@ export class LearnerRoutes {
   register(): Elysia {
     return new Elysia().group('/api/courses', (group) =>
       group
-        .get('/me/subscriber-curriculum-items/:courseId', () => {})
+        .get('/subscriber-curriculum-items/:courseId', () => {})
         .get('/published-courses', async ({ query }) => {
           const paredQuery = paginationQuerySchema.parse(query);
           const result = await this.getPublishedCourses.execute({
