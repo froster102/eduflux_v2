@@ -136,8 +136,14 @@ export function usePublishCourse(options?: {
     mutationFn: publishCourse,
 
     onError: (error: AxiosError<Record<string, any>>) => {
-      if (options?.onError) {
+      if (options?.onError && error.response?.data.code === "INVALID_INPUT") {
         options.onError(error.response?.data.message);
+      } else {
+        addToast({
+          title: "Course publishment",
+          description: "Failed to publish course.",
+          color: "danger",
+        });
       }
     },
 

@@ -27,11 +27,11 @@ export default function CourseErrorModal({
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="p-2">
+            <ModalHeader className="px-4 pb-0">
               Why can&apos;t I submit the course
             </ModalHeader>
-            <ModalBody>
-              <div className="p-4">
+            <ModalBody className="p-2">
+              <div className="px-6">
                 <ul className="list-disc">
                   {parsedErrors &&
                     parsedErrors.map((error, i) => <li key={i}>{error}</li>)}
