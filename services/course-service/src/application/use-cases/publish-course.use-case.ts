@@ -11,13 +11,14 @@ import { NotFoundException } from '@/application/exceptions/not-found.exception'
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { IUseCase } from './interface/use-case.interface';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
+import { contentLimits } from '@/shared/config/content-limits.config';
 
 export interface PublishCourseInput {
   courseId: string;
   actor: AuthenticatedUserDto;
 }
 
-const MIN_LECTURES_REQUIRED = 5;
+const COURSE_MIN_LECTURES_REQUIRED = contentLimits.COURSE_MIN_LECTURES_REQUIRED;
 
 @injectable()
 export class PublishCourseUseCase
@@ -111,9 +112,9 @@ export class PublishCourseUseCase
     }
 
     const lectures = await this.lectureRepository.findByCourseId(courseId);
-    if (lectures.length < MIN_LECTURES_REQUIRED) {
+    if (lectures.length < COURSE_MIN_LECTURES_REQUIRED) {
       errors.push(
-        `Course must contain at least ${MIN_LECTURES_REQUIRED} lectures.`,
+        `Course must contain at least ${COURSE_MIN_LECTURES_REQUIRED} lectures.`,
       );
     }
 
