@@ -21,6 +21,13 @@ import {
 
 export const protobufPackage = "users";
 
+export interface CreateUserProfileRequest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  roles: string[];
+}
+
 export interface GetUserDetailsRequest {
   userId: string;
 }
@@ -29,6 +36,7 @@ export interface UserResponse {
   id: string;
   firstName: string;
   lastName: string;
+  roles: string[];
   imageUrl: string;
   bio: string;
   socialLinks: SocialLinks[];
@@ -40,6 +48,114 @@ export interface SocialLinks {
   platform: string;
   url: string;
 }
+
+function createBaseCreateUserProfileRequest(): CreateUserProfileRequest {
+  return { id: "", firstName: "", lastName: "", roles: [] };
+}
+
+export const CreateUserProfileRequest: MessageFns<CreateUserProfileRequest> = {
+  encode(message: CreateUserProfileRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.firstName !== "") {
+      writer.uint32(18).string(message.firstName);
+    }
+    if (message.lastName !== "") {
+      writer.uint32(26).string(message.lastName);
+    }
+    for (const v of message.roles) {
+      writer.uint32(34).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): CreateUserProfileRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCreateUserProfileRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.firstName = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.lastName = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.roles.push(reader.string());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CreateUserProfileRequest {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      firstName: isSet(object.firstName) ? globalThis.String(object.firstName) : "",
+      lastName: isSet(object.lastName) ? globalThis.String(object.lastName) : "",
+      roles: globalThis.Array.isArray(object?.roles) ? object.roles.map((e: any) => globalThis.String(e)) : [],
+    };
+  },
+
+  toJSON(message: CreateUserProfileRequest): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.firstName !== "") {
+      obj.firstName = message.firstName;
+    }
+    if (message.lastName !== "") {
+      obj.lastName = message.lastName;
+    }
+    if (message.roles?.length) {
+      obj.roles = message.roles;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CreateUserProfileRequest>, I>>(base?: I): CreateUserProfileRequest {
+    return CreateUserProfileRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CreateUserProfileRequest>, I>>(object: I): CreateUserProfileRequest {
+    const message = createBaseCreateUserProfileRequest();
+    message.id = object.id ?? "";
+    message.firstName = object.firstName ?? "";
+    message.lastName = object.lastName ?? "";
+    message.roles = object.roles?.map((e) => e) || [];
+    return message;
+  },
+};
 
 function createBaseGetUserDetailsRequest(): GetUserDetailsRequest {
   return { userId: "" };
@@ -100,7 +216,17 @@ export const GetUserDetailsRequest: MessageFns<GetUserDetailsRequest> = {
 };
 
 function createBaseUserResponse(): UserResponse {
-  return { id: "", firstName: "", lastName: "", imageUrl: "", bio: "", socialLinks: [], createdAt: "", updatedAt: "" };
+  return {
+    id: "",
+    firstName: "",
+    lastName: "",
+    roles: [],
+    imageUrl: "",
+    bio: "",
+    socialLinks: [],
+    createdAt: "",
+    updatedAt: "",
+  };
 }
 
 export const UserResponse: MessageFns<UserResponse> = {
@@ -114,20 +240,23 @@ export const UserResponse: MessageFns<UserResponse> = {
     if (message.lastName !== "") {
       writer.uint32(26).string(message.lastName);
     }
+    for (const v of message.roles) {
+      writer.uint32(34).string(v!);
+    }
     if (message.imageUrl !== "") {
-      writer.uint32(34).string(message.imageUrl);
+      writer.uint32(42).string(message.imageUrl);
     }
     if (message.bio !== "") {
-      writer.uint32(42).string(message.bio);
+      writer.uint32(50).string(message.bio);
     }
     for (const v of message.socialLinks) {
-      SocialLinks.encode(v!, writer.uint32(50).fork()).join();
+      SocialLinks.encode(v!, writer.uint32(58).fork()).join();
     }
     if (message.createdAt !== "") {
-      writer.uint32(58).string(message.createdAt);
+      writer.uint32(66).string(message.createdAt);
     }
     if (message.updatedAt !== "") {
-      writer.uint32(66).string(message.updatedAt);
+      writer.uint32(74).string(message.updatedAt);
     }
     return writer;
   },
@@ -168,7 +297,7 @@ export const UserResponse: MessageFns<UserResponse> = {
             break;
           }
 
-          message.imageUrl = reader.string();
+          message.roles.push(reader.string());
           continue;
         }
         case 5: {
@@ -176,7 +305,7 @@ export const UserResponse: MessageFns<UserResponse> = {
             break;
           }
 
-          message.bio = reader.string();
+          message.imageUrl = reader.string();
           continue;
         }
         case 6: {
@@ -184,7 +313,7 @@ export const UserResponse: MessageFns<UserResponse> = {
             break;
           }
 
-          message.socialLinks.push(SocialLinks.decode(reader, reader.uint32()));
+          message.bio = reader.string();
           continue;
         }
         case 7: {
@@ -192,11 +321,19 @@ export const UserResponse: MessageFns<UserResponse> = {
             break;
           }
 
-          message.createdAt = reader.string();
+          message.socialLinks.push(SocialLinks.decode(reader, reader.uint32()));
           continue;
         }
         case 8: {
           if (tag !== 66) {
+            break;
+          }
+
+          message.createdAt = reader.string();
+          continue;
+        }
+        case 9: {
+          if (tag !== 74) {
             break;
           }
 
@@ -217,6 +354,7 @@ export const UserResponse: MessageFns<UserResponse> = {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
       firstName: isSet(object.firstName) ? globalThis.String(object.firstName) : "",
       lastName: isSet(object.lastName) ? globalThis.String(object.lastName) : "",
+      roles: globalThis.Array.isArray(object?.roles) ? object.roles.map((e: any) => globalThis.String(e)) : [],
       imageUrl: isSet(object.imageUrl) ? globalThis.String(object.imageUrl) : "",
       bio: isSet(object.bio) ? globalThis.String(object.bio) : "",
       socialLinks: globalThis.Array.isArray(object?.socialLinks)
@@ -237,6 +375,9 @@ export const UserResponse: MessageFns<UserResponse> = {
     }
     if (message.lastName !== "") {
       obj.lastName = message.lastName;
+    }
+    if (message.roles?.length) {
+      obj.roles = message.roles;
     }
     if (message.imageUrl !== "") {
       obj.imageUrl = message.imageUrl;
@@ -264,6 +405,7 @@ export const UserResponse: MessageFns<UserResponse> = {
     message.id = object.id ?? "";
     message.firstName = object.firstName ?? "";
     message.lastName = object.lastName ?? "";
+    message.roles = object.roles?.map((e) => e) || [];
     message.imageUrl = object.imageUrl ?? "";
     message.bio = object.bio ?? "";
     message.socialLinks = object.socialLinks?.map((e) => SocialLinks.fromPartial(e)) || [];
@@ -351,6 +493,16 @@ export const SocialLinks: MessageFns<SocialLinks> = {
 
 export type UserServiceService = typeof UserServiceService;
 export const UserServiceService = {
+  createUserProfile: {
+    path: "/users.UserService/CreateUserProfile",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: CreateUserProfileRequest): Buffer =>
+      Buffer.from(CreateUserProfileRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): CreateUserProfileRequest => CreateUserProfileRequest.decode(value),
+    responseSerialize: (value: UserResponse): Buffer => Buffer.from(UserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): UserResponse => UserResponse.decode(value),
+  },
   getUserDetails: {
     path: "/users.UserService/GetUserDetails",
     requestStream: false,
@@ -364,10 +516,26 @@ export const UserServiceService = {
 } as const;
 
 export interface UserServiceServer extends UntypedServiceImplementation {
+  createUserProfile: handleUnaryCall<CreateUserProfileRequest, UserResponse>;
   getUserDetails: handleUnaryCall<GetUserDetailsRequest, UserResponse>;
 }
 
 export interface UserServiceClient extends Client {
+  createUserProfile(
+    request: CreateUserProfileRequest,
+    callback: (error: ServiceError | null, response: UserResponse) => void,
+  ): ClientUnaryCall;
+  createUserProfile(
+    request: CreateUserProfileRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: UserResponse) => void,
+  ): ClientUnaryCall;
+  createUserProfile(
+    request: CreateUserProfileRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: UserResponse) => void,
+  ): ClientUnaryCall;
   getUserDetails(
     request: GetUserDetailsRequest,
     callback: (error: ServiceError | null, response: UserResponse) => void,
