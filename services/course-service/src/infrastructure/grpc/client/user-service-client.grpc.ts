@@ -16,7 +16,7 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
   private logger = new Logger('GRPC_USER_SERVICE_CLIENT');
 
   constructor() {
-    this.address = userServiceGrpcConfig.USER_SERVICE_GRPC_URL;
+    this.address = userServiceGrpcConfig.GRPC_USER_SERVICE_URL;
     this.client = new UserServiceClient(
       this.address,
       credentials.createInsecure(),

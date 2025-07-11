@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 export const userServiceGrpcConfig = {
-  USER_SERVICE_GRPC_URL: process.env.USER_SERVICE_GRPC_URL as string,
+  GRPC_USER_SERVICE_URL: process.env.GRPC_USER_SERVICE_URL as string,
 };
