@@ -60,7 +60,7 @@ function createBaseInitiatePaymentRequest(): InitiatePaymentRequest {
 export const InitiatePaymentRequest: MessageFns<InitiatePaymentRequest> = {
   encode(message: InitiatePaymentRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.amount !== 0) {
-      writer.uint32(8).int32(message.amount);
+      writer.uint32(13).float(message.amount);
     }
     if (message.currency !== "") {
       writer.uint32(18).string(message.currency);
@@ -97,11 +97,11 @@ export const InitiatePaymentRequest: MessageFns<InitiatePaymentRequest> = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1: {
-          if (tag !== 8) {
+          if (tag !== 13) {
             break;
           }
 
-          message.amount = reader.int32();
+          message.amount = reader.float();
           continue;
         }
         case 2: {
@@ -202,7 +202,7 @@ export const InitiatePaymentRequest: MessageFns<InitiatePaymentRequest> = {
   toJSON(message: InitiatePaymentRequest): unknown {
     const obj: any = {};
     if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
+      obj.amount = message.amount;
     }
     if (message.currency !== "") {
       obj.currency = message.currency;

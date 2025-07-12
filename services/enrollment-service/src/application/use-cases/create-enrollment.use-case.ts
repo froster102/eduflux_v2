@@ -52,9 +52,8 @@ export class CreateEnrollmentUseCase
     const enrollment = Enrollment.create({ id: uuidV4(), courseId, userId });
 
     await this.enrollmentRepository.save(enrollment);
-
     const { checkoutUrl } = await this.paymentServiceGateway.initiatePayment({
-      amount: course.price!,
+      amount: Math.round(course.price! * 100),
       currency: 'USD',
       payerId: user.id,
       paymentPurpose: 'COURSE_ENROLLMENT',

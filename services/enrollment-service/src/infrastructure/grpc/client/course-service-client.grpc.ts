@@ -29,7 +29,7 @@ export class GrpcCourseServiceClient implements ICourseServiceGateway {
         { courseId },
         (error: ServiceError | null, response: Course | null) => {
           if (error) {
-            this.logger.error(`Error fetching user details ${error.message}`);
+            this.logger.error(`Error fetching course details ${error.message}`);
             reject(new Error(error.message));
           }
           if (response) {

@@ -5,7 +5,7 @@
 // source: course.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import {
   type CallOptions,
   ChannelCredentials,
@@ -17,9 +17,9 @@ import {
   Metadata,
   type ServiceError,
   type UntypedServiceImplementation,
-} from '@grpc/grpc-js';
+} from "@grpc/grpc-js";
 
-export const protobufPackage = 'course';
+export const protobufPackage = "course";
 
 export interface GetCourseDetailsRequest {
   courseId: string;
@@ -50,26 +50,19 @@ export interface Instructor {
 }
 
 function createBaseGetCourseDetailsRequest(): GetCourseDetailsRequest {
-  return { courseId: '' };
+  return { courseId: "" };
 }
 
 export const GetCourseDetailsRequest: MessageFns<GetCourseDetailsRequest> = {
-  encode(
-    message: GetCourseDetailsRequest,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.courseId !== '') {
+  encode(message: GetCourseDetailsRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.courseId !== "") {
       writer.uint32(10).string(message.courseId);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): GetCourseDetailsRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetCourseDetailsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetCourseDetailsRequest();
     while (reader.pos < end) {
@@ -93,93 +86,82 @@ export const GetCourseDetailsRequest: MessageFns<GetCourseDetailsRequest> = {
   },
 
   fromJSON(object: any): GetCourseDetailsRequest {
-    return {
-      courseId: isSet(object.courseId)
-        ? globalThis.String(object.courseId)
-        : '',
-    };
+    return { courseId: isSet(object.courseId) ? globalThis.String(object.courseId) : "" };
   },
 
   toJSON(message: GetCourseDetailsRequest): unknown {
     const obj: any = {};
-    if (message.courseId !== '') {
+    if (message.courseId !== "") {
       obj.courseId = message.courseId;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetCourseDetailsRequest>, I>>(
-    base?: I,
-  ): GetCourseDetailsRequest {
+  create<I extends Exact<DeepPartial<GetCourseDetailsRequest>, I>>(base?: I): GetCourseDetailsRequest {
     return GetCourseDetailsRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetCourseDetailsRequest>, I>>(
-    object: I,
-  ): GetCourseDetailsRequest {
+  fromPartial<I extends Exact<DeepPartial<GetCourseDetailsRequest>, I>>(object: I): GetCourseDetailsRequest {
     const message = createBaseGetCourseDetailsRequest();
-    message.courseId = object.courseId ?? '';
+    message.courseId = object.courseId ?? "";
     return message;
   },
 };
 
 function createBaseCourse(): Course {
   return {
-    id: '',
-    title: '',
-    description: '',
-    thumbnail: '',
-    level: '',
-    categoryId: '',
+    id: "",
+    title: "",
+    description: "",
+    thumbnail: "",
+    level: "",
+    categoryId: "",
     price: 0,
     isFree: false,
-    status: '',
+    status: "",
     instructor: undefined,
     averageRating: 0,
     ratingCount: 0,
     enrollmentCount: 0,
-    createdAt: '',
-    updatedAt: '',
-    publishedAt: '',
+    createdAt: "",
+    updatedAt: "",
+    publishedAt: "",
   };
 }
 
 export const Course: MessageFns<Course> = {
-  encode(
-    message: Course,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.id !== '') {
+  encode(message: Course, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.title !== '') {
+    if (message.title !== "") {
       writer.uint32(18).string(message.title);
     }
-    if (message.description !== '') {
+    if (message.description !== "") {
       writer.uint32(26).string(message.description);
     }
-    if (message.thumbnail !== '') {
+    if (message.thumbnail !== "") {
       writer.uint32(34).string(message.thumbnail);
     }
-    if (message.level !== '') {
+    if (message.level !== "") {
       writer.uint32(42).string(message.level);
     }
-    if (message.categoryId !== '') {
+    if (message.categoryId !== "") {
       writer.uint32(50).string(message.categoryId);
     }
     if (message.price !== 0) {
-      writer.uint32(56).int32(message.price);
+      writer.uint32(61).float(message.price);
     }
     if (message.isFree !== false) {
       writer.uint32(64).bool(message.isFree);
     }
-    if (message.status !== '') {
+    if (message.status !== "") {
       writer.uint32(74).string(message.status);
     }
     if (message.instructor !== undefined) {
       Instructor.encode(message.instructor, writer.uint32(90).fork()).join();
     }
     if (message.averageRating !== 0) {
-      writer.uint32(96).int32(message.averageRating);
+      writer.uint32(101).float(message.averageRating);
     }
     if (message.ratingCount !== 0) {
       writer.uint32(104).int32(message.ratingCount);
@@ -187,21 +169,20 @@ export const Course: MessageFns<Course> = {
     if (message.enrollmentCount !== 0) {
       writer.uint32(112).int32(message.enrollmentCount);
     }
-    if (message.createdAt !== '') {
+    if (message.createdAt !== "") {
       writer.uint32(122).string(message.createdAt);
     }
-    if (message.updatedAt !== '') {
+    if (message.updatedAt !== "") {
       writer.uint32(130).string(message.updatedAt);
     }
-    if (message.publishedAt !== '') {
+    if (message.publishedAt !== "") {
       writer.uint32(138).string(message.publishedAt);
     }
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Course {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCourse();
     while (reader.pos < end) {
@@ -256,11 +237,11 @@ export const Course: MessageFns<Course> = {
           continue;
         }
         case 7: {
-          if (tag !== 56) {
+          if (tag !== 61) {
             break;
           }
 
-          message.price = reader.int32();
+          message.price = reader.float();
           continue;
         }
         case 8: {
@@ -288,11 +269,11 @@ export const Course: MessageFns<Course> = {
           continue;
         }
         case 12: {
-          if (tag !== 96) {
+          if (tag !== 101) {
             break;
           }
 
-          message.averageRating = reader.int32();
+          message.averageRating = reader.float();
           continue;
         }
         case 13: {
@@ -346,79 +327,59 @@ export const Course: MessageFns<Course> = {
 
   fromJSON(object: any): Course {
     return {
-      id: isSet(object.id) ? globalThis.String(object.id) : '',
-      title: isSet(object.title) ? globalThis.String(object.title) : '',
-      description: isSet(object.description)
-        ? globalThis.String(object.description)
-        : '',
-      thumbnail: isSet(object.thumbnail)
-        ? globalThis.String(object.thumbnail)
-        : '',
-      level: isSet(object.level) ? globalThis.String(object.level) : '',
-      categoryId: isSet(object.categoryId)
-        ? globalThis.String(object.categoryId)
-        : '',
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      title: isSet(object.title) ? globalThis.String(object.title) : "",
+      description: isSet(object.description) ? globalThis.String(object.description) : "",
+      thumbnail: isSet(object.thumbnail) ? globalThis.String(object.thumbnail) : "",
+      level: isSet(object.level) ? globalThis.String(object.level) : "",
+      categoryId: isSet(object.categoryId) ? globalThis.String(object.categoryId) : "",
       price: isSet(object.price) ? globalThis.Number(object.price) : 0,
       isFree: isSet(object.isFree) ? globalThis.Boolean(object.isFree) : false,
-      status: isSet(object.status) ? globalThis.String(object.status) : '',
-      instructor: isSet(object.instructor)
-        ? Instructor.fromJSON(object.instructor)
-        : undefined,
-      averageRating: isSet(object.averageRating)
-        ? globalThis.Number(object.averageRating)
-        : 0,
-      ratingCount: isSet(object.ratingCount)
-        ? globalThis.Number(object.ratingCount)
-        : 0,
-      enrollmentCount: isSet(object.enrollmentCount)
-        ? globalThis.Number(object.enrollmentCount)
-        : 0,
-      createdAt: isSet(object.createdAt)
-        ? globalThis.String(object.createdAt)
-        : '',
-      updatedAt: isSet(object.updatedAt)
-        ? globalThis.String(object.updatedAt)
-        : '',
-      publishedAt: isSet(object.publishedAt)
-        ? globalThis.String(object.publishedAt)
-        : '',
+      status: isSet(object.status) ? globalThis.String(object.status) : "",
+      instructor: isSet(object.instructor) ? Instructor.fromJSON(object.instructor) : undefined,
+      averageRating: isSet(object.averageRating) ? globalThis.Number(object.averageRating) : 0,
+      ratingCount: isSet(object.ratingCount) ? globalThis.Number(object.ratingCount) : 0,
+      enrollmentCount: isSet(object.enrollmentCount) ? globalThis.Number(object.enrollmentCount) : 0,
+      createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
+      updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
+      publishedAt: isSet(object.publishedAt) ? globalThis.String(object.publishedAt) : "",
     };
   },
 
   toJSON(message: Course): unknown {
     const obj: any = {};
-    if (message.id !== '') {
+    if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.title !== '') {
+    if (message.title !== "") {
       obj.title = message.title;
     }
-    if (message.description !== '') {
+    if (message.description !== "") {
       obj.description = message.description;
     }
-    if (message.thumbnail !== '') {
+    if (message.thumbnail !== "") {
       obj.thumbnail = message.thumbnail;
     }
-    if (message.level !== '') {
+    if (message.level !== "") {
       obj.level = message.level;
     }
-    if (message.categoryId !== '') {
+    if (message.categoryId !== "") {
       obj.categoryId = message.categoryId;
     }
     if (message.price !== 0) {
-      obj.price = Math.round(message.price);
+      obj.price = message.price;
     }
     if (message.isFree !== false) {
       obj.isFree = message.isFree;
     }
-    if (message.status !== '') {
+    if (message.status !== "") {
       obj.status = message.status;
     }
     if (message.instructor !== undefined) {
       obj.instructor = Instructor.toJSON(message.instructor);
     }
     if (message.averageRating !== 0) {
-      obj.averageRating = Math.round(message.averageRating);
+      obj.averageRating = message.averageRating;
     }
     if (message.ratingCount !== 0) {
       obj.ratingCount = Math.round(message.ratingCount);
@@ -426,13 +387,13 @@ export const Course: MessageFns<Course> = {
     if (message.enrollmentCount !== 0) {
       obj.enrollmentCount = Math.round(message.enrollmentCount);
     }
-    if (message.createdAt !== '') {
+    if (message.createdAt !== "") {
       obj.createdAt = message.createdAt;
     }
-    if (message.updatedAt !== '') {
+    if (message.updatedAt !== "") {
       obj.updatedAt = message.updatedAt;
     }
-    if (message.publishedAt !== '') {
+    if (message.publishedAt !== "") {
       obj.publishedAt = message.publishedAt;
     }
     return obj;
@@ -443,50 +404,45 @@ export const Course: MessageFns<Course> = {
   },
   fromPartial<I extends Exact<DeepPartial<Course>, I>>(object: I): Course {
     const message = createBaseCourse();
-    message.id = object.id ?? '';
-    message.title = object.title ?? '';
-    message.description = object.description ?? '';
-    message.thumbnail = object.thumbnail ?? '';
-    message.level = object.level ?? '';
-    message.categoryId = object.categoryId ?? '';
+    message.id = object.id ?? "";
+    message.title = object.title ?? "";
+    message.description = object.description ?? "";
+    message.thumbnail = object.thumbnail ?? "";
+    message.level = object.level ?? "";
+    message.categoryId = object.categoryId ?? "";
     message.price = object.price ?? 0;
     message.isFree = object.isFree ?? false;
-    message.status = object.status ?? '';
-    message.instructor =
-      object.instructor !== undefined && object.instructor !== null
-        ? Instructor.fromPartial(object.instructor)
-        : undefined;
+    message.status = object.status ?? "";
+    message.instructor = (object.instructor !== undefined && object.instructor !== null)
+      ? Instructor.fromPartial(object.instructor)
+      : undefined;
     message.averageRating = object.averageRating ?? 0;
     message.ratingCount = object.ratingCount ?? 0;
     message.enrollmentCount = object.enrollmentCount ?? 0;
-    message.createdAt = object.createdAt ?? '';
-    message.updatedAt = object.updatedAt ?? '';
-    message.publishedAt = object.publishedAt ?? '';
+    message.createdAt = object.createdAt ?? "";
+    message.updatedAt = object.updatedAt ?? "";
+    message.publishedAt = object.publishedAt ?? "";
     return message;
   },
 };
 
 function createBaseInstructor(): Instructor {
-  return { id: '', name: '' };
+  return { id: "", name: "" };
 }
 
 export const Instructor: MessageFns<Instructor> = {
-  encode(
-    message: Instructor,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.id !== '') {
+  encode(message: Instructor, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Instructor {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInstructor();
     while (reader.pos < end) {
@@ -519,17 +475,17 @@ export const Instructor: MessageFns<Instructor> = {
 
   fromJSON(object: any): Instructor {
     return {
-      id: isSet(object.id) ? globalThis.String(object.id) : '',
-      name: isSet(object.name) ? globalThis.String(object.name) : '',
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
     };
   },
 
   toJSON(message: Instructor): unknown {
     const obj: any = {};
-    if (message.id !== '') {
+    if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       obj.name = message.name;
     }
     return obj;
@@ -538,12 +494,10 @@ export const Instructor: MessageFns<Instructor> = {
   create<I extends Exact<DeepPartial<Instructor>, I>>(base?: I): Instructor {
     return Instructor.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Instructor>, I>>(
-    object: I,
-  ): Instructor {
+  fromPartial<I extends Exact<DeepPartial<Instructor>, I>>(object: I): Instructor {
     const message = createBaseInstructor();
-    message.id = object.id ?? '';
-    message.name = object.name ?? '';
+    message.id = object.id ?? "";
+    message.name = object.name ?? "";
     return message;
   },
 };
@@ -551,15 +505,13 @@ export const Instructor: MessageFns<Instructor> = {
 export type CourseServiceService = typeof CourseServiceService;
 export const CourseServiceService = {
   getCourseDetails: {
-    path: '/course.CourseService/GetCourseDetails',
+    path: "/course.CourseService/GetCourseDetails",
     requestStream: false,
     responseStream: false,
     requestSerialize: (value: GetCourseDetailsRequest): Buffer =>
       Buffer.from(GetCourseDetailsRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): GetCourseDetailsRequest =>
-      GetCourseDetailsRequest.decode(value),
-    responseSerialize: (value: Course): Buffer =>
-      Buffer.from(Course.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetCourseDetailsRequest => GetCourseDetailsRequest.decode(value),
+    responseSerialize: (value: Course): Buffer => Buffer.from(Course.encode(value).finish()),
     responseDeserialize: (value: Buffer): Course => Course.decode(value),
   },
 } as const;
@@ -588,42 +540,24 @@ export interface CourseServiceClient extends Client {
 
 export const CourseServiceClient = makeGenericClientConstructor(
   CourseServiceService,
-  'course.CourseService',
+  "course.CourseService",
 ) as unknown as {
-  new (
-    address: string,
-    credentials: ChannelCredentials,
-    options?: Partial<ClientOptions>,
-  ): CourseServiceClient;
+  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): CourseServiceClient;
   service: typeof CourseServiceService;
   serviceName: string;
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends {}
-        ? { [K in keyof T]?: DeepPartial<T[K]> }
-        : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

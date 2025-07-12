@@ -7,7 +7,7 @@ service PaymentService {
 }
 
 message InitiatePaymentRequest {
-    int32 amount = 1;           
+    float amount = 1;           
     string currency = 2;
     string payerId = 3;       
     string paymentPurpose = 4; 

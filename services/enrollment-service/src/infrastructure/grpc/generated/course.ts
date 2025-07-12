@@ -149,7 +149,7 @@ export const Course: MessageFns<Course> = {
       writer.uint32(50).string(message.categoryId);
     }
     if (message.price !== 0) {
-      writer.uint32(56).int32(message.price);
+      writer.uint32(61).float(message.price);
     }
     if (message.isFree !== false) {
       writer.uint32(64).bool(message.isFree);
@@ -161,7 +161,7 @@ export const Course: MessageFns<Course> = {
       Instructor.encode(message.instructor, writer.uint32(90).fork()).join();
     }
     if (message.averageRating !== 0) {
-      writer.uint32(96).int32(message.averageRating);
+      writer.uint32(101).float(message.averageRating);
     }
     if (message.ratingCount !== 0) {
       writer.uint32(104).int32(message.ratingCount);
@@ -237,11 +237,11 @@ export const Course: MessageFns<Course> = {
           continue;
         }
         case 7: {
-          if (tag !== 56) {
+          if (tag !== 61) {
             break;
           }
 
-          message.price = reader.int32();
+          message.price = reader.float();
           continue;
         }
         case 8: {
@@ -269,11 +269,11 @@ export const Course: MessageFns<Course> = {
           continue;
         }
         case 12: {
-          if (tag !== 96) {
+          if (tag !== 101) {
             break;
           }
 
-          message.averageRating = reader.int32();
+          message.averageRating = reader.float();
           continue;
         }
         case 13: {
@@ -367,7 +367,7 @@ export const Course: MessageFns<Course> = {
       obj.categoryId = message.categoryId;
     }
     if (message.price !== 0) {
-      obj.price = Math.round(message.price);
+      obj.price = message.price;
     }
     if (message.isFree !== false) {
       obj.isFree = message.isFree;
@@ -379,7 +379,7 @@ export const Course: MessageFns<Course> = {
       obj.instructor = Instructor.toJSON(message.instructor);
     }
     if (message.averageRating !== 0) {
-      obj.averageRating = Math.round(message.averageRating);
+      obj.averageRating = message.averageRating;
     }
     if (message.ratingCount !== 0) {
       obj.ratingCount = Math.round(message.ratingCount);

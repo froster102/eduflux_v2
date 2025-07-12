@@ -17,11 +17,11 @@ message Course {
    string thumbnail= 4 ;
    string  level = 5;
    string categoryId = 6;
-   int32 price = 7;
+   float price = 7;
    bool isFree = 8;
    string  status = 9;
    Instructor instructor = 11;
-   int32 averageRating = 12;
+   float averageRating = 12;
    int32  ratingCount = 13;
    int32 enrollmentCount = 14;
    string createdAt = 15;
