@@ -1,30 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 
 import {
-  getPublishedCourseCurriculum,
-  getPublishedCourseInfo,
-  getPublishedCourses,
+  getCourseCurriculum,
+  getCourseInfo,
+  getCourses,
 } from "../services/course";
 
-export function useGetPublishedCourses(
-  paginationQueryParams: PaginationQueryParams,
-) {
+export function useGetCourses(paginationQueryParams: PaginationQueryParams) {
   return useQuery({
     queryKey: ["published-courses", paginationQueryParams],
-    queryFn: () => getPublishedCourses(paginationQueryParams),
+    queryFn: () => getCourses(paginationQueryParams),
   });
 }
 
-export function useGetPublishedCourseInfo(courseId: string) {
+export function useGetCourseInfo(courseId: string) {
   return useQuery({
     queryKey: [`published-course-${courseId}`],
-    queryFn: () => getPublishedCourseInfo(courseId),
+    queryFn: () => getCourseInfo(courseId),
   });
 }
 
 export function useGetPublishedCourseCurriculum(courseId: string) {
   return useQuery({
     queryKey: [`published-course-curriculum-${courseId}`],
-    queryFn: () => getPublishedCourseCurriculum(courseId),
+    queryFn: () => getCourseCurriculum(courseId),
   });
 }

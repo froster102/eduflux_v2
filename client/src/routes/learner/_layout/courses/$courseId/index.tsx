@@ -9,10 +9,6 @@ import React from "react";
 import { Avatar } from "@heroui/avatar";
 import { addToast } from "@heroui/toast";
 
-import {
-  useGetPublishedCourseCurriculum,
-  useGetPublishedCourseInfo,
-} from "@/features/learner/courses/hooks/queries";
 import CourseIcon from "@/assets/icons/CourseIcon";
 import { IMAGE_BASE_URL } from "@/config/image";
 import PlayIcon from "@/assets/icons/PlayIcon";
@@ -20,6 +16,10 @@ import PreviewLectureModal from "@/features/learner/courses/components/PreviewLe
 import { useGetInstructorProfile } from "@/features/learner/hooks/queries";
 import { useEnrollForCourse } from "@/features/learner/courses/hooks/mutations";
 import { tryCatch } from "@/utils/try-catch";
+import {
+  useGetCourseInfo,
+  useGetPublishedCourseCurriculum,
+} from "@/features/learner/courses/hooks/queries";
 
 export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
 function RouteComponent() {
   const { courseId } = Route.useParams();
   const { data: courseInfo, isLoading: isCourseInfoLoading } =
-    useGetPublishedCourseInfo(courseId);
+    useGetCourseInfo(courseId);
   const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetPublishedCourseCurriculum(courseId);
   const { data: instructorProfile, isLoading: isInstructorProfileLoading } =

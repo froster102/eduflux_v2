@@ -1,7 +1,7 @@
 import api from "@/lib/axios";
 import { buildQueryUrlParams } from "@/utils/url";
 
-export async function getPublishedCourses(
+export async function getCourses(
   paginationQueryParams: PaginationQueryParams,
 ): Promise<{
   courses: Course[];
@@ -9,25 +9,21 @@ export async function getPublishedCourses(
 }> {
   const params = buildQueryUrlParams(paginationQueryParams);
 
-  const response = await api.get(`/courses/published-courses${params}`);
+  const response = await api.get(`/courses${params}`);
 
   return response.data;
 }
 
-export async function getPublishedCourseInfo(
-  courseId: string,
-): Promise<Course> {
-  const response = await api.get(`/courses/published-courses/${courseId}`);
+export async function getCourseInfo(courseId: string): Promise<Course> {
+  const response = await api.get(`/courses/${courseId}`);
 
   return response.data;
 }
 
-export async function getPublishedCourseCurriculum(
+export async function getCourseCurriculum(
   courseId: string,
 ): Promise<CurriculumItems> {
-  const response = await api.get(
-    `/courses/published-courses/${courseId}/curriculum`,
-  );
+  const response = await api.get(`/courses/${courseId}/curriculum`);
 
   return response.data;
 }

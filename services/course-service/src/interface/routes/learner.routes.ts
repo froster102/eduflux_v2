@@ -1,5 +1,4 @@
 import { GetPublishedCourseCurriculumUseCase } from '@/application/use-cases/get-published-course-curriculum';
-import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';
 import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-published-courses.use-case';
 import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination.schema';
 import { TYPES } from '@/shared/di/types';
@@ -11,8 +10,7 @@ export class LearnerRoutes {
   constructor(
     @inject(TYPES.GetPublishedCoursesUseCase)
     private readonly getPublishedCourses: GetPublishedCoursesUseCase,
-    @inject(TYPES.GetPublishedCourseInfoUseCase)
-    private readonly getPublishedCourseInfoUseCase: GetPublishedCourseInfoUseCase,
+
     @inject(TYPES.GetPublishedCourseCurriculumUseCase)
     private readonly getPublishedCourseCurriculumUseCase: GetPublishedCourseCurriculumUseCase,
   ) {}
@@ -20,8 +18,8 @@ export class LearnerRoutes {
   register(): Elysia {
     return new Elysia().group('/api/courses', (group) =>
       group
-        .get('/subscriber-curriculum-items/:courseId', () => {})
-        .get('/published-courses', async ({ query }) => {
+        .get('/:courseId/subscriber-curriculum-items/', () => {})
+        .get('/', async ({ query }) => {
           const paredQuery = paginationQuerySchema.parse(query);
           const result = await this.getPublishedCourses.execute({
             paginationQueryParams: paredQuery,
@@ -29,13 +27,7 @@ export class LearnerRoutes {
 
           return result;
         })
-        .get('/published-courses/:courseId', async ({ params }) => {
-          const course = await this.getPublishedCourseInfoUseCase.execute(
-            params.courseId,
-          );
-          return course;
-        })
-        .get('/published-courses/:courseId/curriculum', async ({ params }) => {
+        .get('/:courseId/curriculum', async ({ params }) => {
           const curriculum =
             await this.getPublishedCourseCurriculumUseCase.execute(
               params.courseId,

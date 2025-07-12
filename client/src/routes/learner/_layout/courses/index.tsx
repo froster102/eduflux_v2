@@ -4,7 +4,7 @@ import React from "react";
 import { Spinner } from "@heroui/spinner";
 import { Input } from "@heroui/input";
 
-import { useGetPublishedCourses } from "@/features/learner/courses/hooks/queries";
+import { useGetCourses } from "@/features/learner/courses/hooks/queries";
 import { SearchIcon } from "@/components/Icons";
 import CourseCard from "@/components/CourseCard";
 
@@ -17,7 +17,7 @@ function RouteComponent() {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(10);
 
-  const { data, isLoading } = useGetPublishedCourses({
+  const { data, isLoading } = useGetCourses({
     page,
     limit,
     searchFields: ["title"],

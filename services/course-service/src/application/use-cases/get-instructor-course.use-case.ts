@@ -31,6 +31,10 @@ export class GetInstructorCourseUseCase
       throw new NotFoundException(`Course with ID:${id} not found.`);
     }
 
+    if (course.status === 'published') {
+      return course;
+    }
+
     if (course.instructor.id !== actor.id) {
       throw new ForbiddenException(`You are not allowed to view this course.`);
     }
