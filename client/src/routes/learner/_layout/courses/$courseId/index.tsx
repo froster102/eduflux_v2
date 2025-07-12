@@ -90,7 +90,7 @@ function RouteComponent() {
         <Divider />
       </div>
       <div className="flex flex-col md:flex-row gap-4 w-full">
-        <div>
+        <Card>
           <div className="relative h-[60vh] w-full">
             <Image
               className="w-full h-full object-cover"
@@ -173,7 +173,7 @@ function RouteComponent() {
               </div>
             </Skeleton>
           </div>
-        </div>
+        </Card>
         <Skeleton
           className="w-full max-w-lg"
           isLoaded={!isInstructorProfileLoading}

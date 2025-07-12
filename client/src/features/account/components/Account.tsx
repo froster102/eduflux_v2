@@ -3,7 +3,8 @@ import { Skeleton } from "@heroui/skeleton";
 import { Card } from "@heroui/card";
 import React from "react";
 
-import ProfileCard from "@/features/account/components/ProfileCard";
+import ProfileCard from "./ProfileCard";
+
 import {
   useGetUserProfile,
   useGetUserSessions,
@@ -61,13 +62,18 @@ export default function Account() {
         data-lenis="false"
       >
         <div className="max-w-md w-full h-fit">
-          <Skeleton isLoaded={!isProfileLoading}>
+          {isProfileLoading || isSessionsLoading ? (
+            <Skeleton className="rounded-md" isLoaded={!isProfileLoading}>
+              {<div className="rounded-md h-56" />}
+            </Skeleton>
+          ) : (
             <ProfileCard
               email={user!.email}
               lastLogin={latestSession?.createdAt}
               name={profile?.firstName + " " + profile?.lastName}
             />
-          </Skeleton>
+          )}
+
           <div className="pt-4  md:block">
             {isSessionsLoading ? (
               new Array(3).fill(0).map((_, i) => (

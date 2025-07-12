@@ -24,7 +24,7 @@ export default function CourseCard({
     <>
       <Card
         isPressable
-        className="h-full bg-background"
+        className="bg-background w-full"
         shadow="sm"
         onPress={() => {
           navigate({ to: `/learner/courses/${course.id}` });
