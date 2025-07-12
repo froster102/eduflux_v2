@@ -1,4 +1,4 @@
-import { betterAuth, User } from 'better-auth';
+import { betterAuth, BetterAuthError, User } from 'better-auth';
 import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import * as schema from '@/database/schema';
@@ -131,13 +131,17 @@ export const auth = betterAuth({
               id: user.id,
               firstName,
               lastName,
+              email: user.email,
               roles: [Role.LEARNER],
             }),
           );
 
           if (error) {
             await ctx.context.internalAdapter.deleteUser(user.id);
-            throw new Error('Internal server error');
+            throw new BetterAuthError(
+              'Internal server error',
+              'INTERNAL_SERVER_ERROR',
+            );
           }
         }
       }

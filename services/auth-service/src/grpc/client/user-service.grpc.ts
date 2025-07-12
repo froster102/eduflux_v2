@@ -1,6 +1,7 @@
 import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
 import {
-  CreateUserProfileRequest,
+  CreateUserRequest,
+  UpdateUserRequest,
   UserResponse,
   UserServiceClient,
 } from '../generated/user';
@@ -28,17 +29,45 @@ export class UserGrpcServiceClient implements IUserGrpcService {
     id: string;
     firstName: string;
     lastName: string;
+    email: string;
     roles: Role[];
   }): Promise<void> {
-    const request: CreateUserProfileRequest = {
+    const request: CreateUserRequest = {
       id: data.id,
       firstName: data.firstName,
       lastName: data.lastName,
+      email: data.email,
       roles: data.roles,
     };
 
     return new Promise((resolve, reject) => {
-      this.client.createUserProfile(
+      this.client.createUser(
+        request,
+        (error: ServiceError | null, response: UserResponse | null) => {
+          if (error) {
+            this.logger.error(`Error creating user profile ${error.message}`);
+            reject(new Error(error.message));
+          }
+          if (response) {
+            resolve();
+          }
+        },
+      );
+    });
+  }
+
+  updateUser(
+    data: Partial<{
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      roles: Role[];
+    }>,
+  ): Promise<void> {
+    const request: UpdateUserRequest = { ...data } as UpdateUserRequest;
+    return new Promise((resolve, reject) => {
+      this.client.updateUser(
         request,
         (error: ServiceError | null, response: UserResponse | null) => {
           if (error) {

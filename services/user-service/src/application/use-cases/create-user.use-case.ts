@@ -23,6 +23,7 @@ export class CreateUserUseCase {
       createUserDto.id,
       createUserDto.firstName,
       createUserDto.lastName,
+      createUserDto.email,
       createUserDto.roles,
       createUserDto.bio,
       createUserDto.socialLinks,

@@ -3,8 +3,9 @@ import { TYPES } from '@/shared/di/types';
 import { GetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { Logger } from '@/shared/utils/logger';
 import {
-  CreateUserProfileRequest,
-  GetUserDetailsRequest,
+  CreateUserRequest,
+  GetUserRequest,
+  UpdateUserRequest,
   UserResponse,
   UserServiceServer,
 } from '../generated/user';
@@ -15,6 +16,7 @@ import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { CreateUserUseCase } from '@/application/use-cases/create-user.use-case';
 import { CreateUserDto } from '@/application/dtos/create-user.dto';
 import { Role } from '@/shared/types/role';
+import { UpdateUserUseCase } from '@/application/use-cases/update-user.use-case';
 
 @injectable()
 export class UserGrpcService implements UserServiceServer {
@@ -28,10 +30,12 @@ export class UserGrpcService implements UserServiceServer {
     private readonly getUserUseCase: GetUserUseCase,
     @inject(TYPES.CreateUserUseCase)
     private readonly createUserUseCase: CreateUserUseCase,
+    @inject(TYPES.UpdateUserUseCase)
+    private readonly updateUserUseCase: UpdateUserUseCase,
   ) {}
 
-  createUserProfile(
-    call: ServerUnaryCall<CreateUserProfileRequest, UserResponse>,
+  createUser(
+    call: ServerUnaryCall<CreateUserRequest, UserResponse>,
     callback: sendUnaryData<UserResponse>,
   ): void {
     this.logger.info(`Received request for userId: ${call.request.id}`);
@@ -39,6 +43,7 @@ export class UserGrpcService implements UserServiceServer {
       id: call.request.id,
       firstName: call.request.firstName,
       lastName: call.request.lastName,
+      email: call.request.email,
       roles: call.request.roles as Role[],
     };
     this.createUserUseCase
@@ -48,6 +53,7 @@ export class UserGrpcService implements UserServiceServer {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
+          email: user.email,
           roles: user.roles,
           imageUrl: user.imageUrl || '',
           bio: user.bio || '',
@@ -61,32 +67,46 @@ export class UserGrpcService implements UserServiceServer {
         callback(null, response);
       })
       .catch((error: Error) => {
-        this.logger.error(
-          `Error processing createUserProfile request for id ${call.request.id}: ${error.message}`,
-        );
-        if (
-          error instanceof ApplicationException ||
-          error instanceof DomainException
-        ) {
-          const serviceError = {
-            name: 'UserServiceError',
-            code: getGrpcStatusCode(error.code),
-            message: error.message,
-          };
-          callback(serviceError, null);
-        } else {
-          const serviceError = {
-            name: 'UserServiceError',
-            code: status.INTERNAL,
-            message: 'Failed to process request to create user profile',
-          };
-          callback(serviceError, null);
-        }
+        this.handleError(error, callback);
       });
   }
 
-  getUserDetails(
-    call: ServerUnaryCall<GetUserDetailsRequest, UserResponse>,
+  updateUser(
+    call: ServerUnaryCall<UpdateUserRequest, UserResponse>,
+    callback: sendUnaryData<UserResponse>,
+  ) {
+    this.logger.info(
+      `Received request for user update USER_ID:${call.request.id}`,
+    );
+    this.updateUserUseCase
+      .execute({
+        id: call.request.id,
+        firstName: call.request.firstName,
+        lastName: call.request.email,
+        roles: call.request.roles as Role[],
+      })
+      .then((user) => {
+        const response: UserResponse = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          imageUrl: user.imageUrl,
+          email: user.email,
+          bio: user.bio,
+          socialLinks: user.socialLinks,
+          createdAt: user.createdAt.toISOString(),
+          updatedAt: user.updatedAt.toISOString(),
+          roles: user.roles,
+        };
+        callback(null, response);
+      })
+      .catch((error: Error) => {
+        this.handleError(error, callback);
+      });
+  }
+
+  getUser(
+    call: ServerUnaryCall<GetUserRequest, UserResponse>,
     callback: sendUnaryData<UserResponse>,
   ): void {
     this.logger.info(`Received request for userID: ${call.request.userId}`);
@@ -98,6 +118,7 @@ export class UserGrpcService implements UserServiceServer {
           firstName: user.firstName,
           lastName: user.lastName,
           imageUrl: user.imageUrl,
+          email: user.email,
           bio: user.bio,
           socialLinks: user.socialLinks,
           createdAt: user.createdAt.toISOString(),
@@ -106,27 +127,32 @@ export class UserGrpcService implements UserServiceServer {
         };
         callback(null, response);
       })
-      .catch((error) => {
-        this.logger.error(
-          `Error processing request: ${(error as Record<string, any>).message}`,
-        );
-        if (
-          error instanceof ApplicationException ||
-          error instanceof DomainException
-        ) {
-          const serviceError = {
-            name: 'UserServiceError',
-            code: getGrpcStatusCode(error.code),
-            message: error.message,
-          };
-          callback(serviceError, null);
-        }
-        const serviceError = {
-          name: 'UserServiceError',
-          code: status.INTERNAL,
-          message: 'Failed to process request',
-        };
-        callback(serviceError, null);
+      .catch((error: Error) => {
+        this.handleError(error, callback);
       });
+  }
+
+  private handleError<T>(
+    error: Error | ApplicationException | DomainException,
+    callback: sendUnaryData<T>,
+  ) {
+    this.logger.error(`Error processing request: ${error.message}`);
+    if (
+      error instanceof ApplicationException ||
+      error instanceof DomainException
+    ) {
+      const serviceError = {
+        name: 'UserServiceError',
+        code: getGrpcStatusCode(error.code),
+        message: error.message,
+      };
+      callback(serviceError, null);
+    }
+    const serviceError = {
+      name: 'UserServiceError',
+      code: status.INTERNAL,
+      message: 'Failed to process request',
+    };
+    callback(serviceError, null);
   }
 }

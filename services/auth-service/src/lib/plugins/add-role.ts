@@ -1,5 +1,8 @@
 import { db } from '@/database/db';
 import { user } from '@/database/schema';
+import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
+import { container } from '@/shared/di/container';
+import { TYPES } from '@/shared/di/types';
 import {
   APIError,
   createAuthEndpoint,
@@ -58,11 +61,22 @@ export const addRole = () => {
             });
           }
 
-          const [updatedUser] = await db
-            .update(user)
-            .set({ roles: [...foundUser.roles, result.data.role] })
-            .where(eq(user.id, session.user.id))
-            .returning();
+          const userService = container.get<IUserGrpcService>(
+            TYPES.UserGrpcService,
+          );
+
+          const updatedUser = await db.transaction(async (tx) => {
+            const [updatedUser] = await tx
+              .update(user)
+              .set({ roles: [...foundUser.roles, result.data.role] })
+              .where(eq(user.id, session.user.id))
+              .returning();
+            await userService.updateUser({
+              id: foundUser.id,
+              roles: [...(foundUser.roles as Role[]), 'INSTRUCTOR'],
+            });
+            return updatedUser;
+          });
 
           const jwtToken = await getJwtToken(ctx, {
             jwt: {

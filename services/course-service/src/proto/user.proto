@@ -3,10 +3,28 @@ syntax = "proto3";
 package users;
 
 service UserService {
-  rpc GetUserDetails(GetUserDetailsRequest) returns (UserResponse);
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+  rpc GetUser(GetUserRequest) returns (UserResponse);
 }
 
-message GetUserDetailsRequest {
+message CreateUserRequest {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  repeated string roles = 5;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  repeated string roles = 5;
+}
+
+message GetUserRequest {
   string userId = 1; 
 }
 
@@ -14,11 +32,13 @@ message UserResponse {
   string id = 1;
   string firstName = 2;
   string lastName = 3;
-  string imageUrl = 4;
-  string bio = 5;
-  repeated SocialLinks socialLinks = 6;
-  string createdAt = 7;
-  string updatedAt = 8;
+  string email = 4;
+  repeated string roles = 5;
+  string imageUrl = 6;
+  string bio = 7;
+  repeated SocialLinks socialLinks = 8;
+  string createdAt = 9;
+  string updatedAt = 10;
 }
 
 message SocialLinks {

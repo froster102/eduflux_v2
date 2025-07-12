@@ -1,5 +1,5 @@
 import {
-  GetUserDetailsRequest,
+  GetUserRequest,
   UserResponse,
   UserServiceClient,
 } from '../generated/user';
@@ -28,14 +28,13 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
   }
 
   getUserDetails(userId: string): Promise<UserProfile> {
-    const request: GetUserDetailsRequest = { userId };
+    const request: GetUserRequest = { userId };
 
     return new Promise((resolve, reject) => {
-      this.client.getUserDetails(
+      this.client.getUser(
         request,
         (error: ServiceError | null, response: UserResponse | null) => {
           if (error) {
-            console.log(error);
             this.logger.error(`Error fetching user details ${error.message}`);
             reject(new Error(error.message));
           }

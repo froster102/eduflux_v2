@@ -4,6 +4,7 @@ export class User {
   private readonly _id: string;
   private _firstName: string;
   private _lastName: string;
+  private _email: string;
   private _imageUrl?: string;
   private _roles: Role[];
   private _bio?: string;
@@ -18,6 +19,7 @@ export class User {
     id: string,
     firstName: string,
     lastName: string,
+    email: string,
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
@@ -31,6 +33,7 @@ export class User {
     this._id = id;
     this._firstName = firstName;
     this._lastName = lastName;
+    this._email = email;
     this._roles = roles;
     this._imageUrl = imageUrl;
     this._bio = bio;
@@ -43,6 +46,7 @@ export class User {
     id: string,
     firstName: string,
     lastName: string,
+    email: string,
     roles: Role[],
     bio?: string,
     socialLinks?: {
@@ -55,6 +59,7 @@ export class User {
       id,
       firstName,
       lastName,
+      email,
       roles,
       now,
       now,
@@ -68,6 +73,7 @@ export class User {
     id: string,
     firstName: string,
     lastName: string,
+    email: string,
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
@@ -82,6 +88,7 @@ export class User {
       id,
       firstName,
       lastName,
+      email,
       roles,
       createdAt,
       updatedAt,
@@ -101,6 +108,10 @@ export class User {
 
   public get lastName(): string {
     return this._lastName;
+  }
+
+  public get email(): string {
+    return this._email;
   }
 
   public get imageUrl(): string | undefined {
@@ -168,40 +179,46 @@ export class User {
     dto: Partial<{
       firstName: string;
       lastName: string;
-      imageUrl?: string;
-      bio?: string | null;
-      socialLinks?: { platform: string; url: string }[];
+      email: string;
+      roles: Role[];
+      imageUrl: string;
+      bio: string | null;
+      socialLinks: { platform: string; url: string }[];
     }>,
   ): void {
     let updated = false;
 
-    if (dto.firstName !== undefined) {
-      if (!dto.firstName) {
-        throw new Error('First name cannot be empty.');
-      }
+    if (dto.firstName) {
       this._firstName = dto.firstName;
       updated = true;
     }
 
-    if (dto.lastName !== undefined) {
-      if (!dto.lastName) {
-        throw new Error('Last name cannot be empty.');
-      }
+    if (dto.lastName) {
       this._lastName = dto.lastName;
       updated = true;
     }
 
-    if (dto.imageUrl !== undefined) {
+    if (dto.email) {
+      this._email = dto.email;
+      updated = true;
+    }
+
+    if (dto.roles && dto.roles.length > 0) {
+      this._roles = dto.roles;
+      updated = true;
+    }
+
+    if (dto.imageUrl) {
       this._imageUrl = dto.imageUrl;
       updated = true;
     }
 
-    if (dto.bio !== undefined) {
+    if (dto.bio) {
       this._bio = dto.bio;
       updated = true;
     }
 
-    if (dto.socialLinks !== undefined) {
+    if (dto.socialLinks) {
       this._socialLinks = dto.socialLinks;
       updated = true;
     }

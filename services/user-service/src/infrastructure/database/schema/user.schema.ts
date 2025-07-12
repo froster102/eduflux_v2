@@ -5,6 +5,7 @@ export interface IMongoUser extends Document {
   _id: Schema.Types.ObjectId | string;
   firstName: string;
   lastName: string;
+  email: string;
   roles: Role[];
   imageUrl?: string;
   bio?: string;
@@ -41,6 +42,7 @@ export const UserSchema = new Schema<IMongoUser>(
     lastName: {
       type: String,
     },
+    email: { type: String },
     imageUrl: {
       type: String,
     },
