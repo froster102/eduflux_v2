@@ -9,6 +9,7 @@ import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { v4 as uuidV4 } from 'uuid';
 import { imageConfig } from '@/shared/config/image.config';
+import { ConflictException } from '../exceptions/conflict.exception';
 
 export interface CreateEnrollmentDto {
   userId: string;
@@ -47,6 +48,22 @@ export class CreateEnrollmentUseCase
 
     if (!course || course.status !== 'published') {
       throw new NotFoundException('Course not found.');
+    }
+
+    const existingEnrollment =
+      await this.enrollmentRepository.findUserEnrollmentForCourse(
+        user.id,
+        course.id,
+      );
+
+    if (existingEnrollment && existingEnrollment.status === 'PENDING') {
+      throw new ConflictException(
+        `Enrollment already exists.Please wait sometime to complete processing.`,
+      );
+    }
+
+    if (existingEnrollment && existingEnrollment.status === 'COMPLETED') {
+      throw new ConflictException(`Enrollment already exists.`);
     }
 
     const enrollment = Enrollment.create({ id: uuidV4(), courseId, userId });
