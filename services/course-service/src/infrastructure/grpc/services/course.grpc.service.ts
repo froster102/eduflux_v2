@@ -60,14 +60,14 @@ export class GrpcCourseService implements CourseServiceServer {
           error instanceof DomainException
         ) {
           const serviceError = {
-            name: 'UserServiceError',
+            name: 'CourseServiceError',
             code: getGrpcStatusCode(error.code),
             message: error.message,
           };
           callback(serviceError, null);
         } else {
           const serviceError = {
-            name: 'UserServiceError',
+            name: 'CourseServiceError',
             code: status.INTERNAL,
             message: 'Failed to process request to create user profile',
           };
