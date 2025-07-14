@@ -92,7 +92,7 @@ export default function Sidebar({
         </CardFooter>
       </Card>
 
-      <div className="lg:hidden lg:px-4 fixed top-0 left-0 z-50 w-full py-2">
+      <div className="lg:hidden lg:px-4 fixed top-0 left-0 z-50 w-full py-2 px-4">
         <Card
           disableRipple
           isPressable
