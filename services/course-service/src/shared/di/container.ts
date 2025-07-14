@@ -57,7 +57,7 @@ import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instruct
 import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-published-courses.use-case';
 import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';
 import { GetPublishedCourseCurriculumUseCase } from '@/application/use-cases/get-published-course-curriculum';
-import { GrpcCourseService } from '@/infrastructure/grpc/services/course.service';
+import { GrpcCourseService } from '@/infrastructure/grpc/services/course.grpc.service';
 
 const container = new Container();
 
