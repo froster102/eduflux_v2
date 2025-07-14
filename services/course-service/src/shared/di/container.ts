@@ -26,7 +26,7 @@ import { MongoAssetRepository } from '@/infrastructure/database/repositories/ass
 import { CompleteAssetUploadUseCase } from '@/application/use-cases/complete-asset-upload.use-case';
 import { AdminRoutes } from '@/interface/routes/admin.route';
 import { LearnerRoutes } from '@/interface/routes/learner.routes';
-import { InstructorRoutes } from '@/interface/routes/instructor.routes';
+import { InstructorRoutes } from '@/interface/routes/course.routes';
 import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use-case';
 import { DeleteChapterUseCase } from '@/application/use-cases/delete-chapter.use-case';
 import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
@@ -52,7 +52,7 @@ import { CategoryMapper } from '@/infrastructure/mappers/category.mapper';
 import { ICategoryRepository } from '@/domain/repositories/category.repository';
 import { MongoCategoryRepository } from '@/infrastructure/database/repositories/category.repository';
 import { GetCourseCategoriesUseCase } from '@/application/use-cases/get-course-categories.use-case';
-import { CourseRoutes } from '@/interface/routes/course.routes';
+import { CourseRoutes } from '@/interface/routes/user.routes';
 import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
 import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-published-courses.use-case';
 import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';

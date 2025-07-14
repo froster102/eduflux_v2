@@ -6,9 +6,9 @@ import { container } from '@/shared/di/container';
 import { COURSE_SERVICE } from '@/shared/constants/services';
 import { AdminRoutes } from '@/interface/routes/admin.route';
 import { TYPES } from '@/shared/di/types';
-import { InstructorRoutes } from '@/interface/routes/instructor.routes';
+import { InstructorRoutes } from '@/interface/routes/course.routes';
 import { LearnerRoutes } from '@/interface/routes/learner.routes';
-import { CourseRoutes } from '@/interface/routes/course.routes';
+import { CourseRoutes } from '@/interface/routes/user.routes';
 
 export class Server {
   private app: Elysia;
