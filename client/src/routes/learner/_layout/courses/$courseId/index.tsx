@@ -1,4 +1,3 @@
-import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Skeleton } from "@heroui/skeleton";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
@@ -8,6 +7,8 @@ import { Button } from "@heroui/button";
 import React from "react";
 import { Avatar } from "@heroui/avatar";
 import { addToast } from "@heroui/toast";
+import { Divider } from "@heroui/divider";
+import { VideoIcon } from "lucide-react";
 
 import CourseIcon from "@/assets/icons/CourseIcon";
 import { IMAGE_BASE_URL } from "@/config/image";
@@ -20,6 +21,8 @@ import {
   useGetCourseInfo,
   useGetPublishedCourseCurriculum,
 } from "@/features/learner/courses/hooks/queries";
+import MessageIcon from "@/assets/icons/MessageIcon";
+import NoteIcon from "@/assets/icons/NoteIcon";
 
 export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -29,11 +32,11 @@ function RouteComponent() {
   const { courseId } = Route.useParams();
   const { data: courseInfo, isLoading: isCourseInfoLoading } =
     useGetCourseInfo(courseId);
-  const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
+  let { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetPublishedCourseCurriculum(courseId);
-  const { data: instructorProfile, isLoading: isInstructorProfileLoading } =
+  let { data: instructorProfile, isLoading: isInstructorProfileLoading } =
     useGetInstructorProfile(courseInfo?.instructor.id!);
-  const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
+  let [openPreviewModal, setOpenPreviewModal] = React.useState(false);
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
   const enrollForCourse = useEnrollForCourse();
@@ -43,6 +46,28 @@ function RouteComponent() {
       (courseInfo && courseInfo.description) as string,
     ),
   };
+
+  const curriculumItemsLength: {
+    totalChapters: number;
+    totalLectures: number;
+  } = React.useMemo(() => {
+    if (isCourseCurriculumLoading || !courseCurriculum) {
+      return { totalChapters: 0, totalLectures: 0 };
+    }
+
+    return courseCurriculum.reduce(
+      (acc, el) => {
+        if (el._class === "chapter") {
+          acc.totalChapters++;
+        } else if (el._class === "lecture") {
+          acc.totalLectures++;
+        }
+
+        return acc;
+      },
+      { totalChapters: 0, totalLectures: 0 },
+    );
+  }, [isCourseCurriculumLoading, courseCurriculum]);
 
   const previewLectures: Lecture[] = React.useMemo(() => {
     if (isCourseCurriculumLoading || !courseCurriculum) {
@@ -80,21 +105,112 @@ function RouteComponent() {
 
   return (
     <>
-      <div>
-        <p className="text-3xl font-bold">Courses</p>
-        <small className="text-sm text-default-500">
-          Below is the information about the course
-        </small>
-      </div>
-      <div className="py-4">
-        <Divider />
-      </div>
-      <div className="flex flex-col lg:flex-row gap-4 w-full">
-        <Card>
-          <div className="relative h-[60vh] w-full">
+      <div className="flex flex-col lg:flex-row gap-4 w-full pt-4">
+        <Card className="bg-transparent flex flex-col gap-4" shadow="none">
+          {isCourseInfoLoading ? (
+            <Skeleton className="h-[40vh] rounded-lg">course info</Skeleton>
+          ) : (
+            <div className="py-4">
+              <p className="text-2xl font-semibold">{courseInfo?.title}</p>
+              <div dangerouslySetInnerHTML={descriptionHtml} className="pt-2" />
+            </div>
+          )}
+          {isCourseCurriculumLoading ? (
+            <Skeleton className="rounded-lg h-[50vh] w-full">
+              Course curriculum
+            </Skeleton>
+          ) : (
+            <div className="w-full">
+              <p className="text-xl font-semibold">Course Curriculum</p>
+              <Skeleton isLoaded={!isCourseCurriculumLoading}>
+                <div className="pt-2">
+                  <Card
+                    className="bg-transparent border border-default-200"
+                    shadow="sm"
+                  >
+                    <CardBody>
+                      {courseCurriculum &&
+                        courseCurriculum.map((curriculum, index) => (
+                          <div
+                            key={curriculum.id}
+                            className={`capitalize py-2  ${curriculum._class === "lecture" ? "pl-8" : "pl-4"}  ${curriculum._class === "chapter" && index !== 0 ? "border-t border-secondary-100 pt-4 mt-4" : ""} `}
+                          >
+                            {curriculum._class === "chapter" ? (
+                              <p className="font-bold text-lg">
+                                {`${curriculum._class} ${curriculum.objectIndex}: ${curriculum.title}`}
+                              </p>
+                            ) : (
+                              <div className="flex items-center gap-3">
+                                <div className="flex items-center justify-center bg-primary text-black h-6 w-6 text-sm rounded-full flex-shrink-0">
+                                  {curriculum.objectIndex}
+                                </div>
+                                <CourseIcon
+                                  className="flex-shrink-0"
+                                  width={14}
+                                />
+                                <p className="flex-grow">{curriculum.title}</p>
+                                {curriculum._class === "lecture" &&
+                                curriculum.preview ? (
+                                  <Button
+                                    className="bg-transparent flex text-xs items-center gap-2"
+                                    size="sm"
+                                    onPress={() =>
+                                      handleLecturePreview(curriculum)
+                                    }
+                                  >
+                                    <span>
+                                      <PlayIcon width={12} />
+                                    </span>{" "}
+                                    Preview{" "}
+                                  </Button>
+                                ) : null}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                    </CardBody>
+                  </Card>
+                </div>
+              </Skeleton>
+            </div>
+          )}
+
+          {isInstructorProfileLoading ? (
+            <Skeleton className="w-full h-[40vh] rounded-md">
+              Instructor Profile
+            </Skeleton>
+          ) : (
+            <Card className="w-full h-fit bg-background border border-default-200">
+              <CardHeader className="text-lg font-medium flex pb-0">
+                <div>
+                  <p>Instructor</p>
+                  <div className="flex items-center gap-2 py-2">
+                    <Avatar
+                      isBordered
+                      radius="full"
+                      size="md"
+                      src={instructorProfile?.imageUrl}
+                    />
+                    <p className="text-xl font-semibold">
+                      {instructorProfile?.firstName}{" "}
+                      {instructorProfile?.lastName}
+                    </p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardBody className="pt-0">
+                <p className="text-sm">{instructorProfile?.bio}</p>
+              </CardBody>
+              <CardFooter className="pt-0">
+                <Button color="primary">Learn more..</Button>
+              </CardFooter>
+            </Card>
+          )}
+        </Card>
+        <Card className="max-w-sm w-full h-fit bg-background border border-default-200">
+          <CardBody className="flex flex-col w-full gap-4">
             <Image
-              className="w-full h-full object-cover"
-              height={500}
+              className="w-full object-cover"
               isLoading={isCourseInfoLoading}
               src={
                 !isCourseInfoLoading
@@ -103,107 +219,29 @@ function RouteComponent() {
               }
               width="100%"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black to-black/70 z-10" />
-            <div className="absolute inset-0 container mx-auto px-4 flex flex-col py-2 justify-end pb-12 z-20">
-              <Card className="max-w-xs h-fit ml-auto bg-secondary-600">
-                <CardHeader className="text-lg font-semibold pb-0">
-                  Enroll for this course now
-                </CardHeader>
-                <CardBody className="py-2 pt-0">
-                  <p className="text-xl font-semibold">$ {courseInfo?.price}</p>
-                  <Button color="primary" onPress={handleEnrollForCourse}>
-                    Enroll
-                  </Button>
-                </CardBody>
-              </Card>
+            <p className="text-4xl font-semibold">${courseInfo?.price}</p>
+            <Button color="primary" onPress={handleEnrollForCourse}>
+              Buy course now
+            </Button>
+            <Button startContent={<MessageIcon />} variant="bordered">
+              Send a message to instructor
+            </Button>
+            <Divider />
+            <div>
+              <p className="font-semibold">This course includes:</p>
+              <ul className="text-default-600">
+                <li className="flex gap-2 items-center">
+                  <NoteIcon width={18} />
+                  {courseCurriculum?.length} Modules
+                </li>
+                <li className="flex gap-2 items-center">
+                  <VideoIcon width={18} />
+                  {curriculumItemsLength.totalLectures} Video lessons
+                </li>
+              </ul>
             </div>
-          </div>
-
-          <div className="py-4">
-            <p className="text-xl font-semibold">What is this course about </p>
-            <div dangerouslySetInnerHTML={descriptionHtml} className="pt-2" />
-          </div>
-          <div>
-            <p className="text-xl font-semibold">Course Curriculum</p>
-            <Skeleton isLoaded={!isCourseCurriculumLoading}>
-              <div className="pt-2">
-                <Card className="bg-secondary-600" shadow="sm">
-                  <CardBody>
-                    {courseCurriculum &&
-                      courseCurriculum.map((curriculum, index) => (
-                        <div
-                          key={curriculum.id}
-                          className={`capitalize py-2  ${curriculum._class === "lecture" ? "pl-8" : "pl-4"}  ${curriculum._class === "chapter" && index !== 0 ? "border-t border-secondary-100 pt-4 mt-4" : ""} `}
-                        >
-                          {curriculum._class === "chapter" ? (
-                            <p className="font-bold text-lg">
-                              {`${curriculum._class} ${curriculum.objectIndex}: ${curriculum.title}`}
-                            </p>
-                          ) : (
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center justify-center bg-secondary-500 h-6 w-6 text-sm rounded-full flex-shrink-0">
-                                {curriculum.objectIndex}
-                              </div>
-                              <CourseIcon
-                                className="flex-shrink-0"
-                                width={14}
-                              />
-                              <p className="flex-grow">{curriculum.title}</p>
-                              {curriculum._class === "lecture" &&
-                              curriculum.preview ? (
-                                <Button
-                                  className="bg-transparent flex text-xs items-center gap-2"
-                                  size="sm"
-                                  onPress={() =>
-                                    handleLecturePreview(curriculum)
-                                  }
-                                >
-                                  <span>
-                                    <PlayIcon width={12} />
-                                  </span>{" "}
-                                  Preview{" "}
-                                </Button>
-                              ) : null}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                  </CardBody>
-                </Card>
-              </div>
-            </Skeleton>
-          </div>
+          </CardBody>
         </Card>
-        {isInstructorProfileLoading ? (
-          <Skeleton className="w-full lg:max-w-lg h-[40vh] rounded-md">
-            Instructor Profile
-          </Skeleton>
-        ) : (
-          <Card className="w-full h-fit bg-secondary-600 lg:max-w-lg">
-            <CardHeader className="text-lg font-medium flex pb-0">
-              <div>
-                <p>Instructor</p>
-                <div className="flex items-center gap-2 py-2">
-                  <Avatar
-                    isBordered
-                    radius="full"
-                    size="md"
-                    src={instructorProfile?.imageUrl}
-                  />
-                  <p className="text-xl font-semibold">
-                    {instructorProfile?.firstName} {instructorProfile?.lastName}
-                  </p>
-                </div>
-              </div>
-            </CardHeader>
-            <CardBody className="pt-0">
-              <p className="text-sm">{instructorProfile?.bio}</p>
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button color="primary">Learn more..</Button>
-            </CardFooter>
-          </Card>
-        )}
       </div>
 
       {!isCourseInfoLoading && (

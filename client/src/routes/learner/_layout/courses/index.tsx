@@ -1,14 +1,11 @@
-import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 import { Spinner } from "@heroui/spinner";
-import { Input } from "@heroui/input";
 import { Tab, Tabs } from "@heroui/tabs";
 import { Pagination } from "@heroui/pagination";
 import { Button } from "@heroui/button";
 
 import { useGetCourses } from "@/features/learner/courses/hooks/queries";
-import { SearchIcon } from "@/components/Icons";
 import CourseCard from "@/components/CourseCard";
 
 export const Route = createFileRoute("/learner/_layout/courses/")({
@@ -32,23 +29,6 @@ function RouteComponent() {
   return (
     <div className="w-full">
       <div>
-        <p className="text-3xl font-bold">Courses</p>
-        <small className="text-sm text-default-500">
-          Below are the list of the courses
-        </small>
-      </div>
-      <div className="py-4">
-        <Divider />
-      </div>
-      <div>
-        <Input
-          isClearable
-          className="w-full max-w-md"
-          color="default"
-          placeholder={`Search`}
-          startContent={<SearchIcon />}
-          // onValueChange={debouncedSetSearchQuery}
-        />
         <Tabs
           key={"key"}
           aria-label="Tabs variants"
@@ -66,7 +46,7 @@ function RouteComponent() {
           </div>
         ) : (
           <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {data?.courses.map((course) => (
                 <CourseCard key={course.id} course={course} />
               ))}

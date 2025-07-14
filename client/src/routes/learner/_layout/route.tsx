@@ -1,5 +1,4 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { User } from "@heroui/user";
 
 import { useAuthStore } from "@/store/auth-store";
 import RoleSwitcher from "@/components/RoleSwitcher";
@@ -19,9 +18,12 @@ function Layout() {
 
   const topContent = (
     <>
-      <div className="flex justify-between w-full px-2">
+      {/* <div className="flex justify-between w-full px-2">
         <User className="text-default-500" name={user && user.name} />
-        {/* <Notifications /> */}
+        <Notifications />
+      </div> */}
+      <div className="flex justify-center w-full px-2">
+        <p className="font-semibold text-2xl ">Eduflux</p>
       </div>
       <RoleSwitcher />
     </>

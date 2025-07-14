@@ -45,7 +45,7 @@ export default function Sidebar({
 
   return (
     <>
-      <Card className="hidden lg:flex max-w-52 w-full h-full dark:bg-secondary-700 bg-secondary-500">
+      <Card className="hidden lg:flex max-w-52 w-full h-full bg-primary-500/10 text-primary border border-default-200">
         <CardHeader className="relative">
           <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" />
           <div className="w-full">{topContent}</div>
@@ -55,12 +55,14 @@ export default function Sidebar({
             {navItems.map((item, i) => (
               <Link
                 key={i}
-                className="text-zinc-900"
                 to={item.path}
                 onClick={() => setSelected(item.label)}
               >
                 <Card
-                  className={`text-base font-medium transition-colors text-default-600  ${selected === item.label ? "bg-secondary-600" : "bg-transparent"} hover:bg-secondary-600`}
+                  className={`text-base
+                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"} 
+                     hover:bg-black/60 hover:text-black
+                     dark:hover:bg-primary/60 dark:hover:text-black`}
                   shadow="none"
                 >
                   <CardHeader className="flex gap-2 text-nowrap">

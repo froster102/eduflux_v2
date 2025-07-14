@@ -40,6 +40,7 @@ declare global {
     instructor: { id: string; name: string };
     averageRating: number;
     ratingCount: number;
+    enrollmentCount: number;
     publishedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;

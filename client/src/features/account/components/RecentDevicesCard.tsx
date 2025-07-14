@@ -36,7 +36,11 @@ export default function RecentDevicesCard({
 
   return (
     <>
-      <Card className="bg-background" radius="sm" shadow="sm">
+      <Card
+        className="bg-background border border-default-200"
+        radius="sm"
+        shadow="sm"
+      >
         <CardHeader>
           <p className="font-medium">Recent Devices</p>
         </CardHeader>
@@ -47,11 +51,7 @@ export default function RecentDevicesCard({
 
             return (
               <div key={session.id} className="pt-2">
-                <Card
-                  className="bg-zinc-200 dark:bg-secondary border-zinc-100"
-                  radius="sm"
-                  shadow="sm"
-                >
+                <Card radius="sm" shadow="sm">
                   <CardBody className="p-2">
                     <div className="flex">
                       <div className="flex items-center gap-2">

@@ -26,10 +26,6 @@ export default function PreviewLectureModal({
   return (
     <Modal
       backdrop="blur"
-      className="dark:bg-secondary-700 bg-secondary-400"
-      classNames={{
-        backdrop: "bg-secondary-600/10",
-      }}
       isOpen={isOpen}
       placement="top-center"
       scrollBehavior="inside"
@@ -59,7 +55,7 @@ export default function PreviewLectureModal({
                 <Card
                   key={lecture.id}
                   isPressable
-                  className=" bg-secondary-600"
+                  className=" bg-background"
                   shadow="sm"
                   onPress={() => setActivePreviewLecture(lecture)}
                 >

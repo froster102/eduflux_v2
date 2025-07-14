@@ -43,7 +43,11 @@ export default function PasswordForm({
   };
 
   return (
-    <Card className="bg-background w-full h-fit p-2" radius="sm" shadow="sm">
+    <Card
+      className="bg-background w-full h-fit p-2 border border-default-200"
+      radius="sm"
+      shadow="sm"
+    >
       <CardHeader>
         <p className="font-medium">Update Password</p>
       </CardHeader>

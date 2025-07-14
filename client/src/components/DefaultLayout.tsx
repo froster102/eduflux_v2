@@ -1,8 +1,9 @@
 import React from "react";
-import { Card, CardBody } from "@heroui/card";
 
 import ConfirmationModal from "./ConfirmationModal";
 import Sidebar from "./Sidebar";
+
+import Header from "@/features/components/Header";
 
 export default function DefaultLayout({
   navItems,
@@ -22,13 +23,12 @@ export default function DefaultLayout({
 
   return (
     <>
-      <div className="p-4 lg:p-2 h-full">
+      <div className="p-4 lg:p-6 h-dvh">
         <div className="lg:flex gap-4 w-full h-full">
           <Sidebar navItems={navItems} topContent={topContent} />
-          <div className="pt-16 lg:pt-0 w-full h-full">
-            <Card className="dark:bg-secondary-700 bg-secondary-500 w-full h-full">
-              <CardBody>{children}</CardBody>
-            </Card>
+          <div className="pt-16 lg:pt-0 w-full h-full flex-1 overflow-y-auto scrollbar-hide">
+            <Header />
+            {children}
           </div>
         </div>
       </div>

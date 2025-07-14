@@ -40,7 +40,11 @@ export default function Account() {
 
   const latestSession = React.useMemo(() => {
     if (sessions) {
-      return [...sessions].sort((a, b) => b.createdAt - a.createdAt)[0];
+      return [...sessions].sort(
+        (a, b) =>
+          (b.createdAt as unknown as number) -
+          (a.createdAt as unknown as number),
+      )[0];
     }
 
     return null;
@@ -48,14 +52,6 @@ export default function Account() {
 
   return (
     <>
-      <div className="flex justify-between items-center">
-        <div>
-          <p className="text-2xl font-bold">Account</p>
-          <small className="text-default-500 text-sm">
-            Your account details have been given below
-          </small>
-        </div>
-      </div>
       <Divider className="mt-4" orientation="horizontal" />
       <div
         className="md:flex w-full gap-4 pt-4 px-0 md:px-4 lg:px-14 overflow-x-scroll scrollbar-hide scroll-smooth"

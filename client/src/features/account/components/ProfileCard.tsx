@@ -18,7 +18,11 @@ export default function ProfileCard({
   lastLogin,
 }: ProfileCardProps) {
   return (
-    <Card className="bg-background " radius="sm" shadow="sm">
+    <Card
+      className="bg-background border border-default-200"
+      radius="sm"
+      shadow="sm"
+    >
       <CardHeader>
         <User
           avatarProps={{

@@ -34,7 +34,11 @@ export default function ProfileForm({
   };
 
   return (
-    <Card className="bg-background w-full h-fit p-2" radius="sm" shadow="sm">
+    <Card
+      className="bg-background border border-default-200 w-full h-fit p-2"
+      radius="sm"
+      shadow="sm"
+    >
       <CardHeader className="flex justify-between">
         <p className="font-medium">Profile</p>
         {action === "view" && (

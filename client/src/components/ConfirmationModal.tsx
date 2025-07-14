@@ -33,10 +33,6 @@ export default function ConfirmationModal({
   return (
     <Modal
       backdrop="blur"
-      classNames={{
-        base: `dark:bg-secondary-600 bg-secondary-500`,
-        backdrop: "dark:bg-secondary-600/10",
-      }}
       isOpen={isOpen}
       onClose={onClose}
       onOpenChange={onClose}
