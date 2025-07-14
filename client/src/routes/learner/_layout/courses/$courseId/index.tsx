@@ -89,7 +89,7 @@ function RouteComponent() {
       <div className="py-4">
         <Divider />
       </div>
-      <div className="flex flex-col md:flex-row gap-4 w-full">
+      <div className="flex flex-col lg:flex-row gap-4 w-full">
         <Card>
           <div className="relative h-[60vh] w-full">
             <Image
@@ -174,11 +174,12 @@ function RouteComponent() {
             </Skeleton>
           </div>
         </Card>
-        <Skeleton
-          className="w-full max-w-lg"
-          isLoaded={!isInstructorProfileLoading}
-        >
-          <Card className="max-w-lg w-full h-fit bg-secondary-600">
+        {isInstructorProfileLoading ? (
+          <Skeleton className="w-full lg:max-w-lg h-[40vh] rounded-md">
+            Instructor Profile
+          </Skeleton>
+        ) : (
+          <Card className="w-full h-fit bg-secondary-600 lg:max-w-lg">
             <CardHeader className="text-lg font-medium flex pb-0">
               <div>
                 <p>Instructor</p>
@@ -202,7 +203,7 @@ function RouteComponent() {
               <Button color="primary">Learn more..</Button>
             </CardFooter>
           </Card>
-        </Skeleton>
+        )}
       </div>
 
       {!isCourseInfoLoading && (
