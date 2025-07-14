@@ -6,7 +6,7 @@ export async function getInstructorCourses(
 ): Promise<{ courses: Course[]; total: number }> {
   const params = buildQueryUrlParams(paginationQueryParams);
 
-  const response = await api.get(`/courses/me/taught-courses${params}`);
+  const response = await api.get(`/users/me/taught-courses${params}`);
 
   return response.data;
 }

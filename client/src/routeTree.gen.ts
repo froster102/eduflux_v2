@@ -29,6 +29,7 @@ import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instr
 import { Route as InstructorLayoutAccountIndexRouteImport } from './routes/instructor/_layout/account/index'
 import { Route as LearnerLayoutCoursesCourseIdIndexRouteImport } from './routes/learner/_layout/courses/$courseId/index'
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
+import { Route as LearnerLayoutCoursesCourseIdLearnIndexRouteImport } from './routes/learner/_layout/courses/$courseId/learn/index'
 
 const LearnerRouteImport = createFileRoute('/learner')()
 const InstructorRouteImport = createFileRoute('/instructor')()
@@ -137,6 +138,12 @@ const InstructorLayoutCoursesCourseIdManageRoute =
     path: '/courses/$courseId/manage',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
+const LearnerLayoutCoursesCourseIdLearnIndexRoute =
+  LearnerLayoutCoursesCourseIdLearnIndexRouteImport.update({
+    id: '/courses/$courseId/learn/',
+    path: '/courses/$courseId/learn/',
+    getParentRoute: () => LearnerLayoutRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/learner/courses/$courseId': typeof LearnerLayoutCoursesCourseIdIndexRoute
+  '/learner/courses/$courseId/learn': typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,6 +182,7 @@ export interface FileRoutesByTo {
   '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/learner/courses/$courseId': typeof LearnerLayoutCoursesCourseIdIndexRoute
+  '/learner/courses/$courseId/learn': typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,6 +206,7 @@ export interface FileRoutesById {
   '/learner/_layout/courses/': typeof LearnerLayoutCoursesIndexRoute
   '/instructor/_layout/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/learner/_layout/courses/$courseId/': typeof LearnerLayoutCoursesCourseIdIndexRoute
+  '/learner/_layout/courses/$courseId/learn/': typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -219,6 +229,7 @@ export interface FileRouteTypes {
     | '/learner/courses'
     | '/instructor/courses/$courseId/manage'
     | '/learner/courses/$courseId'
+    | '/learner/courses/$courseId/learn'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/learner/courses'
     | '/instructor/courses/$courseId/manage'
     | '/learner/courses/$courseId'
+    | '/learner/courses/$courseId/learn'
   id:
     | '__root__'
     | '/'
@@ -258,6 +270,7 @@ export interface FileRouteTypes {
     | '/learner/_layout/courses/'
     | '/instructor/_layout/courses/$courseId/manage'
     | '/learner/_layout/courses/$courseId/'
+    | '/learner/_layout/courses/$courseId/learn/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -409,6 +422,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutCoursesCourseIdManageRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
+    '/learner/_layout/courses/$courseId/learn/': {
+      id: '/learner/_layout/courses/$courseId/learn/'
+      path: '/courses/$courseId/learn'
+      fullPath: '/learner/courses/$courseId/learn'
+      preLoaderRoute: typeof LearnerLayoutCoursesCourseIdLearnIndexRouteImport
+      parentRoute: typeof LearnerLayoutRouteRoute
+    }
   }
 }
 
@@ -471,6 +491,7 @@ interface LearnerLayoutRouteRouteChildren {
   LearnerLayoutAccountIndexRoute: typeof LearnerLayoutAccountIndexRoute
   LearnerLayoutCoursesIndexRoute: typeof LearnerLayoutCoursesIndexRoute
   LearnerLayoutCoursesCourseIdIndexRoute: typeof LearnerLayoutCoursesCourseIdIndexRoute
+  LearnerLayoutCoursesCourseIdLearnIndexRoute: typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
 }
 
 const LearnerLayoutRouteRouteChildren: LearnerLayoutRouteRouteChildren = {
@@ -479,6 +500,8 @@ const LearnerLayoutRouteRouteChildren: LearnerLayoutRouteRouteChildren = {
   LearnerLayoutCoursesIndexRoute: LearnerLayoutCoursesIndexRoute,
   LearnerLayoutCoursesCourseIdIndexRoute:
     LearnerLayoutCoursesCourseIdIndexRoute,
+  LearnerLayoutCoursesCourseIdLearnIndexRoute:
+    LearnerLayoutCoursesCourseIdLearnIndexRoute,
 }
 
 const LearnerLayoutRouteRouteWithChildren =
