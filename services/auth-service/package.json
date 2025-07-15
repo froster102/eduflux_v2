@@ -4,7 +4,8 @@
   "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun --watch src/main.ts & bun run tsc --watch",
+    "type:check": "bun run tsc --watch",
+    "dev": "bun --watch src/main.ts",
     "start": "bun src/main.ts"
   },
   "keywords": [],
