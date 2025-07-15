@@ -80,7 +80,7 @@ export default function Sidebar({
               {bottomContent}
               <Card
                 isPressable
-                className={`text-base font-medium transition-colors text-default-600 bg-transparent hover:bg-secondary-600 w-full`}
+                className={`text-base font-medium transition-colors text-default-600 bg-transparent hover:bg-primary/60 hover:text-black w-full`}
                 shadow="none"
                 onPress={() => setOpenLogoutConfirmation(true)}
               >
