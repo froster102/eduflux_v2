@@ -44,16 +44,12 @@ function Manage() {
     });
   }
 
+  function onPublishHandler() {
+    publishCourse.mutate(courseId);
+  }
+
   return (
     <div className="h-full">
-      {/* <Button
-        color="primary"
-        isDisabled={publishCourse.isPending}
-        isLoading={publishCourse.isPending}
-        onPress={() => publishCourse.mutate(courseId)}
-      >
-        Publish
-      </Button> */}
       <div className="py-4">
         <Divider />
       </div>
@@ -77,6 +73,9 @@ function Manage() {
                       }
                     : {}
                 }
+                isPublished={courseInfo?.status === "published"}
+                isPublishing={publishCourse.isPending}
+                onPublishHandler={onPublishHandler}
                 onSubmitHandler={onSubmitHandler}
               />
             )}

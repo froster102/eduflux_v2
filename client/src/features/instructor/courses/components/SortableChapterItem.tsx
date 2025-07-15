@@ -26,9 +26,7 @@ export default function SortableChapterItem({
     <>
       <SortableItem id={chapter.id}>
         <Card
-          className={`bg-secondary-600 ${
-            isFirstItem ? "mt-4" : ""
-          } rounded-t-lg rounded-b-none"
+          className={` ${isFirstItem ? "mt-4" : ""} rounded-t-lg rounded-b-none"
         }`}
           shadow="none"
         >
@@ -37,6 +35,9 @@ export default function SortableChapterItem({
               <CardBody>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
+                    <div className="px-2 opacity-0 invisible  transition-opacity duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
+                      <DragIcon width={24} />
+                    </div>
                     <p>
                       <span className="font-semibold">
                         Chapter {chapter.objectIndex}:
@@ -67,9 +68,6 @@ export default function SortableChapterItem({
                         <DeleteIcon width={14} />
                       </Button>
                     </div>
-                  </div>
-                  <div className="px-2 opacity-0 invisible  transition-opacity duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
-                    <DragIcon width={24} />
                   </div>
                 </div>
               </CardBody>

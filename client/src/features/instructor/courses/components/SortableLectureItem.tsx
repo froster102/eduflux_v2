@@ -31,6 +31,9 @@ export default function SortableLectureItem({
         <CardBody className="border border-default-200 rounded-lg">
           <div className="flex justify-between">
             <div className="flex items-center justify-between">
+              <div className="px-2 opacity-0 invisible  transition-opacity duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
+                <DragIcon width={24} />
+              </div>
               <p>
                 <span className="font-semibold capitalize">
                   {lecture._class} {lecture.objectIndex}:
@@ -76,16 +79,13 @@ export default function SortableLectureItem({
                   Content
                 </Button>
               )}
-              <div className="px-2 opacity-0 invisible  transition-opacity duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
-                <DragIcon width={24} />
-              </div>
             </div>
           </div>
         </CardBody>
         <div className="py-2">
           {isLastItemInChapter && (
             <Button
-              color="secondary"
+              color="primary"
               size="sm"
               onPress={() => {
                 onAddLecture(index);

@@ -16,7 +16,7 @@ export default function FormModal({
   return (
     <Modal
       backdrop="blur"
-      className="dark:bg-secondary-700 bg-secondary-400"
+      className="bg-background"
       classNames={{
         backdrop: "bg-secondary-600/10",
       }}

@@ -295,7 +295,7 @@ export default function DroppableCurriculumItems({
 
                     <SortableItem id={item.id}>
                       <Card
-                        className={`bg-secondary-600 ${
+                        className={` ${
                           i !== 0 && isChapter ? "mt-4" : ""
                         } ${isChapter ? "rounded-t-lg rounded-b-none" : "rounded-none"} ${
                           isLastItemInChapter ? "rounded-b-lg" : ""
@@ -333,7 +333,7 @@ export default function DroppableCurriculumItems({
 
               <div className="pt-4">
                 <Button
-                  color="secondary"
+                  color="primary"
                   size="sm"
                   onPress={() => {
                     setOpenChapterFormModal({ mode: "create", isOpen: true });
@@ -347,7 +347,7 @@ export default function DroppableCurriculumItems({
           </SortableContext>
           <DragOverlay>
             {activeId && activeItem ? (
-              <Card className={`bg-secondary-600`} shadow="md">
+              <Card shadow="md">
                 <CardBody>
                   <p>
                     <span className="font-semibold capitalize">

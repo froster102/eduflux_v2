@@ -18,8 +18,14 @@ import { IMAGE_BASE_URL } from "@/config/image";
 export default function CourseForm({
   onSubmitHandler,
   initialValues,
+  onPublishHandler,
+  isPublishing,
+  isPublished,
 }: DefaultFormProps<UpdateCourseFormData> & {
   initialValues: Partial<UpdateCourseFormData>;
+  onPublishHandler: () => void;
+  isPublishing: boolean;
+  isPublished: boolean;
 }) {
   const {
     handleSubmit,
@@ -168,6 +174,16 @@ export default function CourseForm({
         <Button color="primary" isDisabled={!isDirty} type="submit">
           Save
         </Button>
+        {!isPublished && (
+          <Button
+            color="primary"
+            isDisabled={isPublishing}
+            isLoading={isPublishing}
+            onPress={onPublishHandler}
+          >
+            Publish
+          </Button>
+        )}
       </div>
     </Form>
   );
