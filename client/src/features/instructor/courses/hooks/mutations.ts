@@ -62,10 +62,10 @@ export function useUpdateChapter() {
 export function useDeleteChapter() {
   return useMutation({
     mutationFn: deleteChapter,
-    onError: () => {
+    onError: (error: AxiosError<ApiErrorResponse>) => {
       addToast({
         title: "Chapter deletion",
-        description: "Failed to delete chapter",
+        description: error.response?.data.message || "Failed to delete chapter",
         color: "danger",
       });
     },

@@ -26,6 +26,15 @@ declare global {
     url: string | File;
   };
 
+  export type CourseStatus =
+    | "draft"
+    | "published"
+    | "unpublished"
+    | "archived"
+    | "in_review"
+    | "approved"
+    | "rejected";
+
   export type Course = {
     id: string;
     title: string;
@@ -35,7 +44,7 @@ declare global {
     level: "beginner" | "intermediate" | "advanced";
     price: number;
     isFree: boolean;
-    status: Status;
+    status: CourseStatus;
     feedback: string | null;
     instructor: { id: string; name: string };
     averageRating: number;
@@ -239,6 +248,18 @@ declare global {
     onCancel?: () => void;
     mode?: "create" | "edit";
     initialValue?: TFormData;
+  };
+
+  export type ApiErrorResponse = {
+    message: string;
+    statusCode?: number;
+    code?: string;
+    details?: string | Record<string, any>;
+    errors?: Array<{
+      field?: string;
+      message: string;
+      [key: string]: any;
+    }>;
   };
 }
 

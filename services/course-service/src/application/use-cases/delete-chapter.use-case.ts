@@ -6,6 +6,7 @@ import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { IUseCase } from './interface/use-case.interface';
+import { InvalidInputException } from '../exceptions/invalid-input.exception';
 
 export interface DeleteChapterDto {
   courseId: string;
@@ -42,6 +43,16 @@ export class DeleteChapterUseCase
       throw new ForbiddenException(
         'You are not authorized modify this course.',
       );
+    }
+
+    const chapter = await this.chapterRepository.findById(chapterId);
+
+    if (!chapter) {
+      throw new NotFoundException('Chapter not found.');
+    }
+
+    if (chapter.objectIndex === 1) {
+      throw new InvalidInputException('Cannot delete the first chapter');
     }
 
     const deleted = await this.chapterRepository.deleteById(chapterId);
