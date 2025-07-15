@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { buildQueryUrlParams } from "@/utils/url";
+import { buildQueryUrlParams } from "@/utils/helpers";
 
 export async function getInstructorCourses(
   paginationQueryParams: PaginationQueryParams,

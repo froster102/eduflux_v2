@@ -19,7 +19,12 @@ import { PaymentEventsConsumer } from '@/interface/consumer/payment-events.consu
 import { CompleteEnrollmentUseCase } from '@/application/use-cases/complete-enrollment.use-case';
 import { GrpcEnrollmentService } from '@/infrastructure/grpc/services/enrollment.grpc.service';
 import { GetUserEnrollmentsUseCase } from '@/application/use-cases/get-user-enrollments.use-case';
-import { CheckUserEnrollmentUseCase } from '@/application/use-cases/check-user-enrollment.use-case';
+import {
+  CheckEnrollmentOutputDto,
+  CheckUserEnrollmentDto,
+  CheckUserEnrollmentUseCase,
+} from '@/application/use-cases/check-user-enrollment.use-case';
+import { IUseCase } from '@/application/use-cases/interface/use-case.interface';
 
 const container = new Container();
 
@@ -34,7 +39,9 @@ container
   .bind<GetUserEnrollmentsUseCase>(TYPES.GetUserEnrollmentsUseCase)
   .to(GetUserEnrollmentsUseCase);
 container
-  .bind<CheckUserEnrollmentUseCase>(TYPES.CheckUserEnrollmentUseCase)
+  .bind<
+    IUseCase<CheckUserEnrollmentDto, CheckEnrollmentOutputDto>
+  >(TYPES.CheckUserEnrollmentUseCase)
   .to(CheckUserEnrollmentUseCase);
 
 //Ports

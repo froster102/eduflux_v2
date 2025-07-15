@@ -39,6 +39,11 @@ services:
         paths:
           - /api/courses
         strip_path: false
+
+      - name: user-subscribed-courses
+        paths:
+          - /api/users/me/subscribed-courses
+        strip_path: false
         
       - name: user-taught-courses-route
         paths:

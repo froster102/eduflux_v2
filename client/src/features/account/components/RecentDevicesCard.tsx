@@ -32,8 +32,6 @@ export default function RecentDevicesCard({
     setOpenConfirmationModal(false);
   }
 
-  console.log(sessions);
-
   return (
     <>
       <Card

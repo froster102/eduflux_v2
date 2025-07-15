@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 
 import {
+  checkUserEnrollment,
   getCourseCurriculum,
   getCourseInfo,
   getCourses,
+  getSubscribedCourses,
 } from "../services/course";
+
+import { useAuthStore } from "@/store/auth-store";
 
 export function useGetCourses(paginationQueryParams: PaginationQueryParams) {
   return useQuery({
@@ -24,5 +28,30 @@ export function useGetPublishedCourseCurriculum(courseId: string) {
   return useQuery({
     queryKey: [`published-course-curriculum-${courseId}`],
     queryFn: () => getCourseCurriculum(courseId),
+  });
+}
+
+export function useGetSubsribedCourses({
+  paginationQueryParams,
+  enabled,
+}: {
+  paginationQueryParams: PaginationQueryParams;
+  enabled: boolean;
+}) {
+  const { user } = useAuthStore();
+
+  return useQuery({
+    queryKey: [`user-${user?.id}-subscribed-courses`, paginationQueryParams],
+    queryFn: () => getSubscribedCourses(paginationQueryParams),
+    enabled,
+  });
+}
+
+export function useCheckUserEnrollment(courseId: string) {
+  const { user } = useAuthStore();
+
+  return useQuery({
+    queryKey: [`user-${user?.id}-course-${courseId}-enrollment`],
+    queryFn: () => checkUserEnrollment(courseId),
   });
 }

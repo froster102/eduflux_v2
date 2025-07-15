@@ -58,6 +58,9 @@ import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-publishe
 import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';
 import { GetPublishedCourseCurriculumUseCase } from '@/application/use-cases/get-published-course-curriculum';
 import { GrpcCourseService } from '@/infrastructure/grpc/services/course.grpc.service';
+import { GetUserSubscribedCoursesUseCase } from '@/application/use-cases/get-user-subscribed-courses';
+import { IEnrollmentServiceGateway } from '@/application/ports/enrollment-service.gateway';
+import { GrpcEnrollmentServiceClient } from '@/infrastructure/grpc/client/enrollment-service-client.grpc';
 
 const container = new Container();
 
@@ -135,6 +138,9 @@ container
     TYPES.GetPublishedCourseCurriculumUseCase,
   )
   .to(GetPublishedCourseCurriculumUseCase);
+container
+  .bind<GetUserSubscribedCoursesUseCase>(TYPES.GetUserSubscribedCoursesUseCase)
+  .to(GetUserSubscribedCoursesUseCase);
 
 //Http Routes
 container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);
@@ -150,10 +156,15 @@ container
 //Ports
 container
   .bind<IUserServiceGateway>(TYPES.UserServiceGateway)
-  .to(GrpcUserServiceClient);
+  .to(GrpcUserServiceClient)
+  .inSingletonScope();
 container
   .bind<IFileStorageGateway>(TYPES.FileStorageGateway)
   .to(CloudinaryService);
+container
+  .bind<IEnrollmentServiceGateway>(TYPES.EnrollmentServiceGateway)
+  .to(GrpcEnrollmentServiceClient)
+  .inSingletonScope();
 
 //Repositories
 container

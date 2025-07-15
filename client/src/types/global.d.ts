@@ -96,6 +96,22 @@ declare global {
     message: string;
   };
 
+  export type EnrollmentStatus =
+    | "PENDING"
+    | "COMPLETED"
+    | "FAILED"
+    | "REFUNDED";
+
+  export type Enrollment = {
+    id: string;
+    userId: string;
+    courseId: string;
+    status: EnrollmentStatus;
+    paymentId: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+
   export type Session = {
     expiresAt: Date;
     token: string;

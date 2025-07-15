@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Skeleton } from "@heroui/skeleton";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import Dompurify from "dompurify";
@@ -18,6 +18,7 @@ import { useGetInstructorProfile } from "@/features/learner/hooks/queries";
 import { useEnrollForCourse } from "@/features/learner/courses/hooks/mutations";
 import { tryCatch } from "@/utils/try-catch";
 import {
+  useCheckUserEnrollment,
   useGetCourseInfo,
   useGetPublishedCourseCurriculum,
 } from "@/features/learner/courses/hooks/queries";
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
 
 function RouteComponent() {
   const { courseId } = Route.useParams();
+  const navigate = useNavigate();
   const { data: courseInfo, isLoading: isCourseInfoLoading } =
     useGetCourseInfo(courseId);
   let { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
@@ -40,6 +42,10 @@ function RouteComponent() {
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
   const enrollForCourse = useEnrollForCourse();
+  const {
+    data: userEnrollmentStatus,
+    isLoading: isUserEnrollmentStatusLoading,
+  } = useCheckUserEnrollment(courseId);
 
   const descriptionHtml = {
     __html: Dompurify.sanitize(
@@ -106,9 +112,14 @@ function RouteComponent() {
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-4 w-full pt-4">
-        <Card className="bg-transparent flex flex-col gap-4" shadow="none">
+        <Card
+          className="bg-transparent flex flex-col gap-4 w-full"
+          shadow="none"
+        >
           {isCourseInfoLoading ? (
-            <Skeleton className="h-[40vh] rounded-lg">course info</Skeleton>
+            <Skeleton className="h-[40vh] rounded-lg w-full">
+              course info
+            </Skeleton>
           ) : (
             <div className="py-4">
               <p className="text-2xl font-semibold">{courseInfo?.title}</p>
@@ -207,7 +218,7 @@ function RouteComponent() {
             </Card>
           )}
         </Card>
-        <Card className="max-w-sm w-full h-fit bg-background border border-default-200">
+        <Card className="w-full order-first lg:order-last lg:max-w-sm h-fit bg-background border border-default-200">
           <CardBody className="flex flex-col w-full gap-4">
             <Image
               className="w-full object-cover"
@@ -220,8 +231,20 @@ function RouteComponent() {
               width="100%"
             />
             <p className="text-4xl font-semibold">${courseInfo?.price}</p>
-            <Button color="primary" onPress={handleEnrollForCourse}>
-              Buy course now
+            <Button
+              color="primary"
+              isLoading={
+                isUserEnrollmentStatusLoading || enrollForCourse.isPending
+              }
+              onPress={
+                userEnrollmentStatus && userEnrollmentStatus.isEnrolled
+                  ? () => navigate({ to: `/learner/courses/${courseId}/learn` })
+                  : handleEnrollForCourse
+              }
+            >
+              {userEnrollmentStatus && userEnrollmentStatus.isEnrolled
+                ? "Got to course"
+                : "Buy course now"}
             </Button>
             <Button startContent={<MessageIcon />} variant="bordered">
               Send a message to instructor

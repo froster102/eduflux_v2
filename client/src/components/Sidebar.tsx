@@ -45,7 +45,7 @@ export default function Sidebar({
 
   return (
     <>
-      <Card className="hidden lg:flex max-w-52 w-full h-full bg-primary-500/10 text-primary border border-default-200">
+      <Card className="hidden lg:flex max-w-52 w-full h-full bg-primary/5 text-primary border border-default-200">
         <CardHeader className="relative">
           <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" />
           <div className="w-full">{topContent}</div>

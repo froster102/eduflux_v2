@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import { buildQueryUrlParams } from "@/utils/url";
+import { buildQueryUrlParams } from "@/utils/helpers";
 
 export async function getCourses(
   paginationQueryParams: PaginationQueryParams,
@@ -32,6 +32,25 @@ export async function enrollForCourse(
   courseId: string,
 ): Promise<{ checkoutUrl: string }> {
   const response = await api.post(`/enrollments/`, { courseId });
+
+  return response.data;
+}
+
+export async function getSubscribedCourses(
+  paginationQueryParams: PaginationQueryParams,
+): Promise<{ total: number; courses: Course[] }> {
+  const queryParams = buildQueryUrlParams(paginationQueryParams);
+  const response = await api.get(`/users/me/subscribed-courses${queryParams}`);
+
+  return response.data;
+}
+
+export async function checkUserEnrollment(
+  courseId: string,
+): Promise<{ isEnrolled: boolean }> {
+  const response = await api.get(
+    `/enrollments/check-enrollment?courseId=${courseId}`,
+  );
 
   return response.data;
 }

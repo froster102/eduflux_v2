@@ -54,7 +54,6 @@ export class UserRoutes {
             body: updateUserSchema,
           },
         )
-        .get('/me/subscribed-courses', () => {})
         .get(
           '/get-upload-url',
           ({ user }): HttpResponse<ISignedUploadUrlResponse> => {

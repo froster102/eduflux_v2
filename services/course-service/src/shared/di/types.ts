@@ -28,9 +28,13 @@ export const TYPES = {
   GetPublishedCourseCurriculumUseCase: Symbol.for(
     'GetPublishedCourseCurriculumUseCase',
   ),
+  GetUserSubscribedCoursesUseCase: Symbol.for(
+    'GetUserSubscribedCoursesUseCase',
+  ),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),
+  EnrollmentServiceGateway: Symbol.for('EnrollmentServiceGateway'),
   FileStorageGateway: Symbol.for('FileStorageGateway'),
 
   //Repositories

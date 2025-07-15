@@ -1,7 +1,6 @@
 import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, Tab } from "@heroui/tabs";
-import { Button } from "@heroui/button";
 import React from "react";
 
 import {
@@ -46,25 +45,15 @@ function Manage() {
   }
 
   return (
-    <div className="h-full overflow-y-scroll scrollbar-hide">
-      <div className="flex justify-between">
-        <div>
-          <p className="text-2xl font-bold">Course Setup</p>
-          <small className="text-default-500 text-sm">
-            Below you can setup your info and curriculum
-          </small>
-        </div>
-        <div className="self-end">
-          <Button
-            color="primary"
-            isDisabled={publishCourse.isPending}
-            isLoading={publishCourse.isPending}
-            onPress={() => publishCourse.mutate(courseId)}
-          >
-            Publish
-          </Button>
-        </div>
-      </div>
+    <div className="h-full">
+      {/* <Button
+        color="primary"
+        isDisabled={publishCourse.isPending}
+        isLoading={publishCourse.isPending}
+        onPress={() => publishCourse.mutate(courseId)}
+      >
+        Publish
+      </Button> */}
       <div className="py-4">
         <Divider />
       </div>
