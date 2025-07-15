@@ -10,9 +10,14 @@ export interface GetAllInstructorCoursesInput {
   paginationQueryParams: PaginationQueryParams;
 }
 
+export interface GetAllInstructorCoursesOutput {
+  courses: Course[];
+  total: number;
+}
+
 export class GetAllInstructorCoursesUseCase
   implements
-    IUseCase<GetAllInstructorCoursesInput, { courses: Course[]; total: number }>
+    IUseCase<GetAllInstructorCoursesInput, GetAllInstructorCoursesOutput>
 {
   constructor(
     @inject(TYPES.CourseRepository)

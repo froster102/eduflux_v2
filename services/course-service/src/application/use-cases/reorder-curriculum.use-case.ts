@@ -9,6 +9,7 @@ import { NotFoundException } from '../exceptions/not-found.exception';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
 import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface ReorderCurriculumDto {
   courseId: string;
@@ -21,7 +22,9 @@ export interface ReorderCurriculumInput {
 }
 
 @injectable()
-export class ReorderCurriculumUseCase {
+export class ReorderCurriculumUseCase
+  implements IUseCase<ReorderCurriculumInput, void>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

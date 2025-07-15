@@ -1,7 +1,9 @@
+import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
 import type { IFileStorageGateway } from '@/application/ports/file-storage.gateway';
-import { ApproveCourseUseCase } from '@/application/use-cases/approve-course.use-case';
-import { CompleteAssetUploadUseCase } from '@/application/use-cases/complete-asset-upload.use-case';
-import { RejectCourseUseCase } from '@/application/use-cases/reject-course.use-case';
+import { ApproveCourseInput } from '@/application/use-cases/approve-course.use-case';
+import { CompleteAssetUploadDto } from '@/application/use-cases/complete-asset-upload.use-case';
+import { RejectCourseInput } from '@/application/use-cases/reject-course.use-case';
+import { Asset } from '@/domain/entity/asset.entity';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -19,11 +21,14 @@ export class AdminRoutes {
     @inject(TYPES.FileStorageGateway)
     private readonly fileStorageGateway: IFileStorageGateway,
     @inject(TYPES.CompleteAssetUploadUseCase)
-    private readonly completeAssetUploadUseCase: CompleteAssetUploadUseCase,
+    private readonly completeAssetUploadUseCase: IUseCase<
+      CompleteAssetUploadDto,
+      Asset
+    >,
     @inject(TYPES.ApproveCourseUseCase)
-    private readonly approveCourseUseCase: ApproveCourseUseCase,
+    private readonly approveCourseUseCase: IUseCase<ApproveCourseInput, Course>,
     @inject(TYPES.RejectCourseUseCase)
-    private readonly rejectCourseUseCase: RejectCourseUseCase,
+    private readonly rejectCourseUseCase: IUseCase<RejectCourseInput, Course>,
   ) {}
 
   register(): Elysia {

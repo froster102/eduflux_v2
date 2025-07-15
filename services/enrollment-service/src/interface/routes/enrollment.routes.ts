@@ -2,7 +2,10 @@ import type { IUseCase } from '@/application/use-cases/interface/use-case.interf
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { Elysia, t } from 'elysia';
-import { CreateEnrollmentUseCase } from '@/application/use-cases/create-enrollment.use-case';
+import {
+  CreateEnrollmentDto,
+  CreateEnrollmentOutputDto,
+} from '@/application/use-cases/create-enrollment.use-case';
 import { createEnrollmentSchema } from '@/infrastructure/http/schema/enrollment.schema';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import {
@@ -14,7 +17,10 @@ import {
 export class EnrollmentRoutes {
   constructor(
     @inject(TYPES.CreateEnrollmentUseCase)
-    private readonly createEnrollmentUseCase: CreateEnrollmentUseCase,
+    private readonly createEnrollmentUseCase: IUseCase<
+      CreateEnrollmentDto,
+      CreateEnrollmentOutputDto
+    >,
     @inject(TYPES.CheckUserEnrollmentUseCase)
     private readonly checkUserEnrollmentUseCase: IUseCase<
       CheckUserEnrollmentDto,

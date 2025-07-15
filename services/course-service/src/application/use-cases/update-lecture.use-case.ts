@@ -7,6 +7,7 @@ import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Lecture } from '@/domain/entity/lecture.entity';
 import { CreateLectureDto } from './create-lecture.use-case';
+import { IUseCase } from './interface/use-case.interface';
 
 export interface UpdateLectureDto extends Partial<CreateLectureDto> {
   courseId: string;
@@ -18,7 +19,9 @@ export interface UpdateLectureInput {
   actor: AuthenticatedUserDto;
 }
 
-export class UpdateLectureUseCase {
+export class UpdateLectureUseCase
+  implements IUseCase<UpdateLectureInput, Lecture>
+{
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

@@ -19,12 +19,12 @@ import { PAYMENT_SERVICE } from '@/shared/constants/service';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
 
-interface HandleStripeWebhookInput {
+export interface HandleStripeWebhookInput {
   rawBody: string | Buffer;
   signature: string;
 }
 
-interface HandleStripeWebhookOutput {
+export interface HandleStripeWebhookOutput {
   success: boolean;
   message: string;
 }

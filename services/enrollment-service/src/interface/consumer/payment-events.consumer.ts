@@ -1,3 +1,4 @@
+import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
 import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
@@ -5,7 +6,7 @@ import { Consumer, EachMessagePayload } from 'kafkajs';
 import { ENROLLMENT_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
 import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
 import { kafka } from '@/infrastructure/messaging/kafka/setup';
-import { CompleteEnrollmentUseCase } from '@/application/use-cases/complete-enrollment.use-case';
+import { CompleteEnrollmentDto } from '@/application/use-cases/complete-enrollment.use-case';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
 import { ApplicationException } from '@/application/exceptions/application.exception';
@@ -35,7 +36,10 @@ export class PaymentEventsConsumer {
 
   constructor(
     @inject(TYPES.CompleteEnrollmentUseCase)
-    private readonly completeEnrollmentUseCase: CompleteEnrollmentUseCase,
+    private readonly completeEnrollmentUseCase: IUseCase<
+      CompleteEnrollmentDto,
+      void
+    >,
   ) {
     this.topic = PAYMENTS_TOPIC;
     this.consumer = kafka.consumer({

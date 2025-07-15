@@ -1,16 +1,20 @@
-import { AddAssetToLectureUseCase } from '@/application/use-cases/add-asset-to-lecture.use-case';
-import { CreateChapterUseCase } from '@/application/use-cases/create-chapter.use-case';
-import { CreateCourseUseCase } from '@/application/use-cases/create-course.use-case';
-import { CreateLectureUseCase } from '@/application/use-cases/create-lecture.use-case';
-import { GetInstructorCourseCurriculumUseCase } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
-import { GetInstructorCourseUseCase } from '@/application/use-cases/get-instructor-course.use-case';
+import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import { AddAssetToLectureInput } from '@/application/use-cases/add-asset-to-lecture.use-case';
+import { CreateChapterInput } from '@/application/use-cases/create-chapter.use-case';
+import { CreateCourseInput } from '@/application/use-cases/create-course.use-case';
+import { CreateLectureInput } from '@/application/use-cases/create-lecture.use-case';
+import {
+  CurriculumItemWithAsset,
+  GetInstructorCourseCurriculumInput,
+} from '@/application/use-cases/get-instructor-course-curriculum.use-case';
+import { GetInstructorCourseInput } from '@/application/use-cases/get-instructor-course.use-case';
 import {
   ReorderCurriculumDto,
-  ReorderCurriculumUseCase,
+  ReorderCurriculumInput,
 } from '@/application/use-cases/reorder-curriculum.use-case';
-import { UpdateChapterUseCase } from '@/application/use-cases/update-chapter.use-case';
-import { UpdateCourseUseCase } from '@/application/use-cases/update-course.use-case';
-import { UpdateLectureUseCase } from '@/application/use-cases/update-lecture.use-case';
+import { UpdateChapterInput } from '@/application/use-cases/update-chapter.use-case';
+import { UpdateCourseInput } from '@/application/use-cases/update-course.use-case';
+import { UpdateLectureInput } from '@/application/use-cases/update-lecture.use-case';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -29,10 +33,12 @@ import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
 import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
-import { DeleteChapterUseCase } from '@/application/use-cases/delete-chapter.use-case';
-import { DeleteLectureUseCase } from '@/application/use-cases/delete-lecture.use-case';
-import { PublishCourseUseCase } from '@/application/use-cases/publish-course.use-case';
-import { GetCourseCategoriesUseCase } from '@/application/use-cases/get-course-categories.use-case';
+import { DeleteChapterInput } from '@/application/use-cases/delete-chapter.use-case';
+import { DeleteLectureInput } from '@/application/use-cases/delete-lecture.use-case';
+import { PublishCourseInput } from '@/application/use-cases/publish-course.use-case';
+import { Chapter } from '@/domain/entity/chapter.entity';
+import { Lecture } from '@/domain/entity/lecture.entity';
+import { Category } from '@/domain/entity/category.entity';
 
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
@@ -41,35 +47,59 @@ const purify = DOMPurify(window);
 export class InstructorRoutes {
   constructor(
     @inject(TYPES.CreateCourseUseCase)
-    private readonly creatCourseUseCase: CreateCourseUseCase,
+    private readonly creatCourseUseCase: IUseCase<CreateCourseInput, Course>,
     @inject(TYPES.UpdateCourseUseCase)
-    private readonly updateCourseUseCase: UpdateCourseUseCase,
+    private readonly updateCourseUseCase: IUseCase<UpdateCourseInput, Course>,
     @inject(TYPES.GetInstructorCourseCurriculumUseCase)
-    private readonly getInstructorCourseCurriculum: GetInstructorCourseCurriculumUseCase,
+    private readonly getInstructorCourseCurriculum: IUseCase<
+      GetInstructorCourseCurriculumInput,
+      CurriculumItemWithAsset[]
+    >,
     @inject(TYPES.CreateChapterUseCase)
-    private readonly createChapterUseCase: CreateChapterUseCase,
+    private readonly createChapterUseCase: IUseCase<
+      CreateChapterInput,
+      Chapter
+    >,
     @inject(TYPES.UpdateChapterUseCase)
-    private readonly updateChapterUseCase: UpdateChapterUseCase,
+    private readonly updateChapterUseCase: IUseCase<
+      UpdateChapterInput,
+      Chapter
+    >,
     @inject(TYPES.CreateLectureUseCase)
-    private readonly createLectureUseCase: CreateLectureUseCase,
+    private readonly createLectureUseCase: IUseCase<
+      CreateLectureInput,
+      Lecture
+    >,
     @inject(TYPES.UpdateLectureUseCase)
-    private readonly updateLectureUseCase: UpdateLectureUseCase,
+    private readonly updateLectureUseCase: IUseCase<
+      UpdateLectureInput,
+      Lecture
+    >,
     @inject(TYPES.AddAssetToLectureUseCase)
-    private readonly addAssetToLectureUseCase: AddAssetToLectureUseCase,
+    private readonly addAssetToLectureUseCase: IUseCase<
+      AddAssetToLectureInput,
+      void
+    >,
     // @inject(TYPES.SubmitForReviewUseCase)
     // private readonly submitForReviewUseCase: SubmitForReviewUseCase,
     @inject(TYPES.ReorderCurriculumUseCase)
-    private readonly reorderCurriculumUseCase: ReorderCurriculumUseCase,
+    private readonly reorderCurriculumUseCase: IUseCase<
+      ReorderCurriculumInput,
+      void
+    >,
     @inject(TYPES.GetInstructorCourseUseCase)
-    private readonly getInstructorCourseUseCase: GetInstructorCourseUseCase,
+    private readonly getInstructorCourseUseCase: IUseCase<
+      GetInstructorCourseInput,
+      Course
+    >,
     @inject(TYPES.DeleteChapterUseCase)
-    private readonly deleteChapterUseCase: DeleteChapterUseCase,
+    private readonly deleteChapterUseCase: IUseCase<DeleteChapterInput, void>,
     @inject(TYPES.DeleteLectureUseCase)
-    private readonly deleteLectureUseCase: DeleteLectureUseCase,
+    private readonly deleteLectureUseCase: IUseCase<DeleteLectureInput, void>,
     @inject(TYPES.PublishCourseUseCase)
-    private readonly publishCourseUseCase: PublishCourseUseCase,
+    private readonly publishCourseUseCase: IUseCase<PublishCourseInput, Course>,
     @inject(TYPES.GetCourseCategoriesUseCase)
-    private readonly getCourseCategories: GetCourseCategoriesUseCase,
+    private readonly getCourseCategories: IUseCase<void, Category[]>,
   ) {}
 
   register(): Elysia {

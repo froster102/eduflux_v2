@@ -1,5 +1,9 @@
-import { GetPublishedCourseCurriculumUseCase } from '@/application/use-cases/get-published-course-curriculum';
-import { GetPublishedCoursesUseCase } from '@/application/use-cases/get-published-courses.use-case';
+import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import { CurriculumItemWithAsset } from '@/application/use-cases/get-instructor-course-curriculum.use-case';
+import {
+  GetPublishedCoursesInput,
+  GetPublishedCoursesOutput,
+} from '@/application/use-cases/get-published-courses.use-case';
 import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination.schema';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
@@ -9,10 +13,16 @@ import { inject, injectable } from 'inversify';
 export class LearnerRoutes {
   constructor(
     @inject(TYPES.GetPublishedCoursesUseCase)
-    private readonly getPublishedCourses: GetPublishedCoursesUseCase,
+    private readonly getPublishedCourses: IUseCase<
+      GetPublishedCoursesInput,
+      GetPublishedCoursesOutput
+    >,
 
     @inject(TYPES.GetPublishedCourseCurriculumUseCase)
-    private readonly getPublishedCourseCurriculumUseCase: GetPublishedCourseCurriculumUseCase,
+    private readonly getPublishedCourseCurriculumUseCase: IUseCase<
+      string,
+      CurriculumItemWithAsset[]
+    >,
   ) {}
 
   register(): Elysia {
