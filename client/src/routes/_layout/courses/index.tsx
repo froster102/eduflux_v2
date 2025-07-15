@@ -9,7 +9,7 @@ import {
 } from "@/features/learner/courses/hooks/queries";
 import CoursesList from "@/features/learner/courses/components/CoursesList";
 
-export const Route = createFileRoute("/learner/_layout/courses/")({
+export const Route = createFileRoute("/_layout/courses/")({
   component: RouteComponent,
 });
 

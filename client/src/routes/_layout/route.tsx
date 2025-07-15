@@ -9,7 +9,7 @@ import SessionIcon from "@/assets/icons/SessionIcon";
 import MessageIcon from "@/assets/icons/MessageIcon";
 import AccountIcon from "@/assets/icons/AccountIcon";
 
-export const Route = createFileRoute("/learner/_layout")({
+export const Route = createFileRoute("/_layout")({
   component: Layout,
 });
 
@@ -31,27 +31,27 @@ function Layout() {
 
   const navItems = [
     {
-      path: "/learner",
+      path: "/home",
       icon: <HomeIcon width={24} />,
       label: "Home",
     },
     {
-      path: "/learner/courses",
+      path: "/courses",
       icon: <CourseIcon width={24} />,
       label: "Courses",
     },
     {
-      path: "/learner/sessions",
+      path: "/sessions",
       icon: <SessionIcon width={24} />,
       label: "Sessions",
     },
     {
-      path: "/learner/messages",
+      path: "/messages",
       icon: <MessageIcon width={24} />,
       label: "Messages",
     },
     {
-      path: "/learner/account",
+      path: "/account",
       icon: <AccountIcon width={24} />,
       label: "Account",
     },

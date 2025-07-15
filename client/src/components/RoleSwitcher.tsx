@@ -47,7 +47,7 @@ export default function RoleSwitcher() {
       }
     } else if (value === "LEARNER") {
       setRole(new Set(["LEARNER"]));
-      navigate({ to: "/learner" });
+      navigate({ to: "/home" });
     }
   }
 

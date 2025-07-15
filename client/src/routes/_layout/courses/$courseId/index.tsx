@@ -24,7 +24,7 @@ import { IMAGE_BASE_URL } from "@/config/image";
 import NoteIcon from "@/assets/icons/NoteIcon";
 import MessageIcon from "@/assets/icons/MessageIcon";
 
-export const Route = createFileRoute("/learner/_layout/courses/$courseId/")({
+export const Route = createFileRoute("/_layout/courses/$courseId/")({
   component: RouteComponent,
 });
 

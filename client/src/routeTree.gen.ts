@@ -12,6 +12,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
+import { Route as LayoutRouteRouteImport } from './routes/_layout/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
@@ -19,26 +20,23 @@ import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
-import { Route as LearnerLayoutRouteRouteImport } from './routes/learner/_layout/route'
 import { Route as InstructorLayoutRouteRouteImport } from './routes/instructor/_layout/route'
-import { Route as LearnerLayoutIndexRouteImport } from './routes/learner/_layout/index'
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
-import { Route as LearnerLayoutCoursesIndexRouteImport } from './routes/learner/_layout/courses/index'
-import { Route as LearnerLayoutAccountIndexRouteImport } from './routes/learner/_layout/account/index'
+import { Route as LayoutSessionsIndexRouteImport } from './routes/_layout/sessions/index'
+import { Route as LayoutMessagesIndexRouteImport } from './routes/_layout/messages/index'
+import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index'
+import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
+import { Route as LayoutAccountIndexRouteImport } from './routes/_layout/account/index'
+import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
+import { Route as InstructorLayoutMessagesIndexRouteImport } from './routes/instructor/_layout/messages/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
 import { Route as InstructorLayoutAccountIndexRouteImport } from './routes/instructor/_layout/account/index'
-import { Route as LearnerLayoutCoursesCourseIdIndexRouteImport } from './routes/learner/_layout/courses/$courseId/index'
+import { Route as LayoutCoursesCourseIdIndexRouteImport } from './routes/_layout/courses/$courseId/index'
+import { Route as LayoutCoursesCourseIdLearnIndexRouteImport } from './routes/_layout/courses/$courseId/learn/index'
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
-import { Route as LearnerLayoutCoursesCourseIdLearnIndexRouteImport } from './routes/learner/_layout/courses/$courseId/learn/index'
 
-const LearnerRouteImport = createFileRoute('/learner')()
 const InstructorRouteImport = createFileRoute('/instructor')()
 
-const LearnerRoute = LearnerRouteImport.update({
-  id: '/learner',
-  path: '/learner',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const InstructorRoute = InstructorRouteImport.update({
   id: '/instructor',
   path: '/instructor',
@@ -47,6 +45,10 @@ const InstructorRoute = InstructorRouteImport.update({
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutRouteRoute = LayoutRouteRouteImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -84,35 +86,51 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const LearnerLayoutRouteRoute = LearnerLayoutRouteRouteImport.update({
-  id: '/_layout',
-  getParentRoute: () => LearnerRoute,
-} as any)
 const InstructorLayoutRouteRoute = InstructorLayoutRouteRouteImport.update({
   id: '/_layout',
   getParentRoute: () => InstructorRoute,
-} as any)
-const LearnerLayoutIndexRoute = LearnerLayoutIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LearnerLayoutRouteRoute,
 } as any)
 const InstructorLayoutIndexRoute = InstructorLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => InstructorLayoutRouteRoute,
 } as any)
-const LearnerLayoutCoursesIndexRoute =
-  LearnerLayoutCoursesIndexRouteImport.update({
-    id: '/courses/',
-    path: '/courses/',
-    getParentRoute: () => LearnerLayoutRouteRoute,
+const LayoutSessionsIndexRoute = LayoutSessionsIndexRouteImport.update({
+  id: '/sessions/',
+  path: '/sessions/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+const LayoutMessagesIndexRoute = LayoutMessagesIndexRouteImport.update({
+  id: '/messages/',
+  path: '/messages/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+const LayoutHomeIndexRoute = LayoutHomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+const LayoutCoursesIndexRoute = LayoutCoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+const LayoutAccountIndexRoute = LayoutAccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+const InstructorLayoutSessionsIndexRoute =
+  InstructorLayoutSessionsIndexRouteImport.update({
+    id: '/sessions/',
+    path: '/sessions/',
+    getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
-const LearnerLayoutAccountIndexRoute =
-  LearnerLayoutAccountIndexRouteImport.update({
-    id: '/account/',
-    path: '/account/',
-    getParentRoute: () => LearnerLayoutRouteRoute,
+const InstructorLayoutMessagesIndexRoute =
+  InstructorLayoutMessagesIndexRouteImport.update({
+    id: '/messages/',
+    path: '/messages/',
+    getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
 const InstructorLayoutCoursesIndexRoute =
   InstructorLayoutCoursesIndexRouteImport.update({
@@ -126,11 +144,17 @@ const InstructorLayoutAccountIndexRoute =
     path: '/account/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
-const LearnerLayoutCoursesCourseIdIndexRoute =
-  LearnerLayoutCoursesCourseIdIndexRouteImport.update({
+const LayoutCoursesCourseIdIndexRoute =
+  LayoutCoursesCourseIdIndexRouteImport.update({
     id: '/courses/$courseId/',
     path: '/courses/$courseId/',
-    getParentRoute: () => LearnerLayoutRouteRoute,
+    getParentRoute: () => LayoutRouteRoute,
+  } as any)
+const LayoutCoursesCourseIdLearnIndexRoute =
+  LayoutCoursesCourseIdLearnIndexRouteImport.update({
+    id: '/courses/$courseId/learn/',
+    path: '/courses/$courseId/learn/',
+    getParentRoute: () => LayoutRouteRoute,
   } as any)
 const InstructorLayoutCoursesCourseIdManageRoute =
   InstructorLayoutCoursesCourseIdManageRouteImport.update({
@@ -138,75 +162,79 @@ const InstructorLayoutCoursesCourseIdManageRoute =
     path: '/courses/$courseId/manage',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
-const LearnerLayoutCoursesCourseIdLearnIndexRoute =
-  LearnerLayoutCoursesCourseIdLearnIndexRouteImport.update({
-    id: '/courses/$courseId/learn/',
-    path: '/courses/$courseId/learn/',
-    getParentRoute: () => LearnerLayoutRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/instructor': typeof InstructorLayoutRouteRouteWithChildren
-  '/learner': typeof LearnerLayoutRouteRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/account': typeof LayoutAccountIndexRoute
+  '/courses': typeof LayoutCoursesIndexRoute
+  '/home': typeof LayoutHomeIndexRoute
+  '/messages': typeof LayoutMessagesIndexRoute
+  '/sessions': typeof LayoutSessionsIndexRoute
   '/instructor/': typeof InstructorLayoutIndexRoute
-  '/learner/': typeof LearnerLayoutIndexRoute
+  '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
   '/instructor/account': typeof InstructorLayoutAccountIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
-  '/learner/account': typeof LearnerLayoutAccountIndexRoute
-  '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
+  '/instructor/messages': typeof InstructorLayoutMessagesIndexRoute
+  '/instructor/sessions': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
-  '/learner/courses/$courseId': typeof LearnerLayoutCoursesCourseIdIndexRoute
-  '/learner/courses/$courseId/learn': typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
+  '/courses/$courseId/learn': typeof LayoutCoursesCourseIdLearnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/instructor': typeof InstructorLayoutIndexRoute
-  '/learner': typeof LearnerLayoutIndexRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
+  '/account': typeof LayoutAccountIndexRoute
+  '/courses': typeof LayoutCoursesIndexRoute
+  '/home': typeof LayoutHomeIndexRoute
+  '/messages': typeof LayoutMessagesIndexRoute
+  '/sessions': typeof LayoutSessionsIndexRoute
+  '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
   '/instructor/account': typeof InstructorLayoutAccountIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
-  '/learner/account': typeof LearnerLayoutAccountIndexRoute
-  '/learner/courses': typeof LearnerLayoutCoursesIndexRoute
+  '/instructor/messages': typeof InstructorLayoutMessagesIndexRoute
+  '/instructor/sessions': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
-  '/learner/courses/$courseId': typeof LearnerLayoutCoursesCourseIdIndexRoute
-  '/learner/courses/$courseId/learn': typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
+  '/courses/$courseId/learn': typeof LayoutCoursesCourseIdLearnIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_layout': typeof LayoutRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/instructor': typeof InstructorRouteWithChildren
   '/instructor/_layout': typeof InstructorLayoutRouteRouteWithChildren
-  '/learner': typeof LearnerRouteWithChildren
-  '/learner/_layout': typeof LearnerLayoutRouteRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/_layout/account/': typeof LayoutAccountIndexRoute
+  '/_layout/courses/': typeof LayoutCoursesIndexRoute
+  '/_layout/home/': typeof LayoutHomeIndexRoute
+  '/_layout/messages/': typeof LayoutMessagesIndexRoute
+  '/_layout/sessions/': typeof LayoutSessionsIndexRoute
   '/instructor/_layout/': typeof InstructorLayoutIndexRoute
-  '/learner/_layout/': typeof LearnerLayoutIndexRoute
+  '/_layout/courses/$courseId/': typeof LayoutCoursesCourseIdIndexRoute
   '/instructor/_layout/account/': typeof InstructorLayoutAccountIndexRoute
   '/instructor/_layout/courses/': typeof InstructorLayoutCoursesIndexRoute
-  '/learner/_layout/account/': typeof LearnerLayoutAccountIndexRoute
-  '/learner/_layout/courses/': typeof LearnerLayoutCoursesIndexRoute
+  '/instructor/_layout/messages/': typeof InstructorLayoutMessagesIndexRoute
+  '/instructor/_layout/sessions/': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/_layout/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
-  '/learner/_layout/courses/$courseId/': typeof LearnerLayoutCoursesCourseIdIndexRoute
-  '/learner/_layout/courses/$courseId/learn/': typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
+  '/_layout/courses/$courseId/learn/': typeof LayoutCoursesCourseIdLearnIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -214,81 +242,84 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/instructor'
-    | '/learner'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/account'
+    | '/courses'
+    | '/home'
+    | '/messages'
+    | '/sessions'
     | '/instructor/'
-    | '/learner/'
+    | '/courses/$courseId'
     | '/instructor/account'
     | '/instructor/courses'
-    | '/learner/account'
-    | '/learner/courses'
+    | '/instructor/messages'
+    | '/instructor/sessions'
     | '/instructor/courses/$courseId/manage'
-    | '/learner/courses/$courseId'
-    | '/learner/courses/$courseId/learn'
+    | '/courses/$courseId/learn'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/instructor'
-    | '/learner'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth'
+    | '/account'
+    | '/courses'
+    | '/home'
+    | '/messages'
+    | '/sessions'
+    | '/courses/$courseId'
     | '/instructor/account'
     | '/instructor/courses'
-    | '/learner/account'
-    | '/learner/courses'
+    | '/instructor/messages'
+    | '/instructor/sessions'
     | '/instructor/courses/$courseId/manage'
-    | '/learner/courses/$courseId'
-    | '/learner/courses/$courseId/learn'
+    | '/courses/$courseId/learn'
   id:
     | '__root__'
     | '/'
+    | '/_layout'
     | '/auth'
     | '/instructor'
     | '/instructor/_layout'
-    | '/learner'
-    | '/learner/_layout'
     | '/auth/forgot-password'
     | '/auth/reset-password'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/_layout/account/'
+    | '/_layout/courses/'
+    | '/_layout/home/'
+    | '/_layout/messages/'
+    | '/_layout/sessions/'
     | '/instructor/_layout/'
-    | '/learner/_layout/'
+    | '/_layout/courses/$courseId/'
     | '/instructor/_layout/account/'
     | '/instructor/_layout/courses/'
-    | '/learner/_layout/account/'
-    | '/learner/_layout/courses/'
+    | '/instructor/_layout/messages/'
+    | '/instructor/_layout/sessions/'
     | '/instructor/_layout/courses/$courseId/manage'
-    | '/learner/_layout/courses/$courseId/'
-    | '/learner/_layout/courses/$courseId/learn/'
+    | '/_layout/courses/$courseId/learn/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   InstructorRoute: typeof InstructorRouteWithChildren
-  LearnerRoute: typeof LearnerRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/learner': {
-      id: '/learner'
-      path: '/learner'
-      fullPath: '/learner'
-      preLoaderRoute: typeof LearnerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/instructor': {
       id: '/instructor'
       path: '/instructor'
@@ -301,6 +332,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -352,26 +390,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/learner/_layout': {
-      id: '/learner/_layout'
-      path: '/learner'
-      fullPath: '/learner'
-      preLoaderRoute: typeof LearnerLayoutRouteRouteImport
-      parentRoute: typeof LearnerRoute
-    }
     '/instructor/_layout': {
       id: '/instructor/_layout'
       path: '/instructor'
       fullPath: '/instructor'
       preLoaderRoute: typeof InstructorLayoutRouteRouteImport
       parentRoute: typeof InstructorRoute
-    }
-    '/learner/_layout/': {
-      id: '/learner/_layout/'
-      path: '/'
-      fullPath: '/learner/'
-      preLoaderRoute: typeof LearnerLayoutIndexRouteImport
-      parentRoute: typeof LearnerLayoutRouteRoute
     }
     '/instructor/_layout/': {
       id: '/instructor/_layout/'
@@ -380,19 +404,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
-    '/learner/_layout/courses/': {
-      id: '/learner/_layout/courses/'
-      path: '/courses'
-      fullPath: '/learner/courses'
-      preLoaderRoute: typeof LearnerLayoutCoursesIndexRouteImport
-      parentRoute: typeof LearnerLayoutRouteRoute
+    '/_layout/sessions/': {
+      id: '/_layout/sessions/'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof LayoutSessionsIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
     }
-    '/learner/_layout/account/': {
-      id: '/learner/_layout/account/'
+    '/_layout/messages/': {
+      id: '/_layout/messages/'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof LayoutMessagesIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
+    '/_layout/home/': {
+      id: '/_layout/home/'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof LayoutHomeIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
+    '/_layout/courses/': {
+      id: '/_layout/courses/'
+      path: '/courses'
+      fullPath: '/courses'
+      preLoaderRoute: typeof LayoutCoursesIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
+    '/_layout/account/': {
+      id: '/_layout/account/'
       path: '/account'
-      fullPath: '/learner/account'
-      preLoaderRoute: typeof LearnerLayoutAccountIndexRouteImport
-      parentRoute: typeof LearnerLayoutRouteRoute
+      fullPath: '/account'
+      preLoaderRoute: typeof LayoutAccountIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
+    '/instructor/_layout/sessions/': {
+      id: '/instructor/_layout/sessions/'
+      path: '/sessions'
+      fullPath: '/instructor/sessions'
+      preLoaderRoute: typeof InstructorLayoutSessionsIndexRouteImport
+      parentRoute: typeof InstructorLayoutRouteRoute
+    }
+    '/instructor/_layout/messages/': {
+      id: '/instructor/_layout/messages/'
+      path: '/messages'
+      fullPath: '/instructor/messages'
+      preLoaderRoute: typeof InstructorLayoutMessagesIndexRouteImport
+      parentRoute: typeof InstructorLayoutRouteRoute
     }
     '/instructor/_layout/courses/': {
       id: '/instructor/_layout/courses/'
@@ -408,12 +467,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutAccountIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
-    '/learner/_layout/courses/$courseId/': {
-      id: '/learner/_layout/courses/$courseId/'
+    '/_layout/courses/$courseId/': {
+      id: '/_layout/courses/$courseId/'
       path: '/courses/$courseId'
-      fullPath: '/learner/courses/$courseId'
-      preLoaderRoute: typeof LearnerLayoutCoursesCourseIdIndexRouteImport
-      parentRoute: typeof LearnerLayoutRouteRoute
+      fullPath: '/courses/$courseId'
+      preLoaderRoute: typeof LayoutCoursesCourseIdIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
+    '/_layout/courses/$courseId/learn/': {
+      id: '/_layout/courses/$courseId/learn/'
+      path: '/courses/$courseId/learn'
+      fullPath: '/courses/$courseId/learn'
+      preLoaderRoute: typeof LayoutCoursesCourseIdLearnIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
     }
     '/instructor/_layout/courses/$courseId/manage': {
       id: '/instructor/_layout/courses/$courseId/manage'
@@ -422,15 +488,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutCoursesCourseIdManageRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
-    '/learner/_layout/courses/$courseId/learn/': {
-      id: '/learner/_layout/courses/$courseId/learn/'
-      path: '/courses/$courseId/learn'
-      fullPath: '/learner/courses/$courseId/learn'
-      preLoaderRoute: typeof LearnerLayoutCoursesCourseIdLearnIndexRouteImport
-      parentRoute: typeof LearnerLayoutRouteRoute
-    }
   }
 }
+
+interface LayoutRouteRouteChildren {
+  LayoutAccountIndexRoute: typeof LayoutAccountIndexRoute
+  LayoutCoursesIndexRoute: typeof LayoutCoursesIndexRoute
+  LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute
+  LayoutMessagesIndexRoute: typeof LayoutMessagesIndexRoute
+  LayoutSessionsIndexRoute: typeof LayoutSessionsIndexRoute
+  LayoutCoursesCourseIdIndexRoute: typeof LayoutCoursesCourseIdIndexRoute
+  LayoutCoursesCourseIdLearnIndexRoute: typeof LayoutCoursesCourseIdLearnIndexRoute
+}
+
+const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
+  LayoutAccountIndexRoute: LayoutAccountIndexRoute,
+  LayoutCoursesIndexRoute: LayoutCoursesIndexRoute,
+  LayoutHomeIndexRoute: LayoutHomeIndexRoute,
+  LayoutMessagesIndexRoute: LayoutMessagesIndexRoute,
+  LayoutSessionsIndexRoute: LayoutSessionsIndexRoute,
+  LayoutCoursesCourseIdIndexRoute: LayoutCoursesCourseIdIndexRoute,
+  LayoutCoursesCourseIdLearnIndexRoute: LayoutCoursesCourseIdLearnIndexRoute,
+}
+
+const LayoutRouteRouteWithChildren = LayoutRouteRoute._addFileChildren(
+  LayoutRouteRouteChildren,
+)
 
 interface AuthRouteRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
@@ -458,6 +541,8 @@ interface InstructorLayoutRouteRouteChildren {
   InstructorLayoutIndexRoute: typeof InstructorLayoutIndexRoute
   InstructorLayoutAccountIndexRoute: typeof InstructorLayoutAccountIndexRoute
   InstructorLayoutCoursesIndexRoute: typeof InstructorLayoutCoursesIndexRoute
+  InstructorLayoutMessagesIndexRoute: typeof InstructorLayoutMessagesIndexRoute
+  InstructorLayoutSessionsIndexRoute: typeof InstructorLayoutSessionsIndexRoute
   InstructorLayoutCoursesCourseIdManageRoute: typeof InstructorLayoutCoursesCourseIdManageRoute
 }
 
@@ -465,6 +550,8 @@ const InstructorLayoutRouteRouteChildren: InstructorLayoutRouteRouteChildren = {
   InstructorLayoutIndexRoute: InstructorLayoutIndexRoute,
   InstructorLayoutAccountIndexRoute: InstructorLayoutAccountIndexRoute,
   InstructorLayoutCoursesIndexRoute: InstructorLayoutCoursesIndexRoute,
+  InstructorLayoutMessagesIndexRoute: InstructorLayoutMessagesIndexRoute,
+  InstructorLayoutSessionsIndexRoute: InstructorLayoutSessionsIndexRoute,
   InstructorLayoutCoursesCourseIdManageRoute:
     InstructorLayoutCoursesCourseIdManageRoute,
 }
@@ -486,43 +573,11 @@ const InstructorRouteWithChildren = InstructorRoute._addFileChildren(
   InstructorRouteChildren,
 )
 
-interface LearnerLayoutRouteRouteChildren {
-  LearnerLayoutIndexRoute: typeof LearnerLayoutIndexRoute
-  LearnerLayoutAccountIndexRoute: typeof LearnerLayoutAccountIndexRoute
-  LearnerLayoutCoursesIndexRoute: typeof LearnerLayoutCoursesIndexRoute
-  LearnerLayoutCoursesCourseIdIndexRoute: typeof LearnerLayoutCoursesCourseIdIndexRoute
-  LearnerLayoutCoursesCourseIdLearnIndexRoute: typeof LearnerLayoutCoursesCourseIdLearnIndexRoute
-}
-
-const LearnerLayoutRouteRouteChildren: LearnerLayoutRouteRouteChildren = {
-  LearnerLayoutIndexRoute: LearnerLayoutIndexRoute,
-  LearnerLayoutAccountIndexRoute: LearnerLayoutAccountIndexRoute,
-  LearnerLayoutCoursesIndexRoute: LearnerLayoutCoursesIndexRoute,
-  LearnerLayoutCoursesCourseIdIndexRoute:
-    LearnerLayoutCoursesCourseIdIndexRoute,
-  LearnerLayoutCoursesCourseIdLearnIndexRoute:
-    LearnerLayoutCoursesCourseIdLearnIndexRoute,
-}
-
-const LearnerLayoutRouteRouteWithChildren =
-  LearnerLayoutRouteRoute._addFileChildren(LearnerLayoutRouteRouteChildren)
-
-interface LearnerRouteChildren {
-  LearnerLayoutRouteRoute: typeof LearnerLayoutRouteRouteWithChildren
-}
-
-const LearnerRouteChildren: LearnerRouteChildren = {
-  LearnerLayoutRouteRoute: LearnerLayoutRouteRouteWithChildren,
-}
-
-const LearnerRouteWithChildren =
-  LearnerRoute._addFileChildren(LearnerRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LayoutRouteRoute: LayoutRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   InstructorRoute: InstructorRouteWithChildren,
-  LearnerRoute: LearnerRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
