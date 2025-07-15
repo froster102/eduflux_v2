@@ -1,10 +1,7 @@
 import { InitiatePaymentUseCase } from '@/application/use-cases/initiate-payment.use-case';
 import { Container } from 'inversify';
 import { TYPES } from './types';
-import { IPaymentRepository } from '@/domain/repositories/transaction.repository';
-import { IMessageBrokerGatway } from '@/application/ports/message-broker.gateway';
 import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-producer.adapter';
-import { IStripeGateway } from '@/application/ports/stripe.gateway';
 import { StripeClient } from '@/infrastructure/stripe/stripe-client.gateway';
 import { MongoPaymenRepositoryImpl } from '@/infrastructure/database/repositories/transaction.repository';
 import { HandleStripeWebhookUseCase } from '@/application/use-cases/handle-stripe-webhook.use-case';
@@ -16,39 +13,31 @@ import { GrpcPaymentService } from '@/infrastructure/grpc/services/payment.servi
 const container = new Container();
 
 //Use Cases
-container
-  .bind<InitiatePaymentUseCase>(TYPES.InitiatePaymentUseCase)
-  .to(InitiatePaymentUseCase);
-container
-  .bind<HandleStripeWebhookUseCase>(TYPES.HandleStripeWebhookUseCase)
-  .to(HandleStripeWebhookUseCase);
+container.bind(TYPES.InitiatePaymentUseCase).to(InitiatePaymentUseCase);
+container.bind(TYPES.HandleStripeWebhookUseCase).to(HandleStripeWebhookUseCase);
 
 //Repositories
-container
-  .bind<IPaymentRepository>(TYPES.PaymentRepository)
-  .to(MongoPaymenRepositoryImpl);
+container.bind(TYPES.PaymentRepository).to(MongoPaymenRepositoryImpl);
 
 //Http routes
-container.bind<PaymentRoutes>(TYPES.PaymentRoutes).to(PaymentRoutes);
+container.bind(TYPES.PaymentRoutes).to(PaymentRoutes);
 
 //Ports
-container.bind<IStripeGateway>(TYPES.StripeGateway).to(StripeClient);
+container.bind(TYPES.StripeGateway).to(StripeClient);
 
 //Message broker
 container
-  .bind<IMessageBrokerGatway>(TYPES.MessageBrokerGateway)
+  .bind(TYPES.MessageBrokerGateway)
   .to(KafkaProducerAdapter)
   .inSingletonScope();
 
 //Grpc service
-container
-  .bind<GrpcPaymentService>(TYPES.GrpcPaymentService)
-  .to(GrpcPaymentService);
+container.bind(TYPES.GrpcPaymentService).to(GrpcPaymentService);
 
 //Database
-container.bind<DatabaseClient>(TYPES.DatabaseClient).to(DatabaseClient);
+container.bind(TYPES.DatabaseClient).to(DatabaseClient);
 
 //Mapper
-container.bind<TransactionMapper>(TYPES.PaymentMapper).to(TransactionMapper);
+container.bind(TYPES.PaymentMapper).to(TransactionMapper);
 
 export { container };
