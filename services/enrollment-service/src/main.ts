@@ -6,6 +6,7 @@ import { serverConfig } from './shared/config/server.config';
 import { DatabaseClient } from './infrastructure/database/setup';
 import { PaymentEventsConsumer } from './interface/consumer/payment-events.consumer';
 import { GrpcServer } from './infrastructure/grpc/grpc.server';
+import { IMessageBrokerGatway } from './application/ports/message-broker.gateway';
 
 async function bootstrap() {
   //http
@@ -20,22 +21,17 @@ async function bootstrap() {
   const grpcServer = new GrpcServer();
   grpcServer.start();
 
-  // kafka consumers
+  //kafka produer
+  const kafkaProducer = container.get<IMessageBrokerGatway>(
+    TYPES.MessageBrokerGateway,
+  );
+  await kafkaProducer.connect();
+
+  // kafka consumer
   const kafkaConsumer = container.get<PaymentEventsConsumer>(
     TYPES.PaymentEventsConsumer,
   );
   await kafkaConsumer.connect();
-
-  process.on('SIGTERM', () => {
-    void (async () => await kafkaConsumer.disconnect())();
-  });
-
-  process.on('SIGINT', () => {
-    void (async () => {
-      await kafkaConsumer.disconnect();
-      process.exit(0);
-    })();
-  });
 }
 
 void bootstrap();

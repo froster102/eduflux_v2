@@ -61,6 +61,8 @@ import { GrpcCourseService } from '@/infrastructure/grpc/services/course.grpc.se
 import { GetUserSubscribedCoursesUseCase } from '@/application/use-cases/get-user-subscribed-courses';
 import { IEnrollmentServiceGateway } from '@/application/ports/enrollment-service.gateway';
 import { GrpcEnrollmentServiceClient } from '@/infrastructure/grpc/client/enrollment-service-client.grpc';
+import { UpdateEnrollmentCountUseCase } from '@/application/use-cases/update-enrollment-count.use-case';
+import { EnrollmentEventsConsumer } from '@/interface/consumer/enrollment-events.consumer';
 
 const container = new Container();
 
@@ -141,6 +143,9 @@ container
 container
   .bind<GetUserSubscribedCoursesUseCase>(TYPES.GetUserSubscribedCoursesUseCase)
   .to(GetUserSubscribedCoursesUseCase);
+container
+  .bind(TYPES.UpdateCourseEnrollmentCountUseCase)
+  .to(UpdateEnrollmentCountUseCase);
 
 //Http Routes
 container.bind<AdminRoutes>(TYPES.AdminRoutes).to(AdminRoutes);
@@ -182,6 +187,9 @@ container
 container
   .bind<ICategoryRepository>(TYPES.CategoryRepository)
   .to(MongoCategoryRepository);
+
+//Consumer
+container.bind(TYPES.EnrollmentEventsConsumer).to(EnrollmentEventsConsumer);
 
 //mappers
 container

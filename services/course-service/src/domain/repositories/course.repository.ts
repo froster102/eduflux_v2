@@ -15,4 +15,5 @@ export interface ICourseRepository extends IBaseRepository<Course> {
   findAllPublishedCourses(
     paginationQueryParams: PaginationQueryParams,
   ): Promise<{ courses: Course[]; total: number }>;
+  incrementCourseEnrollmentCount(courseId: string): Promise<void>;
 }

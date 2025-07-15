@@ -157,4 +157,11 @@ export class MongoCourseRepository
         }
       : { courses: [], total: 0 };
   }
+
+  async incrementCourseEnrollmentCount(courseId: string): Promise<void> {
+    await CourseModel.findOneAndUpdate(
+      { _id: courseId },
+      { $inc: { enrollmentCount: 1 } },
+    );
+  }
 }

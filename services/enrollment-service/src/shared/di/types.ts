@@ -9,6 +9,7 @@ export const TYPES = {
   UserServiceGateway: Symbol.for('UserServiceGateway'),
   CourseServiceGateway: Symbol.for('CourseServiceGateway'),
   PaymentServiceGateway: Symbol.for('PaymentServiceGateway'),
+  MessageBrokerGateway: Symbol.for('MessageBrokerGateway'),
 
   //Grpc service
   GrpcEnrollmentService: Symbol.for('GrpcEnrollmentService'),

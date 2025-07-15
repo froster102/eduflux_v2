@@ -31,6 +31,9 @@ export const TYPES = {
   GetUserSubscribedCoursesUseCase: Symbol.for(
     'GetUserSubscribedCoursesUseCase',
   ),
+  UpdateCourseEnrollmentCountUseCase: Symbol.for(
+    'UpdateCourseEnrollmentCountUseCase',
+  ),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),
@@ -49,6 +52,9 @@ export const TYPES = {
   InstructorRoutes: Symbol.for('InstructorRoutes'),
   LearnerRoutes: Symbol.for('LearnerRoutes'),
   CourseRoutes: Symbol.for('CourseRoutes'),
+
+  //Consumers
+  EnrollmentEventsConsumer: Symbol.for('EnrollmentEventsConsumer'),
 
   //Grpc Services
   GrpcCourseService: Symbol.for('GrpcCourseService'),

@@ -25,6 +25,7 @@ import {
   CheckUserEnrollmentUseCase,
 } from '@/application/use-cases/check-user-enrollment.use-case';
 import { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-producer.adapter';
 
 const container = new Container();
 
@@ -54,6 +55,10 @@ container
 container
   .bind<IPaymentServiceGateway>(TYPES.PaymentServiceGateway)
   .to(GrpcPaymentServiceClient);
+container
+  .bind(TYPES.MessageBrokerGateway)
+  .to(KafkaProducerAdapter)
+  .inSingletonScope();
 
 //Repositories
 container
