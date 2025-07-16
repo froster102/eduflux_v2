@@ -5,6 +5,7 @@ import {
   IEnrollmentServiceGateway,
 } from '@/application/ports/enrollment-service.gateway';
 import {
+  CheckUserEnrollmentResponse,
   Enrollments,
   EnrollmentServiceClient,
   GetUserEnrollmentsRequest,
@@ -28,6 +29,7 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
       `gRPC enrollment service client initialized, target:${this.address}`,
     );
   }
+
   getUserEnrollments(
     userId: string,
     paginationQueryParams: PaginationQueryParams,
@@ -72,6 +74,28 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
               total: response.total,
               enrollments: response.enrollments as unknown as EnrollmentDto[],
             });
+          }
+        },
+      ),
+    );
+  }
+
+  checkUserEnrollment(
+    userId: string,
+    courseId: string,
+  ): Promise<{ isEnrolled: boolean }> {
+    return new Promise((resolve, reject) =>
+      this.client.checkUserEnrollment(
+        { userId, courseId },
+        (error: ServiceError | null, response: CheckUserEnrollmentResponse) => {
+          if (error) {
+            this.logger.error(
+              `Error fetching user enrollment details ${error.message}`,
+            );
+            reject(new Error(error.message));
+          }
+          if (response) {
+            resolve(response);
           }
         },
       ),

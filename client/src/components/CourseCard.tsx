@@ -23,7 +23,7 @@ export default function CourseCard({ course, isSubscribed }: CourseCardProps) {
         className="bg-background w-full border-1.5 border-default-200"
         shadow="sm"
         onPress={() => {
-          navigate({ to: `/learner/courses/${course.id}` });
+          navigate({ to: `/courses/${course.id}` });
         }}
       >
         <CardBody className="p-2 grid grid-cols-3 sm:flex sm:flex-col gap-2 overflow-hidden">

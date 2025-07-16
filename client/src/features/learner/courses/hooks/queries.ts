@@ -5,6 +5,7 @@ import {
   getCourseCurriculum,
   getCourseInfo,
   getCourses,
+  getLecture,
   getSubscribedCourses,
 } from "../services/course";
 
@@ -53,5 +54,28 @@ export function useCheckUserEnrollment(courseId: string) {
   return useQuery({
     queryKey: [`user-${user?.id}-course-${courseId}-enrollment`],
     queryFn: () => checkUserEnrollment(courseId),
+  });
+}
+
+export function useGetSubscribedCourseCurriculumItem(
+  item: (CurriculumItem & { courseId: string }) | null,
+) {
+  return useQuery({
+    queryKey: [`course-${item?.courseId}-curriculum-item-${item?.id}`],
+    queryFn: async () => {
+      if (!item) {
+        return null;
+      }
+      switch (item._class) {
+        case "lecture":
+          return await getLecture({
+            lectureId: item.id,
+            courseId: item.courseId,
+          });
+
+        default:
+          null;
+      }
+    },
   });
 }

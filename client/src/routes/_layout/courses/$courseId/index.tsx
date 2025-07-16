@@ -33,11 +33,11 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { data: courseInfo, isLoading: isCourseInfoLoading } =
     useGetCourseInfo(courseId);
-  let { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
+  const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetPublishedCourseCurriculum(courseId);
-  let { data: instructorProfile, isLoading: isInstructorProfileLoading } =
+  const { data: instructorProfile, isLoading: isInstructorProfileLoading } =
     useGetInstructorProfile(courseInfo?.instructor.id!);
-  let [openPreviewModal, setOpenPreviewModal] = React.useState(false);
+  const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
   const enrollForCourse = useEnrollForCourse();
@@ -161,7 +161,7 @@ function RouteComponent() {
                       userEnrollmentStatus && userEnrollmentStatus.isEnrolled
                         ? () =>
                             navigate({
-                              to: `/learner/courses/${courseId}/learn`,
+                              to: `/courses/${courseId}/learn`,
                             })
                         : handleEnrollForCourse
                     }

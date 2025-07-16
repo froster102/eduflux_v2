@@ -34,6 +34,7 @@ export const TYPES = {
   UpdateCourseEnrollmentCountUseCase: Symbol.for(
     'UpdateCourseEnrollmentCountUseCase',
   ),
+  GetSubscriberLectureUseCase: Symbol.for('GetSubscriberLectureUseCase'),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),

@@ -44,6 +44,7 @@ import { GetUserSubscribedCoursesUseCase } from '@/application/use-cases/get-use
 import { GrpcEnrollmentServiceClient } from '@/infrastructure/grpc/client/enrollment-service-client.grpc';
 import { UpdateEnrollmentCountUseCase } from '@/application/use-cases/update-enrollment-count.use-case';
 import { EnrollmentEventsConsumer } from '@/interface/consumer/enrollment-events.consumer';
+import { GetSubscriberLectureUseCase } from '@/application/use-cases/get-subscriber-lecture.use-case';
 
 const container = new Container();
 
@@ -87,6 +88,10 @@ container
 container
   .bind(TYPES.UpdateCourseEnrollmentCountUseCase)
   .to(UpdateEnrollmentCountUseCase);
+
+container
+  .bind(TYPES.GetSubscriberLectureUseCase)
+  .to(GetSubscriberLectureUseCase);
 
 //Http Routes
 container.bind(TYPES.AdminRoutes).to(AdminRoutes);

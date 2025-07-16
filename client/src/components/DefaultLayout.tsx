@@ -28,7 +28,7 @@ export default function DefaultLayout({
           <Sidebar navItems={navItems} topContent={topContent} />
           <div className="pt-16 lg:pt-0 w-full h-full flex-1 overflow-y-auto scrollbar-hide">
             <Header />
-            {children}
+            <div className="pt-10 h-full">{children}</div>
           </div>
         </div>
       </div>

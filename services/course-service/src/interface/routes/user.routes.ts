@@ -12,6 +12,10 @@ import {
   GetUserSubscribedCoursesInput,
   GetUserSubscribedCoursesOutput,
 } from '@/application/use-cases/get-user-subscribed-courses';
+import {
+  GetSubscriberLectureInput,
+  GetSubscriberLectureOutput,
+} from '@/application/use-cases/get-subscriber-lecture.use-case';
 
 @injectable()
 export class CourseRoutes {
@@ -25,6 +29,11 @@ export class CourseRoutes {
     private readonly getUserSubscribedCoursesUseCase: IUseCase<
       GetUserSubscribedCoursesInput,
       GetUserSubscribedCoursesOutput
+    >,
+    @inject(TYPES.GetSubscriberLectureUseCase)
+    private readonly getSubscriberLectureUseCase: IUseCase<
+      GetSubscriberLectureInput,
+      GetSubscriberLectureOutput
     >,
   ) {}
 
@@ -47,7 +56,18 @@ export class CourseRoutes {
             paginationQueryParams: parsedQuery,
           });
           return response;
-        }),
+        })
+        .get(
+          '/me/subscribed-courses/:courseId/lectures/:lectureId',
+          async ({ params, user }) => {
+            const { lecture } = await this.getSubscriberLectureUseCase.execute({
+              courseId: params.courseId,
+              lectureId: params.lectureId,
+              userId: user.id,
+            });
+            return { ...lecture };
+          },
+        ),
     );
   }
 }

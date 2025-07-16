@@ -54,3 +54,14 @@ export async function checkUserEnrollment(
 
   return response.data;
 }
+
+export async function getLecture(data: {
+  lectureId: string;
+  courseId: string;
+}): Promise<Lecture> {
+  const response = await api.get(
+    `/users/me/subscribed-courses/${data.courseId}/lectures/${data.lectureId}`,
+  );
+
+  return response.data;
+}

@@ -22,4 +22,8 @@ export interface IEnrollmentServiceGateway {
     userId: string,
     paginationQueryParams: PaginationQueryParams,
   ): Promise<GetUserEnrollmentsResponseDto>;
+  checkUserEnrollment(
+    userId: string,
+    courseId: string,
+  ): Promise<{ isEnrolled: boolean }>;
 }
