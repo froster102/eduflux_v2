@@ -199,18 +199,9 @@ declare global {
     createdAt: Date;
   };
 
-  export type Progress = {
+  export type CourseProgress = {
     id: string;
-    userId: string;
-    courseId: string;
-    completedLessons: {
-      lessonId: string;
-      sectionId: string;
-      isCompleted: boolean;
-    }[];
-    completionPercentage: number;
-    createdAt: Date;
-    updatedAt: Date;
+    completedLectures: string[];
   };
 
   export type GraphData = {

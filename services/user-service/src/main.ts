@@ -4,8 +4,8 @@ import { serverConfig } from './shared/config/server.config';
 import { container } from './shared/di/container';
 import { TYPES } from './shared/di/types';
 import { DatabaseClient } from './infrastructure/database/setup';
-import { UserEventsConsumer } from './interface/consumers/user-events.consumer';
 import { GrpcServer } from './infrastructure/grpc/grpc.server';
+import { EnrollmentEventsConsumer } from './interface/consumers/enrollment-events.consumer';
 
 async function bootstrap() {
   //http
@@ -17,10 +17,10 @@ async function bootstrap() {
   await databaseClient.connect();
 
   //kafka consumer
-  // const userEventsConsumer = container.get<UserEventsConsumer>(
-  //   TYPES.UserEventsConsumer,
-  // );
-  // await userEventsConsumer.connect();
+  const enrollmentEventsConsumer = container.get<EnrollmentEventsConsumer>(
+    TYPES.EnrollmentEventsConsumer,
+  );
+  await enrollmentEventsConsumer.connect();
 
   //grpc
   const grpcServer = container.get<GrpcServer>(TYPES.GrpcServer);

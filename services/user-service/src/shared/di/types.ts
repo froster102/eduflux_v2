@@ -4,6 +4,7 @@ export const TYPES = {
 
   //Repositories
   UserRepository: Symbol.for('UserRepository'),
+  ProgressRepository: Symbol.for('ProgressRepository'),
 
   //Use Cases
   CreateUserUseCase: Symbol.for('CreateUserUseCase'),
@@ -11,15 +12,21 @@ export const TYPES = {
   GetUserUseCase: Symbol.for('GetUserUseCase'),
   GetUploadUrlUseCase: Symbol.for('GetUploadUrlUseCase'),
   GetInstructorProfileUseCase: Symbol.for('GetInstructorProfileUseCase'),
+  GetUserCourseProgressUseCase: Symbol.for('GetUserCourseProgressUseCase'),
+  CreateUserProgressUseCase: Symbol.for('CreateUserProgressUseCase'),
+  AddLectureProgressUseCase: Symbol.for('AddLectureProgressUseCase'),
+  DeleteLectureProgressUseCase: Symbol.for('DeleteLectureProgressUseCase'),
 
   //Consumers
   UserEventsConsumer: Symbol.for('UserEventsConsumer'),
+  EnrollmentEventsConsumer: Symbol.for('EnrollmentEventsConsumer'),
 
   //Http Controllers
   UserController: Symbol.for('UserController'),
 
   //Http Routes
   UserRoutes: Symbol.for('UserRoutes'),
+  ProgressRoutes: Symbol.for('ProgressRoutes'),
 
   //Services
   FileStorageService: Symbol.for('FileStorageService'),
@@ -27,4 +34,7 @@ export const TYPES = {
   //Grpc Services
   UserGrpcService: Symbol.for('UserGrpcService'),
   GrpcServer: Symbol.for('GrpcServer'),
+
+  //Mappers
+  ProgressMapper: Symbol.for('ProgressMapper'),
 };

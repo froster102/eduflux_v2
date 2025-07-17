@@ -4,6 +4,7 @@ import {
   checkUserEnrollment,
   getCourseCurriculum,
   getCourseInfo,
+  getCourseProgress,
   getCourses,
   getLecture,
   getSubscribedCourses,
@@ -77,5 +78,14 @@ export function useGetSubscribedCourseCurriculumItem(
           null;
       }
     },
+  });
+}
+
+export function useGetCourseProgress(courseId: string) {
+  const { user } = useAuthStore();
+
+  return useQuery({
+    queryKey: [`user-${user!.id}-course-${courseId}-progress`],
+    queryFn: () => getCourseProgress(courseId),
   });
 }

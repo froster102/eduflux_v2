@@ -4,19 +4,21 @@ import { httpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { errorHandler } from './middlewares/error-handler.middleware';
 import { USER_SERVICE } from '@/shared/constants/services';
 import { TYPES } from '@/shared/di/types';
-import { UserRoutes } from '@/interface/routes/user.routes';
 import { container } from '@/shared/di/container';
+import { IRoute } from '@/interface/routes/interface/routes.interface';
 
 export class Server {
   private app: Elysia;
   private port: number;
   private logger = new Logger(USER_SERVICE);
-  private userRoutes: UserRoutes;
+  private userRoutes: IRoute<Elysia>;
+  private progressRoutes: IRoute<Elysia>;
 
   constructor(port: number) {
     this.app = new Elysia();
     this.port = port;
-    this.userRoutes = container.get<UserRoutes>(TYPES.UserRoutes);
+    this.userRoutes = container.get<IRoute<Elysia>>(TYPES.UserRoutes);
+    this.progressRoutes = container.get<IRoute<Elysia>>(TYPES.ProgressRoutes);
   }
 
   private setupMiddlewares(): void {
@@ -26,7 +28,8 @@ export class Server {
 
   private setupRoutes(): void {
     this.app.get('/api/users/ok', () => ({ ok: true }));
-    this.app.use(this.userRoutes.setupRoutes());
+    this.app.use(this.userRoutes.register());
+    this.app.use(this.progressRoutes.register());
   }
 
   start(): void {

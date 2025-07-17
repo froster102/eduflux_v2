@@ -9,10 +9,15 @@ import { Spinner } from "@heroui/spinner";
 
 import {
   useGetCourseInfo,
+  useGetCourseProgress,
   useGetPublishedCourseCurriculum,
   useGetSubscribedCourseCurriculumItem,
 } from "@/features/learner/courses/hooks/queries";
 import HLSPlayer from "@/components/HLSPlayer";
+import {
+  useAddCourseLectureProgress,
+  useDeleteCourseLectureProgress,
+} from "@/features/learner/courses/hooks/mutations";
 
 export const Route = createFileRoute("/_layout/courses/$courseId/learn/")({
   component: RouteComponent,
@@ -28,12 +33,49 @@ function RouteComponent() {
     React.useState<CurriculumItem | null>(null);
   const { data: itemContent, isLoading: isItemContentLoading } =
     useGetSubscribedCourseCurriculumItem(selectedCurriculumItem);
+  const addCourseLectureProgress = useAddCourseLectureProgress();
+  const deleteLectureProgress = useDeleteCourseLectureProgress();
+  const { data: courseProgress } = useGetCourseProgress(courseId);
 
   React.useEffect(() => {
     if (courseCurriculum) {
       setSelectedCurriculumItem(courseCurriculum[1]);
     }
   }, [courseCurriculum]);
+
+  const totalModulesWithoutChapter = React.useMemo(() => {
+    if (courseCurriculum) {
+      return courseCurriculum.reduce((acc, el) => {
+        if (el._class !== "chapter") {
+          acc++;
+        }
+
+        return acc;
+      }, 0);
+    }
+
+    return 0;
+  }, [courseCurriculum]);
+
+  const completedItems: Set<string> = React.useMemo(() => {
+    if (courseProgress) {
+      return new Set<string>(courseProgress.completedLectures);
+    }
+
+    return new Set();
+  }, [courseProgress]);
+
+  const progressPercentage = React.useMemo(() => {
+    if (courseProgress && totalModulesWithoutChapter > 0) {
+      const percentage =
+        (courseProgress.completedLectures.length * 100) /
+        totalModulesWithoutChapter;
+
+      return percentage;
+    }
+
+    return 0;
+  }, [courseProgress, totalModulesWithoutChapter]);
 
   function findChapterItems(
     curriculumItems: CurriculumItems,
@@ -55,6 +97,22 @@ function RouteComponent() {
     return itemsForChapter;
   }
 
+  function handleCourseProgress(item: CurriculumItem, isCompleted: boolean) {
+    if (item._class == "lecture") {
+      if (isCompleted) {
+        addCourseLectureProgress.mutate({
+          courseId,
+          lectureId: item.id,
+        });
+      } else {
+        deleteLectureProgress.mutate({
+          courseId,
+          lectureId: item.id,
+        });
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col lg:flex-row gap-4 w-full h-full pt-2">
       <Card className="w-full h-fit overflow-hidden">
@@ -63,8 +121,6 @@ function RouteComponent() {
             <Spinner />
           ) : itemContent && itemContent!._class === "lecture" ? (
             <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-              {" "}
-              {/* 16:9 aspect ratio */}
               <div className="absolute top-0 left-0 w-full h-full">
                 <HLSPlayer
                   options={{
@@ -90,8 +146,12 @@ function RouteComponent() {
             <p className="font-semibold text-xl">{courseInfo!.title}</p>
           )}
           <div className="pt-2 w-full flex items-center gap-2">
-            <Progress aria-label="Loading..." className="max-w-md" value={60} />
-            60%
+            <Progress
+              aria-label="Loading..."
+              className="max-w-md"
+              value={progressPercentage}
+            />
+            {progressPercentage}%
           </div>
         </CardHeader>
         <CardBody>
@@ -132,7 +192,17 @@ function RouteComponent() {
                               >
                                 <CardBody>
                                   <div className="flex">
-                                    <Checkbox defaultSelected={false} />
+                                    <Checkbox
+                                      isSelected={completedItems.has(
+                                        chapterItem.id,
+                                      )}
+                                      onValueChange={(value) => {
+                                        handleCourseProgress(
+                                          chapterItem,
+                                          value,
+                                        );
+                                      }}
+                                    />
                                     <p>
                                       {chapterItem.objectIndex}.
                                       {chapterItem.title}

@@ -3,9 +3,15 @@ import httpStatus from 'http-status';
 import { HttpResponse } from '../interfaces/http-response.interface';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { getHttpErrorCode } from '@/shared/errors/error-code';
+import { Logger } from '@/shared/utils/logger';
+import { USER_SERVICE } from '@/shared/constants/services';
+
+const logger = new Logger(USER_SERVICE);
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, request, error }): HttpResponse<any> => {
+    logger.error((error as Error)?.message);
+
     if (code === 'NOT_FOUND') {
       set.status = httpStatus.NOT_FOUND;
       return {

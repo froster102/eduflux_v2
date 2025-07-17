@@ -67,3 +67,36 @@ export async function getLecture(data: {
 
   return response.data;
 }
+
+export async function getCourseProgress(
+  courseId: string,
+): Promise<CourseProgress> {
+  const response = await api.get(
+    `/users/me/subscribed-courses/${courseId}/progress`,
+  );
+
+  return response.data;
+}
+
+export async function addCourseLectureProgress(data: {
+  courseId: string;
+  lectureId: string;
+}): Promise<void> {
+  await api.post(
+    `/users/me/subscribed-courses/${data.courseId}/completed-lectures/`,
+    { lectureId: data.lectureId },
+  );
+
+  return;
+}
+
+export async function deleteCourseLectureProgress(data: {
+  courseId: string;
+  lectureId: string;
+}) {
+  await api.delete(
+    `/users/me/subscribed-courses/${data.courseId}/completed-lectures/${data.lectureId}`,
+  );
+
+  return;
+}

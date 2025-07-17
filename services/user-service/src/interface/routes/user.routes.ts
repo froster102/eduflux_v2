@@ -12,9 +12,10 @@ import { updateUserSchema } from '@/shared/validation/schema/update-user';
 import { ISignedUploadUrlResponse } from '@/application/ports/file-storage.service';
 import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
 import { GetInstructorProfileUseCase } from '@/application/use-cases/get-instructor-profile.use-case';
+import { IRoute } from './interface/routes.interface';
 
 @injectable()
-export class UserRoutes {
+export class UserRoutes implements IRoute<Elysia> {
   constructor(
     @inject(TYPES.GetUserUseCase)
     private readonly getUserUseCase: GetUserUseCase,
@@ -26,7 +27,7 @@ export class UserRoutes {
     private readonly getInstructorProfileUseCase: GetInstructorProfileUseCase,
   ) {}
 
-  setupRoutes(): Elysia {
+  register(): Elysia {
     return new Elysia().group('/api/users', (group) =>
       group
         .use(authenticaionMiddleware)
