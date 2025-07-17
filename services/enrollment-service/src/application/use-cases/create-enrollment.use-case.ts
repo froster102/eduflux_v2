@@ -41,7 +41,7 @@ export class CreateEnrollmentUseCase
     const user = await this.userServiceGateway.getUserDetails(userId);
 
     if (!user) {
-      throw new NotFoundException('User not found.');
+      throw new NotFoundException(`User with ID:${userId} not found.`);
     }
 
     const course = await this.courseServiceGateway.getCourseDetails(courseId);
@@ -58,6 +58,7 @@ export class CreateEnrollmentUseCase
 
     if (existingEnrollment && existingEnrollment.status === 'PENDING') {
       throw new ConflictException(
+        'Enrollment already exists.',
         `Enrollment already exists.Please wait sometime to complete processing.`,
       );
     }

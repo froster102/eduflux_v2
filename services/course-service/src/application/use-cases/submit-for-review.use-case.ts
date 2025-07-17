@@ -43,13 +43,11 @@ export class SubmitForReviewUseCase
     const foundCourse = await this.courseRepository.findById(courseId);
 
     if (!foundCourse) {
-      throw new NotFoundException(`Course with id: ${courseId} not found`);
+      throw new NotFoundException(`Course with ID:${courseId} not found`);
     }
 
     if (foundCourse.instructor.id !== actor.id) {
-      throw new ForbiddenException(
-        'You are not authorized for "submission" of this course.',
-      );
+      throw new ForbiddenException('You are not authorized for this action.');
     }
 
     const instructorInfo = await this.userServiceGateway.getUserDetails(

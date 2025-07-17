@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { TYPES } from '@/shared/di/types';
 import { User } from '@/domain/entities/user.entity';
-import { ConflictException } from '@/application/exceptions/conflict-exception';
+import { ConflictException } from '../exceptions/conflict.exception';
 
 @injectable()
 export class CreateUserUseCase {
@@ -16,7 +16,9 @@ export class CreateUserUseCase {
     const user = await this.userRepository.findById(createUserDto.id);
 
     if (user) {
-      throw new ConflictException(`User already exists.`);
+      throw new ConflictException(
+        `User with ID:${createUserDto.id} already exists.`,
+      );
     }
 
     const newUser = User.create(

@@ -6,14 +6,19 @@ import {
 } from '../generated/payment';
 import { TYPES } from '@/shared/di/types';
 import { InitiatePaymentUseCase } from '@/application/use-cases/initiate-payment.use-case';
-import { sendUnaryData, ServerUnaryCall, status } from '@grpc/grpc-js';
+import {
+  sendUnaryData,
+  ServerUnaryCall,
+  ServiceError,
+  status,
+} from '@grpc/grpc-js';
 import { Logger } from '@/shared/utils/logger';
 import { PAYMENT_SERVICE } from '@/shared/constants/service';
 import { Currency } from '@/shared/constants/currency';
 import { PaymentPurpose } from '@/domain/entities/transaction.entity';
-import { ApplicationException } from '@/application/exception/application.exception';
 import { DomainException } from '@/domain/exception/domain.exception';
 import { getGrpcStatusCode } from '@/shared/error/error-code';
+import { ApplicationException } from '@/application/exceptions/application.exception';
 
 export class GrpcPaymentService implements PaymentServiceServer {
   private logger = new Logger(PAYMENT_SERVICE);
@@ -47,9 +52,11 @@ export class GrpcPaymentService implements PaymentServiceServer {
         };
         callback(null, response);
       })
-      .catch((error) => {
-        console.log(error);
-        this.logger.error('Error processing request to initiate payment');
+      .catch((error: Error | ServiceError) => {
+        this.logger.error(
+          `Error processing request to initiate payment error: ${error.message}`,
+          error as Record<string, any>,
+        );
         if (
           error instanceof ApplicationException ||
           error instanceof DomainException

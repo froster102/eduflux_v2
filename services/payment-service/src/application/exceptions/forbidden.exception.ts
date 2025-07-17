@@ -2,8 +2,9 @@ import { AppErrorCode } from '@/shared/error/error-code';
 import { ApplicationException } from './application.exception';
 
 export class ForbiddenException extends ApplicationException {
-  constructor(message: string) {
-    super(message, AppErrorCode.FORBIDDEN);
+  constructor(message: string, publicMessage?: string) {
+    super(message, AppErrorCode.FORBIDDEN, publicMessage);
     this.name = 'ForbiddenException';
+    this.publicMessage = publicMessage;
   }
 }

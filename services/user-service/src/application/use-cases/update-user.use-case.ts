@@ -15,7 +15,9 @@ export class UpdateUserUseCase {
     const user = await this.userRepository.findById(updateUserDto.id);
 
     if (!user) {
-      throw new NotFoundException(`User with ID:${updateUserDto.id} not found`);
+      throw new NotFoundException(
+        `User with ID:${updateUserDto.id} not found.`,
+      );
     }
 
     user.update(updateUserDto);
@@ -25,6 +27,6 @@ export class UpdateUserUseCase {
       user,
     );
 
-    return updatedUser;
+    return updatedUser!;
   }
 }

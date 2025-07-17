@@ -1,4 +1,4 @@
-import { AppErrorCode } from '@/shared/errors/error-code';
+import { AppErrorCode } from '@/shared/error/error-code';
 import { ApplicationException } from './application.exception';
 
 export class NotFoundException extends ApplicationException {

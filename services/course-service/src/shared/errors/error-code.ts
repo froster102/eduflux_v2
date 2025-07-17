@@ -8,7 +8,18 @@ export enum AppErrorCode {
   FORBIDDEN = 'FORBIDDEN',
   NOT_FOUND = 'NOT_FOUND',
   UNAUTHORIZED = 'UNAUTHORIZED',
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
 }
+
+export const PUBLIC_ERROR_MESSAGES: Record<AppErrorCode, string> = {
+  [AppErrorCode.NOT_FOUND]: 'The requested resource was not found.',
+  [AppErrorCode.FORBIDDEN]: 'You are not authorized to perform this action.',
+  [AppErrorCode.INVALID_INPUT]: 'One or more input fields are invalid.',
+  [AppErrorCode.INTERNAL_SERVER_ERROR]:
+    'An unexpected server error occurred. Please try again later.',
+  [AppErrorCode.CONFLICT]: 'The requested resource already exists',
+  [AppErrorCode.UNAUTHORIZED]: 'Unauthorized',
+};
 
 export const errorCodeToHttpStatusCode: { [key in AppErrorCode]?: number } = {
   [AppErrorCode.INVALID_INPUT]: httpStatus.BAD_REQUEST,

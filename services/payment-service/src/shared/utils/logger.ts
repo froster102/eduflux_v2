@@ -1,14 +1,14 @@
-import * as winston from "winston";
-import { serverConfig } from "../config/server.config";
+import * as winston from 'winston';
+import { serverConfig } from '../config/server.config';
 
 const { combine, timestamp, printf, colorize } = winston.format;
 
 const customFormat = printf(
   ({ level, message, timestamp, context, ...info }) => {
-    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : "";
+    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : '';
     // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
-    return `[${timestamp}] [${context ?? "App"}] ${level}: ${message} ${meta}`;
-  }
+    return `[${timestamp}] [${context ?? 'App'}] ${level}: ${message} ${meta}`;
+  },
 );
 
 export class Logger {
@@ -19,16 +19,16 @@ export class Logger {
     this._context = context as string;
 
     this._logger = winston.createLogger({
-      level: serverConfig.NODE_ENV === "development" ? "debug" : "info",
+      level: serverConfig.NODE_ENV === 'development' ? 'debug' : 'info',
       levels: winston.config.npm.levels,
       format: combine(
         colorize({ all: true }),
-        timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format((info) => {
           info.context = this._context;
           return info;
         })(),
-        customFormat
+        customFormat,
       ),
       transports: [new winston.transports.Console()],
     });

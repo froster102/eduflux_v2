@@ -52,7 +52,10 @@ export class DeleteChapterUseCase
     }
 
     if (chapter.objectIndex === 1) {
-      throw new InvalidInputException('Cannot delete the first chapter');
+      throw new InvalidInputException(
+        'Cannot delete the first chapter due to business rules.',
+        'The first chapter of a course cannot be deleted.',
+      );
     }
 
     const deleted = await this.chapterRepository.deleteById(chapterId);

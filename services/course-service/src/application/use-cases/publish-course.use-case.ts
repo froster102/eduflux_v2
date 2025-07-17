@@ -44,7 +44,7 @@ export class PublishCourseUseCase
     const foundCourse = await this.courseRepository.findById(courseId);
 
     if (!foundCourse) {
-      throw new NotFoundException(`Course with id: ${courseId} not found`);
+      throw new NotFoundException(`Course with ID:${courseId} not found`);
     }
 
     if (foundCourse.instructor.id !== actor.id) {

@@ -15,7 +15,7 @@ export class GetInstructorProfileUseCase {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(`User with ID:${userId} not found.`);
     }
 
     if (!user.roles.includes(Role.INSTRUCTOR)) {

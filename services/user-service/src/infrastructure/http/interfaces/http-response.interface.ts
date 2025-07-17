@@ -3,4 +3,5 @@ export interface HttpResponse<T> {
   data?: T;
   code?: string;
   path?: string;
+  error?: Record<string, any>;
 }

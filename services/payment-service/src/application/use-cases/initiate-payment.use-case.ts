@@ -6,12 +6,12 @@ import {
   Transaction,
   PaymentPurpose,
 } from '@/domain/entities/transaction.entity';
-import { InvalidInputException } from '../exception/invalid-input.exception';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { tryCatch } from '@/shared/utils/try-catch';
-import { ApplicationException } from '../exception/application.exception';
 import { AppErrorCode } from '@/shared/error/error-code';
+import { InvalidInputException } from '../exceptions/invalid-input.exception';
+import { ApplicationException } from '../exceptions/application.exception';
 
 export interface InitiatePaymentInputDto {
   amount: number;
@@ -84,7 +84,7 @@ export class InitiatePaymentUseCase
       await this.paymentRepository.update(newPayment.id, newPayment);
       throw new ApplicationException(
         `Failed to initiate payment ${error.message}`,
-        AppErrorCode.INTERNAL,
+        AppErrorCode.INTERNAL_SERVER_ERROR,
       );
     }
 

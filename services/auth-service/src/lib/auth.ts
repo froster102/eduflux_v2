@@ -14,6 +14,7 @@ import { container } from '@/shared/di/container';
 import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
 import { TYPES } from '@/shared/di/types';
 import { tryCatch } from '@/shared/utils/try-catch';
+import { ErrorMesssage } from '@/shared/errors/error-message';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,
@@ -139,7 +140,7 @@ export const auth = betterAuth({
           if (error) {
             await ctx.context.internalAdapter.deleteUser(user.id);
             throw new BetterAuthError(
-              'Internal server error',
+              ErrorMesssage.INTERNALE_SERVER_ERROR,
               'INTERNAL_SERVER_ERROR',
             );
           }

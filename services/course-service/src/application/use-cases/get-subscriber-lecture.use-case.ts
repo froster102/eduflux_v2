@@ -51,13 +51,13 @@ export class GetSubscriberLectureUseCase
     const course = await this.courseRepository.findById(courseId);
 
     if (!course) {
-      throw new NotFoundException('Course not found');
+      throw new NotFoundException(`Course with ID:${courseId} not found`);
     }
 
     const lecture = await this.lectureRepository.findById(lectureId);
 
     if (!lecture) {
-      throw new NotFoundException('Lecture not found.');
+      throw new NotFoundException(`Lecture with ID:${lectureId}  found.`);
     }
 
     const asset = await this.assetRepository.findById(lecture.assetId!);

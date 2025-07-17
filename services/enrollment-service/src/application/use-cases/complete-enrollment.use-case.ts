@@ -26,7 +26,9 @@ export class CompleteEnrollmentUseCase
     const enrollment = await this.enrollmentRepository.findById(enrollmentId);
 
     if (!enrollment) {
-      throw new NotFoundException(`Enrollment not found`);
+      throw new NotFoundException(
+        `Enrollment with ID:${enrollmentId} not found`,
+      );
     }
 
     enrollment.markAsCompleted(paymentId);

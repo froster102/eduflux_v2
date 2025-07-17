@@ -50,7 +50,7 @@ export class CreateCourseUseCase
 
     if (!category) {
       throw new NotFoundException(
-        `Category with ${createCourseDto.categoryId} not found.`,
+        `Category with ID:${createCourseDto.categoryId} not found.`,
       );
     }
 

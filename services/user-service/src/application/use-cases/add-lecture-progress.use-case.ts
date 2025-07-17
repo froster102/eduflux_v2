@@ -27,7 +27,9 @@ export class AddLectureProgressUseCase
     );
 
     if (!progress) {
-      throw new NotFoundException('Progress not found.');
+      throw new NotFoundException(
+        `Progress for course with ID:${courseId} for user ${userId} not found.`,
+      );
     }
 
     progress.addLecture(lectureId);

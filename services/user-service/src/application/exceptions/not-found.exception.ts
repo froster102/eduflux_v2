@@ -1,9 +1,10 @@
-import { ApplicationException } from '@/application/exceptions/application.exception';
 import { AppErrorCode } from '@/shared/errors/error-code';
+import { ApplicationException } from './application.exception';
 
 export class NotFoundException extends ApplicationException {
-  constructor(message: string) {
-    super(message, AppErrorCode.NOT_FOUND);
+  constructor(message: string, publicMessage?: string) {
+    super(message, AppErrorCode.NOT_FOUND, publicMessage);
     this.name = 'NotFoundException';
+    this.publicMessage = publicMessage;
   }
 }

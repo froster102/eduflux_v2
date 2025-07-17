@@ -11,10 +11,10 @@ import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { CheckUserEnrollmentUseCase } from '@/application/use-cases/check-user-enrollment.use-case';
-import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { GetUserEnrollmentsUseCase } from '@/application/use-cases/get-user-enrollments.use-case';
+import { ApplicationException } from '@/application/exceptions/application.exception';
 
 export class GrpcEnrollmentService implements EnrollmentServiceServer {
   private logger = new Logger(ENROLLMENT_SERVICE);

@@ -33,7 +33,9 @@ export class GetUserCourseProgressUseCase
     );
 
     if (!progress) {
-      throw new NotFoundException('Progress not found.');
+      throw new NotFoundException(
+        `Progress for user with ID:${userId} for course ID:${courseId} not found.`,
+      );
     }
 
     return {

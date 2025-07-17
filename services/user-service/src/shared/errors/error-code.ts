@@ -8,9 +8,18 @@ export enum AppErrorCode {
   FORBIDDEN = 'FORBIDDEN',
   NOT_FOUND = 'NOT_FOUND',
   UNAUTHORIZED = 'UNAUTHORIZED',
+  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
 }
 
-//Http status code mapping
+export const PUBLIC_ERROR_MESSAGES: Record<AppErrorCode, string> = {
+  [AppErrorCode.NOT_FOUND]: 'The requested resource was not found.',
+  [AppErrorCode.FORBIDDEN]: 'You are not authorized to perform this action.',
+  [AppErrorCode.INVALID_INPUT]: 'One or more input fields are invalid.',
+  [AppErrorCode.INTERNAL_SERVER_ERROR]:
+    'An unexpected server error occurred. Please try again later.',
+  [AppErrorCode.CONFLICT]: 'The requested resource already exists',
+  [AppErrorCode.UNAUTHORIZED]: 'Unauthorized',
+};
 
 export const errorCodeToHttpStatusCode: { [key in AppErrorCode]?: number } = {
   [AppErrorCode.INVALID_INPUT]: httpStatus.BAD_REQUEST,
@@ -36,8 +45,6 @@ export const getHttpErrorCode = (code: AppErrorCode | string): number => {
   return httpStatus.INTERNAL_SERVER_ERROR;
 };
 
-//Grpc status code mapping
-
 export const errorCodeToGrpcStatusCode: { [key in AppErrorCode]?: number } = {
   [AppErrorCode.CONFLICT]: grpcStatus.ALREADY_EXISTS,
   [AppErrorCode.FORBIDDEN]: grpcStatus.PERMISSION_DENIED,
@@ -56,6 +63,6 @@ export const getGrpcStatusCode = (code: AppErrorCode | string): number => {
     const logger = new Logger('ERROR_HANDLER');
 
     logger.warn(`[ERROR_HANDLER] Unknown application error code '${code}'`);
-    return grpcStatus.INTERNAL;
   }
+  return grpcStatus.INTERNAL;
 };

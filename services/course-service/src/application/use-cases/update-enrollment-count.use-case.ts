@@ -14,7 +14,7 @@ export class UpdateEnrollmentCountUseCase implements IUseCase<string, void> {
     const course = await this.courseRepository.findById(courseId);
 
     if (!course) {
-      throw new NotFoundException('Course not found.');
+      throw new NotFoundException(`Course with ID:${courseId} not found.`);
     }
 
     await this.courseRepository.incrementCourseEnrollmentCount(courseId);

@@ -27,7 +27,9 @@ export class DeleteLectureProgressUseCase
     );
 
     if (!progress) {
-      throw new NotFoundException('Progress not found.');
+      throw new NotFoundException(
+        `Progress for user with ID:${userId} for course ID:${courseId} not found.`,
+      );
     }
 
     progress.removeLecture(lectureId);

@@ -10,7 +10,6 @@ import type {
 import { inject } from 'inversify';
 import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
-import { ApplicationException } from '../exception/application.exception';
 import { AppErrorCode } from '@/shared/error/error-code';
 import { v4 as uuidV4 } from 'uuid';
 import { Logger } from '@/shared/utils/logger';
@@ -18,6 +17,7 @@ import { PAYMENT_SERVICE } from '@/shared/constants/service';
 
 import { tryCatch } from '@/shared/utils/try-catch';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
+import { ApplicationException } from '../exceptions/application.exception';
 
 export interface HandleStripeWebhookInput {
   rawBody: string | Buffer;
@@ -54,7 +54,7 @@ export class HandleStripeWebhookUseCase
     if (error) {
       throw new ApplicationException(
         `Webhook error: ${(error as Record<string, any>).message}`,
-        AppErrorCode.INTERNAL,
+        AppErrorCode.INTERNAL_SERVER_ERROR,
       );
     }
 
@@ -191,11 +191,11 @@ export class HandleStripeWebhookUseCase
       return { success: true, message: 'Webhook processed successfully.' };
     } catch (error: any) {
       this.logger.error(
-        `Error processing Stripe event ${event.id} for payment ${payment.id} (correlationId: ${correlationId}):`,
+        `Error processing Stripe event ${event.id} for payment ID:${payment.id} (correlationId: ${correlationId}):`,
       );
       throw new ApplicationException(
-        `Failed to process webhook for internal reasons: ${(error as Record<string, any>).message as string}`,
-        AppErrorCode.INTERNAL,
+        `Failed to process webhook error: ${(error as Record<string, any>).message as string}`,
+        AppErrorCode.INTERNAL_SERVER_ERROR,
       );
     }
   }
