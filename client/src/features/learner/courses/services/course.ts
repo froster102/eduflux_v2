@@ -40,7 +40,9 @@ export async function getSubscribedCourses(
   paginationQueryParams: PaginationQueryParams,
 ): Promise<{ total: number; courses: Course[] }> {
   const queryParams = buildQueryUrlParams(paginationQueryParams);
-  const response = await api.get(`/users/me/subscribed-courses${queryParams}`);
+  const response = await api.get(
+    `/courses/me/subscribed-courses${queryParams}`,
+  );
 
   return response.data;
 }
@@ -60,7 +62,7 @@ export async function getLecture(data: {
   courseId: string;
 }): Promise<Lecture> {
   const response = await api.get(
-    `/users/me/subscribed-courses/${data.courseId}/lectures/${data.lectureId}`,
+    `/courses/me/subscribed-courses/${data.courseId}/lectures/${data.lectureId}`,
   );
 
   return response.data;

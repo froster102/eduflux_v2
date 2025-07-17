@@ -40,16 +40,6 @@ services:
           - /api/courses
         strip_path: false
 
-      - name: user-subscribed-courses
-        paths:
-          - /api/users/me/subscribed-courses
-        strip_path: false
-        
-      - name: user-taught-courses-route
-        paths:
-          - /api/users/me/taught-courses
-        strip_path: false
-
   - name: upload-service
     url: http://upload-service:3004
     routes:
@@ -73,5 +63,3 @@ services:
         paths:
           - /api/payments
         strip_path: false
-   
-          

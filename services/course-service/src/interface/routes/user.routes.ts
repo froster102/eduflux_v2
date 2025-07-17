@@ -38,7 +38,7 @@ export class CourseRoutes {
   ) {}
 
   register(): Elysia {
-    return new Elysia().group('/api/users', (group) =>
+    return new Elysia().group('/api/courses', (group) =>
       group
         .use(authenticaionMiddleware)
         .get('/me/taught-courses', async ({ user, query }) => {
