@@ -9,7 +9,7 @@ export const httpLoggerMiddleware = (app: Elysia) => {
 
   app.onRequest(({ server, request }) => {
     logger.info(`Incomming request: ${request.method} ${request.url}`, {
-      ip: server.requestIP(request).address,
+      ip: server!.requestIP(request)!.address,
       userAgent: request.headers.get('user-agent'),
     });
   });

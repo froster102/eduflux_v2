@@ -22,7 +22,7 @@ export class MongoProgressRepository
   async findByUserIdAndCourseId(
     userId: string,
     courseId: string,
-  ): Promise<Progress> {
+  ): Promise<Progress | null> {
     const progress = await ProgressModel.findOne({ userId, courseId }).catch(
       (error: Error) => {
         throw new DatabaseException(error.message);

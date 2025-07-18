@@ -13,8 +13,10 @@ import { ServerUnaryCall, sendUnaryData, status } from '@grpc/grpc-js';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
-import { CreateUserUseCase } from '@/application/use-cases/create-user.use-case';
-import { CreateUserDto } from '@/application/dtos/create-user.dto';
+import {
+  CreateUserInput,
+  CreateUserUseCase,
+} from '@/application/use-cases/create-user.use-case';
 import { Role } from '@/shared/types/role';
 import { UpdateUserUseCase } from '@/application/use-cases/update-user.use-case';
 
@@ -39,7 +41,7 @@ export class UserGrpcService implements UserServiceServer {
     callback: sendUnaryData<UserResponse>,
   ): void {
     this.logger.info(`Received request for userId: ${call.request.id}`);
-    const createUserDto: CreateUserDto = {
+    const createUserDto: CreateUserInput = {
       id: call.request.id,
       firstName: call.request.firstName,
       lastName: call.request.lastName,
@@ -90,10 +92,10 @@ export class UserGrpcService implements UserServiceServer {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          imageUrl: user.imageUrl,
+          imageUrl: user.imageUrl!,
           email: user.email,
-          bio: user.bio,
-          socialLinks: user.socialLinks,
+          bio: user.bio!,
+          socialLinks: user.socialLinks!,
           createdAt: user.createdAt.toISOString(),
           updatedAt: user.updatedAt.toISOString(),
           roles: user.roles,
@@ -117,10 +119,10 @@ export class UserGrpcService implements UserServiceServer {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          imageUrl: user.imageUrl,
+          imageUrl: user.imageUrl!,
           email: user.email,
-          bio: user.bio,
-          socialLinks: user.socialLinks,
+          bio: user.bio!,
+          socialLinks: user.socialLinks!,
           createdAt: user.createdAt.toISOString(),
           updatedAt: user.updatedAt.toISOString(),
           roles: user.roles,

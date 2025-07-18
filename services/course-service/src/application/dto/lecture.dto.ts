@@ -1,4 +1,4 @@
-import { AssetDto } from '../use-cases/asset.dto';
+import { AssetDto } from './asset.dto';
 
 export interface LectureDto {
   _class: ClassType;

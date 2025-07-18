@@ -4,14 +4,16 @@ import { inject } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { Role } from '@/shared/types/role';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import { User } from '@/domain/entities/user.entity';
+import { IUseCase } from './interface/use-case.interface';
 
-export class GetInstructorProfileUseCase {
+export class GetInstructorProfileUseCase implements IUseCase<string, User> {
   constructor(
     @inject(TYPES.UserRepository)
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(userId: string) {
+  async execute(userId: string): Promise<User> {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {

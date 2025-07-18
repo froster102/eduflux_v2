@@ -15,7 +15,7 @@ export class Logger {
   private _context: string;
 
   constructor(context?: string) {
-    this._context = context;
+    this._context = context!;
 
     this._logger = winston.createLogger({
       level: 'info',

@@ -26,7 +26,7 @@ export const updateUserSchema = t.Object({
     t.Array(
       t.Object(
         {
-          plattform: t.String({
+          platform: t.String({
             enum: [
               'x',
               'facebook',
