@@ -1,5 +1,7 @@
+import { envVariables } from '../validation/env-variables';
+
 export const jwtConfig = {
-  JWT_ISS: process.env.JWT_ISS,
-  JWT_AUD: process.env.JWT_AUD,
-  JWKS_URL: process.env.JWKS_URL as string,
+  JWT_ISS: envVariables.JWT_ISS,
+  JWT_AUD: envVariables.JWT_AUD,
+  JWKS_URL: envVariables.JWKS_URL,
 };

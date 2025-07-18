@@ -6,11 +6,12 @@ import { Kafka, Producer } from 'kafkajs';
 import { kafka } from '../kafka/setup';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { Logger } from '@/shared/utils/logger';
+import { PAYMENT_SERVICE } from '@/shared/constants/service';
 
 export class KafkaProducerAdapter implements IMessageBrokerGatway {
   private kafka: Kafka;
   private producer: Producer;
-  private logger = new Logger();
+  private logger = new Logger(PAYMENT_SERVICE);
 
   constructor() {
     this.kafka = kafka;

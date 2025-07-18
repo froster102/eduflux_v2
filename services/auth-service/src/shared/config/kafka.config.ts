@@ -1,6 +1,7 @@
-import 'dotenv/config';
+import { AUTH_SERVICE } from '../constants/services';
+import { envVariables } from '../validation/env-variables';
 
 export const kafkaConfig = {
-  CLIENT_ID: 'AUTH_SERVICE',
-  BROKERS: [process.env.KAKFA_BROKER_URL],
+  CLIENT_ID: AUTH_SERVICE,
+  BROKERS: [envVariables.KAKFA_BROKER_URL],
 };

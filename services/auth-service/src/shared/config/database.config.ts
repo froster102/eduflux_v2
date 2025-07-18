@@ -1,5 +1,5 @@
-import 'dotenv/config';
+import { envVariables } from '../validation/env-variables';
 
 export const databaseConfig = {
-  DATABASE_URL: process.env.DATABASE_URL,
+  DATABASE_URL: envVariables.DATABASE_URL,
 };

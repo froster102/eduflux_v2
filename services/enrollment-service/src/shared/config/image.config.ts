@@ -1,3 +1,5 @@
+import { envVariables } from '../validation/env-variables';
+
 export const imageConfig = {
-  IMAGE_BASE_URL: process.env.IMAGE_BASE_URL!,
+  IMAGE_BASE_URL: envVariables.IMAGE_BASE_URL,
 };

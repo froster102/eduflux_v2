@@ -1,5 +1,5 @@
-import 'dotenv/config';
+import { envVariables } from '../validation/env-variables';
 
 export const betterAuthConfig = {
-  BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+  BETTER_AUTH_SECRET: envVariables.BETTER_AUTH_SECRET,
 };

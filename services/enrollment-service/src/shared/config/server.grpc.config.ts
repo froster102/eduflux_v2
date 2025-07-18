@@ -1,3 +1,5 @@
+import { envVariables } from '../validation/env-variables';
+
 export const grpcServerConfig = {
-  PORT: process.env.GRPC_SERVER_PORT,
+  PORT: envVariables.GRPC_SERVER_PORT,
 };
