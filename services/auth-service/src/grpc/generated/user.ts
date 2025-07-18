@@ -47,7 +47,7 @@ export interface UserResponse {
   lastName: string;
   email: string;
   roles: string[];
-  imageUrl: string;
+  image: string;
   bio: string;
   socialLinks: SocialLinks[];
   createdAt: string;
@@ -372,7 +372,7 @@ function createBaseUserResponse(): UserResponse {
     lastName: "",
     email: "",
     roles: [],
-    imageUrl: "",
+    image: "",
     bio: "",
     socialLinks: [],
     createdAt: "",
@@ -397,8 +397,8 @@ export const UserResponse: MessageFns<UserResponse> = {
     for (const v of message.roles) {
       writer.uint32(42).string(v!);
     }
-    if (message.imageUrl !== "") {
-      writer.uint32(50).string(message.imageUrl);
+    if (message.image !== "") {
+      writer.uint32(50).string(message.image);
     }
     if (message.bio !== "") {
       writer.uint32(58).string(message.bio);
@@ -467,7 +467,7 @@ export const UserResponse: MessageFns<UserResponse> = {
             break;
           }
 
-          message.imageUrl = reader.string();
+          message.image = reader.string();
           continue;
         }
         case 7: {
@@ -518,7 +518,7 @@ export const UserResponse: MessageFns<UserResponse> = {
       lastName: isSet(object.lastName) ? globalThis.String(object.lastName) : "",
       email: isSet(object.email) ? globalThis.String(object.email) : "",
       roles: globalThis.Array.isArray(object?.roles) ? object.roles.map((e: any) => globalThis.String(e)) : [],
-      imageUrl: isSet(object.imageUrl) ? globalThis.String(object.imageUrl) : "",
+      image: isSet(object.image) ? globalThis.String(object.image) : "",
       bio: isSet(object.bio) ? globalThis.String(object.bio) : "",
       socialLinks: globalThis.Array.isArray(object?.socialLinks)
         ? object.socialLinks.map((e: any) => SocialLinks.fromJSON(e))
@@ -545,8 +545,8 @@ export const UserResponse: MessageFns<UserResponse> = {
     if (message.roles?.length) {
       obj.roles = message.roles;
     }
-    if (message.imageUrl !== "") {
-      obj.imageUrl = message.imageUrl;
+    if (message.image !== "") {
+      obj.image = message.image;
     }
     if (message.bio !== "") {
       obj.bio = message.bio;
@@ -573,7 +573,7 @@ export const UserResponse: MessageFns<UserResponse> = {
     message.lastName = object.lastName ?? "";
     message.email = object.email ?? "";
     message.roles = object.roles?.map((e) => e) || [];
-    message.imageUrl = object.imageUrl ?? "";
+    message.image = object.image ?? "";
     message.bio = object.bio ?? "";
     message.socialLinks = object.socialLinks?.map((e) => SocialLinks.fromPartial(e)) || [];
     message.createdAt = object.createdAt ?? "";

@@ -1,16 +1,17 @@
 import 'reflect-metadata';
 import { startServer } from './http/server';
-import { connectKafkaProducer } from './messaging/kafka/kafka';
 import { tryCatch } from './shared/utils/try-catch';
+import { UserEventsConsumer } from './messaging/kafka/consumers/user-events.consumer';
 
 async function boostrap(): Promise<void> {
   startServer();
 
-  const { error: kafkaProducerConnectionError } = await tryCatch(
-    connectKafkaProducer(),
+  const userEventsConsumer = new UserEventsConsumer();
+  const { error: userEventsConsumerError } = await tryCatch(
+    userEventsConsumer.connect(),
   );
 
-  if (kafkaProducerConnectionError) {
+  if (userEventsConsumerError) {
     process.exit(1);
   }
 }
