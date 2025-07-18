@@ -5,12 +5,9 @@ import { inject, injectable } from 'inversify';
 import { Elysia } from 'elysia';
 import { UpdateUserInput } from '@/application/use-cases/update-user.use-case';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
-import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { User } from '@/domain/entities/user.entity';
 import httpStatus from 'http-status';
 import { updateUserSchema } from '@/shared/validation/schema/update-user';
-import { ISignedUploadUrlResponse } from '@/application/ports/file-storage.service';
-import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
 
 @injectable()
 export class UserRoutes implements IRoute<Elysia> {
@@ -19,8 +16,6 @@ export class UserRoutes implements IRoute<Elysia> {
     private readonly getUserUseCase: IUseCase<string, User>,
     @inject(TYPES.UpdateUserUseCase)
     private readonly updateUserUseCase: IUseCase<UpdateUserInput, User>,
-    @inject(TYPES.GetUploadUrlUseCase)
-    private readonly getUploadUrlUseCase: GetUploadUrlUseCase,
     @inject(TYPES.GetInstructorProfileUseCase)
     private readonly getInstructorProfileUseCase: IUseCase<string, User>,
   ) {}
@@ -36,31 +31,20 @@ export class UserRoutes implements IRoute<Elysia> {
         })
         .put(
           '/me',
-          async ({ body, user }): Promise<HttpResponse<User>> => {
-            const { firstName, lastName, bio, socialLinks, imageUrl } = body;
+          async ({ body, user }) => {
+            const { firstName, lastName, bio, socialLinks, image } = body;
             const updatedUser = await this.updateUserUseCase.execute({
               id: user.id,
               firstName,
               lastName,
               bio,
-              imageUrl,
+              image,
               socialLinks,
             });
-            return { data: updatedUser };
+            return { ...updatedUser.toJSON() };
           },
           {
             body: updateUserSchema,
-          },
-        )
-        .get(
-          '/get-upload-url',
-          ({ user }): HttpResponse<ISignedUploadUrlResponse> => {
-            const signedUrlsResponse = this.getUploadUrlUseCase.execute(
-              user.id,
-            );
-            return {
-              data: signedUrlsResponse,
-            };
           },
         )
         .get('/:id', async ({ params }) => {

@@ -12,7 +12,7 @@ export class UserMapper implements IMapper<User, IMongoUser> {
       raw.roles,
       raw.createdAt,
       raw.updatedAt,
-      raw.imageUrl,
+      raw.image,
       raw.bio,
       raw.socialLinks,
     );
@@ -25,7 +25,7 @@ export class UserMapper implements IMapper<User, IMongoUser> {
       lastName: raw.lastName,
       email: raw.email,
       roles: raw.roles,
-      imageUrl: raw.imageUrl,
+      image: raw.image,
       bio: raw.bio,
       socialLinks: raw.socialLinks,
       createdAt: raw.createdAt,

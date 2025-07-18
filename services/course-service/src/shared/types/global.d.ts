@@ -7,7 +7,7 @@ declare global {
     id: string;
     firstName: string;
     lastName: string;
-    imageUrl: string;
+    image: string;
     bio: string;
     socialLinks: SocialLinks[];
     createdAt: string;

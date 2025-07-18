@@ -136,8 +136,8 @@ declare global {
     name: string;
     email: string;
     emailVerified: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     image?: string | null | undefined | undefined;
     roles: Role[];
     id: string;
@@ -146,7 +146,7 @@ declare global {
   export type UserProfile = {
     firstName: string;
     lastName: string;
-    imageUrl?: string;
+    image?: string;
     bio: string;
     socialLinks: { platform: string; url: string }[];
     createdAt: string;

@@ -5,6 +5,7 @@ export interface Auth {
   user: User | null;
   setUser: (user: User) => void;
   addUserRole: (role: Role) => void;
+  updateUser: (data: Partial<User>) => void;
   signout: () => void;
 }
 
@@ -30,6 +31,20 @@ export const useAuthStore = create<Auth>()(
           }
 
           return { ...state };
+        }),
+      updateUser: (data) =>
+        set((state) => {
+          if (state.user) {
+            return {
+              ...state,
+              user: {
+                ...state.user,
+                ...data,
+              },
+            };
+          }
+
+          return state;
         }),
       signout: () => set(() => ({ ...initialState })),
     }),

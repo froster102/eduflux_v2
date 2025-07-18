@@ -7,8 +7,6 @@ import { UpdateUserUseCase } from '@/application/use-cases/update-user.use-case'
 // import { UserEventsConsumer } from '@/interface/consumers/user-events.consumer';
 import { GetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { UserRoutes } from '@/interface/routes/user.routes';
-import { CloudinaryService } from '@/infrastructure/storage/cloudinary.service';
-import { GetUploadUrlUseCase } from '@/application/use-cases/get-signed-url.use-case';
 import { UserGrpcService } from '@/infrastructure/grpc/services/user.service';
 import { GrpcServer } from '@/infrastructure/grpc/grpc.server';
 import { GetInstructorProfileUseCase } from '@/application/use-cases/get-instructor-profile.use-case';
@@ -20,6 +18,7 @@ import { ProgressMapper } from '@/infrastructure/mappers/progress.mapper';
 import { GetUserCourseProgressUseCase } from '@/application/use-cases/get-user-course-progress.use-case';
 import { EnrollmentEventsConsumer } from '@/interface/consumers/enrollment-events.consumer';
 import { CreateUserProgressUseCase } from '@/application/use-cases/create-user-progress.use-case';
+import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-producer.adapter';
 
 const container = new Container();
 
@@ -34,7 +33,6 @@ container.bind(TYPES.ProgressRepository).to(MongoProgressRepository);
 container.bind(TYPES.CreateUserUseCase).to(CreateUserUseCase);
 container.bind(TYPES.UpdateUserUseCase).to(UpdateUserUseCase);
 container.bind(TYPES.GetUserUseCase).to(GetUserUseCase);
-container.bind(TYPES.GetUploadUrlUseCase).to(GetUploadUrlUseCase);
 container.bind(TYPES.CreateUserProgressUseCase).to(CreateUserProgressUseCase);
 container
   .bind(TYPES.GetInstructorProfileUseCase)
@@ -47,7 +45,12 @@ container
   .bind(TYPES.GetUserCourseProgressUseCase)
   .to(GetUserCourseProgressUseCase);
 
-//Consumers
+//Ports
+container
+  .bind(TYPES.MessageBrokerGateway)
+  .to(KafkaProducerAdapter)
+  .inSingletonScope();
+
 // container.bind(TYPES.UserEventsConsumer).to(UserEventsConsumer);
 container.bind(TYPES.EnrollmentEventsConsumer).to(EnrollmentEventsConsumer);
 
@@ -56,7 +59,6 @@ container.bind(TYPES.UserRoutes).to(UserRoutes);
 container.bind(TYPES.ProgressRoutes).to(ProgressRoutes);
 
 //Services
-container.bind(TYPES.FileStorageService).to(CloudinaryService);
 
 //Grpc
 container.bind(TYPES.UserGrpcService).to(UserGrpcService);

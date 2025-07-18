@@ -7,7 +7,7 @@ export interface IMongoUser extends Document {
   lastName: string;
   email: string;
   roles: Role[];
-  imageUrl?: string;
+  image?: string;
   bio?: string;
   socialLinks?: {
     platform: string;
@@ -43,7 +43,7 @@ export const UserSchema = new Schema<IMongoUser>(
       type: String,
     },
     email: { type: String },
-    imageUrl: {
+    image: {
       type: String,
     },
     bio: {

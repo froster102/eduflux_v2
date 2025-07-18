@@ -11,11 +11,7 @@ export const updateUserSchema = t.Object({
     maxLength: 50,
     description: "User's last name",
   }),
-  imageUrl: t.Optional(
-    t.String({
-      format: 'uri',
-    }),
-  ),
+  image: t.Optional(t.String({})),
   bio: t.Optional(
     t.String({
       maxLength: 500,

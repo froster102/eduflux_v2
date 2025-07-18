@@ -5,7 +5,7 @@ export class User {
   private _firstName: string;
   private _lastName: string;
   private _email: string;
-  private _imageUrl?: string;
+  private _image?: string;
   private _roles: Role[];
   private _bio?: string;
   private _socialLinks?: {
@@ -23,7 +23,7 @@ export class User {
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
-    imageUrl?: string,
+    image?: string,
     bio?: string,
     socialLinks?: {
       platform: string;
@@ -35,7 +35,7 @@ export class User {
     this._lastName = lastName;
     this._email = email;
     this._roles = roles;
-    this._imageUrl = imageUrl;
+    this._image = image;
     this._bio = bio;
     this._socialLinks = socialLinks;
     this._createdAt = createdAt;
@@ -77,7 +77,7 @@ export class User {
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
-    imageUrl?: string,
+    image?: string,
     bio?: string,
     socialLinks?: {
       platform: string;
@@ -92,7 +92,7 @@ export class User {
       roles,
       createdAt,
       updatedAt,
-      imageUrl,
+      image,
       bio,
       socialLinks,
     );
@@ -114,8 +114,8 @@ export class User {
     return this._email;
   }
 
-  public get imageUrl(): string | undefined {
-    return this._imageUrl;
+  public get image(): string | undefined {
+    return this._image;
   }
 
   public get bio(): string | undefined {
@@ -154,8 +154,8 @@ export class User {
     this._updatedAt = new Date();
   }
 
-  public updateImageUrl(imageUrl?: string): void {
-    this._imageUrl = imageUrl;
+  public updateImageUrl(image?: string): void {
+    this._image = image;
     this._updatedAt = new Date();
   }
 
@@ -181,7 +181,7 @@ export class User {
       lastName: string;
       email: string;
       roles: Role[];
-      imageUrl: string;
+      image: string;
       bio: string | null;
       socialLinks: { platform: string; url: string }[];
     }>,
@@ -208,8 +208,8 @@ export class User {
       updated = true;
     }
 
-    if (dto.imageUrl) {
-      this._imageUrl = dto.imageUrl;
+    if (dto.image) {
+      this._image = dto.image;
       updated = true;
     }
 
@@ -233,7 +233,8 @@ export class User {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
-      imageUrl: this.imageUrl,
+      image: this.image,
+      email: this.email,
       bio: this.bio,
       socialLinks: this.socialLinks,
       createdAt: this.createdAt.toISOString(),

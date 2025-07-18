@@ -34,7 +34,7 @@ message UserResponse {
   string lastName = 3;
   string email = 4;
   repeated string roles = 5;
-  string imageUrl = 6;
+  string image = 6;
   string bio = 7;
   repeated SocialLinks socialLinks = 8;
   string createdAt = 9;

@@ -4,6 +4,7 @@ import { useLocation } from "@tanstack/react-router";
 
 import { useAuthStore } from "@/store/auth-store";
 import { SearchIcon } from "@/components/Icons";
+import { IMAGE_BASE_URL } from "@/config/image";
 
 export default function Header() {
   const { user } = useAuthStore();
@@ -51,6 +52,9 @@ export default function Header() {
         </div>
         <div>
           <User
+            avatarProps={{
+              src: `${IMAGE_BASE_URL}${user?.image ?? undefined}`,
+            }}
             className="text-default-500"
             classNames={{
               name: "text-lg text-black dark:text-white font-medium",

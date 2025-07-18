@@ -26,7 +26,7 @@ export function useUpdatePassword() {
 }
 
 export function useUpdateProfile() {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const queryClient = useQueryClient();
   const key = `user-${user!.id}-profile`;
 
@@ -48,7 +48,11 @@ export function useUpdateProfile() {
       return { prev };
     },
 
-    onSuccess: () => {
+    onSuccess: (_, requestData) => {
+      updateUser({
+        ...requestData,
+        name: requestData.firstName + " " + requestData.lastName,
+      });
       addToast({
         title: "Profile updation",
         description: "Your profile has been update successfully",

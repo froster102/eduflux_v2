@@ -8,7 +8,7 @@ import { formatTo12HourWithDate } from "@/utils/date";
 interface ProfileCardProps {
   email: string;
   name: string;
-  imageUrl?: string;
+  image?: string;
   lastLogin?: Date;
 }
 
@@ -16,6 +16,7 @@ export default function ProfileCard({
   email,
   name,
   lastLogin,
+  image,
 }: ProfileCardProps) {
   return (
     <Card
@@ -28,6 +29,7 @@ export default function ProfileCard({
           avatarProps={{
             size: "lg",
             radius: "sm",
+            src: image,
           }}
           classNames={{
             name: "text-xl font-semibold capitalize",

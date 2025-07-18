@@ -1,4 +1,3 @@
-import { Divider } from "@heroui/divider";
 import { Skeleton } from "@heroui/skeleton";
 import { Card } from "@heroui/card";
 import React from "react";
@@ -17,6 +16,7 @@ import {
   useUpdateProfile,
 } from "@/features/account/hooks/mutations";
 import RecentDevicesCard from "@/features/account/components/RecentDevicesCard";
+import { IMAGE_BASE_URL } from "@/config/image";
 
 export default function Account() {
   const { user } = useAuthStore();
@@ -52,12 +52,11 @@ export default function Account() {
 
   return (
     <>
-      <Divider className="mt-4" orientation="horizontal" />
       <div
-        className="md:flex w-full gap-4 pt-4 px-0 md:px-4 lg:px-14 overflow-x-scroll scrollbar-hide scroll-smooth"
+        className="flex flex-col md:flex md:flex-row w-full gap-4 px-0 md:px-4 lg:px-6 md:overflow-x-scroll scrollbar-hide scroll-smooth"
         data-lenis="false"
       >
-        <div className="max-w-md w-full h-fit">
+        <div className="flex flex-col gap-4 max-w-md w-full h-fit">
           {isProfileLoading || isSessionsLoading ? (
             <Skeleton className="rounded-md" isLoaded={!isProfileLoading}>
               {<div className="rounded-md h-56" />}
@@ -65,12 +64,13 @@ export default function Account() {
           ) : (
             <ProfileCard
               email={user!.email}
+              image={`${IMAGE_BASE_URL}${user?.image}`}
               lastLogin={latestSession?.createdAt}
               name={profile?.firstName + " " + profile?.lastName}
             />
           )}
 
-          <div className="pt-4  md:block">
+          <div className="hidden md:block">
             {isSessionsLoading ? (
               new Array(3).fill(0).map((_, i) => (
                 <Skeleton key={i}>
@@ -85,7 +85,7 @@ export default function Account() {
             )}
           </div>
         </div>
-        <div className="w-full max-h-screen md:pt-0 md:overflow-y-auto scrollbar-hide">
+        <div className="w-full md:max-h-screen md:overflow-y-auto scrollbar-hide">
           <Skeleton
             className="rounded-lg bg-background"
             isLoaded={!isProfileLoading}
@@ -103,13 +103,20 @@ export default function Account() {
               onSubmitHandler={onUpdatePasswordHandler}
             />
           </div>
-          <div className="pt-4 block md:hidden">
-            {/* <RecentDevicesCard
-              activeSession={activeSession!}
-              isLoading={isUserSessionsLoading}
-              userSessions={userSessions?.sessions!}
-            /> */}
-          </div>
+        </div>
+        <div className="block md:hidden">
+          {isSessionsLoading ? (
+            new Array(3).fill(0).map((_, i) => (
+              <Skeleton key={i}>
+                <Card className="max-w-md w-full h-[124px]" />
+              </Skeleton>
+            ))
+          ) : (
+            <RecentDevicesCard
+              activeSession={sessions![0]}
+              sessions={sessions!}
+            />
+          )}
         </div>
       </div>
     </>

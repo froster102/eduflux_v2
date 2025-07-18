@@ -1,1 +1,2 @@
 export const ENROLLMENTS_TOPIC = 'ENROLLMENTS_TOPIC';
+export const USERS_TOPIC = 'USERS_TOPIC';

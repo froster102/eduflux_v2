@@ -32,5 +32,6 @@ export const updateProfileSchema = z
         message: "Avoid special characters, use spaces",
       }),
     bio: z.string({ error: "Required" }),
+    image: z.string(),
   })
   .partial();
