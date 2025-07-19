@@ -8,15 +8,14 @@
   },
   "dependencies": {
     "elysia": "latest",
-    "@eslint/js": "^9.28.0",
     "cloudinary": "^2.6.1",
-    "dotenv": "^16.5.0",
     "http-status": "^2.1.0",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
     "zod": "^3.25.64"
   },
   "devDependencies": {
+    "@eslint/js": "^9.28.0",
     "bun-types": "latest",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
