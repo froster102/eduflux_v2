@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function AlignRightIcon(props: SVGProps<SVGSVGElement>) {
+export default function AlignRightIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function LogoutIcon(props: SVGProps<SVGSVGElement>) {
+export default function LogoutIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

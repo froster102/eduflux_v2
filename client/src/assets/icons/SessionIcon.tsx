@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function SessionIcon(props: SVGProps<SVGSVGElement>) {
+export default function SessionIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

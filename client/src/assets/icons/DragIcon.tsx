@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function DragIcon(props: SVGProps<SVGSVGElement>) {
+export default function DragIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

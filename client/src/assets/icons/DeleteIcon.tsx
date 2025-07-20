@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function DeleteIcon(props: SVGProps<SVGSVGElement>) {
+export default function DeleteIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

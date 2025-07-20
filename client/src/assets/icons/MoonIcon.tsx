@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function MoonIcon(props: SVGProps<SVGSVGElement>) {
+export default function MoonIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

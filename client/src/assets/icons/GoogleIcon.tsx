@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function GoogleIcon(props: SVGProps<SVGSVGElement>) {
+export default function GoogleIcon(props: IconSvgProps) {
   return (
     <svg
       height={48}

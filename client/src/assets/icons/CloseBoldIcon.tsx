@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function CloseBoldIcon(props: SVGProps<SVGSVGElement>) {
+export default function CloseBoldIcon(props: IconSvgProps) {
   return (
     <svg
       height="24"

@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function UploadIcon(props: SVGProps<SVGSVGElement>) {
+export default function UploadIcon(props: IconSvgProps) {
   return (
     <svg
       height="24"

@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function SunIcon(props: SVGProps<SVGSVGElement>) {
+export default function SunIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

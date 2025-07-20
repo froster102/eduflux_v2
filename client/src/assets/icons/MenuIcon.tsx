@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function MenuIcon(props: SVGProps<SVGSVGElement>) {
+export default function MenuIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

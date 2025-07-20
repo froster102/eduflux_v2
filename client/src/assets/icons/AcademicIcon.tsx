@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function AcademicIcon(props: SVGProps<SVGSVGElement>) {
+export default function AcademicIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

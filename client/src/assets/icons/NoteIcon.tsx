@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function NoteIcon(props: SVGProps<SVGSVGElement>) {
+export default function NoteIcon(props: IconSvgProps) {
   return (
     <svg
       height="24"

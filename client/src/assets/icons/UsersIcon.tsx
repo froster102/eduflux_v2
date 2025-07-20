@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function UsersIcon(props: SVGProps<SVGSVGElement>) {
+export default function UsersIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

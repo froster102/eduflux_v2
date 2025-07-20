@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function PlayIcon(props: SVGProps<SVGSVGElement>) {
+export default function PlayIcon(props: IconSvgProps) {
   return (
     <svg
       height={24}

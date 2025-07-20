@@ -1,6 +1,4 @@
-import { SVGProps } from "react";
-
-export default function BoldIcon(props: SVGProps<SVGSVGElement>) {
+export default function BoldIcon(props: IconSvgProps) {
   return (
     <svg
       height="24"
