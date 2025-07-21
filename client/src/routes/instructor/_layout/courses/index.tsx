@@ -7,10 +7,10 @@ import React from "react";
 import { Pagination } from "@heroui/pagination";
 import { Spinner } from "@heroui/spinner";
 
-import { useGetInstructorCourses } from "@/features/instructor/courses/hooks/queries";
 import { SearchIcon } from "@/components/Icons";
 import CourseListCard from "@/features/instructor/courses/components/CourseListCard";
 import CreateCourseModal from "@/features/instructor/courses/components/CreateCourseModal";
+import { useGetInstructorCourses } from "@/features/instructor/courses/hooks/useGetInstructorCourses";
 
 export const Route = createFileRoute("/instructor/_layout/courses/")({
   component: RouteComponent,

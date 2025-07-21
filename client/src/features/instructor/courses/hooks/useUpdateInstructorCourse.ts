@@ -1,43 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToast } from "@heroui/toast";
 
-import {
-  getCourseCategories,
-  getCourseInfo,
-  getInstructorCourseCurriculum,
-  getInstructorCourses,
-  updateCourseInfo,
-} from "../services/course";
-
-export function useGetInstructorCourses(
-  paginationQueryParams: PaginationQueryParams,
-) {
-  return useQuery({
-    queryKey: ["instructor-courses", paginationQueryParams],
-    queryFn: () => getInstructorCourses(paginationQueryParams),
-  });
-}
-
-export function useGetInstructorCourseCurriculum(courseId: string) {
-  return useQuery({
-    queryKey: [`${courseId}-instructor-curriculum`],
-    queryFn: () => getInstructorCourseCurriculum(courseId),
-  });
-}
-
-export function useGetCourseCategories() {
-  return useQuery({
-    queryKey: ["course-categories"],
-    queryFn: getCourseCategories,
-  });
-}
-
-export function useGetInstructorCourse(courseId: string) {
-  return useQuery({
-    queryKey: [`course-${courseId}`],
-    queryFn: () => getCourseInfo(courseId),
-  });
-}
+import { updateCourseInfo } from "../services/course";
 
 export function useUpdateInstructorCourse() {
   const queryClient = useQueryClient();

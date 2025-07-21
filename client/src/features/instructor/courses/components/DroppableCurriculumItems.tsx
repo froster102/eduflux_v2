@@ -15,16 +15,14 @@ import React from "react";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 
-import {
-  useAddContentToLecture,
-  useCreateChapter,
-  useCreateLecture,
-  useDeleteChapter,
-  useDeleteLecture,
-  useUpdateChapter,
-  useUpdateCurriculumItems,
-  useUpdateLecture,
-} from "../hooks/mutations";
+import { useCreateLecture } from "../hooks/useCreateLecture";
+import { useUpdateLecture } from "../hooks/useUpdateLecture";
+import { useDeleteLecture } from "../hooks/useDeleteLecture";
+import { useCreateChapter } from "../hooks/useCreateChapter";
+import { useUpdateChapter } from "../hooks/useUpdateChapter";
+import { useDeleteChapter } from "../hooks/useDeleteChapter";
+import { useAddContentToLecture } from "../hooks/useAddContentToLecture";
+import { useUpdateCurriculumItems } from "../hooks/useUpdateCurriculumItems";
 
 import SortableItem from "./SortableItem";
 import SortableChapterItem from "./SortableChapterItem";
@@ -36,6 +34,7 @@ import FileUploadModal from "./FileUploadModal";
 import { useCurriculumStore } from "@/store/curriculum-store";
 import FormModal from "@/components/FormModal";
 import { tryCatch } from "@/utils/try-catch";
+
 interface DroppableCurriculumItemsProps {
   courseId: string;
   curriculumItems: CurriculumItem[];

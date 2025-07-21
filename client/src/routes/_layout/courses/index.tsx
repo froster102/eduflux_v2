@@ -3,11 +3,9 @@ import React from "react";
 import { Spinner } from "@heroui/spinner";
 import { Tab, Tabs } from "@heroui/tabs";
 
-import {
-  useGetCourses,
-  useGetSubsribedCourses,
-} from "@/features/learner/courses/hooks/queries";
 import CoursesList from "@/features/learner/courses/components/CoursesList";
+import { useGetSubsribedCourses } from "@/features/learner/courses/hooks/useGetSubsribedCourses";
+import { useGetCourses } from "@/features/learner/courses/hooks/useGetCourses";
 
 export const Route = createFileRoute("/_layout/courses/")({
   component: RouteComponent,

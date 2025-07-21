@@ -1,0 +1,12 @@
+import { useQuery } from "@tanstack/react-query";
+
+import { getInstructorCourses } from "../services/course";
+
+export function useGetInstructorCourses(
+  paginationQueryParams: PaginationQueryParams,
+) {
+  return useQuery({
+    queryKey: ["instructor-courses", paginationQueryParams],
+    queryFn: () => getInstructorCourses(paginationQueryParams),
+  });
+}

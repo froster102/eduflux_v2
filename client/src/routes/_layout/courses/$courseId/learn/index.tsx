@@ -7,17 +7,13 @@ import React from "react";
 import { Checkbox } from "@heroui/checkbox";
 import { Spinner } from "@heroui/spinner";
 
-import {
-  useGetCourseInfo,
-  useGetCourseProgress,
-  useGetPublishedCourseCurriculum,
-  useGetSubscribedCourseCurriculumItem,
-} from "@/features/learner/courses/hooks/queries";
 import HLSPlayer from "@/components/HLSPlayer";
-import {
-  useAddCourseLectureProgress,
-  useDeleteCourseLectureProgress,
-} from "@/features/learner/courses/hooks/mutations";
+import { useGetCourseInfo } from "@/features/learner/courses/hooks/useGetCourseInfo";
+import { useGetPublishedCourseCurriculum } from "@/features/learner/courses/hooks/useGetPublishedCourseCurriculum";
+import { useGetSubscribedCourseCurriculumItem } from "@/features/learner/courses/hooks/useGetSubscribedCourseCurriculumItem";
+import { useAddCourseLectureProgress } from "@/features/learner/courses/hooks/useAddCourseLectureProgress";
+import { useDeleteCourseLectureProgress } from "@/features/learner/courses/hooks/useDeleteCourseLectureProgress";
+import { useGetCourseProgress } from "@/features/learner/courses/hooks/useGetCourseProgress";
 
 export const Route = createFileRoute("/_layout/courses/$courseId/learn/")({
   component: RouteComponent,

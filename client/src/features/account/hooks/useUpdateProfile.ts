@@ -1,29 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addToast } from "@heroui/toast";
 
-import { updateProfile, updateUserPassword } from "../services/account";
+import { updateProfile } from "../services/account";
 
 import { useAuthStore } from "@/store/auth-store";
-
-export function useUpdatePassword() {
-  return useMutation({
-    mutationFn: updateUserPassword,
-    onSuccess: () => {
-      addToast({
-        title: "Update Password",
-        description: "Your password has been updated sucessfully",
-        color: "success",
-      });
-    },
-    onError: (error: any) => {
-      addToast({
-        title: "Update Password",
-        description: error.message,
-        color: "danger",
-      });
-    },
-  });
-}
 
 export function useUpdateProfile() {
   const { user, updateUser } = useAuthStore();
@@ -70,19 +50,3 @@ export function useUpdateProfile() {
     },
   });
 }
-
-// export function useTerminateSessionMutation() {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: terminateSession,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ["sessions"] });
-//       addToast({
-//         title: "Session terminated",
-//         description: "Session terminated successfuly",
-//         color: "success",
-//       });
-//     },
-//   });
-// }

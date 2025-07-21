@@ -2,19 +2,16 @@ import { Skeleton } from "@heroui/skeleton";
 import { Card } from "@heroui/card";
 import React from "react";
 
+import { useGetUserProfile } from "../hooks/useGetUserProfile";
+import { useGetUserSessions } from "../hooks/useGetUserSessions";
+import { useUpdatePassword } from "../hooks/useUpdatePassword";
+import { useUpdateProfile } from "../hooks/useUpdateProfile";
+
 import ProfileCard from "./ProfileCard";
 
-import {
-  useGetUserProfile,
-  useGetUserSessions,
-} from "@/features/account/hooks/queries";
 import { useAuthStore } from "@/store/auth-store";
 import PasswordForm from "@/features/account/components/forms/PasswordForm";
 import ProfileForm from "@/features/account/components/forms/ProfileForm";
-import {
-  useUpdatePassword,
-  useUpdateProfile,
-} from "@/features/account/hooks/mutations";
 import RecentDevicesCard from "@/features/account/components/RecentDevicesCard";
 import { IMAGE_BASE_URL } from "@/config/image";
 

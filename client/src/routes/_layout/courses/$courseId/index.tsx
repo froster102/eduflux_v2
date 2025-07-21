@@ -13,16 +13,14 @@ import CourseIcon from "@/assets/icons/CourseIcon";
 import PlayIcon from "@/assets/icons/PlayIcon";
 import PreviewLectureModal from "@/features/learner/courses/components/PreviewLectureModal";
 import { useGetInstructorProfile } from "@/features/learner/hooks/queries";
-import { useEnrollForCourse } from "@/features/learner/courses/hooks/mutations";
 import { tryCatch } from "@/utils/try-catch";
-import {
-  useCheckUserEnrollment,
-  useGetCourseInfo,
-  useGetPublishedCourseCurriculum,
-} from "@/features/learner/courses/hooks/queries";
 import { IMAGE_BASE_URL } from "@/config/image";
 import NoteIcon from "@/assets/icons/NoteIcon";
 import MessageIcon from "@/assets/icons/MessageIcon";
+import { useGetCourseInfo } from "@/features/learner/courses/hooks/useGetCourseInfo";
+import { useGetPublishedCourseCurriculum } from "@/features/learner/courses/hooks/useGetPublishedCourseCurriculum";
+import { useEnrollForCourse } from "@/features/learner/courses/hooks/useEnrollForCourse";
+import { useCheckUserEnrollment } from "@/features/learner/courses/hooks/useCheckUserEnrollment";
 
 export const Route = createFileRoute("/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -204,7 +202,7 @@ function RouteComponent() {
                         isBordered
                         radius="full"
                         size="md"
-                        src={instructorProfile?.imageUrl}
+                        src={`${IMAGE_BASE_URL}${instructorProfile?.image}`}
                       />
                       <p className="text-xl font-semibold">
                         {instructorProfile?.firstName}{" "}

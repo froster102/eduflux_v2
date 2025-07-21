@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import SignUpForm from "@/features/auth/components/forms/SignUpForm";
-import { useSignUp } from "@/features/auth/hooks/mutations";
+import { useSignUp } from "@/features/auth/hooks/useSignUp";
 
 export const Route = createFileRoute("/auth/sign-up")({
   component: SignUpPage,

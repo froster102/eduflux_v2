@@ -12,9 +12,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectItem } from "@heroui/select";
 import { Button } from "@heroui/button";
 
+import { useGetCourseCategories } from "../hooks/useGetCourseCategories";
+import { useCreateCourse } from "../hooks/useCreateCourse";
+
 import { createCourseSchema } from "@/validations/course";
-import { useGetCourseCategories } from "@/features/instructor/courses/hooks/queries";
-import { useCreateCourse } from "@/features/instructor/courses/hooks/mutations";
 
 export default function CreateCourseModal({
   isOpen,

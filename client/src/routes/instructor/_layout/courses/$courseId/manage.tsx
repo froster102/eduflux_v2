@@ -1,17 +1,15 @@
+import React from "react";
 import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, Tab } from "@heroui/tabs";
-import React from "react";
 
-import {
-  useGetInstructorCourse,
-  useGetInstructorCourseCurriculum,
-  useUpdateInstructorCourse,
-} from "@/features/instructor/courses/hooks/queries";
 import DroppableCurriculumItems from "@/features/instructor/courses/components/DroppableCurriculumItems";
 import CourseForm from "@/features/instructor/courses/components/forms/CourseForm";
-import { usePublishCourse } from "@/features/instructor/courses/hooks/mutations";
 import CourseErrorModal from "@/features/instructor/courses/components/CourseErrorModal";
+import { useGetInstructorCourse } from "@/features/instructor/courses/hooks/useGetInstructorCourse";
+import { useGetInstructorCourseCurriculum } from "@/features/instructor/courses/hooks/useGetInstructorCourseCurriculum";
+import { useUpdateInstructorCourse } from "@/features/instructor/courses/hooks/useUpdateInstructorCourse";
+import { usePublishCourse } from "@/features/instructor/courses/hooks/usePublishCourse";
 
 export const Route = createFileRoute(
   "/instructor/_layout/courses/$courseId/manage",

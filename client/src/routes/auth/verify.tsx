@@ -1,8 +1,8 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 import VerifyOtpForm from "@/features/auth/components/forms/VerifyOtpForm";
-import { useVerifyOtp } from "@/features/auth/hooks/mutations";
 import { useVerificationStore } from "@/store/verification-store";
+import { useVerifyOtp } from "@/features/auth/hooks/useVerifyOtp";
 
 export const Route = createFileRoute("/auth/verify")({
   component: RouteComponent,

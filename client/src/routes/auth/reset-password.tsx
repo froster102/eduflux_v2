@@ -2,11 +2,9 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import React from "react";
 
 import ResetPasswordForm from "@/features/auth/components/forms/ResetPasswordForm";
-import {
-  useResendOtp,
-  useResetPassword,
-} from "@/features/auth/hooks/mutations";
 import { useVerificationStore } from "@/store/verification-store";
+import { useResetPassword } from "@/features/auth/hooks/useResetPassword";
+import { useResendOtp } from "@/features/auth/hooks/useResendOtp";
 
 export const Route = createFileRoute("/auth/reset-password")({
   component: RouteComponent,
