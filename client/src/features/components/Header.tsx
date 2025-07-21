@@ -1,12 +1,17 @@
-import { Input } from "@heroui/input";
 import { User } from "@heroui/user";
 import { useLocation } from "@tanstack/react-router";
+import { Button } from "@heroui/button";
 
 import { useAuthStore } from "@/store/auth-store";
-import { SearchIcon } from "@/components/Icons";
 import { IMAGE_BASE_URL } from "@/config/image";
+import Notifications from "@/components/Notifications";
+import MenuIcon from "@/assets/icons/MenuIcon";
 
-export default function Header() {
+interface HeaderProps {
+  onOpenSidebar: () => void;
+}
+
+export default function Header({ onOpenSidebar }: HeaderProps) {
   const { user } = useAuthStore();
   const location = useLocation();
 
@@ -18,12 +23,22 @@ export default function Header() {
       : location.pathname.split("/")[1];
 
   return (
-    <header>
+    <header className="sticky top-0 z-50 w-full">
       <div className="flex justify-between items-center">
-        <div>
-          <p className="text-2xl font-semibold capitalize">{header}</p>
+        <div className="flex items-center gap-2">
+          <div className="lg:hidden">
+            <Button
+              isIconOnly
+              color="primary"
+              radius="full"
+              onPress={onOpenSidebar}
+            >
+              <MenuIcon />
+            </Button>
+          </div>
+          <p className="lg:p-0 text-2xl font-semibold capitalize">{header}</p>
         </div>
-        <div>
+        {/* <div>
           <Input
             classNames={{
               label: "text-black/50 dark:text-white/90",
@@ -49,20 +64,23 @@ export default function Header() {
             size="md"
             startContent={<SearchIcon />}
           />
-        </div>
-        <div>
-          <User
-            avatarProps={{
-              src: `${IMAGE_BASE_URL}${user?.image ?? undefined}`,
-            }}
-            className="text-default-500"
-            classNames={{
-              name: "text-lg text-black dark:text-white font-medium",
-              description: "text-default-600",
-            }}
-            description={user && user.email}
-            name={user && user.name}
-          />
+        </div> */}
+        <div className="flex gap-2 items-center">
+          <div className="hidden md:block">
+            <User
+              avatarProps={{
+                src: `${IMAGE_BASE_URL}${user?.image ?? undefined}`,
+              }}
+              className="text-default-500"
+              classNames={{
+                name: "text-lg text-black dark:text-white font-medium",
+                description: "text-default-600",
+              }}
+              description={user && user.email}
+              name={user && user.name}
+            />
+          </div>
+          <Notifications />
         </div>
       </div>
     </header>

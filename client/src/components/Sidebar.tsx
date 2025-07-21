@@ -1,6 +1,5 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import React from "react";
-import { useDisclosure } from "@heroui/modal";
 import {
   Drawer,
   DrawerBody,
@@ -13,9 +12,8 @@ import { Link } from "@tanstack/react-router";
 import ConfirmationModal from "./ConfirmationModal";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 
-import { useLogout } from "@/features/auth/hooks/mutations";
-import MenuIcon from "@/assets/icons/MenuIcon";
 import LogoutIcon from "@/assets/icons/LogoutIcon";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 
 interface SidebarProps {
   topContent?: React.ReactNode;
@@ -25,15 +23,19 @@ interface SidebarProps {
     label: string;
   }>;
   bottomContent?: React.ReactNode;
+  isOpen: boolean;
+  onOpenChange: () => void;
 }
 
 export default function Sidebar({
   topContent,
   navItems,
   bottomContent,
+  isOpen,
+  onOpenChange,
 }: SidebarProps) {
   const [selected, setSelected] = React.useState<string>("home");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const [openLogoutConfirmation, setOpenLogoutConfirmation] =
     React.useState(false);
   const logout = useLogout();
@@ -45,7 +47,7 @@ export default function Sidebar({
 
   return (
     <>
-      <Card className="hidden lg:flex max-w-52 w-full h-full bg-primary/5 text-primary border border-default-200">
+      <Card className="hidden lg:flex max-w-52 w-full h-full bg-background text-white border border-default-200">
         <CardHeader className="relative">
           <ThemeSwitcher className="absolute top-0 right-0 bg-transparent" />
           <div className="w-full">{topContent}</div>
@@ -61,8 +63,7 @@ export default function Sidebar({
                 <Card
                   className={`text-base
                      font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"} 
-                     hover:bg-black/60 hover:text-black
-                     dark:hover:bg-primary/60 dark:hover:text-black`}
+                     `}
                   shadow="none"
                 >
                   <CardHeader className="flex gap-2 text-nowrap">
@@ -84,7 +85,7 @@ export default function Sidebar({
                 shadow="none"
                 onPress={() => setOpenLogoutConfirmation(true)}
               >
-                <CardHeader className="flex gap-2 text-nowrap">
+                <CardHeader className="flex gap-2 text-white">
                   <LogoutIcon width={24} />
                   Logout
                 </CardHeader>
@@ -94,30 +95,17 @@ export default function Sidebar({
         </CardFooter>
       </Card>
 
-      <div className="lg:hidden lg:px-4 fixed top-0 left-0 z-50 w-full py-2">
-        <Card
-          disableRipple
-          isPressable
-          className="w-full dark:bg-secondary-700 bg-secondary-500"
-          onPress={onOpen}
-        >
-          <CardBody>
-            <div className="flex">
-              <MenuIcon width={24} />
-              <p className="pl-2 capitalize">{selected}</p>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
-
       <Drawer
         backdrop="transparent"
+        classNames={{
+          base: "m-2 rounded-medium",
+        }}
         isOpen={isOpen}
         placement="left"
         size="xs"
         onOpenChange={onOpenChange}
       >
-        <DrawerContent className="dark:bg-secondary-700 bg-secondary-500">
+        <DrawerContent className="bg-background border border-default-200">
           {(onClose) => (
             <>
               <DrawerHeader className="flex gap-1 relative">
@@ -137,7 +125,9 @@ export default function Sidebar({
                       }}
                     >
                       <Card
-                        className={`text-base font-medium transition-colors text-default-600  ${selected === item.label ? "bg-secondary-600" : "bg-transparent"} hover:bg-secondary-600`}
+                        className={`text-base
+                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"} 
+                     `}
                         shadow="none"
                       >
                         <CardHeader className="flex gap-2 text-nowrap">

@@ -90,8 +90,8 @@ declare global {
     status: "pending";
     mediaSources: [
       {
-        type: "application/x-mpegURL";
-        src: "https://res.cloudinary.com/drdphexjc/video/upload/sp_auto/v1751448526/5c8d0c8a-0775-4371-beee-d4e38b74cb61.m3u8";
+        type: string;
+        src: string;
       },
     ];
   };
@@ -99,11 +99,6 @@ declare global {
   export type CurriculumItem = Chapter | Lecture;
 
   export type CurriculumItems = (Chapter | Lecture)[];
-
-  export type ErrorResponse = {
-    status: string;
-    message: string;
-  };
 
   export type EnrollmentStatus =
     | "PENDING"
@@ -151,18 +146,6 @@ declare global {
     socialLinks: { platform: string; url: string }[];
     createdAt: string;
     updatedAt: string;
-  };
-
-  export type Enrollment = {
-    id: string;
-    studentId: string;
-    courseId: string;
-    status: "approved" | "pending" | "rejected";
-    requestedAt: string;
-    reviewedAt: string;
-    reviewedBy: string;
-    reviewer?: User;
-    student?: Student;
   };
 
   export type Role = "ADMIN" | "LEARNER" | "INSTRUCTOR";
@@ -243,7 +226,6 @@ declare global {
 
   export type ApiErrorResponse = {
     message: string;
-    statusCode?: number;
     code?: string;
     details?: string | Record<string, any>;
     errors?: Array<{

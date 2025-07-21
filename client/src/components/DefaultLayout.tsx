@@ -1,4 +1,5 @@
 import React from "react";
+import { useDisclosure } from "@heroui/modal";
 
 import ConfirmationModal from "./ConfirmationModal";
 import Sidebar from "./Sidebar";
@@ -20,15 +21,23 @@ export default function DefaultLayout({
 }) {
   const [openConfirmationModal, setOpenConfirmationModal] =
     React.useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
       <div className="p-4 lg:p-6 h-dvh">
         <div className="lg:flex gap-4 w-full h-full">
-          <Sidebar navItems={navItems} topContent={topContent} />
-          <div className="pt-16 lg:pt-0 w-full h-full flex-1 overflow-y-auto scrollbar-hide">
-            <Header />
-            <div className="pt-6 h-full">{children}</div>
+          <Sidebar
+            isOpen={isOpen}
+            navItems={navItems}
+            topContent={topContent}
+            onOpenChange={onOpenChange}
+          />
+          <div className="flex flex-col w-full h-full flex-1 overflow-hidden">
+            <Header onOpenSidebar={onOpen} />
+            <div className="flex-1 overflow-y-auto min-h-0 scrollbar-hide">
+              {children}
+            </div>
           </div>
         </div>
       </div>

@@ -1,39 +1,40 @@
-import { Bell, Inbox } from "lucide-react";
-import { Badge } from "@heroui/badge";
+import { Inbox } from "lucide-react";
 import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
 import { Divider } from "@heroui/divider";
 import { Button } from "@heroui/button";
+import { Card } from "@heroui/card";
+import { Badge } from "@heroui/badge";
 
-import NotificationCard from "./NotificationCard";
+import NotificationIcon from "@/assets/icons/NotificationIcon";
 
-import { useNotificationStore } from "@/store/notification-store";
-import { formatTo12HourWithDate } from "@/utils/date";
+// import { useNotificationStore } from "@/store/notification-store";
 
 interface NotificationsProps {}
 
 export default function Notifications({}: NotificationsProps) {
   const [openNotifications, setOpenNotifications] = React.useState(false);
-  const { notifications, connect, disconnect, markAsRead, markAllAsRead } =
-    useNotificationStore();
+  // const { notifications, connect, disconnect, markAsRead, markAllAsRead } =
+  //   useNotificationStore();
 
-  React.useEffect(() => {
-    connect();
+  // React.useEffect(() => {
+  //   connect();
 
-    return () => disconnect();
-  }, []);
+  //   return () => disconnect();
+  // }, []);
 
-  function handleMarkNotificationAsRead(notificationId: string) {
-    markAsRead(notificationId);
-  }
+  // function handleMarkNotificationAsRead(notificationId: string) {
+  //   markAsRead(notificationId);
+  // }
 
   return (
     <>
       <Popover className="max-w-96" placement="bottom" size="lg">
         <PopoverTrigger>
-          <button
-            className="outline-none border-none"
-            onClick={() => {
+          <Card
+            isPressable
+            className="p-1 bg-primary text-black rounded-full"
+            onPress={() => {
               setOpenNotifications(!openNotifications);
             }}
           >
@@ -41,15 +42,15 @@ export default function Notifications({}: NotificationsProps) {
               aria-label="more than 99 notifications"
               className="border-0"
               color="danger"
-              content={notifications.length > 0 ? notifications.length : null}
+              // content={notifications.length > 0 ? notifications.length : null}
               shape="circle"
               size="md"
             >
-              <Bell />
+              <NotificationIcon width={24} />
             </Badge>
-          </button>
+          </Card>
         </PopoverTrigger>
-        <PopoverContent className="w-96 p-0 bg-secondary-500">
+        <PopoverContent className="w-96 p-0  border border-default-200">
           <div className="w-full">
             <div className="flex justify-between items-center px-2 py-2">
               <div className="flex items-center">
@@ -58,17 +59,17 @@ export default function Notifications({}: NotificationsProps) {
               </div>
               <Button
                 color="primary"
-                isDisabled={notifications.length <= 0}
+                // isDisabled={notifications.length <= 0}
                 radius="full"
                 size="sm"
-                onPress={markAllAsRead}
+                // onPress={markAllAsRead}
               >
                 Mark all as read
               </Button>
             </div>
             <Divider orientation="horizontal" />
             <div className="max-h-96 overflow-x-auto scrollbar-hide">
-              {notifications.length > 0 ? (
+              {/* {notifications.length > 0 ? (
                 notifications.map((notification) => (
                   <NotificationCard
                     key={notification.id}
@@ -82,11 +83,10 @@ export default function Notifications({}: NotificationsProps) {
                     title={notification.title}
                   />
                 ))
-              ) : (
-                <small className="text-default-500 h-10 flex justify-center items-center">
-                  There are no unread notifications
-                </small>
-              )}
+              ) :  */}
+              <small className="text-default-500 h-10 flex justify-center items-center">
+                There are no unread notifications
+              </small>
             </div>
           </div>
         </PopoverContent>

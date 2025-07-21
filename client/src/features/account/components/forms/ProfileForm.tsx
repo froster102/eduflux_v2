@@ -1,5 +1,3 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Divider } from "@heroui/divider";
 import { Input, Textarea } from "@heroui/input";
 import { Controller, useForm } from "react-hook-form";
 import { Form } from "@heroui/form";
@@ -10,7 +8,7 @@ import { Avatar } from "@heroui/avatar";
 import axios from "axios";
 import { Progress } from "@heroui/progress";
 
-import { updateProfileSchema } from "../../validations/account.schema";
+import { updateProfileSchema } from "../../validations/account-schema";
 
 import { formatTo12HourWithDate } from "@/utils/date";
 import EditIcon from "@/assets/icons/EditIcon";
@@ -127,176 +125,163 @@ export default function ProfileForm({
   }
 
   return (
-    <Card
-      className="bg-background border border-default-200 w-full h-fit p-2"
-      radius="sm"
-      shadow="sm"
+    <Form
+      className="w-full relative flex flex-col gap-4 pt-4"
+      validationBehavior="native"
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <CardHeader className="flex justify-between">
-        <p className="font-medium">Profile</p>
-        {action === "view" && (
+      {action === "view" && (
+        <Button
+          isIconOnly
+          className="absolute right-0 bg-transparent border border-default-200"
+          size="sm"
+          onPress={() => {
+            setAction("edit");
+          }}
+        >
+          <EditIcon width={24} />
+        </Button>
+      )}
+      <div className="flex items-center gap-4">
+        <Controller
+          control={control}
+          name="image"
+          render={({ field }) => (
+            <Avatar
+              className="w-20 h-20 text-large"
+              src={`${IMAGE_BASE_URL}${field.value}`}
+            />
+          )}
+        />
+
+        <input
+          ref={fileInputRef}
+          accept="image/*"
+          style={{ display: "none" }}
+          type="file"
+          onChange={handleFileChange}
+        />
+
+        {profileImageUploadState.isUploading ? (
+          <Progress
+            aria-label="Profile image uploading..."
+            value={profileImageUploadState.progress}
+          />
+        ) : (
           <Button
-            isIconOnly
-            className="bg-transparent border border-default-200"
             size="sm"
-            onPress={() => {
-              setAction("edit");
-            }}
+            startContent={<UploadIcon width={14} />}
+            variant="ghost"
+            onPress={handleProfileImageUpdateClick}
           >
-            <EditIcon width={24} />
+            Update image
           </Button>
         )}
-      </CardHeader>
-      <Divider className="" orientation="horizontal" />
-      <CardBody>
-        <div />
-        <Form
-          className="w-full flex flex-col gap-4 pt-4"
-          validationBehavior="native"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="flex items-center gap-4">
-            <Controller
-              control={control}
-              name="image"
-              render={({ field }) => (
-                <Avatar
-                  className="w-20 h-20 text-large"
-                  src={`${IMAGE_BASE_URL}${field.value}`}
-                />
-              )}
+      </div>
+      <div className="flex w-full gap-4">
+        <Controller
+          control={control}
+          name={"firstName"}
+          render={({ field }) => (
+            <Input
+              {...field}
+              color="default"
+              errorMessage={errors.firstName?.message}
+              isInvalid={!!errors.firstName}
+              label="First Name"
+              labelPlacement="outside"
+              name="firstName"
+              radius="sm"
+              readOnly={action === "view"}
             />
-
-            <input
-              ref={fileInputRef}
-              accept="image/*"
-              style={{ display: "none" }}
-              type="file"
-              onChange={handleFileChange}
-            />
-
-            {profileImageUploadState.isUploading ? (
-              <Progress
-                aria-label="Profile image uploading..."
-                value={profileImageUploadState.progress}
-              />
-            ) : (
-              <Button
-                size="sm"
-                startContent={<UploadIcon width={14} />}
-                variant="ghost"
-                onPress={handleProfileImageUpdateClick}
-              >
-                Update image
-              </Button>
-            )}
-          </div>
-          <div className="flex w-full gap-4">
-            <Controller
-              control={control}
-              name={"firstName"}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  color="default"
-                  errorMessage={errors.firstName?.message}
-                  isInvalid={!!errors.firstName}
-                  label="First Name"
-                  labelPlacement="outside"
-                  name="firstName"
-                  radius="sm"
-                  readOnly={action === "view"}
-                />
-              )}
-            />
-          </div>
-          <Controller
-            control={control}
-            name="lastName"
-            render={({ field }) => (
-              <Input
-                {...field}
-                errorMessage={errors.lastName?.message}
-                isInvalid={!!errors.lastName}
-                label="Last Name"
-                labelPlacement="outside"
-                name="email"
-                radius="sm"
-                readOnly={action === "view"}
-                type="text"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="bio"
-            render={({ field }) => (
-              <Textarea
-                readOnly={action === "view"}
-                {...field}
-                label="Biography"
-                labelPlacement="outside"
-              />
-            )}
-          />
-
-          <div className="w-full flex flex-col gap-4">
-            <div className="flex gap-4">
-              <Input
-                label="Created on"
-                labelPlacement="outside"
-                name="Created on"
-                radius="sm"
-                readOnly={true}
-                type="text"
-                value={
-                  (initialValue?.createdAt &&
-                    formatTo12HourWithDate(new Date(initialValue.createdAt))) ||
-                  ""
-                }
-              />
-              <Input
-                label="Updated on"
-                labelPlacement="outside"
-                name="Updated on"
-                radius="sm"
-                readOnly={true}
-                type="text"
-                value={
-                  (initialValue?.updatedAt &&
-                    formatTo12HourWithDate(new Date(initialValue.updatedAt))) ||
-                  ""
-                }
-              />
-            </div>
-          </div>
-          {action === "edit" && (
-            <div className="ml-auto">
-              <Button
-                color="danger"
-                size="sm"
-                type="reset"
-                variant="flat"
-                onPress={() => {
-                  setAction("view");
-                  reset(initialValue);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="ml-2"
-                color="primary"
-                isDisabled={!isDirty}
-                size="sm"
-                type="submit"
-              >
-                Update Profile
-              </Button>
-            </div>
           )}
-        </Form>
-      </CardBody>
-    </Card>
+        />
+      </div>
+      <Controller
+        control={control}
+        name="lastName"
+        render={({ field }) => (
+          <Input
+            {...field}
+            errorMessage={errors.lastName?.message}
+            isInvalid={!!errors.lastName}
+            label="Last Name"
+            labelPlacement="outside"
+            name="email"
+            radius="sm"
+            readOnly={action === "view"}
+            type="text"
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="bio"
+        render={({ field }) => (
+          <Textarea
+            readOnly={action === "view"}
+            {...field}
+            label="Biography"
+            labelPlacement="outside"
+          />
+        )}
+      />
+
+      <div className="w-full flex flex-col gap-4">
+        <div className="flex gap-4">
+          <Input
+            label="Created on"
+            labelPlacement="outside"
+            name="Created on"
+            radius="sm"
+            readOnly={true}
+            type="text"
+            value={
+              (initialValue?.createdAt &&
+                formatTo12HourWithDate(new Date(initialValue.createdAt))) ||
+              ""
+            }
+          />
+          <Input
+            label="Updated on"
+            labelPlacement="outside"
+            name="Updated on"
+            radius="sm"
+            readOnly={true}
+            type="text"
+            value={
+              (initialValue?.updatedAt &&
+                formatTo12HourWithDate(new Date(initialValue.updatedAt))) ||
+              ""
+            }
+          />
+        </div>
+      </div>
+      {action === "edit" && (
+        <div className="ml-auto">
+          <Button
+            color="danger"
+            size="sm"
+            type="reset"
+            variant="flat"
+            onPress={() => {
+              setAction("view");
+              reset(initialValue);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="ml-2"
+            color="primary"
+            isDisabled={!isDirty}
+            size="sm"
+            type="submit"
+          >
+            Update Profile
+          </Button>
+        </div>
+      )}
+    </Form>
   );
 }
