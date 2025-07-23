@@ -1,0 +1,1 @@
+export const SESSION_SERVICE = 'SESSION_SERVICE';

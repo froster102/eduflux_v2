@@ -16,6 +16,8 @@ export const TYPES = {
   CreateUserProgressUseCase: Symbol.for('CreateUserProgressUseCase'),
   AddLectureProgressUseCase: Symbol.for('AddLectureProgressUseCase'),
   DeleteLectureProgressUseCase: Symbol.for('DeleteLectureProgressUseCase'),
+  GetUserSessionPriceUseCase: Symbol.for('GetUserSessionPriceUseCase'),
+  UpdateUserSessionPriceUseCase: Symbol.for('UpdateUserSessionPriceUseCase'),
 
   //Ports
   MessageBrokerGateway: Symbol.for('MessageBrokerGateway'),

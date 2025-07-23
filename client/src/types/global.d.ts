@@ -159,17 +159,30 @@ declare global {
     updatedAt: string;
   };
 
-  export type StudentSession = {
+  export type SessionStatus =
+    | "PENDING_PAYMENT"
+    | "BOOKED"
+    | "CONFIRMED"
+    | "IN_PROGRESS"
+    | "COMPLETED"
+    | "CANCELLED"
+    | "RESCHEDULED"
+    | "NO_SHOW"
+    | "INSTRUCTOR_NO_SHOW"
+    | "PAYMENT_EXPIRED";
+
+  export type InstructorSession = {
     id: string;
-    startTime: string;
-    endTime: string;
-    status: "scheduled" | "in_progress" | "completed" | "cancelled" | "failed";
-    createdAt: string;
-    updatedAt: string;
-    tutorId: string;
-    tutor: User;
-    studentId: string;
-    student: User;
+    instructor: User;
+    availabilitySlotId: string;
+    startTime: Date;
+    endTime: Date;
+    status: SessionStatus;
+    paymentId: string | null;
+    price: number;
+    currency: string;
+    createdAt: Date;
+    updatedAt: Date;
   };
 
   export type AppNotification = {

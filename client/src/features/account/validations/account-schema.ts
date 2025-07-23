@@ -35,21 +35,3 @@ export const updateProfileSchema = z
     image: z.string(),
   })
   .partial();
-
-export const sessionPricingSchema = z.object({
-  price: z
-    .number({
-      error: "Session price is required",
-    })
-    .min(0.01, "Session price must be greater than 0")
-    .max(10000, "Session price cannot exceed 10,000"),
-  currency: z.string().min(1, "Currency is required"),
-  duration: z
-    .number({
-      error: "Session duration is required",
-    })
-    .min(15, "Session duration must be at least 15 minutes")
-    .max(240, "Session duration cannot exceed 240 minutes (4 hours)"),
-});
-
-export type SessionPricingFormData = z.infer<typeof sessionPricingSchema>;

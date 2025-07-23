@@ -63,3 +63,11 @@ services:
         paths:
           - /api/payments
         strip_path: false
+
+  - name: session-service
+    url: http://session-service:3008
+    routes:
+      - name: session-route
+        paths:
+          - /api/sessions
+        strip_path: false

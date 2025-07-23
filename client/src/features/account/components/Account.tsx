@@ -9,13 +9,13 @@ import { useUpdatePassword } from "../hooks/useUpdatePassword";
 import { useUpdateProfile } from "../hooks/useUpdateProfile";
 
 import ProfileCard from "./ProfileCard";
-import SessionPriceForm from "./forms/SessionPriceForm";
 
 import { useAuthStore } from "@/store/auth-store";
 import PasswordForm from "@/features/account/components/forms/PasswordForm";
 import ProfileForm from "@/features/account/components/forms/ProfileForm";
 import RecentDevicesCard from "@/features/account/components/RecentDevicesCard";
 import { IMAGE_BASE_URL } from "@/config/image";
+import SessionTab from "@/features/instructor/session/components/SessionTab";
 
 type TabKey = "profile" | "account" | "session";
 
@@ -26,6 +26,7 @@ export default function Account() {
     enabled: selectedTab === "profile",
   });
   const { data: sessions, isLoading: isSessionsLoading } = useGetUserSessions();
+
   const updatePassword = useUpdatePassword();
   const updateProfile = useUpdateProfile();
 
@@ -82,15 +83,7 @@ export default function Account() {
         );
 
       case "session": {
-        return (
-          <>
-            {user?.roles.includes("INSTRUCTOR") && (
-              <div className="pt-4">
-                <SessionPriceForm />
-              </div>
-            )}
-          </>
-        );
+        return <SessionTab />;
       }
 
       default: {
@@ -122,9 +115,11 @@ export default function Account() {
           <div className="hidden md:block">
             {isSessionsLoading ? (
               new Array(3).fill(0).map((_, i) => (
-                <Skeleton key={i}>
-                  <Card className="max-w-md w-full h-[124px]" />
-                </Skeleton>
+                <div key={i} className="pt-2">
+                  <Skeleton key={i} className="rounded-md">
+                    <Card className="max-w-md w-full h-[90px]" />
+                  </Skeleton>
+                </div>
               ))
             ) : (
               <RecentDevicesCard

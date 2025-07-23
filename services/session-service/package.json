@@ -1,0 +1,40 @@
+{
+  "name": "session-service",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/main.ts",
+    "type:check": "bun run tsc --watch"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.13.4",
+    "@grpc/proto-loader": "^0.7.15",
+    "@internationalized/date": "^3.8.2",
+    "elysia": "latest",
+    "http-status": "^2.1.0",
+    "inversify": "^7.0.0-alpha.5",
+    "jose": "^6.0.12",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^8.16.4",
+    "nanoid": "^5.1.5",
+    "reflect-metadata": "^0.2.2",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "globals": "^16.2.0",
+    "grpc-tools": "^1.13.0",
+    "@types/google-protobuf": "^3.15.12",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "ts-proto": "^2.7.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}

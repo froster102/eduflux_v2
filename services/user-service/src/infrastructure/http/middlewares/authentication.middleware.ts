@@ -1,3 +1,4 @@
+import { AuthenticatedUserDto } from '@/application/dto/authenticated-user.dto';
 import { UnauthorizedException } from '@/application/exceptions/unauthorised.execption';
 import { validateToken } from '@/shared/utils/jwt.util';
 import Elysia from 'elysia';
@@ -14,6 +15,13 @@ export const authenticaionMiddleware = new Elysia().derive(
         'Invalid token or token has been expired',
       );
     });
-    return { user: payload };
+
+    const user = new AuthenticatedUserDto(
+      payload.id,
+      payload.name,
+      payload.email,
+      payload.roles,
+    );
+    return { user };
   },
 );

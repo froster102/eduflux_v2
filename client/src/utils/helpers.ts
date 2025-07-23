@@ -1,3 +1,4 @@
+import { Time } from "@internationalized/date";
 import { UAParser } from "ua-parser-js";
 
 export function getDeviceName(userAgent: string) {
@@ -85,3 +86,6 @@ export function buildQueryUrlParams(params: PaginationQueryParams): string {
 
   return queryString ? `?${queryString}` : "";
 }
+
+export const timeToString = (time: Time) =>
+  `${time.hour.toString().padStart(2, "0")}:${time.minute.toString().padStart(2, "0")}`;

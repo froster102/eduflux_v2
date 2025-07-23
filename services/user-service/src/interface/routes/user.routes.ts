@@ -7,7 +7,15 @@ import { UpdateUserInput } from '@/application/use-cases/update-user.use-case';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import { User } from '@/domain/entities/user.entity';
 import httpStatus from 'http-status';
-import { updateUserSchema } from '@/shared/validation/schema/update-user';
+import {
+  updateUserSchema,
+  updateUserSessionPricingSchema,
+} from '@/infrastructure/http/schema/user';
+import {
+  GetUserSessionPriceInput,
+  GetUserSessionPriceOutput,
+} from '@/application/use-cases/get-user-session-price.use-case';
+import { UpdateUserSessionPriceInput } from '@/application/use-cases/update-user-session-price.use-case';
 
 @injectable()
 export class UserRoutes implements IRoute<Elysia> {
@@ -18,6 +26,16 @@ export class UserRoutes implements IRoute<Elysia> {
     private readonly updateUserUseCase: IUseCase<UpdateUserInput, User>,
     @inject(TYPES.GetInstructorProfileUseCase)
     private readonly getInstructorProfileUseCase: IUseCase<string, User>,
+    @inject(TYPES.GetUserSessionPriceUseCase)
+    private readonly getUserSessionPriceUseCase: IUseCase<
+      GetUserSessionPriceInput,
+      GetUserSessionPriceOutput
+    >,
+    @inject(TYPES.UpdateUserSessionPriceUseCase)
+    private readonly updateUserSessionPriceUseCase: IUseCase<
+      UpdateUserSessionPriceInput,
+      void
+    >,
   ) {}
 
   register(): Elysia {
@@ -46,6 +64,23 @@ export class UserRoutes implements IRoute<Elysia> {
           {
             body: updateUserSchema,
           },
+        )
+        .get('/me/session-pricing', async ({ user }) => {
+          const pricing = await this.getUserSessionPriceUseCase.execute({
+            actor: user,
+          });
+          return pricing;
+        })
+        .put(
+          '/me/session-pricing',
+          async ({ user, body }) => {
+            await this.updateUserSessionPriceUseCase.execute({
+              actor: user,
+              price: body.price,
+            });
+            return;
+          },
+          { body: updateUserSessionPricingSchema },
         )
         .get('/:id', async ({ params }) => {
           const user = await this.getInstructorProfileUseCase.execute(
