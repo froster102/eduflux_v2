@@ -1,10 +1,11 @@
+import type { ClientSession } from 'mongoose';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
 import type { IMongoSlot } from '../schema/slot.schema';
 import { MongoBaseRepository } from './base.repository';
 import { ISlotRepository } from '@/domain/repositories/slot.repository';
 import { TYPES } from '@/shared/di/types';
 import { Slot, SlotStatus } from '@/domain/entities/slot.entity';
-import { inject } from 'inversify';
+import { inject, unmanaged } from 'inversify';
 import { SlotModel } from '../models/slot.model';
 
 export class MongoSlotRepository
@@ -14,8 +15,9 @@ export class MongoSlotRepository
   constructor(
     @inject(TYPES.SlotMapper)
     private readonly slotMapper: IMapper<Slot, IMongoSlot>,
+    @unmanaged() session?: ClientSession,
   ) {
-    super(SlotModel, slotMapper);
+    super(SlotModel, slotMapper, session);
   }
 
   async deleteAvailableOrBlockedByInstructorAndRange(
@@ -23,14 +25,17 @@ export class MongoSlotRepository
     startDate: Date,
     endDate: Date,
   ): Promise<void> {
-    await SlotModel.deleteMany({
-      instructorId: instructorId,
-      startTime: { $gte: startDate },
-      endTime: { $lte: endDate },
-      status: {
-        $in: [SlotStatus.AVAILABLE, SlotStatus.BLOCKED],
+    await SlotModel.deleteMany(
+      {
+        instructorId: instructorId,
+        startTime: { $gte: startDate },
+        endTime: { $lte: endDate },
+        status: {
+          $in: [SlotStatus.AVAILABLE, SlotStatus.BLOCKED],
+        },
       },
-    });
+      { session: this.session },
+    );
   }
 
   async findBookedByInstructorAndRange(

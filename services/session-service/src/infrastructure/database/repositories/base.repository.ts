@@ -1,3 +1,4 @@
+import type { ClientSession } from 'mongoose';
 import type { IBaseRepository } from '@/domain/repositories/base.repository';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
 import { Model } from 'mongoose';
@@ -7,25 +8,32 @@ import { PaginationQueryParams } from '@/application/dto/pagination.dto';
 export abstract class MongoBaseRepository<TDomain, TPersistence>
   implements IBaseRepository<TDomain>
 {
+  protected session?: ClientSession;
+
   constructor(
     private readonly model: Model<TPersistence>,
     private readonly mapper: IMapper<TDomain, TPersistence>,
-  ) {}
+    session?: ClientSession,
+  ) {
+    this.session = session;
+  }
 
   async saveMany(entities: TDomain[]): Promise<TDomain[]> {
     const persistenceEntities = entities.map((e) =>
       this.mapper.toPersistence(e),
     );
 
-    const result = await this.model.insertMany(persistenceEntities);
+    const result = await this.model.insertMany(persistenceEntities, {
+      session: this.session,
+    });
 
     return this.mapper.toDomainArray(result as TPersistence[]);
   }
 
   async save(entity: TDomain): Promise<TDomain> {
     const persistence = this.mapper.toPersistence(entity);
-    const saved = await this.model
-      .create(persistence)
+    const [saved] = await this.model
+      .create([persistence], { session: this.session })
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
@@ -36,7 +44,7 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
     const persistence = this.mapper.toPersistence(data as TDomain);
 
     const updated = await this.model
-      .findOneAndUpdate({ _id: id }, persistence)
+      .findOneAndUpdate({ _id: id }, persistence, { session: this.session })
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
@@ -46,7 +54,7 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
 
   async findById(id: string): Promise<TDomain | null> {
     const found = await this.model
-      .findOne({ _id: id })
+      .findOne({ _id: id }, null, { session: this.session })
       .catch((error: Record<string, any>) => {
         throw new DatabaseException(error.message as string);
       });
@@ -54,7 +62,9 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
   }
 
   async findByIds(ids: string[]): Promise<TDomain[]> {
-    const enities = await this.model.find({ _id: { $in: ids } });
+    const enities = await this.model.find({ _id: { $in: ids } }, null, {
+      session: this.session,
+    });
     return enities ? this.mapper.toDomainArray(enities) : [];
   }
 
@@ -153,5 +163,9 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
   async deleteById(id: string): Promise<boolean> {
     const result = await this.model.deleteOne({ _id: id });
     return result.deletedCount > 0 ? true : false;
+  }
+
+  updateMany(ids: string[], data: (TDomain | undefined)[]): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 }

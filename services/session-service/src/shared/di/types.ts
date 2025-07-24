@@ -13,6 +13,9 @@ export const TYPES = {
   ScheduleSettingRepository: Symbol.for('ScheduleSettingRepository'),
   SlotRepository: Symbol.for('SlotRepository'),
 
+  //Unit of work
+  UnitOfWork: Symbol.for('UnitOfWork'),
+
   //Database client
   DatabaseClient: Symbol.for('DatabaseClient'),
 

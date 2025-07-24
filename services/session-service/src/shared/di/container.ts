@@ -10,6 +10,7 @@ import { ScheduleSettingMapper } from '@/infrastructure/mapper/schedule-setting.
 import { MongoSessionRepository } from '@/infrastructure/database/repositories/session.repository';
 import { MongoSlotRepository } from '@/infrastructure/database/repositories/slot.repository';
 import { MongoScheduleSettingRepository } from '@/infrastructure/database/repositories/schedule-setting';
+import { MongoUnitOfWork } from '@/infrastructure/unit-of-work/mongo-unit-of-work';
 
 const container = new Container();
 
@@ -22,6 +23,9 @@ container.bind(TYPES.SlotRepository).to(MongoSlotRepository);
 container
   .bind(TYPES.ScheduleSettingRepository)
   .to(MongoScheduleSettingRepository);
+
+//Unit of work
+container.bind(TYPES.UnitOfWork).to(MongoUnitOfWork).inTransientScope();
 
 //Use Cases
 container

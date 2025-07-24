@@ -1,3 +1,4 @@
+import type { IUnitOfWork } from '../ports/unit-of-work.interface';
 import type { IUseCase } from './interface/use-case.interface';
 import type { ISlotRepository } from '@/domain/repositories/slot.repository';
 import type { IScheduleSettingRepository } from '@/domain/repositories/schedule-setting.repository';
@@ -36,7 +37,8 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
     @inject(TYPES.SlotRepository)
     private readonly slotRepository: ISlotRepository,
     @inject(TYPES.ScheduleSettingRepository)
-    private readonly scheduleTemplateRepository: IScheduleSettingRepository,
+    private readonly scheduleSettingRepository: IScheduleSettingRepository,
+    @inject(TYPES.UnitOfWork) private readonly uow: IUnitOfWork,
   ) {}
 
   async execute(
@@ -95,16 +97,6 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
 
     this.logger.info(
       `Fetched ${allExistingBookedSlots.length} existing BOOKED slots for instructor ${instructorId}.`,
-    );
-
-    await this.slotRepository.deleteAvailableOrBlockedByInstructorAndRange(
-      instructorId,
-      today,
-      endDate,
-    );
-
-    this.logger.info(
-      `Deleted existing AVAILABLE/BLOCKED slots for instructor ${instructorId} in the range.`,
     );
 
     const generatedSlots: Slot[] = [];
@@ -199,35 +191,46 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
 
     this.logger.info(`Generated ${generatedSlots.length} new available slots.`);
 
-    let savedSlotsCount = 0;
-    if (generatedSlots.length > 0) {
-      const savedResult = await this.slotRepository.saveMany(generatedSlots);
-      savedSlotsCount = savedResult.length || generatedSlots.length;
-      this.logger.info(`Successfully saved ${savedSlotsCount} new slots.`);
-    } else {
-      this.logger.info('No new slots generated to save.');
-    }
-
-    const scheduleSetting = ScheduleSetting.create(
-      instructorId,
-      weeklySchedule,
-      60,
-      applyForWeeks,
-    );
-
-    const foundUserScheduleSetting =
-      await this.scheduleTemplateRepository.findByUserId(instructorId);
-
-    if (foundUserScheduleSetting) {
-      await this.scheduleTemplateRepository.update(
-        foundUserScheduleSetting.id,
-        scheduleSetting,
+    await this.uow.runTransaction(async (trx) => {
+      await trx.slotRepository.deleteAvailableOrBlockedByInstructorAndRange(
+        instructorId,
+        today,
+        endDate,
       );
-    } else {
-      await this.scheduleTemplateRepository.save(scheduleSetting);
-    }
 
-    this.logger.info('Update instructors schedule setting.');
+      this.logger.info(
+        `Deleted existing AVAILABLE/BLOCKED slots for instructor ${instructorId} in the range.`,
+      );
+      let savedSlotsCount = 0;
+      if (generatedSlots.length > 0) {
+        const savedResult = await trx.slotRepository.saveMany(generatedSlots);
+        savedSlotsCount = savedResult.length || generatedSlots.length;
+        this.logger.info(`Successfully saved ${savedSlotsCount} new slots.`);
+      } else {
+        this.logger.info('No new slots generated to save.');
+      }
+
+      const scheduleSetting = ScheduleSetting.create(
+        instructorId,
+        weeklySchedule,
+        60,
+        applyForWeeks,
+      );
+
+      const foundUserScheduleSetting =
+        await trx.scheduleSettingRepository.findByUserId(instructorId);
+
+      if (foundUserScheduleSetting) {
+        await trx.scheduleSettingRepository.update(
+          foundUserScheduleSetting.id,
+          scheduleSetting,
+        );
+      } else {
+        await trx.scheduleSettingRepository.save(scheduleSetting);
+      }
+
+      this.logger.info('Update instructors schedule setting.');
+    });
 
     // Produce event if needed to notify the user
     // if (savedSlotsCount > 0) {
