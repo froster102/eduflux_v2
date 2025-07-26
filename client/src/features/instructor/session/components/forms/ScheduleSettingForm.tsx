@@ -29,21 +29,21 @@ const weekdays = [
 const DEFAULT_START_TIME_STR = "10:00:00";
 const DEFAULT_END_TIME_STR = "23:00:00";
 
-const defaultScheduleSetting = {
-  weeklySchedule: weekdays.map((_, index) => ({
-    dayOfWeek: index,
-    enabled: false,
-    startTime: DEFAULT_START_TIME_STR,
-    endTime: DEFAULT_END_TIME_STR,
-  })),
-  applyForWeeks: 1,
-};
-
 export default function ScheduleSettingForm({
   initialValue,
   isPending,
   onSubmitHandler,
 }: DefaultFormProps<AvailabilityFormData>) {
+  const normalizedInitialValue = initialValue
+    ? {
+        ...initialValue,
+        weeklySchedule: initialValue.weeklySchedule.map((schedule) => ({
+          ...schedule,
+          startTime: schedule.startTime || DEFAULT_START_TIME_STR,
+          endTime: schedule.endTime || DEFAULT_END_TIME_STR,
+        })),
+      }
+    : undefined;
   const {
     handleSubmit,
     control,
@@ -53,7 +53,7 @@ export default function ScheduleSettingForm({
     setValue,
   } = useForm<AvailabilityFormData>({
     resolver: zodResolver(availabilitySchema),
-    defaultValues: initialValue || defaultScheduleSetting,
+    defaultValues: normalizedInitialValue,
   });
 
   const watchedDays = watch("weeklySchedule");
@@ -169,10 +169,11 @@ export default function ScheduleSettingForm({
                 }
                 errorMessage={errors.timeZone?.message}
                 isInvalid={!!errors.timeZone}
-                label="Select your preffered time"
+                label="Timezone"
                 labelPlacement="outside"
                 placeholder="Select your preffered time"
                 selectedKeys={new Set([field.value])}
+                value={field.value}
                 onSelectionChange={(keys) => {
                   field.onChange(keys.anchorKey);
                 }}
