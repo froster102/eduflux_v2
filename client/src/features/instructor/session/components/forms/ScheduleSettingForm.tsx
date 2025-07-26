@@ -7,20 +7,23 @@ import { Button } from "@heroui/button";
 import { NumberInput } from "@heroui/number-input";
 import { parseTime } from "@internationalized/date";
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Select, SelectItem } from "@heroui/select";
 
 import {
   AvailabilityFormData,
   availabilitySchema,
 } from "../../validation/session-schema";
 
+import { getAllTimeZones } from "@/utils/date";
+
 const weekdays = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
-  "Sunday",
 ];
 
 const DEFAULT_START_TIME_STR = "10:00:00";
@@ -57,17 +60,19 @@ export default function ScheduleSettingForm({
 
   function onAvailabilitySubmit(data: AvailabilityFormData) {
     onSubmitHandler(data);
+    reset(data);
   }
-
-  console.log(initialValue, defaultScheduleSetting);
 
   return (
     <Card className="bg-background w-full">
       <CardHeader>
         <p className="text-lg font-medium">Availablity</p>
       </CardHeader>
-      <CardBody className="flex flex-col gap-2">
-        <Form onSubmit={handleSubmit(onAvailabilitySubmit)}>
+      <CardBody>
+        <Form
+          className="flex flex-col gap-2"
+          onSubmit={handleSubmit(onAvailabilitySubmit)}
+        >
           {weekdays.map((day, index) => (
             <div key={day} className="flex w-full justify-between">
               <Controller
@@ -134,27 +139,50 @@ export default function ScheduleSettingForm({
               </div>
             </div>
           ))}
-          <div className="mt-4">
-            <Controller
-              control={control}
-              name="applyForWeeks"
-              render={({ field }) => (
-                <NumberInput
-                  hideStepper
-                  aria-label="Apply for (weeks)"
-                  className="w-sm p-2"
-                  errorMessage={errors.applyForWeeks?.message}
-                  isInvalid={!!errors?.applyForWeeks}
-                  label="Apply for (weeks)"
-                  labelPlacement="outside"
-                  value={Number(field.value)}
-                  onChange={(e) => {
-                    field.onChange(Number((e as any).target.value));
-                  }}
-                />
-              )}
-            />
-          </div>
+          <Controller
+            control={control}
+            name="applyForWeeks"
+            render={({ field }) => (
+              <NumberInput
+                hideStepper
+                aria-label="Apply for (weeks)"
+                className="max-w-xs"
+                errorMessage={errors.applyForWeeks?.message}
+                isInvalid={!!errors?.applyForWeeks}
+                label="Apply for (weeks)"
+                labelPlacement="outside"
+                value={Number(field.value)}
+                onChange={(e) => {
+                  field.onChange(Number((e as any).target.value));
+                }}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="timeZone"
+            render={({ field }) => (
+              <Select
+                className="max-w-xs"
+                defaultSelectedKeys={
+                  new Set([Intl.DateTimeFormat().resolvedOptions().timeZone])
+                }
+                errorMessage={errors.timeZone?.message}
+                isInvalid={!!errors.timeZone}
+                label="Select your preffered time"
+                labelPlacement="outside"
+                placeholder="Select your preffered time"
+                selectedKeys={new Set([field.value])}
+                onSelectionChange={(keys) => {
+                  field.onChange(keys.anchorKey);
+                }}
+              >
+                {Array.from(getAllTimeZones()).map((timezone) => (
+                  <SelectItem key={timezone}>{timezone}</SelectItem>
+                ))}
+              </Select>
+            )}
+          />
           <div className="ml-auto space-x-2 flex justify-end">
             {isDirty && (
               <Button

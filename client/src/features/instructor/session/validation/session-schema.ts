@@ -1,6 +1,8 @@
 import { parseTime } from "@internationalized/date";
 import { z } from "zod/v4";
 
+import { getAllTimeZones } from "@/utils/date";
+
 export const sessionPricingSchema = z.object({
   price: z
     .number({
@@ -83,6 +85,9 @@ export const slotSchema = z
 export const availabilitySchema = z.object({
   weeklySchedule: z.array(slotSchema),
   applyForWeeks: z.number().min(1).max(12),
+  timeZone: z
+    .string()
+    .refine((val) => getAllTimeZones().has(val), { error: "Invalid timezone" }),
 });
 
 export type AvailabilityFormData = z.infer<typeof availabilitySchema>;

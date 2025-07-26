@@ -12,6 +12,7 @@ export class ScheduleSettingMapper
       raw.weeklyAvailabilityTemplate,
       raw.slotDurationMinutes,
       raw.applyForWeeks,
+      raw.timeZone,
       raw.createdAt,
       raw.updatedAt,
     );
@@ -24,6 +25,7 @@ export class ScheduleSettingMapper
       weeklyAvailabilityTemplate: setting.weeklyAvailabilityTemplate,
       slotDurationMinutes: setting.slotDurationMinutes,
       applyForWeeks: setting.applyForWeeks,
+      timeZone: setting.timeZone,
       createdAt: setting.createdAt,
       updatedAt: setting.updatedAt,
     } as IMongoScheduleSetting;

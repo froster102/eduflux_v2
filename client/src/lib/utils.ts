@@ -8,3 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 export function capitalize(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
 }
+
+export function testLoadingWithPromise(duration: number) {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve("");
+    }, duration),
+  );
+}

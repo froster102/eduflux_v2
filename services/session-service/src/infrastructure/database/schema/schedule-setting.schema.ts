@@ -21,6 +21,7 @@ export interface IMongoScheduleSetting extends Document {
   }[];
   slotDurationMinutes: number;
   applyForWeeks: number;
+  timeZone: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,6 +44,10 @@ export const ScheduleSettingSchema = new Schema<IMongoScheduleSetting>(
 
     applyForWeeks: {
       type: Number,
+      required: true,
+    },
+    timeZone: {
+      type: String,
       required: true,
     },
   },

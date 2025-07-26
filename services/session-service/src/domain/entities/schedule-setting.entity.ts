@@ -6,6 +6,7 @@ export class ScheduleSetting {
   private _weeklyAvailabilityTemplate: DailyAvailabilityConfig[];
   private _slotDurationMinutes: number;
   private _applyForWeeks: number;
+  private _timeZone: string;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
@@ -15,6 +16,7 @@ export class ScheduleSetting {
     weeklyAvailabilityTemplate: DailyAvailabilityConfig[],
     slotDurationMinutes: number,
     applyForWeeks: number,
+    timeZone: string,
     createdAt: Date,
     updatedAt: Date,
   ) {
@@ -23,6 +25,7 @@ export class ScheduleSetting {
     this._weeklyAvailabilityTemplate = weeklyAvailabilityTemplate;
     this._slotDurationMinutes = slotDurationMinutes;
     this._applyForWeeks = applyForWeeks;
+    this._timeZone = timeZone;
     this._createdAt = createdAt;
     this._updatedAt = updatedAt;
   }
@@ -32,6 +35,7 @@ export class ScheduleSetting {
     template: DailyAvailabilityConfig[],
     duration: number,
     applyForWeeks: number,
+    timeZone: string,
   ): ScheduleSetting {
     const now = new Date();
     return new ScheduleSetting(
@@ -40,6 +44,7 @@ export class ScheduleSetting {
       template,
       duration,
       applyForWeeks,
+      timeZone,
       now,
       now,
     );
@@ -51,6 +56,7 @@ export class ScheduleSetting {
     weeklyAvailabilityTemplate: DailyAvailabilityConfig[],
     slotDurationMinutes: number,
     applyForWeeks: number,
+    timeZone: string,
     createdAt: Date,
     updatedAt: Date,
   ): ScheduleSetting {
@@ -60,6 +66,7 @@ export class ScheduleSetting {
       weeklyAvailabilityTemplate,
       slotDurationMinutes,
       applyForWeeks,
+      timeZone,
       createdAt,
       updatedAt,
     );
@@ -79,6 +86,9 @@ export class ScheduleSetting {
   }
   public get applyForWeeks(): number {
     return this._applyForWeeks;
+  }
+  public get timeZone(): string {
+    return this._timeZone;
   }
   public get createdAt(): Date {
     return this._createdAt;
@@ -105,6 +115,7 @@ export class ScheduleSetting {
       weeklyAvailabilityTemplate: this.weeklyAvailabilityTemplate,
       slotDurationMinutes: this.slotDurationMinutes,
       applyForWeeks: this.applyForWeeks,
+      timeZone: this.timeZone,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString(),
     };

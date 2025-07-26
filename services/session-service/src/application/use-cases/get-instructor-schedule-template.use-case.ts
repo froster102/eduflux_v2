@@ -46,6 +46,7 @@ export class GetInstructorScheduleTemplateUseCase
           applyForWeeks: scheduleSetting.applyForWeeks,
           weeklySchedule: scheduleSetting.weeklyAvailabilityTemplate,
           slotDurationMinutes: scheduleSetting.slotDurationMinutes,
+          timeZone: scheduleSetting.timeZone,
           createdAt: scheduleSetting.createdAt,
           updatedAt: scheduleSetting.updatedAt,
         },

@@ -1,3 +1,4 @@
+import { getAllTimeZones } from '@/shared/utils/date';
 import { parseTime } from '@internationalized/date';
 import { z } from 'zod/v4';
 
@@ -65,4 +66,11 @@ export const slotSchema = z
 export const availabilitySchema = z.object({
   weeklySchedule: z.array(slotSchema),
   applyForWeeks: z.number().min(1).max(12),
+  timeZone: z.string().refine(
+    (val) => {
+      return getAllTimeZones().has(val);
+    },
+    { error: 'Invalid timezone.' },
+  ),
+});
 });

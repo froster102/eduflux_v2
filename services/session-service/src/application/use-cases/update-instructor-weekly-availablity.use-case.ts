@@ -14,6 +14,7 @@ import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { ScheduleSetting } from '@/domain/entities/schedule-setting.entity';
 import { slotLimits } from '@/shared/config/slot-limits';
+import { getAllTimeZones } from '@/shared/utils/date';
 
 export interface DailyAvailabilityConfig {
   dayOfWeek: number;
@@ -26,6 +27,7 @@ export interface UpdateInstructorWeeklyAvailabilityInput {
   actor: AuthenticatedUserDto;
   weeklySchedule: DailyAvailabilityConfig[];
   applyForWeeks: number;
+  timeZone: string;
 }
 
 export class UpdateInstructorWeeklyAvailabilityUseCase
@@ -215,6 +217,7 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
         weeklySchedule,
         60,
         applyForWeeks,
+        timeZone,
       );
 
       const foundUserScheduleSetting =

@@ -41,6 +41,7 @@ export class ScheduleRoutes {
             actor: user,
             applyForWeeks: parsedBody.applyForWeeks,
             weeklySchedule: parsedBody.weeklySchedule,
+            timeZone: parsedBody.timeZone,
           });
         }),
     );
