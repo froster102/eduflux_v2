@@ -73,4 +73,17 @@ export const availabilitySchema = z.object({
     { error: 'Invalid timezone.' },
   ),
 });
+
+export const bookingSchema = z.object({
+  slotId: z.string({ error: 'Slot id is required' }),
+});
+
+export const dateSchema = z.object({
+  date: z.iso.datetime({ error: 'Invalid date.', local: true }),
+  timeZone: z.string().refine(
+    (val) => {
+      return getAllTimeZones().has(val);
+    },
+    { error: 'Invalid timezone.' },
+  ),
 });

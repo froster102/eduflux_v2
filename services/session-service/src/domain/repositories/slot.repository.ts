@@ -12,4 +12,9 @@ export interface ISlotRepository extends IBaseRepository<Slot> {
     startTime: Date,
     endTime: Date,
   ): Promise<Slot[]>;
+  findByInstructorId(
+    instructorId: string,
+    startOfDayUTC: Date,
+    endOfDayUTC: Date,
+  ): Promise<Slot[]>;
 }

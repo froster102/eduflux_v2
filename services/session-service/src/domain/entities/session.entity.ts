@@ -152,7 +152,7 @@ export class Session {
       this._status === SessionStatus.NO_SHOW ||
       this._status === SessionStatus.INSTRUCTOR_NO_SHOW
     ) {
-      throw new Error(
+      throw new DomainException(
         'Cannot reschedule a cancelled, completed, or no-show session.',
       );
     }
@@ -168,7 +168,7 @@ export class Session {
       this._status !== SessionStatus.BOOKED &&
       this._status !== SessionStatus.IN_PROGRESS
     ) {
-      throw new Error(
+      throw new DomainException(
         'Cannot mark a session as NO_SHOW if not BOOKED or IN_PROGRESS.',
       );
     }
@@ -181,7 +181,7 @@ export class Session {
       this._status !== SessionStatus.BOOKED &&
       this._status !== SessionStatus.IN_PROGRESS
     ) {
-      throw new Error(
+      throw new DomainException(
         'Cannot mark a session as INSTRUCTOR_NO_SHOW if not BOOKED or IN_PROGRESS.',
       );
     }
@@ -191,7 +191,7 @@ export class Session {
 
   markAsPaymentExpired(): void {
     if (this._status !== SessionStatus.PENDING_PAYMENT) {
-      throw new Error(
+      throw new DomainException(
         'Cannot mark a session as PAYMENT_EXPIRED if not PENDING_PAYMENT.',
       );
     }

@@ -8,7 +8,19 @@ import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 import { UpdateInstructorWeeklyAvailabilityInput } from '@/application/use-cases/update-instructor-weekly-availablity.use-case';
-import { availabilitySchema } from '@/infrastructure/http/schema/session.schema';
+import {
+  availabilitySchema,
+  bookingSchema,
+  dateSchema,
+} from '@/infrastructure/http/schema/session.schema';
+import {
+  BookSessionInput,
+  BookSessionOutput,
+} from '@/application/use-cases/book-session.use-case';
+import {
+  GetInstructorAvailableSlotsInput,
+  GetInstructorAvailableSlotsOutput,
+} from '@/application/use-cases/get-instructor-available-slots.use-case';
 
 export class ScheduleRoutes {
   constructor(
@@ -21,6 +33,16 @@ export class ScheduleRoutes {
     private readonly updateInstructorWeeklyAvailabilityUseCase: IUseCase<
       UpdateInstructorWeeklyAvailabilityInput,
       void
+    >,
+    @inject(TYPES.BookSessionUseCase)
+    private readonly bookSessionUseCase: IUseCase<
+      BookSessionInput,
+      BookSessionOutput
+    >,
+    @inject(TYPES.GetInstructorAvailableSlotsUseCase)
+    private readonly getInstructorAvailableSlotsUseCase: IUseCase<
+      GetInstructorAvailableSlotsInput,
+      GetInstructorAvailableSlotsOutput
     >,
   ) {}
 
@@ -43,6 +65,25 @@ export class ScheduleRoutes {
             weeklySchedule: parsedBody.weeklySchedule,
             timeZone: parsedBody.timeZone,
           });
+        })
+        .post('/bookings', async ({ user, body }) => {
+          const parsedBody = bookingSchema.parse(body);
+          const response = await this.bookSessionUseCase.execute({
+            slotId: parsedBody.slotId,
+            userId: user.id,
+          });
+
+          return response;
+        })
+        .get('/instructors/:instructorId/slots', async ({ params, query }) => {
+          const parsedQuery = dateSchema.parse(query);
+          const response =
+            await this.getInstructorAvailableSlotsUseCase.execute({
+              instructorId: params.instructorId,
+              date: parsedQuery.date,
+              timeZone: parsedQuery.timeZone,
+            });
+          return response;
         }),
     );
   }

@@ -8,6 +8,7 @@ import CourseIcon from "@/assets/icons/CourseIcon";
 import SessionIcon from "@/assets/icons/SessionIcon";
 import MessageIcon from "@/assets/icons/MessageIcon";
 import AccountIcon from "@/assets/icons/AccountIcon";
+import InstructorIcon from "@/assets/icons/InstructorIcon";
 
 export const Route = createFileRoute("/_layout")({
   component: Layout,
@@ -44,6 +45,11 @@ function Layout() {
       path: "/sessions",
       icon: <SessionIcon width={24} />,
       label: "Sessions",
+    },
+    {
+      path: "/instructors",
+      icon: <InstructorIcon width={24} />,
+      label: "Instructors",
     },
     {
       path: "/messages",

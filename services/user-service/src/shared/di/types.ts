@@ -18,6 +18,7 @@ export const TYPES = {
   DeleteLectureProgressUseCase: Symbol.for('DeleteLectureProgressUseCase'),
   GetUserSessionPriceUseCase: Symbol.for('GetUserSessionPriceUseCase'),
   UpdateUserSessionPriceUseCase: Symbol.for('UpdateUserSessionPriceUseCase'),
+  GetInstructorsUseCase: Symbol.for('GetInstructorsUseCase'),
 
   //Ports
   MessageBrokerGateway: Symbol.for('MessageBrokerGateway'),
@@ -42,4 +43,5 @@ export const TYPES = {
 
   //Mappers
   ProgressMapper: Symbol.for('ProgressMapper'),
+  UserMapper: Symbol.for('UserMapper'),
 };

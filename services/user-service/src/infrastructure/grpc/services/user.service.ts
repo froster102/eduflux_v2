@@ -4,7 +4,9 @@ import { GetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { Logger } from '@/shared/utils/logger';
 import {
   CreateUserRequest,
+  GetInstructorSessingPricingRequest,
   GetUserRequest,
+  InstructorSessionPricingResponse,
   UpdateUserRequest,
   UserResponse,
   UserServiceServer,
@@ -19,6 +21,7 @@ import {
 } from '@/application/use-cases/create-user.use-case';
 import { Role } from '@/shared/types/role';
 import { UpdateUserUseCase } from '@/application/use-cases/update-user.use-case';
+import { GetUserSessionPriceUseCase } from '@/application/use-cases/get-user-session-price.use-case';
 
 @injectable()
 export class UserGrpcService implements UserServiceServer {
@@ -34,6 +37,8 @@ export class UserGrpcService implements UserServiceServer {
     private readonly createUserUseCase: CreateUserUseCase,
     @inject(TYPES.UpdateUserUseCase)
     private readonly updateUserUseCase: UpdateUserUseCase,
+    @inject(TYPES.GetUserSessionPriceUseCase)
+    private readonly getUserSessionPriceUseCase: GetUserSessionPriceUseCase,
   ) {}
 
   createUser(
@@ -128,6 +133,32 @@ export class UserGrpcService implements UserServiceServer {
           roles: user.roles,
         };
         callback(null, response);
+      })
+      .catch((error: Error) => {
+        this.handleError(error, callback);
+      });
+  }
+
+  getInstructorSessingPricing(
+    call: ServerUnaryCall<
+      GetInstructorSessingPricingRequest,
+      InstructorSessionPricingResponse
+    >,
+    callback: sendUnaryData<InstructorSessionPricingResponse>,
+  ) {
+    this.logger.info(`Received request for userID: ${call.request.userId}`);
+    this.getUserSessionPriceUseCase
+      .execute({ userId: call.request.userId })
+      .then((getUserSessionPriceOutput) => {
+        if (getUserSessionPriceOutput) {
+          const response: InstructorSessionPricingResponse = {
+            id: getUserSessionPriceOutput.id,
+            price: getUserSessionPriceOutput.price,
+            currency: getUserSessionPriceOutput.currency,
+            duration: getUserSessionPriceOutput.duration,
+          };
+          callback(null, response);
+        }
       })
       .catch((error: Error) => {
         this.handleError(error, callback);

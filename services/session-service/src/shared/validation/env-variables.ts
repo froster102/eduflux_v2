@@ -17,16 +17,24 @@ const envSchema = z.object({
   GRPC_USER_SERVICE_URL: z.string({
     error: 'GRPC_USER_SERVICE_URL is required',
   }),
+  GRPC_PAYMENT_SERVICE_URL: z.string({
+    error: 'GRPC_PAYMENT_SERVICE_URL is required ',
+  }),
 
   DATABASE_URL: z.string({
     error: 'DATABASE_URL must be a valid URL',
   }),
+
+  PAYMENT_SUCCESS_URL: z.string({ error: 'PAYMENT_SUCCESS_URL is required.' }),
+  PAYMENT_CANCEL_URL: z.string({ error: 'PAYMENT_CANCEL_URL is required.' }),
 
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),
   JWKS_URL: z.string({ error: 'JWKS_URL must be a valid URL' }),
 
   KAKFA_BROKER_URL: z.string({ error: 'KAKFA_BROKER_URL is required' }),
+
+  IMAGE_BASE_URL: z.string({ error: 'IMAGE_BASE_URL is required.' }),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;

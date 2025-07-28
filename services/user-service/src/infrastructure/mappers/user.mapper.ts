@@ -9,7 +9,7 @@ export class UserMapper implements IMapper<User, IMongoUser> {
       raw.firstName,
       raw.lastName,
       raw.email,
-      raw.sessionPrice,
+      raw.sessionPricing,
       raw.roles,
       raw.createdAt,
       raw.updatedAt,
@@ -25,7 +25,7 @@ export class UserMapper implements IMapper<User, IMongoUser> {
       firstName: raw.firstName,
       lastName: raw.lastName,
       email: raw.email,
-      sessionPrice: raw.sessionPrice,
+      sessionPricing: raw.sessionPricing,
       roles: raw.roles,
       image: raw.image,
       bio: raw.bio,
@@ -33,5 +33,9 @@ export class UserMapper implements IMapper<User, IMongoUser> {
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     };
+  }
+
+  toDomainArray(raw: IMongoUser[]): User[] {
+    return raw.map((r) => this.toDomain(r));
   }
 }

@@ -10,7 +10,7 @@ export async function becomeAInstructor() {
 
 export async function getInstructorProfile(
   userId: string,
-): Promise<UserProfile> {
+): Promise<InstructorProfile> {
   const response = await api.get(`/users/${userId}`);
 
   return response.data;

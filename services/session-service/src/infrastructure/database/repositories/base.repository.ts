@@ -1,4 +1,4 @@
-import type { ClientSession } from 'mongoose';
+import type { AnyBulkWriteOperation, ClientSession } from 'mongoose';
 import type { IBaseRepository } from '@/domain/repositories/base.repository';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
 import { Model } from 'mongoose';
@@ -165,7 +165,20 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
     return result.deletedCount > 0 ? true : false;
   }
 
-  updateMany(ids: string[], data: (TDomain | undefined)[]): Promise<void> {
-    throw new Error('Method not implemented.');
+  async updateMany(
+    updates: { id: string; data: Partial<TDomain> }[],
+  ): Promise<void> {
+    if (updates.length === 0) {
+      return;
+    }
+
+    const operations: AnyBulkWriteOperation<any>[] = updates.map((update) => ({
+      updateOne: {
+        filter: { _id: update.id },
+        update: { $set: update.data },
+      },
+    }));
+
+    await this.model.bulkWrite(operations, { session: this.session });
   }
 }

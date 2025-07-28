@@ -14,7 +14,7 @@ import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { ScheduleSetting } from '@/domain/entities/schedule-setting.entity';
 import { slotLimits } from '@/shared/config/slot-limits';
-import { getAllTimeZones } from '@/shared/utils/date';
+import { convertLoacalTimeAndDateToUtc } from '@/shared/utils/date';
 
 export interface DailyAvailabilityConfig {
   dayOfWeek: number;
@@ -46,10 +46,9 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
   async execute(
     updateInstructorWeeklyAvailabilityInput: UpdateInstructorWeeklyAvailabilityInput,
   ): Promise<void> {
-    const { weeklySchedule, applyForWeeks, actor } =
+    const { weeklySchedule, applyForWeeks, actor, timeZone } =
       updateInstructorWeeklyAvailabilityInput;
     const instructorId = actor.id;
-
     if (!actor.roles.includes(Role.INSTRUCTOR)) {
       throw new ForbiddenException('Instructor not found or unauthorized.');
     }
@@ -120,14 +119,20 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
         dailyConfig.startTime &&
         dailyConfig.endTime
       ) {
-        let currentSlotStartTime = this.parseTimeToDate(
+        let currentSlotStartTime = convertLoacalTimeAndDateToUtc(
           currentDay,
           dailyConfig.startTime,
+          timeZone,
         );
-        const dailyEndTime = this.parseTimeToDate(
+        const dailyEndTime = convertLoacalTimeAndDateToUtc(
           currentDay,
           dailyConfig.endTime,
+          timeZone,
         );
+
+        if (dailyEndTime <= currentSlotStartTime) {
+          dailyEndTime.setUTCDate(dailyEndTime.getUTCDate() + 1);
+        }
 
         while (currentSlotStartTime < dailyEndTime) {
           //Currently added a 60 minutes (1hour) duration
@@ -240,10 +245,10 @@ export class UpdateInstructorWeeklyAvailabilityUseCase
     // }
   }
 
-  private parseTimeToDate(date: Date, time: string): Date {
-    const [hours, minutes] = time.split(':').map(Number);
-    const newDate = new Date(date);
-    newDate.setUTCHours(hours, minutes, 0, 0);
-    return newDate;
-  }
+  // private parseTimeToDate(date: Date, time: string, timeZone: string): Date {
+  //   const [hours, minutes] = time.split(':').map(Number);
+  //   const localDate = new Date(date);
+  //   localDate.setHours(hours, minutes, 0, 0); // Set time as if in local timezone
+  //   return convertZonedToUtc(localDate, timeZone); // Convert to UTC
+  // }
 }

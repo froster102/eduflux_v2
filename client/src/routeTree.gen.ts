@@ -24,6 +24,7 @@ import { Route as InstructorLayoutRouteRouteImport } from './routes/instructor/_
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
 import { Route as LayoutSessionsIndexRouteImport } from './routes/_layout/sessions/index'
 import { Route as LayoutMessagesIndexRouteImport } from './routes/_layout/messages/index'
+import { Route as LayoutInstructorsIndexRouteImport } from './routes/_layout/instructors/index'
 import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index'
 import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
 import { Route as LayoutAccountIndexRouteImport } from './routes/_layout/account/index'
@@ -31,6 +32,7 @@ import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/inst
 import { Route as InstructorLayoutMessagesIndexRouteImport } from './routes/instructor/_layout/messages/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
 import { Route as InstructorLayoutAccountIndexRouteImport } from './routes/instructor/_layout/account/index'
+import { Route as LayoutInstructorsInstructorIdIndexRouteImport } from './routes/_layout/instructors/$instructorId/index'
 import { Route as LayoutCoursesCourseIdIndexRouteImport } from './routes/_layout/courses/$courseId/index'
 import { Route as LayoutCoursesCourseIdLearnIndexRouteImport } from './routes/_layout/courses/$courseId/learn/index'
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
@@ -105,6 +107,11 @@ const LayoutMessagesIndexRoute = LayoutMessagesIndexRouteImport.update({
   path: '/messages/',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
+const LayoutInstructorsIndexRoute = LayoutInstructorsIndexRouteImport.update({
+  id: '/instructors/',
+  path: '/instructors/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
 const LayoutHomeIndexRoute = LayoutHomeIndexRouteImport.update({
   id: '/home/',
   path: '/home/',
@@ -144,6 +151,12 @@ const InstructorLayoutAccountIndexRoute =
     path: '/account/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
+const LayoutInstructorsInstructorIdIndexRoute =
+  LayoutInstructorsInstructorIdIndexRouteImport.update({
+    id: '/instructors/$instructorId/',
+    path: '/instructors/$instructorId/',
+    getParentRoute: () => LayoutRouteRoute,
+  } as any)
 const LayoutCoursesCourseIdIndexRoute =
   LayoutCoursesCourseIdIndexRouteImport.update({
     id: '/courses/$courseId/',
@@ -176,10 +189,12 @@ export interface FileRoutesByFullPath {
   '/account': typeof LayoutAccountIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
   '/home': typeof LayoutHomeIndexRoute
+  '/instructors': typeof LayoutInstructorsIndexRoute
   '/messages': typeof LayoutMessagesIndexRoute
   '/sessions': typeof LayoutSessionsIndexRoute
   '/instructor/': typeof InstructorLayoutIndexRoute
   '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
+  '/instructors/$instructorId': typeof LayoutInstructorsInstructorIdIndexRoute
   '/instructor/account': typeof InstructorLayoutAccountIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
   '/instructor/messages': typeof InstructorLayoutMessagesIndexRoute
@@ -199,9 +214,11 @@ export interface FileRoutesByTo {
   '/account': typeof LayoutAccountIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
   '/home': typeof LayoutHomeIndexRoute
+  '/instructors': typeof LayoutInstructorsIndexRoute
   '/messages': typeof LayoutMessagesIndexRoute
   '/sessions': typeof LayoutSessionsIndexRoute
   '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
+  '/instructors/$instructorId': typeof LayoutInstructorsInstructorIdIndexRoute
   '/instructor/account': typeof InstructorLayoutAccountIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
   '/instructor/messages': typeof InstructorLayoutMessagesIndexRoute
@@ -225,10 +242,12 @@ export interface FileRoutesById {
   '/_layout/account/': typeof LayoutAccountIndexRoute
   '/_layout/courses/': typeof LayoutCoursesIndexRoute
   '/_layout/home/': typeof LayoutHomeIndexRoute
+  '/_layout/instructors/': typeof LayoutInstructorsIndexRoute
   '/_layout/messages/': typeof LayoutMessagesIndexRoute
   '/_layout/sessions/': typeof LayoutSessionsIndexRoute
   '/instructor/_layout/': typeof InstructorLayoutIndexRoute
   '/_layout/courses/$courseId/': typeof LayoutCoursesCourseIdIndexRoute
+  '/_layout/instructors/$instructorId/': typeof LayoutInstructorsInstructorIdIndexRoute
   '/instructor/_layout/account/': typeof InstructorLayoutAccountIndexRoute
   '/instructor/_layout/courses/': typeof InstructorLayoutCoursesIndexRoute
   '/instructor/_layout/messages/': typeof InstructorLayoutMessagesIndexRoute
@@ -251,10 +270,12 @@ export interface FileRouteTypes {
     | '/account'
     | '/courses'
     | '/home'
+    | '/instructors'
     | '/messages'
     | '/sessions'
     | '/instructor/'
     | '/courses/$courseId'
+    | '/instructors/$instructorId'
     | '/instructor/account'
     | '/instructor/courses'
     | '/instructor/messages'
@@ -274,9 +295,11 @@ export interface FileRouteTypes {
     | '/account'
     | '/courses'
     | '/home'
+    | '/instructors'
     | '/messages'
     | '/sessions'
     | '/courses/$courseId'
+    | '/instructors/$instructorId'
     | '/instructor/account'
     | '/instructor/courses'
     | '/instructor/messages'
@@ -299,10 +322,12 @@ export interface FileRouteTypes {
     | '/_layout/account/'
     | '/_layout/courses/'
     | '/_layout/home/'
+    | '/_layout/instructors/'
     | '/_layout/messages/'
     | '/_layout/sessions/'
     | '/instructor/_layout/'
     | '/_layout/courses/$courseId/'
+    | '/_layout/instructors/$instructorId/'
     | '/instructor/_layout/account/'
     | '/instructor/_layout/courses/'
     | '/instructor/_layout/messages/'
@@ -418,6 +443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutMessagesIndexRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
+    '/_layout/instructors/': {
+      id: '/_layout/instructors/'
+      path: '/instructors'
+      fullPath: '/instructors'
+      preLoaderRoute: typeof LayoutInstructorsIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
     '/_layout/home/': {
       id: '/_layout/home/'
       path: '/home'
@@ -467,6 +499,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutAccountIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
+    '/_layout/instructors/$instructorId/': {
+      id: '/_layout/instructors/$instructorId/'
+      path: '/instructors/$instructorId'
+      fullPath: '/instructors/$instructorId'
+      preLoaderRoute: typeof LayoutInstructorsInstructorIdIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
     '/_layout/courses/$courseId/': {
       id: '/_layout/courses/$courseId/'
       path: '/courses/$courseId'
@@ -495,9 +534,11 @@ interface LayoutRouteRouteChildren {
   LayoutAccountIndexRoute: typeof LayoutAccountIndexRoute
   LayoutCoursesIndexRoute: typeof LayoutCoursesIndexRoute
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute
+  LayoutInstructorsIndexRoute: typeof LayoutInstructorsIndexRoute
   LayoutMessagesIndexRoute: typeof LayoutMessagesIndexRoute
   LayoutSessionsIndexRoute: typeof LayoutSessionsIndexRoute
   LayoutCoursesCourseIdIndexRoute: typeof LayoutCoursesCourseIdIndexRoute
+  LayoutInstructorsInstructorIdIndexRoute: typeof LayoutInstructorsInstructorIdIndexRoute
   LayoutCoursesCourseIdLearnIndexRoute: typeof LayoutCoursesCourseIdLearnIndexRoute
 }
 
@@ -505,9 +546,12 @@ const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
   LayoutAccountIndexRoute: LayoutAccountIndexRoute,
   LayoutCoursesIndexRoute: LayoutCoursesIndexRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
+  LayoutInstructorsIndexRoute: LayoutInstructorsIndexRoute,
   LayoutMessagesIndexRoute: LayoutMessagesIndexRoute,
   LayoutSessionsIndexRoute: LayoutSessionsIndexRoute,
   LayoutCoursesCourseIdIndexRoute: LayoutCoursesCourseIdIndexRoute,
+  LayoutInstructorsInstructorIdIndexRoute:
+    LayoutInstructorsInstructorIdIndexRoute,
   LayoutCoursesCourseIdLearnIndexRoute: LayoutCoursesCourseIdLearnIndexRoute,
 }
 

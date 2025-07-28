@@ -3,12 +3,9 @@ import { inject } from 'inversify';
 import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
-import { Role } from '@/shared/types/role';
-import { ForbiddenException } from '../exceptions/forbidden.exception';
 
 export interface GetUserSessionPriceInput {
-  actor: AuthenticatedUserDto;
+  userId: string;
 }
 
 export interface GetUserSessionPriceOutput {
@@ -30,27 +27,20 @@ export class GetUserSessionPriceUseCase
   async execute(
     getUserSessionPriceInput: GetUserSessionPriceInput,
   ): Promise<GetUserSessionPriceOutput | null> {
-    const { actor } = getUserSessionPriceInput;
+    const { userId } = getUserSessionPriceInput;
 
-    if (!actor.hasRole(Role.INSTRUCTOR)) {
-      throw new ForbiddenException(
-        `User with ID${actor.id} not authorized`,
-        'You are not authorized to perform this action,Please activate your instructor account to proceed.',
-      );
-    }
-
-    const user = await this.userRepository.findById(actor.id);
+    const user = await this.userRepository.findById(userId);
 
     if (!user) {
-      throw new NotFoundException(`User with ID${actor.id} not found.`);
+      throw new NotFoundException(`User with ID${userId} not found.`);
     }
 
-    if (user.sessionPrice) {
+    if (user.sessionPricing) {
       return {
-        id: actor.id,
-        price: user.sessionPrice.price,
-        currency: user.sessionPrice.currency,
-        duration: user.sessionPrice.durationMinutes,
+        id: userId,
+        price: user.sessionPricing.price,
+        currency: user.sessionPricing.currency,
+        duration: user.sessionPricing.durationMinutes,
       };
     }
 

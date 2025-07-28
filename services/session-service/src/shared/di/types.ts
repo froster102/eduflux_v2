@@ -7,6 +7,20 @@ export const TYPES = {
   GetInstructorScheduleTemplateUseCase: Symbol.for(
     'GetInstructorScheduleTemplateUseCase',
   ),
+  HandleExpiredPendingPaymentsUseCase: Symbol.for(
+    'HandleExpiredPendingPaymentsUseCase',
+  ),
+  ConfirmSessionBookingUseCase: Symbol.for('ConfirmSessionBookingUseCase'),
+  GetInstructorAvailableSlotsUseCase: Symbol.for(
+    'GetInstructorAvailableSlotsUseCase',
+  ),
+
+  //Domain services
+  SessionBookingService: Symbol.for('SessionBookingService'),
+
+  //Ports
+  UserServiceGateway: Symbol.for('UserServiceGateway'),
+  PaymentServiceGateway: Symbol.for('PaymentServiceGateway'),
 
   //Repositories
   SessionRepository: Symbol.for('SessionRepository'),
@@ -26,4 +40,10 @@ export const TYPES = {
   SessionMapper: Symbol.for('SessionMapper'),
   SlotMapper: Symbol.for('SlotMapper'),
   ScheduleSettingMapper: Symbol.for('ScheduleSettingMapper'),
+
+  //Cron
+  CronServices: Symbol.for('CronServices'),
+
+  //Consumers
+  PaymentEventsConsumer: Symbol.for('PaymentEventsConsumer'),
 };

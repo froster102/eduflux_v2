@@ -1,6 +1,6 @@
 import { Role } from '@/shared/types/role';
 
-export interface SessionPrice {
+export interface SessionPricing {
   price: number;
   currency: string;
   durationMinutes: number;
@@ -11,7 +11,7 @@ export class User {
   private _firstName: string;
   private _lastName: string;
   private _email: string;
-  private _sessionPrice: SessionPrice | null;
+  private _sessionPricing: SessionPricing | null;
   private _image?: string;
   private _roles: Role[];
   private _bio?: string;
@@ -27,7 +27,7 @@ export class User {
     firstName: string,
     lastName: string,
     email: string,
-    sessionPrice: SessionPrice | null,
+    sessionPricing: SessionPricing | null,
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
@@ -42,7 +42,7 @@ export class User {
     this._firstName = firstName;
     this._lastName = lastName;
     this._email = email;
-    this._sessionPrice = sessionPrice;
+    this._sessionPricing = sessionPricing;
     this._roles = roles;
     this._image = image;
     this._bio = bio;
@@ -84,7 +84,7 @@ export class User {
     firstName: string,
     lastName: string,
     email: string,
-    sessionPrice: SessionPrice | null,
+    sessionPricing: SessionPricing | null,
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
@@ -100,7 +100,7 @@ export class User {
       firstName,
       lastName,
       email,
-      sessionPrice,
+      sessionPricing,
       roles,
       createdAt,
       updatedAt,
@@ -126,8 +126,8 @@ export class User {
     return this._email;
   }
 
-  public get sessionPrice(): SessionPrice | null {
-    return this._sessionPrice;
+  public get sessionPricing(): SessionPricing | null {
+    return this._sessionPricing;
   }
 
   public get image(): string | undefined {
@@ -192,7 +192,7 @@ export class User {
   }
 
   public setSessionPrice(price: number): void {
-    this._sessionPrice = {
+    this._sessionPricing = {
       currency: 'USD',
       durationMinutes: 60,
       price,
@@ -257,6 +257,7 @@ export class User {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
+      sessionPricing: this.sessionPricing,
       image: this.image,
       email: this.email,
       bio: this.bio,

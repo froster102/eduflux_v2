@@ -1,11 +1,6 @@
 import api from "@/lib/axios";
 
-export async function getUserSessionPricing(): Promise<{
-  id: string;
-  price: number;
-  currency: string;
-  duration: number;
-} | null> {
+export async function getUserSessionPricing(): Promise<SessionPricing> {
   const response = await api.get("/users/me/session-pricing");
 
   return response.data;

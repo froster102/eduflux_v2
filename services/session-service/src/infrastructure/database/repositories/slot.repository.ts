@@ -51,4 +51,18 @@ export class MongoSlotRepository
     });
     return docs ? this.slotMapper.toDomainArray(docs) : [];
   }
+
+  async findByInstructorId(
+    instructorId: string,
+    startOfDayUTC: Date,
+    endOfDayUTC: Date,
+  ): Promise<Slot[]> {
+    const docs = await SlotModel.find({
+      instructorId,
+      startTime: { $gte: startOfDayUTC },
+      endTime: { $lte: endOfDayUTC },
+    });
+
+    return docs ? this.slotMapper.toDomainArray(docs) : [];
+  }
 }

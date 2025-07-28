@@ -3,6 +3,7 @@ declare global {
     weeklySchedule: DailyAvailabilityConfig[];
     slotDurationMinutes: number;
     applyForWeeks: number;
+    timeZone: string;
     createdAt: Date;
     updatedAt: Date;
   };
@@ -13,6 +14,13 @@ declare global {
     startTime?: string;
     endTime?: string;
   };
+
+  export type SessionPricing = {
+    id: string;
+    price: number;
+    currency: string;
+    duration: number;
+  } | null;
 }
 
 export {};

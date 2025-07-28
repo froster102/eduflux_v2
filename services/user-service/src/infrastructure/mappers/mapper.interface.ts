@@ -1,4 +1,5 @@
-export interface IMapper<Domain, Persistance> {
-  toDomain(raw: Persistance): Domain;
-  toPersistance(raw: Domain): Partial<Persistance>;
+export interface IMapper<Domain, Persistence> {
+  toDomain(raw: Persistence): Domain;
+  toPersistance(raw: Domain): Partial<Persistence>;
+  toDomainArray(raw: Persistence[]): Domain[];
 }

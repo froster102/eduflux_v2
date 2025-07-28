@@ -1,51 +1,48 @@
-import {
-  AvailabilityStatus,
-  InstructorAvailability,
-} from '../entities/slot.entity';
 import { Session, SessionStatus } from '../entities/session.entity';
+import { Slot, SlotStatus } from '../entities/slot.entity';
 import { DomainException } from '../exceptions/domain.exception';
+// import { v4 as uuidv4 } from 'uuid';
 
 export class SessionBookingService {
-  constructor() {}
-
   createPendingSession(
-    availability: InstructorAvailability,
+    slot: Slot,
     learnerId: string,
     price: number,
     currency: string,
-  ): { updatedAvailability: InstructorAvailability; newSession: Session } {
-    if (availability.status !== AvailabilityStatus.AVAILABLE) {
-      throw new Error('Selected slot is not available for booking.');
+  ): { updatedSlot: Slot; newSession: Session } {
+    if (slot.status !== SlotStatus.AVAILABLE) {
+      throw new DomainException('Selected slot is not available for booking.');
     }
 
     const sessionId = `sess-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
     const newSession = Session.create({
       id: sessionId,
-      instructorId: availability.instructorId,
+      instructorId: slot.instructorId,
       learnerId: learnerId,
-      availabilitySlotId: availability.id,
-      startTime: availability.startTime,
-      endTime: availability.endTime,
+      availabilitySlotId: slot.id,
+      startTime: slot.startTime,
+      endTime: slot.endTime,
       status: SessionStatus.PENDING_PAYMENT,
       price: price,
       currency: currency,
       pendingPaymentExpiryTime: null,
     });
 
-    availability.markAsBooked(learnerId, sessionId);
+    slot.markAsBooked(learnerId, sessionId);
 
-    return { updatedAvailability: availability, newSession: newSession };
+    return { updatedSlot: slot, newSession: newSession };
   }
 
   rescheduleSlots(
     originalSession: Session,
-    oldAvailability: InstructorAvailability,
-    newAvailability: InstructorAvailability,
+    oldAvailability: Slot,
+    newAvailability: Slot,
     userId: string,
   ): {
     updatedSession: Session;
-    updatedOldAvailability: InstructorAvailability;
-    updatedNewAvailability: InstructorAvailability;
+    updatedOldAvailability: Slot;
+    updatedNewAvailability: Slot;
   } {
     if (!originalSession.isParticipant(userId)) {
       throw new DomainException(
@@ -53,7 +50,7 @@ export class SessionBookingService {
       );
     }
 
-    if (newAvailability.status !== AvailabilityStatus.AVAILABLE) {
+    if (newAvailability.status !== SlotStatus.AVAILABLE) {
       throw new DomainException(
         'New desired slot is not available for booking.',
       );

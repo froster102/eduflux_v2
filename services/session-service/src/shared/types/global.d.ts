@@ -9,9 +9,6 @@ declare global {
     bio: string;
     roles: Role[];
     socialLinks: SocialLinks[];
-    sessionPricing: {
-      ratePerHour: number;
-    } | null;
     createdAt: string;
     updatedAt: string;
   };

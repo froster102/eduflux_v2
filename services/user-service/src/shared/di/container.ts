@@ -21,6 +21,8 @@ import { CreateUserProgressUseCase } from '@/application/use-cases/create-user-p
 import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-producer.adapter';
 import { GetUserSessionPriceUseCase } from '@/application/use-cases/get-user-session-price.use-case';
 import { UpdateUserSessionPriceUseCase } from '@/application/use-cases/update-user-session-price.use-case';
+import { GetInstructorsUseCase } from '@/application/use-cases/get-instructors.use-case';
+import { UserMapper } from '@/infrastructure/mappers/user.mapper';
 
 const container = new Container();
 
@@ -50,6 +52,7 @@ container
 container
   .bind(TYPES.GetUserCourseProgressUseCase)
   .to(GetUserCourseProgressUseCase);
+container.bind(TYPES.GetInstructorsUseCase).to(GetInstructorsUseCase);
 
 //Ports
 container
@@ -72,5 +75,6 @@ container.bind(TYPES.GrpcServer).to(GrpcServer);
 
 //Mapper
 container.bind(TYPES.ProgressMapper).to(ProgressMapper);
+container.bind(TYPES.UserMapper).to(UserMapper);
 
 export { container };

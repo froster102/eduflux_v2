@@ -1,7 +1,27 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import type { QueryClient } from "@tanstack/react-query";
 
-export const Route = createRootRoute({
-  component: () => (
+import {
+  createRootRouteWithContext,
+  Link,
+  Outlet,
+} from "@tanstack/react-router";
+
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
+  component: RootComponent,
+  notFoundComponent: () => {
+    return (
+      <div>
+        <p>This is the notFoundComponent configured on root route</p>
+        <Link to="/">Start Over</Link>
+      </div>
+    );
+  },
+});
+
+function RootComponent() {
+  return (
     <>
       <main className="max-h-dvh h-full w-full flex flex-col">
         <div className="flex-1 overflow-auto">
@@ -10,5 +30,5 @@ export const Route = createRootRoute({
       </main>
       {/* <TanStackRouterDevtools /> */}
     </>
-  ),
-});
+  );
+}

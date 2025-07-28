@@ -42,6 +42,7 @@
     "@heroui/pagination": "^2.2.20",
     "@heroui/popover": "^2.3.16",
     "@heroui/progress": "^2.2.7",
+    "@heroui/scroll-shadow": "^2.3.16",
     "@heroui/select": "^2.4.10",
     "@heroui/skeleton": "^2.2.9",
     "@heroui/snippet": "2.2.10",
