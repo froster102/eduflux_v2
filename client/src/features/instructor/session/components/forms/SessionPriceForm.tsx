@@ -24,7 +24,10 @@ export default function SessionPricingForm({
     formState: { errors, isDirty },
   } = useForm<SessionPricingFormData>({
     resolver: zodResolver(sessionPricingSchema),
-    defaultValues: initialValue,
+    defaultValues: initialValue || {
+      currency: "USD",
+      duration: 60,
+    },
   });
 
   const onSubmit = (data: SessionPricingFormData) => {
@@ -67,15 +70,15 @@ export default function SessionPricingForm({
           name="currency"
           render={({ field }) => (
             <Input
-              radius="sm"
-              {...field}
               isDisabled
               errorMessage={errors.currency?.message}
               isInvalid={!!errors.currency}
               label="Currency"
               labelPlacement="outside"
               placeholder="e.g., USD, EUR, GBP"
+              radius="sm"
               type="text"
+              value={field.value}
               onValueChange={field.onChange}
             />
           )}
