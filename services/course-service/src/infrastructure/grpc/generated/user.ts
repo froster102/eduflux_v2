@@ -59,6 +59,17 @@ export interface SocialLinks {
   url: string;
 }
 
+export interface GetInstructorSessingPricingRequest {
+  userId: string;
+}
+
+export interface InstructorSessionPricingResponse {
+  id: string;
+  price: number;
+  currency: string;
+  duration: number;
+}
+
 function createBaseCreateUserRequest(): CreateUserRequest {
   return { id: "", firstName: "", lastName: "", email: "", roles: [] };
 }
@@ -658,6 +669,180 @@ export const SocialLinks: MessageFns<SocialLinks> = {
   },
 };
 
+function createBaseGetInstructorSessingPricingRequest(): GetInstructorSessingPricingRequest {
+  return { userId: "" };
+}
+
+export const GetInstructorSessingPricingRequest: MessageFns<GetInstructorSessingPricingRequest> = {
+  encode(message: GetInstructorSessingPricingRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetInstructorSessingPricingRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetInstructorSessingPricingRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetInstructorSessingPricingRequest {
+    return { userId: isSet(object.userId) ? globalThis.String(object.userId) : "" };
+  },
+
+  toJSON(message: GetInstructorSessingPricingRequest): unknown {
+    const obj: any = {};
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetInstructorSessingPricingRequest>, I>>(
+    base?: I,
+  ): GetInstructorSessingPricingRequest {
+    return GetInstructorSessingPricingRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetInstructorSessingPricingRequest>, I>>(
+    object: I,
+  ): GetInstructorSessingPricingRequest {
+    const message = createBaseGetInstructorSessingPricingRequest();
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseInstructorSessionPricingResponse(): InstructorSessionPricingResponse {
+  return { id: "", price: 0, currency: "", duration: 0 };
+}
+
+export const InstructorSessionPricingResponse: MessageFns<InstructorSessionPricingResponse> = {
+  encode(message: InstructorSessionPricingResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.price !== 0) {
+      writer.uint32(21).float(message.price);
+    }
+    if (message.currency !== "") {
+      writer.uint32(26).string(message.currency);
+    }
+    if (message.duration !== 0) {
+      writer.uint32(32).int32(message.duration);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): InstructorSessionPricingResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInstructorSessionPricingResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 21) {
+            break;
+          }
+
+          message.price = reader.float();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.currency = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.duration = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InstructorSessionPricingResponse {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      price: isSet(object.price) ? globalThis.Number(object.price) : 0,
+      currency: isSet(object.currency) ? globalThis.String(object.currency) : "",
+      duration: isSet(object.duration) ? globalThis.Number(object.duration) : 0,
+    };
+  },
+
+  toJSON(message: InstructorSessionPricingResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.price !== 0) {
+      obj.price = message.price;
+    }
+    if (message.currency !== "") {
+      obj.currency = message.currency;
+    }
+    if (message.duration !== 0) {
+      obj.duration = Math.round(message.duration);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<InstructorSessionPricingResponse>, I>>(
+    base?: I,
+  ): InstructorSessionPricingResponse {
+    return InstructorSessionPricingResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<InstructorSessionPricingResponse>, I>>(
+    object: I,
+  ): InstructorSessionPricingResponse {
+    const message = createBaseInstructorSessionPricingResponse();
+    message.id = object.id ?? "";
+    message.price = object.price ?? 0;
+    message.currency = object.currency ?? "";
+    message.duration = object.duration ?? 0;
+    return message;
+  },
+};
+
 export type UserServiceService = typeof UserServiceService;
 export const UserServiceService = {
   createUser: {
@@ -687,12 +872,26 @@ export const UserServiceService = {
     responseSerialize: (value: UserResponse): Buffer => Buffer.from(UserResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): UserResponse => UserResponse.decode(value),
   },
+  getInstructorSessingPricing: {
+    path: "/users.UserService/GetInstructorSessingPricing",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetInstructorSessingPricingRequest): Buffer =>
+      Buffer.from(GetInstructorSessingPricingRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetInstructorSessingPricingRequest =>
+      GetInstructorSessingPricingRequest.decode(value),
+    responseSerialize: (value: InstructorSessionPricingResponse): Buffer =>
+      Buffer.from(InstructorSessionPricingResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): InstructorSessionPricingResponse =>
+      InstructorSessionPricingResponse.decode(value),
+  },
 } as const;
 
 export interface UserServiceServer extends UntypedServiceImplementation {
   createUser: handleUnaryCall<CreateUserRequest, UserResponse>;
   updateUser: handleUnaryCall<UpdateUserRequest, UserResponse>;
   getUser: handleUnaryCall<GetUserRequest, UserResponse>;
+  getInstructorSessingPricing: handleUnaryCall<GetInstructorSessingPricingRequest, InstructorSessionPricingResponse>;
 }
 
 export interface UserServiceClient extends Client {
@@ -740,6 +939,21 @@ export interface UserServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: UserResponse) => void,
+  ): ClientUnaryCall;
+  getInstructorSessingPricing(
+    request: GetInstructorSessingPricingRequest,
+    callback: (error: ServiceError | null, response: InstructorSessionPricingResponse) => void,
+  ): ClientUnaryCall;
+  getInstructorSessingPricing(
+    request: GetInstructorSessingPricingRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: InstructorSessionPricingResponse) => void,
+  ): ClientUnaryCall;
+  getInstructorSessingPricing(
+    request: GetInstructorSessingPricingRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: InstructorSessionPricingResponse) => void,
   ): ClientUnaryCall;
 }
 
