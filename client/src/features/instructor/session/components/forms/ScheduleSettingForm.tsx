@@ -29,6 +29,17 @@ const weekdays = [
 const DEFAULT_START_TIME_STR = "10:00:00";
 const DEFAULT_END_TIME_STR = "23:00:00";
 
+const defaultScheduleSetting = {
+  weeklySchedule: weekdays.map((_, index) => ({
+    dayOfWeek: index,
+    enabled: false,
+    startTime: DEFAULT_START_TIME_STR,
+    endTime: DEFAULT_END_TIME_STR,
+  })),
+  applyForWeeks: 1,
+  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+};
+
 export default function ScheduleSettingForm({
   initialValue,
   isPending,
@@ -43,7 +54,7 @@ export default function ScheduleSettingForm({
           endTime: schedule.endTime || DEFAULT_END_TIME_STR,
         })),
       }
-    : undefined;
+    : defaultScheduleSetting;
   const {
     handleSubmit,
     control,
@@ -164,9 +175,6 @@ export default function ScheduleSettingForm({
             render={({ field }) => (
               <Select
                 className="max-w-xs"
-                defaultSelectedKeys={
-                  new Set([Intl.DateTimeFormat().resolvedOptions().timeZone])
-                }
                 errorMessage={errors.timeZone?.message}
                 isInvalid={!!errors.timeZone}
                 label="Timezone"
