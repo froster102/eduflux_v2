@@ -7,25 +7,13 @@ import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { User } from '@/domain/entities/user.entity';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import { IUseCase } from './interface/use-case.interface';
-import { Role } from '@/shared/types/role';
 import { USERS_TOPIC } from '@/shared/constants/topics';
+import {
+  IUpdateUserUseCase,
+  UpdateUserInput,
+} from './interface/update-user.interface';
 
-export interface UpdateUserInput {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  roles?: Role[];
-  image?: string;
-  bio?: string;
-  socialLinks?: {
-    platform: string;
-    url: string;
-  }[];
-}
-
-export class UpdateUserUseCase implements IUseCase<UpdateUserInput, User> {
+export class UpdateUserUseCase implements IUpdateUserUseCase {
   constructor(
     @inject(TYPES.UserRepository)
     private readonly userRepository: IUserRepository,

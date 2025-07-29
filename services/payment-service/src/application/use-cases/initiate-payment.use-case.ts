@@ -1,11 +1,11 @@
 import type { IPaymentRepository } from '@/domain/repositories/transaction.repository';
 import type { IStripeGateway } from '../ports/stripe.gateway';
-import { Currency } from '@/shared/constants/currency';
-import { IUseCase } from './interface/use-case.interface';
-import {
-  Transaction,
-  PaymentPurpose,
-} from '@/domain/entities/transaction.entity';
+import type {
+  IInitiatePaymentUseCase,
+  InitiatePaymentInput,
+  InitiatePaymentOutput,
+} from './interface/initiate-payment.interface';
+import { Transaction } from '@/domain/entities/transaction.entity';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { tryCatch } from '@/shared/utils/try-catch';
@@ -13,25 +13,7 @@ import { AppErrorCode } from '@/shared/error/error-code';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
 import { ApplicationException } from '../exceptions/application.exception';
 
-export interface InitiatePaymentInputDto {
-  amount: number;
-  currency: Currency;
-  payerId: string;
-  paymentPurpose: PaymentPurpose;
-  metadata: Record<string, any>;
-  successUrl: string;
-  cancelUrl: string;
-  customerEmail?: string;
-}
-
-export interface InitiatePaymentOutputDto {
-  paymentId: string;
-  checkoutUrl: string;
-}
-
-export class InitiatePaymentUseCase
-  implements IUseCase<InitiatePaymentInputDto, InitiatePaymentOutputDto>
-{
+export class InitiatePaymentUseCase implements IInitiatePaymentUseCase {
   constructor(
     @inject(TYPES.PaymentRepository)
     private readonly paymentRepository: IPaymentRepository,
@@ -40,8 +22,8 @@ export class InitiatePaymentUseCase
   ) {}
 
   async execute(
-    input: InitiatePaymentInputDto,
-  ): Promise<InitiatePaymentOutputDto> {
+    initiatePaymentInput: InitiatePaymentInput,
+  ): Promise<InitiatePaymentOutput> {
     const {
       amount,
       cancelUrl,
@@ -51,8 +33,8 @@ export class InitiatePaymentUseCase
       paymentPurpose,
       successUrl,
       customerEmail,
-    } = input;
-    if (input.amount <= 0) {
+    } = initiatePaymentInput;
+    if (amount <= 0) {
       throw new InvalidInputException('Payment amount must be positive');
     }
 

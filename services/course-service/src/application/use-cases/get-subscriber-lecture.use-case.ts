@@ -2,25 +2,18 @@ import type { ICourseRepository } from '@/domain/repositories/course.repository'
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import type { IEnrollmentServiceGateway } from '../ports/enrollment-service.gateway';
-import { LectureDto } from '../dto/lecture.dto';
-import { IUseCase } from './interface/use-case.interface';
+import type {
+  GetSubscriberLectureInput,
+  GetSubscriberLectureOutput,
+  IGetSubscriberLectureUseCase,
+} from './interface/get-subscriber-lecture.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { UnauthorizedException } from '../exceptions/unauthorised.execption';
 
-export interface GetSubscriberLectureInput {
-  userId: string;
-  courseId: string;
-  lectureId: string;
-}
-
-export interface GetSubscriberLectureOutput {
-  lecture: LectureDto;
-}
-
 export class GetSubscriberLectureUseCase
-  implements IUseCase<GetSubscriberLectureInput, GetSubscriberLectureOutput>
+  implements IGetSubscriberLectureUseCase
 {
   constructor(
     @inject(TYPES.CourseRepository)

@@ -1,18 +1,13 @@
-import type { IUseCase } from './interface/use-case.interface';
+import type {
+  AddLectureProgressInput,
+  IAddLectureProgressUseCase,
+} from './interface/add-lecture-progress.interface';
 import type { IProgressRepository } from '@/domain/repositories/progress.repository';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 
-export interface AddLectureProgressInput {
-  userId: string;
-  lectureId: string;
-  courseId: string;
-}
-
-export class AddLectureProgressUseCase
-  implements IUseCase<AddLectureProgressInput, void>
-{
+export class AddLectureProgressUseCase implements IAddLectureProgressUseCase {
   constructor(
     @inject(TYPES.ProgressRepository)
     private readonly progressRepository: IProgressRepository,

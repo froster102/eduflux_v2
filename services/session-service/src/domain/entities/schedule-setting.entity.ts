@@ -1,4 +1,9 @@
-import { DailyAvailabilityConfig } from '@/application/use-cases/update-instructor-weekly-availablity.use-case';
+export interface DailyAvailabilityConfig {
+  dayOfWeek: number;
+  enabled: boolean;
+  startTime?: string;
+  endTime?: string;
+}
 
 export class ScheduleSetting {
   private readonly _id: string;

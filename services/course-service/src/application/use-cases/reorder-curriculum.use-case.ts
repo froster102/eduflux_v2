@@ -1,30 +1,20 @@
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  IReorderCurriculumUseCase,
+  ReorderCurriculumInput,
+} from './interface/reorder-curriculum.interface';
 import { Chapter } from '@/domain/entity/chapter.entity';
 import { Lecture } from '@/domain/entity/lecture.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface ReorderCurriculumDto {
-  courseId: string;
-  items: { class: ClassType; id: string }[];
-}
-
-export interface ReorderCurriculumInput {
-  reorderCurriculumDto: ReorderCurriculumDto;
-  actor: AuthenticatedUserDto;
-}
 
 @injectable()
-export class ReorderCurriculumUseCase
-  implements IUseCase<ReorderCurriculumInput, void>
-{
+export class ReorderCurriculumUseCase implements IReorderCurriculumUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -35,8 +25,7 @@ export class ReorderCurriculumUseCase
   ) {}
 
   async execute(reorderCurriculumInput: ReorderCurriculumInput) {
-    const { reorderCurriculumDto: dto, actor } = reorderCurriculumInput;
-    const { courseId, items: orderedItems } = dto;
+    const { courseId, items: orderedItems, actor } = reorderCurriculumInput;
 
     const course = await this.courseRepository.findById(courseId);
 

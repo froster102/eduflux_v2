@@ -1,24 +1,15 @@
 import type { IEnrollmentServiceGateway } from '../ports/enrollment-service.gateway';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import { inject } from 'inversify';
-import { PaginationQueryParams } from '../dto/pagination.dto';
-import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
-import { Course } from '@/domain/entity/course.entity';
-
-export interface GetUserSubscribedCoursesInput {
-  userId: string;
-  paginationQueryParams: PaginationQueryParams;
-}
-
-export interface GetUserSubscribedCoursesOutput {
-  total: number;
-  courses: Course[];
-}
+import {
+  GetUserSubscribedCoursesInput,
+  GetUserSubscribedCoursesOutput,
+  IGetUserSubscribedCoursesUseCase,
+} from './interface/get-user-subscribed-courses.interface';
 
 export class GetUserSubscribedCoursesUseCase
-  implements
-    IUseCase<GetUserSubscribedCoursesInput, GetUserSubscribedCoursesOutput>
+  implements IGetUserSubscribedCoursesUseCase
 {
   constructor(
     @inject(TYPES.CourseRepository)

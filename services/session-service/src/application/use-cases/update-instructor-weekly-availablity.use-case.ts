@@ -1,8 +1,11 @@
 import type { IUnitOfWork } from '../ports/unit-of-work.interface';
-import type { IUseCase } from './interface/use-case.interface';
 import type { ISlotRepository } from '@/domain/repositories/slot.repository';
 import type { IScheduleSettingRepository } from '@/domain/repositories/schedule-setting.repository';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
+import type {
+  IUpdateInstructorWeeklyAvailabilityUseCase,
+  UpdateInstructorWeeklyAvailabilityInput,
+} from './interface/update-instructor-weekly-availablity.interface';
+
 import { Role } from '@/shared/constants/role';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
@@ -16,22 +19,8 @@ import { ScheduleSetting } from '@/domain/entities/schedule-setting.entity';
 import { slotLimits } from '@/shared/config/slot-limits';
 import { convertLoacalTimeAndDateToUtc } from '@/shared/utils/date';
 
-export interface DailyAvailabilityConfig {
-  dayOfWeek: number;
-  enabled: boolean;
-  startTime?: string;
-  endTime?: string;
-}
-
-export interface UpdateInstructorWeeklyAvailabilityInput {
-  actor: AuthenticatedUserDto;
-  weeklySchedule: DailyAvailabilityConfig[];
-  applyForWeeks: number;
-  timeZone: string;
-}
-
 export class UpdateInstructorWeeklyAvailabilityUseCase
-  implements IUseCase<UpdateInstructorWeeklyAvailabilityInput, void>
+  implements IUpdateInstructorWeeklyAvailabilityUseCase
 {
   private logger = new Logger(SESSION_SERVICE);
 

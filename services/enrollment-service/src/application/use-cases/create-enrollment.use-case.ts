@@ -2,8 +2,12 @@ import type { ICourseServiceGateway } from '../ports/course-service.gateway';
 import type { IUserServiceGateway } from '../ports/user-service.gateway';
 import type { IEnrollmentRepository } from '@/domain/repositories/enrollment.repository';
 import type { IPaymentServiceGateway } from '../ports/payment-service.gateway';
+import type {
+  CreateEnrollmentInput,
+  CreateEnrollmentOutput,
+  ICreateEnrollmentUseCase,
+} from './interface/create-enrollment.interface';
 import { Enrollment } from '@/domain/enitites/enrollment.entity';
-import { IUseCase } from './interface/use-case.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
@@ -11,18 +15,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { imageConfig } from '@/shared/config/image.config';
 import { ConflictException } from '../exceptions/conflict.exception';
 
-export interface CreateEnrollmentDto {
-  userId: string;
-  courseId: string;
-}
-
-export interface CreateEnrollmentOutputDto {
-  checkoutUrl: string;
-}
-
-export class CreateEnrollmentUseCase
-  implements IUseCase<CreateEnrollmentDto, CreateEnrollmentOutputDto>
-{
+export class CreateEnrollmentUseCase implements ICreateEnrollmentUseCase {
   constructor(
     @inject(TYPES.EnrollmentRepository)
     private readonly enrollmentRepository: IEnrollmentRepository,
@@ -35,9 +28,9 @@ export class CreateEnrollmentUseCase
   ) {}
 
   async execute(
-    createEnrollmentDto: CreateEnrollmentDto,
-  ): Promise<CreateEnrollmentOutputDto> {
-    const { courseId, userId } = createEnrollmentDto;
+    createEnrollmentInput: CreateEnrollmentInput,
+  ): Promise<CreateEnrollmentOutput> {
+    const { courseId, userId } = createEnrollmentInput;
     const user = await this.userServiceGateway.getUserDetails(userId);
 
     if (!user) {

@@ -1,33 +1,19 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { IDeleteLectureProgressUseCase } from '@/application/use-cases/interface/delete-lecture-progress.interface';
+import type { IAddLectureProgressUseCase } from '@/application/use-cases/interface/add-lecture-progress.interface';
+import type { IGetUserCourseProgressUseCase } from '@/application/use-cases/interface/get-user-course-progress.interface';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { Elysia, t } from 'elysia';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
-import { AddLectureProgressInput } from '@/application/use-cases/add-lecture-progress.use-case';
-import { DeleteLectureProgressInput } from '@/application/use-cases/delete-lecture-progress.use-case';
-import { IRoute } from './interface/routes.interface';
-import {
-  GetUserCourseProgessInput,
-  GetUserCourseProgressOutput,
-} from '@/application/use-cases/get-user-course-progress.use-case';
 
-export class ProgressRoutes implements IRoute<Elysia> {
+export class ProgressRoutes {
   constructor(
     @inject(TYPES.GetUserCourseProgressUseCase)
-    private readonly getUserCourseProgressUseCase: IUseCase<
-      GetUserCourseProgessInput,
-      GetUserCourseProgressOutput
-    >,
+    private readonly getUserCourseProgressUseCase: IGetUserCourseProgressUseCase,
     @inject(TYPES.AddLectureProgressUseCase)
-    private readonly addLectureProgressUseCase: IUseCase<
-      AddLectureProgressInput,
-      void
-    >,
+    private readonly addLectureProgressUseCase: IAddLectureProgressUseCase,
     @inject(TYPES.DeleteLectureProgressUseCase)
-    private readonly deleteLectureProgressUseCase: IUseCase<
-      DeleteLectureProgressInput,
-      void
-    >,
+    private readonly deleteLectureProgressUseCase: IDeleteLectureProgressUseCase,
   ) {}
 
   register(): Elysia {

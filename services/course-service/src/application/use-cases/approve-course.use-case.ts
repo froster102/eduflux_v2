@@ -1,20 +1,15 @@
-import { Course } from '@/domain/entity/course.entity';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  ApproveCourseInput,
+  IApproveCourseUseCase,
+} from './interface/approve-course.interface';
+import { Course } from '@/domain/entity/course.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
 
-export interface ApproveCourseInput {
-  courseId: string;
-  actor: AuthenticatedUserDto;
-}
-
-export class ApproveCourseUseCase
-  implements IUseCase<ApproveCourseInput, Course>
-{
+export class ApproveCourseUseCase implements IApproveCourseUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

@@ -7,10 +7,10 @@ import {
 import { sendUnaryData, ServerUnaryCall, status } from '@grpc/grpc-js';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { GetPublishedCourseInfoUseCase } from '@/application/use-cases/get-published-course-info.use-case';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
+import { IGetPublishedCourseInfoUseCase } from '@/application/use-cases/interface/get-published-course-info.interface';
 
 export class GrpcCourseService implements CourseServiceServer {
   private logger = new Logger('GrpcCourseService');
@@ -20,7 +20,7 @@ export class GrpcCourseService implements CourseServiceServer {
 
   constructor(
     @inject(TYPES.GetPublishedCourseInfoUseCase)
-    private readonly getPublishedCourseInfoUseCase: GetPublishedCourseInfoUseCase,
+    private readonly getPublishedCourseInfoUseCase: IGetPublishedCourseInfoUseCase,
   ) {}
 
   getCourseDetails(

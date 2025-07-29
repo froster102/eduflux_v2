@@ -1,40 +1,21 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { IGetUserSubscribedCoursesUseCase } from '@/application/use-cases/interface/get-user-subscribed-courses.interface';
+import type { IGetSubscriberLectureUseCase } from '@/application/use-cases/interface/get-subscriber-lecture.interface';
+import type { IGetAllInstructorCoursesUseCase } from '@/application/use-cases/interface/get-all-instructor-course.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
 import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination.schema';
-import {
-  GetAllInstructorCoursesInput,
-  GetAllInstructorCoursesOutput,
-} from '@/application/use-cases/get-all-instructor-course.use-case';
-import {
-  GetUserSubscribedCoursesInput,
-  GetUserSubscribedCoursesOutput,
-} from '@/application/use-cases/get-user-subscribed-courses';
-import {
-  GetSubscriberLectureInput,
-  GetSubscriberLectureOutput,
-} from '@/application/use-cases/get-subscriber-lecture.use-case';
 
 @injectable()
 export class CourseRoutes {
   constructor(
     @inject(TYPES.GetAllInstructorCoursesUseCase)
-    private readonly getAllInstructorCoursesUseCase: IUseCase<
-      GetAllInstructorCoursesInput,
-      GetAllInstructorCoursesOutput
-    >,
+    private readonly getAllInstructorCoursesUseCase: IGetAllInstructorCoursesUseCase,
     @inject(TYPES.GetUserSubscribedCoursesUseCase)
-    private readonly getUserSubscribedCoursesUseCase: IUseCase<
-      GetUserSubscribedCoursesInput,
-      GetUserSubscribedCoursesOutput
-    >,
+    private readonly getUserSubscribedCoursesUseCase: IGetUserSubscribedCoursesUseCase,
     @inject(TYPES.GetSubscriberLectureUseCase)
-    private readonly getSubscriberLectureUseCase: IUseCase<
-      GetSubscriberLectureInput,
-      GetSubscriberLectureOutput
-    >,
+    private readonly getSubscriberLectureUseCase: IGetSubscriberLectureUseCase,
   ) {}
 
   register(): Elysia {

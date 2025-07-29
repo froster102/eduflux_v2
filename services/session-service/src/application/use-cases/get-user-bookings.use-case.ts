@@ -1,27 +1,16 @@
-import { Session } from '@/domain/entities/session.entity';
-import { IUseCase } from './interface/use-case.interface';
-import { PaginationQueryParams } from '../dto/pagination.dto';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { ISessionRepository } from '@/domain/repositories/session.repository';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { Role } from '@/shared/constants/role';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
+import {
+  GetUserBookingsInput,
+  GetUserBookingsOutput,
+  IGetUserBookingsUseCase,
+} from './interface/get-user-bookings.interface';
 
-export interface GetUserBookingsInput {
-  actor: AuthenticatedUserDto;
-  paginationQueryParams: PaginationQueryParams & { role: Role };
-}
-
-export interface GetUserBookingsOutput {
-  sessions: Session[];
-  total: number;
-}
-
-export class GetUserBookingsUseCase
-  implements IUseCase<GetUserBookingsInput, GetUserBookingsOutput>
-{
+export class GetUserBookingsUseCase implements IGetUserBookingsUseCase {
   constructor(
     @inject(TYPES.SessionRepository)
     private readonly sessionRepository: ISessionRepository,

@@ -1,30 +1,23 @@
-import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  IRejectCourseUseCase,
+  RejectCourseInput,
+} from './interface/reject-course.interface';
 import { TYPES } from '@/shared/di/types';
+import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { inject, injectable } from 'inversify';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Course } from '@/domain/entity/course.entity';
-import { RejectCourseDto } from '../dto/reject-course.dto';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface RejectCourseInput {
-  rejectCourseDto: RejectCourseDto;
-  actor: AuthenticatedUserDto;
-}
 
 @injectable()
-export class RejectCourseUseCase
-  implements IUseCase<RejectCourseInput, Course>
-{
+export class RejectCourseUseCase implements IRejectCourseUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
   ) {}
 
   async execute(rejectCourseInput: RejectCourseInput): Promise<Course> {
-    const { rejectCourseDto, actor } = rejectCourseInput;
-    const { courseId, feedback } = rejectCourseDto;
+    const { courseId, feedback, actor } = rejectCourseInput;
     const foundCourse = await this.courseRepository.findById(courseId);
 
     if (!foundCourse) {

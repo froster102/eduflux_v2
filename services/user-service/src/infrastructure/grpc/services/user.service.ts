@@ -1,6 +1,12 @@
+import type { IGetUserUseCase } from '@/application/use-cases/interface/get-user.interface';
+import type {
+  CreateUserInput,
+  ICreateUserUseCase,
+} from '@/application/use-cases/interface/create-user.interface';
+import type { IUpdateUserUseCase } from '@/application/use-cases/interface/update-user.interface';
+import type { IGetUserSessionPriceUseCase } from '@/application/use-cases/interface/get-user-session-price.interface';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { GetUserUseCase } from '@/application/use-cases/get-user.use-case';
 import { Logger } from '@/shared/utils/logger';
 import {
   CreateUserRequest,
@@ -15,13 +21,7 @@ import { ServerUnaryCall, sendUnaryData, status } from '@grpc/grpc-js';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
-import {
-  CreateUserInput,
-  CreateUserUseCase,
-} from '@/application/use-cases/create-user.use-case';
 import { Role } from '@/shared/types/role';
-import { UpdateUserUseCase } from '@/application/use-cases/update-user.use-case';
-import { GetUserSessionPriceUseCase } from '@/application/use-cases/get-user-session-price.use-case';
 
 @injectable()
 export class UserGrpcService implements UserServiceServer {
@@ -32,13 +32,13 @@ export class UserGrpcService implements UserServiceServer {
 
   constructor(
     @inject(TYPES.GetUserUseCase)
-    private readonly getUserUseCase: GetUserUseCase,
+    private readonly getUserUseCase: IGetUserUseCase,
     @inject(TYPES.CreateUserUseCase)
-    private readonly createUserUseCase: CreateUserUseCase,
+    private readonly createUserUseCase: ICreateUserUseCase,
     @inject(TYPES.UpdateUserUseCase)
-    private readonly updateUserUseCase: UpdateUserUseCase,
+    private readonly updateUserUseCase: IUpdateUserUseCase,
     @inject(TYPES.GetUserSessionPriceUseCase)
-    private readonly getUserSessionPriceUseCase: GetUserSessionPriceUseCase,
+    private readonly getUserSessionPriceUseCase: IGetUserSessionPriceUseCase,
   ) {}
 
   createUser(

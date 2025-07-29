@@ -4,30 +4,16 @@ import type { ILectureRepository } from '@/domain/repositories/lecture.repositor
 import type { IFileStorageGateway } from '../ports/file-storage.gateway';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
-import { Asset, ResourceType } from '@/domain/entity/asset.entity';
-
-export interface AddAssetToLectureDto {
-  courseId: string;
-  lectureId: string;
-  key: string;
-  resourceType: ResourceType;
-  fileName: string;
-  uuid: string;
-}
-
-export interface AddAssetToLectureInput {
-  addAssetToLectureDto: AddAssetToLectureDto;
-  actor: AuthenticatedUserDto;
-}
+import { Asset } from '@/domain/entity/asset.entity';
+import type {
+  AddAssetToLectureInput,
+  IAddAssetToLectureUseCase,
+} from './interface/add-asset-to-lecture.interface';
 
 @injectable()
-export class AddAssetToLectureUseCase
-  implements IUseCase<AddAssetToLectureInput, void>
-{
+export class AddAssetToLectureUseCase implements IAddAssetToLectureUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -40,10 +26,8 @@ export class AddAssetToLectureUseCase
   ) {}
 
   async execute(addAssetToLectureInput: AddAssetToLectureInput): Promise<void> {
-    const { addAssetToLectureDto, actor } = addAssetToLectureInput;
-
-    const { courseId, lectureId, key, resourceType, uuid } =
-      addAssetToLectureDto;
+    const { courseId, lectureId, key, resourceType, uuid, actor } =
+      addAssetToLectureInput;
 
     const course = await this.courseRepository.findById(courseId);
 

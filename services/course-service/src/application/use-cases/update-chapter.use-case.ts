@@ -1,28 +1,17 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
+import type {
+  IUpdateChapterUseCase,
+  UpdateChapterInput,
+} from './interface/update-chapter.interface';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Chapter } from '@/domain/entity/chapter.entity';
-import { CreateChapterDto } from './create-chapter.use-case';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface UpdateChapterDto extends Partial<CreateChapterDto> {
-  courseId: string;
-  chapterId: string;
-}
-
-export interface UpdateChapterInput {
-  updateChapterDto: UpdateChapterDto;
-  actor: AuthenticatedUserDto;
-}
 
 @injectable()
-export class UpdateChapterUseCase
-  implements IUseCase<UpdateChapterInput, Chapter>
-{
+export class UpdateChapterUseCase implements IUpdateChapterUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

@@ -1,32 +1,15 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import { inject } from 'inversify';
-import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
-import { CourseStatus } from '@/domain/entity/course.entity';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-
-export interface PublishedCourseDto {
-  id: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  level: string;
-  categoryId: string;
-  price: number;
-  isFree: boolean;
-  status: CourseStatus;
-  instructor: { id: string; name: string };
-  enrollmentCount: number;
-  averageRating: number;
-  ratingCount: number;
-  publishedAt: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {
+  IGetPublishedCourseInfoUseCase,
+  PublishedCourseDto,
+} from './interface/get-published-course-info.interface';
 
 export class GetPublishedCourseInfoUseCase
-  implements IUseCase<string, PublishedCourseDto>
+  implements IGetPublishedCourseInfoUseCase
 {
   constructor(
     @inject(TYPES.CourseRepository)

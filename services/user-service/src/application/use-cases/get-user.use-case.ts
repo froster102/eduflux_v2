@@ -1,11 +1,11 @@
-import { User } from '@/domain/entities/user.entity';
 import type { IUserRepository } from '@/domain/repositories/user.repository';
+import type { IGetUserUseCase } from './interface/get-user.interface';
+import { User } from '@/domain/entities/user.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import { IUseCase } from './interface/use-case.interface';
 
-export class GetUserUseCase implements IUseCase<string, User> {
+export class GetUserUseCase implements IGetUserUseCase {
   constructor(
     @inject(TYPES.UserRepository)
     private readonly userRepository: IUserRepository,

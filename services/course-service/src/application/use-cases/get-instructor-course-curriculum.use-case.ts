@@ -2,29 +2,21 @@ import type { ILectureRepository } from '@/domain/repositories/lecture.repositor
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
+import type {
+  CurriculumItemWithAsset,
+  GetInstructorCourseCurriculumInput,
+  IGetInstructorCourseCurriculumUseCase,
+} from './interface/get-instructor-course-curriculum.interface';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { Chapter } from '@/domain/entity/chapter.entity';
 import { Lecture } from '@/domain/entity/lecture.entity';
 import { Asset } from '@/domain/entity/asset.entity';
-import { IUseCase } from './interface/use-case.interface';
-
-export type CurriculumItemWithAsset =
-  | Chapter
-  | (Lecture & { asset?: Partial<Asset> });
-
-export interface GetInstructorCourseCurriculumInput {
-  id: string;
-  actor: AuthenticatedUserDto;
-}
 
 @injectable()
 export class GetInstructorCourseCurriculumUseCase
-  implements
-    IUseCase<GetInstructorCourseCurriculumInput, CurriculumItemWithAsset[]>
+  implements IGetInstructorCourseCurriculumUseCase
 {
   constructor(
     @inject(TYPES.CourseRepository)

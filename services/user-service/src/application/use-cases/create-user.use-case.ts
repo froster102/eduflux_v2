@@ -1,26 +1,15 @@
 import type { IUserRepository } from '@/domain/repositories/user.repository';
+import type {
+  CreateUserInput,
+  ICreateUserUseCase,
+} from './interface/create-user.interface';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { User } from '@/domain/entities/user.entity';
 import { ConflictException } from '../exceptions/conflict.exception';
-import { IUseCase } from './interface/use-case.interface';
-import { Role } from '@/shared/types/role';
-
-export interface CreateUserInput {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  roles: Role[];
-  bio?: string;
-  socialLinks?: {
-    platform: string;
-    url: string;
-  }[];
-}
 
 @injectable()
-export class CreateUserUseCase implements IUseCase<CreateUserInput, User> {
+export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
     @inject(TYPES.UserRepository)
     private readonly userRepository: IUserRepository,

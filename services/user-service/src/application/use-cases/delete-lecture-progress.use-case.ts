@@ -1,17 +1,14 @@
-import type { IUseCase } from './interface/use-case.interface';
+import type {
+  DeleteLectureProgressInput,
+  IDeleteLectureProgressUseCase,
+} from './interface/delete-lecture-progress.interface';
 import type { IProgressRepository } from '@/domain/repositories/progress.repository';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 
-export interface DeleteLectureProgressInput {
-  userId: string;
-  courseId: string;
-  lectureId: string;
-}
-
 export class DeleteLectureProgressUseCase
-  implements IUseCase<DeleteLectureProgressInput, void>
+  implements IDeleteLectureProgressUseCase
 {
   constructor(
     @inject(TYPES.ProgressRepository)

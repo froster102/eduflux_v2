@@ -2,20 +2,19 @@ import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
-import { Chapter } from '@/domain/entity/chapter.entity';
-import { IUseCase } from './interface/use-case.interface';
+import type {
+  IGetPublishedCourseCurriculumUseCase,
+  CurriculumItemWithAsset,
+} from './interface/get-published-course-curriculum.interface';
 import { Lecture } from '@/domain/entity/lecture.entity';
 import { Asset } from '@/domain/entity/asset.entity';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
-
-export type CurriculumItemWithAsset =
-  | Chapter
-  | (Lecture & { asset?: Partial<Asset> });
+import {} from './interface/get-instructor-course-curriculum.interface';
 
 export class GetPublishedCourseCurriculumUseCase
-  implements IUseCase<string, CurriculumItemWithAsset[]>
+  implements IGetPublishedCourseCurriculumUseCase
 {
   constructor(
     @inject(TYPES.CourseRepository)

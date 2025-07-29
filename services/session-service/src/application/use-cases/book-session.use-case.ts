@@ -5,7 +5,11 @@ import {
   PaymentPurpose,
   type IPaymentServiceGateway,
 } from '../ports/payment-service.gateway';
-import type { IUseCase } from './interface/use-case.interface';
+import type {
+  BookSessionInput,
+  BookSessionOutput,
+  IBookSessionUseCase,
+} from './interface/book-session.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
@@ -15,19 +19,7 @@ import { imageConfig } from '@/shared/config/image.config';
 import { Session } from '@/domain/entities/session.entity';
 import { Slot } from '@/domain/entities/slot.entity';
 
-export interface BookSessionInput {
-  slotId: string;
-  userId: string;
-}
-
-export interface BookSessionOutput {
-  id: string;
-  checkoutUrl: string;
-}
-
-export class BookSessionUseCase
-  implements IUseCase<BookSessionInput, BookSessionOutput>
-{
+export class BookSessionUseCase implements IBookSessionUseCase {
   constructor(
     @inject(TYPES.UserServiceGateway)
     private readonly userServiceGateway: IUserServiceGateway,

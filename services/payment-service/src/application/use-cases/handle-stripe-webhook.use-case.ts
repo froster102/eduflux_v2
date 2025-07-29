@@ -7,31 +7,23 @@ import type {
   IMessageBrokerGatway,
   IPaymentEvent,
 } from '../ports/message-broker.gateway';
+import type {
+  HandleStripeWebhookInput,
+  HandleStripeWebhookOutput,
+  IHandleStripeWebhookUseCase,
+} from './interface/handle-stripe-webhook.interface';
 import { inject } from 'inversify';
-import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
 import { AppErrorCode } from '@/shared/error/error-code';
 import { v4 as uuidV4 } from 'uuid';
 import { Logger } from '@/shared/utils/logger';
-import { PAYMENT_SERVICE } from '@/shared/constants/service';
 
+import { PAYMENT_SERVICE } from '@/shared/constants/service';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
 import { ApplicationException } from '../exceptions/application.exception';
 
-export interface HandleStripeWebhookInput {
-  rawBody: string | Buffer;
-  signature: string;
-}
-
-export interface HandleStripeWebhookOutput {
-  success: boolean;
-  message: string;
-}
-
-export class HandleStripeWebhookUseCase
-  implements IUseCase<HandleStripeWebhookInput, HandleStripeWebhookOutput>
-{
+export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
   private logger = new Logger(PAYMENT_SERVICE);
   constructor(
     @inject(TYPES.PaymentRepository)

@@ -1,5 +1,9 @@
 import type { ISlotRepository } from '@/domain/repositories/slot.repository';
-import type { IUseCase } from './interface/use-case.interface';
+import type {
+  GetInstructorAvailableSlotsInput,
+  GetInstructorAvailableSlotsOutput,
+  IGetInstructorAvailableSlotsUseCase,
+} from './interface/get-instructor-available-slots.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
@@ -7,25 +11,8 @@ import { SlotStatus } from '@/domain/entities/slot.entity';
 import { tryCatchSync } from '@/shared/utils/try-catch';
 import { getUtcRangeForLocalDay } from '@/shared/utils/date';
 
-export interface GetInstructorAvailableSlotsInput {
-  instructorId: string;
-  date: string;
-  timeZone: string;
-}
-
-export interface GetInstructorAvailableSlotsOutput {
-  id: string;
-  instructorId: string;
-  startTime: Date;
-  endTime: Date;
-}
-
 export class GetInstructorAvailableSlotsUseCase
-  implements
-    IUseCase<
-      GetInstructorAvailableSlotsInput,
-      GetInstructorAvailableSlotsOutput[]
-    >
+  implements IGetInstructorAvailableSlotsUseCase
 {
   constructor(
     @inject(TYPES.SlotRepository)

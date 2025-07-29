@@ -1,21 +1,16 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  GetInstructorCourseInput,
+  IGetInstructorCourseUseCase,
+} from './interface/get-instructor-course.interface';
 import { inject, injectable } from 'inversify';
-import { IUseCase } from './interface/use-case.interface';
 import { Course } from '@/domain/entity/course.entity';
 import { TYPES } from '@/shared/di/types';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 
-export interface GetInstructorCourseInput {
-  id: string;
-  actor: AuthenticatedUserDto;
-}
-
 @injectable()
-export class GetInstructorCourseUseCase
-  implements IUseCase<GetInstructorCourseInput, Course>
-{
+export class GetInstructorCourseUseCase implements IGetInstructorCourseUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

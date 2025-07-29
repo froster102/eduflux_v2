@@ -1,4 +1,4 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { IConfirmSessionBookingUseCase } from '@/application/use-cases/interface/confirm-session-booking.interface';
 import { TYPES } from '@/shared/di/types';
 import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
@@ -11,7 +11,6 @@ import { PaymentPurpose } from '@/application/ports/payment-service.gateway';
 import { SESSION_SERVICE } from '@/shared/constants/services';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
 import { SESSION_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
-import { ConfirmSessionBookingInput } from '@/application/use-cases/confirm-session-booking.use-case';
 
 export interface IPaymentEvent {
   type: 'payment.failed' | 'payment.success' | 'payment.cancelled';
@@ -37,10 +36,7 @@ export class PaymentEventsConsumer {
 
   constructor(
     @inject(TYPES.ConfirmSessionBookingUseCase)
-    private readonly confirmSessionBookingUseCase: IUseCase<
-      ConfirmSessionBookingInput,
-      void
-    >,
+    private readonly confirmSessionBookingUseCase: IConfirmSessionBookingUseCase,
   ) {
     this.topic = PAYMENTS_TOPIC;
     this.consumer = kafka.consumer({

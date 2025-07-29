@@ -1,49 +1,28 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
-import {
-  GetInstructorScheduleTemplateInput,
-  GetInstructorScheduleTemplateOutput,
-} from '@/application/use-cases/get-instructor-schedule-template.use-case';
+import type { IGetInstructorScheduleTemplateUseCase } from '@/application/use-cases/interface/get-instructor-schedule-template.interface';
+import type { IUpdateInstructorWeeklyAvailabilityUseCase } from '@/application/use-cases/interface/update-instructor-weekly-availablity.interface';
+import type { IBookSessionUseCase } from '@/application/use-cases/interface/book-session.interface';
+import type { IGetInstructorAvailableSlotsUseCase } from '@/application/use-cases/interface/get-instructor-available-slots.interface';
+
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
-import { UpdateInstructorWeeklyAvailabilityInput } from '@/application/use-cases/update-instructor-weekly-availablity.use-case';
 import {
   availabilitySchema,
   bookingSchema,
   dateSchema,
 } from '@/infrastructure/http/schema/session.schema';
-import {
-  BookSessionInput,
-  BookSessionOutput,
-} from '@/application/use-cases/book-session.use-case';
-import {
-  GetInstructorAvailableSlotsInput,
-  GetInstructorAvailableSlotsOutput,
-} from '@/application/use-cases/get-instructor-available-slots.use-case';
 
 export class ScheduleRoutes {
   constructor(
     @inject(TYPES.GetInstructorScheduleTemplateUseCase)
-    private readonly getInstructorScheduleTemplateUseCase: IUseCase<
-      GetInstructorScheduleTemplateInput,
-      GetInstructorScheduleTemplateOutput
-    >,
+    private readonly getInstructorScheduleTemplateUseCase: IGetInstructorScheduleTemplateUseCase,
     @inject(TYPES.UpdateInstructorWeeklyAvailabilityUseCase)
-    private readonly updateInstructorWeeklyAvailabilityUseCase: IUseCase<
-      UpdateInstructorWeeklyAvailabilityInput,
-      void
-    >,
+    private readonly updateInstructorWeeklyAvailabilityUseCase: IUpdateInstructorWeeklyAvailabilityUseCase,
     @inject(TYPES.BookSessionUseCase)
-    private readonly bookSessionUseCase: IUseCase<
-      BookSessionInput,
-      BookSessionOutput
-    >,
+    private readonly bookSessionUseCase: IBookSessionUseCase,
     @inject(TYPES.GetInstructorAvailableSlotsUseCase)
-    private readonly getInstructorAvailableSlotsUseCase: IUseCase<
-      GetInstructorAvailableSlotsInput,
-      GetInstructorAvailableSlotsOutput
-    >,
+    private readonly getInstructorAvailableSlotsUseCase: IGetInstructorAvailableSlotsUseCase,
   ) {}
 
   register(): Elysia {

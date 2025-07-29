@@ -1,25 +1,19 @@
 import type { IUserServiceGateway } from '../ports/user-service.gateway';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { ICategoryRepository } from '@/domain/repositories/category.repository';
+import type {
+  CreateCourseInput,
+  ICreateCourseUseCase,
+} from './interface/create-course.interface';
 import { Course } from '@/domain/entity/course.entity';
-import { CreateCourseDto } from '../dto/create-course.dto';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Role } from '@/shared/constants/roles';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface CreateCourseInput {
-  createCourseDto: CreateCourseDto;
-  actor: AuthenticatedUserDto;
-}
 
 @injectable()
-export class CreateCourseUseCase
-  implements IUseCase<CreateCourseInput, Course>
-{
+export class CreateCourseUseCase implements ICreateCourseUseCase {
   constructor(
     @inject(TYPES.UserServiceGateway)
     private readonly userServiceGateway: IUserServiceGateway,
@@ -30,7 +24,7 @@ export class CreateCourseUseCase
   ) {}
 
   async execute(createCourseInput: CreateCourseInput): Promise<Course> {
-    const { createCourseDto, actor } = createCourseInput;
+    const { categoryId, title, actor } = createCourseInput;
 
     const isAuthorized = actor.hasRole(Role.INSTRUCTOR);
     if (!isAuthorized) {
@@ -44,14 +38,10 @@ export class CreateCourseUseCase
       throw new NotFoundException(`Instructor with ID:${actor.id} not found`);
     }
 
-    const category = await this.categoryRepository.findById(
-      createCourseDto.categoryId,
-    );
+    const category = await this.categoryRepository.findById(categoryId);
 
     if (!category) {
-      throw new NotFoundException(
-        `Category with ID:${createCourseDto.categoryId} not found.`,
-      );
+      throw new NotFoundException(`Category with ID:${categoryId} not found.`);
     }
 
     // currently not checking for duplicate title
@@ -67,7 +57,7 @@ export class CreateCourseUseCase
     // }
 
     const course = Course.create({
-      title: createCourseDto.title,
+      title,
       instructor: {
         id: instructor.id,
         name: instructor.firstName + ' ' + instructor.lastName,

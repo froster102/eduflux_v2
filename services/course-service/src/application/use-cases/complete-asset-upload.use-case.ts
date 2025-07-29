@@ -1,23 +1,15 @@
-import { Asset, MediaSource, ResourceType } from '@/domain/entity/asset.entity';
+import { Asset } from '@/domain/entity/asset.entity';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface CompleteAssetUploadDto {
-  providerSpecificId: string;
-  originalFileName: string;
-  duration: number | null;
-  additionalMetadata: Record<string, any>;
-  mediaSource: MediaSource;
-  resourseType: ResourceType;
-}
+import type {
+  CompleteAssetUploadDto,
+  ICompleteAssetUploadUseCase,
+} from './interface/complete-asset-upload.interface';
 
 @injectable()
-export class CompleteAssetUploadUseCase
-  implements IUseCase<CompleteAssetUploadDto, Asset>
-{
+export class CompleteAssetUploadUseCase implements ICompleteAssetUploadUseCase {
   constructor(
     @inject(TYPES.AssetRepository)
     private readonly assetRepository: IAssetRepository,

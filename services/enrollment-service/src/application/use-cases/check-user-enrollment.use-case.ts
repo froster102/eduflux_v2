@@ -1,29 +1,22 @@
 import type { IEnrollmentRepository } from '@/domain/repositories/enrollment.repository';
+import type {
+  CheckEnrollmentOutput,
+  CheckUserEnrollmentInput,
+  ICheckUserEnrollmentUseCase,
+} from './interface/check-user-enrollment.inerface';
 import { inject } from 'inversify';
-import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
 
-export interface CheckUserEnrollmentDto {
-  userId: string;
-  courseId: string;
-}
-
-export interface CheckEnrollmentOutputDto {
-  isEnrolled: boolean;
-}
-
-export class CheckUserEnrollmentUseCase
-  implements IUseCase<CheckUserEnrollmentDto, CheckEnrollmentOutputDto>
-{
+export class CheckUserEnrollmentUseCase implements ICheckUserEnrollmentUseCase {
   constructor(
     @inject(TYPES.EnrollmentRepository)
     private readonly enrollmentRepository: IEnrollmentRepository,
   ) {}
 
   async execute(
-    checkUserEnrollmentDto: CheckUserEnrollmentDto,
-  ): Promise<CheckEnrollmentOutputDto> {
-    const { userId, courseId } = checkUserEnrollmentDto;
+    checkUserEnrollmentInput: CheckUserEnrollmentInput,
+  ): Promise<CheckEnrollmentOutput> {
+    const { userId, courseId } = checkUserEnrollmentInput;
     const enrollment =
       await this.enrollmentRepository.findUserEnrollmentForCourse(
         userId,

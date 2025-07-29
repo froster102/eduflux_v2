@@ -1,23 +1,14 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  GetAllInstructorCoursesInput,
+  IGetAllInstructorCoursesUseCase,
+} from './interface/get-all-instructor-course.interface';
 import { Course } from '@/domain/entity/course.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
-import { PaginationQueryParams } from '../dto/pagination.dto';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface GetAllInstructorCoursesInput {
-  actorId: string;
-  paginationQueryParams: PaginationQueryParams;
-}
-
-export interface GetAllInstructorCoursesOutput {
-  courses: Course[];
-  total: number;
-}
 
 export class GetAllInstructorCoursesUseCase
-  implements
-    IUseCase<GetAllInstructorCoursesInput, GetAllInstructorCoursesOutput>
+  implements IGetAllInstructorCoursesUseCase
 {
   constructor(
     @inject(TYPES.CourseRepository)

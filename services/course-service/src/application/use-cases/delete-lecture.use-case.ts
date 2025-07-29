@@ -1,26 +1,17 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
+import type {
+  DeleteLectureInput,
+  IDeleteLectureUseCase,
+} from './interface/delete-lecture.interface';
+
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
-
-export interface DeleteLectureDto {
-  courseId: string;
-  lectureId: string;
-}
-
-export interface DeleteLectureInput {
-  deleteLectureDto: DeleteLectureDto;
-  actor: AuthenticatedUserDto;
-}
 
 @injectable()
-export class DeleteLectureUseCase
-  implements IUseCase<DeleteLectureInput, void>
-{
+export class DeleteLectureUseCase implements IDeleteLectureUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -29,9 +20,7 @@ export class DeleteLectureUseCase
   ) {}
 
   async execute(deleteLectureInput: DeleteLectureInput): Promise<void> {
-    const { deleteLectureDto, actor } = deleteLectureInput;
-
-    const { courseId, lectureId } = deleteLectureDto;
+    const { courseId, lectureId, actor } = deleteLectureInput;
 
     const foundCourse = await this.courseRepository.findById(courseId);
 

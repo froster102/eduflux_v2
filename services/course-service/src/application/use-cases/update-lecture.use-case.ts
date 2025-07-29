@@ -3,25 +3,14 @@ import type { ILectureRepository } from '@/domain/repositories/lecture.repositor
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Lecture } from '@/domain/entity/lecture.entity';
-import { CreateLectureDto } from './create-lecture.use-case';
-import { IUseCase } from './interface/use-case.interface';
+import {
+  IUpdateLectureUseCase,
+  UpdateLectureInput,
+} from './interface/update-lecture.interface';
 
-export interface UpdateLectureDto extends Partial<CreateLectureDto> {
-  courseId: string;
-  lectureId: string;
-}
-
-export interface UpdateLectureInput {
-  updateLectureDto: UpdateLectureDto;
-  actor: AuthenticatedUserDto;
-}
-
-export class UpdateLectureUseCase
-  implements IUseCase<UpdateLectureInput, Lecture>
-{
+export class UpdateLectureUseCase implements IUpdateLectureUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

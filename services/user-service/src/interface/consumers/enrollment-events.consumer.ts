@@ -1,4 +1,4 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { ICreateUserProgressUseCase } from '@/application/use-cases/interface/create-user-progress.interface';
 import { TYPES } from '@/shared/di/types';
 import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
@@ -8,7 +8,6 @@ import { DomainException } from '@/domain/exceptions/domain.exception';
 import { USER_SERVICE } from '@/shared/constants/services';
 import { ENROLLMENTS_TOPIC } from '@/shared/constants/topics';
 import { kafka } from '@/infrastructure/messaging/kafka/kafka';
-import { CreateUserProgressInput } from '@/application/use-cases/create-user-progress.use-case';
 import { USER_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
 import { tryCatch } from '@/shared/utils/try-catch';
 
@@ -30,10 +29,7 @@ export class EnrollmentEventsConsumer {
 
   constructor(
     @inject(TYPES.CreateUserProgressUseCase)
-    private readonly createUserProgressUseCase: IUseCase<
-      CreateUserProgressInput,
-      void
-    >,
+    private readonly createUserProgressUseCase: ICreateUserProgressUseCase,
   ) {
     this.topic = ENROLLMENTS_TOPIC;
     this.consumer = kafka.consumer({

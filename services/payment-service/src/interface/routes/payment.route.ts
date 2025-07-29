@@ -1,20 +1,13 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { IHandleStripeWebhookUseCase } from '@/application/use-cases/interface/handle-stripe-webhook.interface';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { Elysia } from 'elysia';
-import {
-  HandleStripeWebhookInput,
-  HandleStripeWebhookOutput,
-} from '@/application/use-cases/handle-stripe-webhook.use-case';
 
 @injectable()
 export class PaymentRoutes {
   constructor(
     @inject(TYPES.HandleStripeWebhookUseCase)
-    private readonly handleStripeWebhookUseCase: IUseCase<
-      HandleStripeWebhookInput,
-      HandleStripeWebhookOutput
-    >,
+    private readonly handleStripeWebhookUseCase: IHandleStripeWebhookUseCase,
   ) {}
 
   setupRoutes(): Elysia {

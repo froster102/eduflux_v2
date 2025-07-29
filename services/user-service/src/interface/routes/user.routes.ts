@@ -1,51 +1,36 @@
-import type { IRoute } from './interface/routes.interface';
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { IUpdateUserUseCase } from '@/application/use-cases/interface/update-user.interface';
+import type { IGetUserUseCase } from '@/application/use-cases/interface/get-user.interface';
+import type { IGetInstructorProfileUseCase } from '@/application/use-cases/interface/get-instructor-profile.interface';
+import type { IGetUserSessionPriceUseCase } from '@/application/use-cases/interface/get-user-session-price.interface';
+import type { IUpdateUserSessionPriceUseCase } from '@/application/use-cases/interface/update-user-session-price.interface';
+import type { IGetInstructorsUseCase } from '@/application/use-cases/interface/get-instructors.interface';
+
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { Elysia } from 'elysia';
-import { UpdateUserInput } from '@/application/use-cases/update-user.use-case';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
-import { User } from '@/domain/entities/user.entity';
 import httpStatus from 'http-status';
 import {
   updateUserSchema,
   updateUserSessionPricingSchema,
 } from '@/infrastructure/http/schema/user';
-import {
-  GetUserSessionPriceInput,
-  GetUserSessionPriceOutput,
-} from '@/application/use-cases/get-user-session-price.use-case';
-import { UpdateUserSessionPriceInput } from '@/application/use-cases/update-user-session-price.use-case';
 import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination';
-import {
-  GetInstructorsInput,
-  GetInstructorsOutput,
-} from '@/application/use-cases/get-instructors.use-case';
 
 @injectable()
-export class UserRoutes implements IRoute<Elysia> {
+export class UserRoutes {
   constructor(
     @inject(TYPES.GetUserUseCase)
-    private readonly getUserUseCase: IUseCase<string, User>,
+    private readonly getUserUseCase: IGetUserUseCase,
     @inject(TYPES.UpdateUserUseCase)
-    private readonly updateUserUseCase: IUseCase<UpdateUserInput, User>,
+    private readonly updateUserUseCase: IUpdateUserUseCase,
     @inject(TYPES.GetInstructorProfileUseCase)
-    private readonly getInstructorProfileUseCase: IUseCase<string, User>,
+    private readonly getInstructorProfileUseCase: IGetInstructorProfileUseCase,
     @inject(TYPES.GetUserSessionPriceUseCase)
-    private readonly getUserSessionPriceUseCase: IUseCase<
-      GetUserSessionPriceInput,
-      GetUserSessionPriceOutput
-    >,
+    private readonly getUserSessionPriceUseCase: IGetUserSessionPriceUseCase,
     @inject(TYPES.UpdateUserSessionPriceUseCase)
-    private readonly updateUserSessionPriceUseCase: IUseCase<
-      UpdateUserSessionPriceInput,
-      void
-    >,
+    private readonly updateUserSessionPriceUseCase: IUpdateUserSessionPriceUseCase,
     @inject(TYPES.GetInstructorsUseCase)
-    private readonly getInstructorsUseCase: IUseCase<
-      GetInstructorsInput,
-      GetInstructorsOutput
-    >,
+    private readonly getInstructorsUseCase: IGetInstructorsUseCase,
   ) {}
 
   register(): Elysia {

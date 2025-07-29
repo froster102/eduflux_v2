@@ -1,23 +1,13 @@
 import type { IEnrollmentRepository } from '@/domain/repositories/enrollment.repository';
-import { PaginationQueryParams } from '../dto/pagination.dto';
-import { IUseCase } from './interface/use-case.interface';
-import { EnrollmentDto } from '../dto/enrollment.dto';
+import type {
+  GetUserEnrollmentsInput,
+  GetUserEnrollmentsOutput,
+  IGetUserEnrollmentsUseCase,
+} from './interface/get-user-enrollments.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 
-export interface GetUserEnrollmentsInput {
-  userId: string;
-  pagination: PaginationQueryParams;
-}
-
-export interface GetUserEnrollmentsOutputDto {
-  total: number;
-  enrollments: EnrollmentDto[];
-}
-
-export class GetUserEnrollmentsUseCase
-  implements IUseCase<GetUserEnrollmentsInput, GetUserEnrollmentsOutputDto>
-{
+export class GetUserEnrollmentsUseCase implements IGetUserEnrollmentsUseCase {
   constructor(
     @inject(TYPES.EnrollmentRepository)
     private readonly enrollmentRepository: IEnrollmentRepository,
@@ -25,7 +15,7 @@ export class GetUserEnrollmentsUseCase
 
   async execute(
     getUserEnrollmentInput: GetUserEnrollmentsInput,
-  ): Promise<GetUserEnrollmentsOutputDto> {
+  ): Promise<GetUserEnrollmentsOutput> {
     const { userId, pagination } = getUserEnrollmentInput;
 
     const result = await this.enrollmentRepository.findUserEnrollments(

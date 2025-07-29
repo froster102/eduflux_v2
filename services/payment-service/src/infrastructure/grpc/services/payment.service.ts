@@ -1,3 +1,4 @@
+import type { IInitiatePaymentUseCase } from '@/application/use-cases/interface/initiate-payment.interface';
 import { inject } from 'inversify';
 import {
   InitiatePaymentRequest,
@@ -5,7 +6,6 @@ import {
   PaymentServiceServer,
 } from '../generated/payment';
 import { TYPES } from '@/shared/di/types';
-import { InitiatePaymentUseCase } from '@/application/use-cases/initiate-payment.use-case';
 import {
   sendUnaryData,
   ServerUnaryCall,
@@ -27,7 +27,7 @@ export class GrpcPaymentService implements PaymentServiceServer {
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;
   constructor(
     @inject(TYPES.InitiatePaymentUseCase)
-    private readonly initialPaymentUseCase: InitiatePaymentUseCase,
+    private readonly initialPaymentUseCase: IInitiatePaymentUseCase,
   ) {}
 
   initiatePayment(

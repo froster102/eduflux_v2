@@ -1,18 +1,14 @@
-import type { IUseCase } from './interface/use-case.interface';
+import type {
+  CreateUserProgressInput,
+  ICreateUserProgressUseCase,
+} from './interface/create-user-progress.interface';
 import type { IProgressRepository } from '@/domain/repositories/progress.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { Progress } from '@/domain/entities/progress.entity';
 import { nanoid } from '@/shared/utils/nanoid';
 
-export interface CreateUserProgressInput {
-  userId: string;
-  courseId: string;
-}
-
-export class CreateUserProgressUseCase
-  implements IUseCase<CreateUserProgressInput, void>
-{
+export class CreateUserProgressUseCase implements ICreateUserProgressUseCase {
   constructor(
     @inject(TYPES.ProgressRepository)
     private readonly progressRepository: IProgressRepository,

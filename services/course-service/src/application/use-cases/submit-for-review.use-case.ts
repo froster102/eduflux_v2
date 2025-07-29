@@ -3,26 +3,21 @@ import type { IChapterRepository } from '@/domain/repositories/chapter.repositor
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import type { IUserServiceGateway } from '../ports/user-service.gateway';
+import type {
+  ISubmitForReviewUseCase,
+  SubmitForReviewInput,
+} from './interface/submit-for-review.interface';
 import { Course } from '@/domain/entity/course.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
-
-export interface SubmitForReviewInput {
-  courseId: string;
-  actor: AuthenticatedUserDto;
-}
 
 const MIN_LECTURES_REQUIRED = 5;
 
 @injectable()
-export class SubmitForReviewUseCase
-  implements IUseCase<SubmitForReviewInput, Course>
-{
+export class SubmitForReviewUseCase implements ISubmitForReviewUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

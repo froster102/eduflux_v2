@@ -10,20 +10,20 @@ import { Logger } from '@/shared/utils/logger';
 import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { CheckUserEnrollmentUseCase } from '@/application/use-cases/check-user-enrollment.use-case';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
-import { GetUserEnrollmentsUseCase } from '@/application/use-cases/get-user-enrollments.use-case';
 import { ApplicationException } from '@/application/exceptions/application.exception';
+import { ICheckUserEnrollmentUseCase } from '@/application/use-cases/interface/check-user-enrollment.inerface';
+import { IGetUserEnrollmentsUseCase } from '@/application/use-cases/interface/get-user-enrollments.interface';
 
 export class GrpcEnrollmentService implements EnrollmentServiceServer {
   private logger = new Logger(ENROLLMENT_SERVICE);
 
   constructor(
     @inject(TYPES.CheckUserEnrollmentUseCase)
-    private readonly checkUserEnrollmenntUseCase: CheckUserEnrollmentUseCase,
+    private readonly checkUserEnrollmenntUseCase: ICheckUserEnrollmentUseCase,
     @inject(TYPES.GetUserEnrollmentsUseCase)
-    private readonly getUserEnrollmentsUseCase: GetUserEnrollmentsUseCase,
+    private readonly getUserEnrollmentsUseCase: IGetUserEnrollmentsUseCase,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents

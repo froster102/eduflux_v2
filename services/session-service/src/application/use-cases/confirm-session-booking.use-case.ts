@@ -1,16 +1,14 @@
-import type { IUseCase } from './interface/use-case.interface';
+import type {
+  ConfirmSessionBookingInput,
+  IConfirmSessionBookingUseCase,
+} from './interface/confirm-session-booking.interface';
 import type { ISessionRepository } from '@/domain/repositories/session.repository';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 
-export interface ConfirmSessionBookingInput {
-  sessionId: string;
-  paymentId: string;
-}
-
 export class ConfirmSessionBookingUseCase
-  implements IUseCase<ConfirmSessionBookingInput, void>
+  implements IConfirmSessionBookingUseCase
 {
   constructor(
     @inject(TYPES.SessionRepository)

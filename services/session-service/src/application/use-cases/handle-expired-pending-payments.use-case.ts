@@ -1,16 +1,16 @@
 import type { ISlotRepository } from '@/domain/repositories/slot.repository';
 import type { ISessionRepository } from '@/domain/repositories/session.repository';
 import type { IUnitOfWork } from '../ports/unit-of-work.interface';
+import type { IHandleExpiredPendingPaymentsUseCase } from './interface/handle-expired-pending-payments.interface';
 import { Session } from '@/domain/entities/session.entity';
 import { Slot } from '@/domain/entities/slot.entity';
 import { SESSION_SERVICE } from '@/shared/constants/services';
 import { TYPES } from '@/shared/di/types';
 import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
-import { IUseCase } from './interface/use-case.interface';
 
 export class HandleExpiredPendingPaymentsUseCase
-  implements IUseCase<void, void>
+  implements IHandleExpiredPendingPaymentsUseCase
 {
   private logger = new Logger(SESSION_SERVICE);
   constructor(

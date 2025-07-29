@@ -1,26 +1,16 @@
-import type { IUseCase } from './interface/use-case.interface';
 import type { IScheduleSettingRepository } from '@/domain/repositories/schedule-setting.repository';
-import type { ScheduleSettingDto } from '../dto/scheduleSetting.dto';
+import type {
+  GetInstructorScheduleTemplateInput,
+  GetInstructorScheduleTemplateOutput,
+  IGetInstructorScheduleTemplateUseCase,
+} from './interface/get-instructor-schedule-template.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { Role } from '@/shared/constants/role';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 
-export interface GetInstructorScheduleTemplateInput {
-  actor: AuthenticatedUserDto;
-}
-
-export interface GetInstructorScheduleTemplateOutput {
-  setting: ScheduleSettingDto | null;
-}
-
 export class GetInstructorScheduleTemplateUseCase
-  implements
-    IUseCase<
-      GetInstructorScheduleTemplateInput,
-      GetInstructorScheduleTemplateOutput
-    >
+  implements IGetInstructorScheduleTemplateUseCase
 {
   constructor(
     @inject(TYPES.ScheduleSettingRepository)

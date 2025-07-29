@@ -1,20 +1,17 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
-import { AddAssetToLectureInput } from '@/application/use-cases/add-asset-to-lecture.use-case';
-import { CreateChapterInput } from '@/application/use-cases/create-chapter.use-case';
-import { CreateCourseInput } from '@/application/use-cases/create-course.use-case';
-import { CreateLectureInput } from '@/application/use-cases/create-lecture.use-case';
-import {
-  CurriculumItemWithAsset,
-  GetInstructorCourseCurriculumInput,
-} from '@/application/use-cases/get-instructor-course-curriculum.use-case';
-import { GetInstructorCourseInput } from '@/application/use-cases/get-instructor-course.use-case';
-import {
-  ReorderCurriculumDto,
-  ReorderCurriculumInput,
-} from '@/application/use-cases/reorder-curriculum.use-case';
-import { UpdateChapterInput } from '@/application/use-cases/update-chapter.use-case';
-import { UpdateCourseInput } from '@/application/use-cases/update-course.use-case';
-import { UpdateLectureInput } from '@/application/use-cases/update-lecture.use-case';
+import type { ICreateCourseUseCase } from '@/application/use-cases/interface/create-course.interface';
+import type { IUpdateCourseUseCase } from '@/application/use-cases/interface/update-course.interface';
+import type { IGetInstructorCourseCurriculumUseCase } from '@/application/use-cases/interface/get-instructor-course-curriculum.interface';
+import type { ICreateChapterUseCase } from '@/application/use-cases/interface/create-chapter.interface';
+import type { IUpdateChapterUseCase } from '@/application/use-cases/interface/update-chapter.interface';
+import type { ICreateLectureUseCase } from '@/application/use-cases/interface/create-lecture.interface';
+import type { IUpdateLectureUseCase } from '@/application/use-cases/interface/update-lecture.interface';
+import type { IAddAssetToLectureUseCase } from '@/application/use-cases/interface/add-asset-to-lecture.interface';
+import type { IReorderCurriculumUseCase } from '@/application/use-cases/interface/reorder-curriculum.interface';
+import type { IGetInstructorCourseUseCase } from '@/application/use-cases/interface/get-instructor-course.interface';
+import type { IDeleteChapterUseCase } from '@/application/use-cases/interface/delete-chapter.interface';
+import type { IDeleteLectureUseCase } from '@/application/use-cases/interface/delete-lecture.interface';
+import type { IPublishCourseUseCase } from '@/application/use-cases/interface/publish-course.use-case.interface';
+import type { IGetCourseCategoriesUseCase } from '@/application/use-cases/interface/get-course-categories.interface';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -33,12 +30,6 @@ import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
 import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
-import { DeleteChapterInput } from '@/application/use-cases/delete-chapter.use-case';
-import { DeleteLectureInput } from '@/application/use-cases/delete-lecture.use-case';
-import { PublishCourseInput } from '@/application/use-cases/publish-course.use-case';
-import { Chapter } from '@/domain/entity/chapter.entity';
-import { Lecture } from '@/domain/entity/lecture.entity';
-import { Category } from '@/domain/entity/category.entity';
 
 const window = new JSDOM('').window;
 const purify = DOMPurify(window);
@@ -47,59 +38,35 @@ const purify = DOMPurify(window);
 export class InstructorRoutes {
   constructor(
     @inject(TYPES.CreateCourseUseCase)
-    private readonly creatCourseUseCase: IUseCase<CreateCourseInput, Course>,
+    private readonly creatCourseUseCase: ICreateCourseUseCase,
     @inject(TYPES.UpdateCourseUseCase)
-    private readonly updateCourseUseCase: IUseCase<UpdateCourseInput, Course>,
+    private readonly updateCourseUseCase: IUpdateCourseUseCase,
     @inject(TYPES.GetInstructorCourseCurriculumUseCase)
-    private readonly getInstructorCourseCurriculum: IUseCase<
-      GetInstructorCourseCurriculumInput,
-      CurriculumItemWithAsset[]
-    >,
+    private readonly getInstructorCourseCurriculum: IGetInstructorCourseCurriculumUseCase,
     @inject(TYPES.CreateChapterUseCase)
-    private readonly createChapterUseCase: IUseCase<
-      CreateChapterInput,
-      Chapter
-    >,
+    private readonly createChapterUseCase: ICreateChapterUseCase,
     @inject(TYPES.UpdateChapterUseCase)
-    private readonly updateChapterUseCase: IUseCase<
-      UpdateChapterInput,
-      Chapter
-    >,
+    private readonly updateChapterUseCase: IUpdateChapterUseCase,
     @inject(TYPES.CreateLectureUseCase)
-    private readonly createLectureUseCase: IUseCase<
-      CreateLectureInput,
-      Lecture
-    >,
+    private readonly createLectureUseCase: ICreateLectureUseCase,
     @inject(TYPES.UpdateLectureUseCase)
-    private readonly updateLectureUseCase: IUseCase<
-      UpdateLectureInput,
-      Lecture
-    >,
+    private readonly updateLectureUseCase: IUpdateLectureUseCase,
     @inject(TYPES.AddAssetToLectureUseCase)
-    private readonly addAssetToLectureUseCase: IUseCase<
-      AddAssetToLectureInput,
-      void
-    >,
+    private readonly addAssetToLectureUseCase: IAddAssetToLectureUseCase,
     // @inject(TYPES.SubmitForReviewUseCase)
     // private readonly submitForReviewUseCase: SubmitForReviewUseCase,
     @inject(TYPES.ReorderCurriculumUseCase)
-    private readonly reorderCurriculumUseCase: IUseCase<
-      ReorderCurriculumInput,
-      void
-    >,
+    private readonly reorderCurriculumUseCase: IReorderCurriculumUseCase,
     @inject(TYPES.GetInstructorCourseUseCase)
-    private readonly getInstructorCourseUseCase: IUseCase<
-      GetInstructorCourseInput,
-      Course
-    >,
+    private readonly getInstructorCourseUseCase: IGetInstructorCourseUseCase,
     @inject(TYPES.DeleteChapterUseCase)
-    private readonly deleteChapterUseCase: IUseCase<DeleteChapterInput, void>,
+    private readonly deleteChapterUseCase: IDeleteChapterUseCase,
     @inject(TYPES.DeleteLectureUseCase)
-    private readonly deleteLectureUseCase: IUseCase<DeleteLectureInput, void>,
+    private readonly deleteLectureUseCase: IDeleteLectureUseCase,
     @inject(TYPES.PublishCourseUseCase)
-    private readonly publishCourseUseCase: IUseCase<PublishCourseInput, Course>,
+    private readonly publishCourseUseCase: IPublishCourseUseCase,
     @inject(TYPES.GetCourseCategoriesUseCase)
-    private readonly getCourseCategories: IUseCase<void, Category[]>,
+    private readonly getCourseCategories: IGetCourseCategoriesUseCase,
   ) {}
 
   register(): Elysia {
@@ -115,7 +82,7 @@ export class InstructorRoutes {
           .post('/', async ({ body, user }): Promise<HttpResponse<Course>> => {
             const parsedBody = createCourseSchema.parse(body);
             const course = await this.creatCourseUseCase.execute({
-              createCourseDto: parsedBody,
+              ...parsedBody,
               actor: user,
             });
             return { data: course };
@@ -131,11 +98,9 @@ export class InstructorRoutes {
             const parsedBody = updateCourseSchema.parse(body);
             const course = await this.updateCourseUseCase.execute({
               actor: user,
-              updateCourseDto: {
-                ...parsedBody,
-                courseId: params.courseId,
-                description: purify.sanitize(parsedBody.description ?? ''),
-              },
+              ...parsedBody,
+              courseId: params.courseId,
+              description: purify.sanitize(parsedBody.description ?? ''),
             });
             return course.toJSON();
           })
@@ -150,14 +115,10 @@ export class InstructorRoutes {
           .put(
             '/:courseId/instructor-curriculum',
             async ({ body, params, user }) => {
-              const parsedBody = reorderCurriculumSchema.parse(
-                body,
-              ) as ReorderCurriculumDto;
+              const parsedBody = reorderCurriculumSchema.parse(body);
               await this.reorderCurriculumUseCase.execute({
-                reorderCurriculumDto: {
-                  courseId: params.courseId,
-                  items: parsedBody.items,
-                },
+                courseId: params.courseId,
+                items: parsedBody.items,
                 actor: user,
               });
             },
@@ -165,11 +126,9 @@ export class InstructorRoutes {
           .post('/:courseId/chapters/', async ({ params, user, body }) => {
             const parsedBody = createChapterSchema.parse(body);
             const chapter = await this.createChapterUseCase.execute({
-              createChapterDto: {
-                courseId: params.courseId,
-                title: parsedBody.title,
-                description: parsedBody.description,
-              },
+              courseId: params.courseId,
+              title: parsedBody.title,
+              description: parsedBody.description,
               actor: user,
             });
             return chapter.toJSON();
@@ -194,10 +153,8 @@ export class InstructorRoutes {
             '/:courseId/chapters/:chapterId',
             async ({ params, user }) => {
               await this.deleteChapterUseCase.execute({
-                deleteChapterDto: {
-                  chapterId: params.chapterId,
-                  courseId: params.courseId,
-                },
+                chapterId: params.chapterId,
+                courseId: params.courseId,
                 actor: user,
               });
               return;
@@ -206,12 +163,10 @@ export class InstructorRoutes {
           .post('/:courseId/lectures/', async ({ params, body, user }) => {
             const parsedBody = createLectureSchema.parse(body);
             const lecture = await this.createLectureUseCase.execute({
-              createLectureDto: {
-                courseId: params.courseId,
-                description: parsedBody.description,
-                preview: parsedBody.preview,
-                title: parsedBody.title,
-              },
+              courseId: params.courseId,
+              description: parsedBody.description,
+              preview: parsedBody.preview,
+              title: parsedBody.title,
               actor: user,
             });
             return lecture.toJSON();
@@ -238,10 +193,8 @@ export class InstructorRoutes {
             async ({ params, user }) => {
               await this.deleteLectureUseCase.execute({
                 actor: user,
-                deleteLectureDto: {
-                  courseId: params.courseId,
-                  lectureId: params.lectureId,
-                },
+                courseId: params.courseId,
+                lectureId: params.lectureId,
               });
             },
           )
@@ -250,14 +203,12 @@ export class InstructorRoutes {
             async ({ body, user, params }) => {
               const parsedBody = addAssetToLectureSchema.parse(body);
               await this.addAssetToLectureUseCase.execute({
-                addAssetToLectureDto: {
-                  resourceType: parsedBody.resourceType as 'image' | 'video',
-                  key: parsedBody.key,
-                  fileName: parsedBody.fileName,
-                  uuid: parsedBody.uuid,
-                  courseId: params.courseId,
-                  lectureId: params.lectureId,
-                },
+                resourceType: parsedBody.resourceType as 'image' | 'video',
+                key: parsedBody.key,
+                fileName: parsedBody.fileName,
+                uuid: parsedBody.uuid,
+                courseId: params.courseId,
+                lectureId: params.lectureId,
                 actor: user,
               });
               return {};

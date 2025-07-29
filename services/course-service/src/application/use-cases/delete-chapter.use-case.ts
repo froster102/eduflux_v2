@@ -1,27 +1,17 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import type { IChapterRepository } from '@/domain/repositories/chapter.repository';
+import type {
+  DeleteChapterInput,
+  IDeleteChapterUseCase,
+} from './interface/delete-chapter.interface';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
 
-export interface DeleteChapterDto {
-  courseId: string;
-  chapterId: string;
-}
-
-export interface DeleteChapterInput {
-  deleteChapterDto: DeleteChapterDto;
-  actor: AuthenticatedUserDto;
-}
-
 @injectable()
-export class DeleteChapterUseCase
-  implements IUseCase<DeleteChapterInput, void>
-{
+export class DeleteChapterUseCase implements IDeleteChapterUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -30,9 +20,8 @@ export class DeleteChapterUseCase
   ) {}
 
   async execute(deleteChapterInput: DeleteChapterInput): Promise<void> {
-    const { deleteChapterDto, actor } = deleteChapterInput;
+    const { courseId, chapterId, actor } = deleteChapterInput;
 
-    const { courseId, chapterId } = deleteChapterDto;
     const foundCourse = await this.courseRepository.findById(courseId);
 
     if (!foundCourse) {

@@ -2,28 +2,23 @@ import type { IChapterRepository } from '@/domain/repositories/chapter.repositor
 import type { ILectureRepository } from '@/domain/repositories/lecture.repository';
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import type { IUserServiceGateway } from '../ports/user-service.gateway';
-import { Course } from '@/domain/entity/course.entity';
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  IPublishCourseUseCase,
+  PublishCourseInput,
+} from './interface/publish-course.use-case.interface';
+import { Course } from '@/domain/entity/course.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
 import { contentLimits } from '@/shared/config/content-limits.config';
-
-export interface PublishCourseInput {
-  courseId: string;
-  actor: AuthenticatedUserDto;
-}
 
 const COURSE_MIN_LECTURES_REQUIRED = contentLimits.COURSE_MIN_LECTURES_REQUIRED;
 
 @injectable()
-export class PublishCourseUseCase
-  implements IUseCase<PublishCourseInput, Course>
-{
+export class PublishCourseUseCase implements IPublishCourseUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,

@@ -1,3 +1,4 @@
+import type { IGetInstructorProfileUseCase } from './interface/get-instructor-profile.interface';
 import type { IUserRepository } from '@/domain/repositories/user.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
@@ -5,9 +6,10 @@ import { NotFoundException } from '../exceptions/not-found.exception';
 import { Role } from '@/shared/types/role';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { User } from '@/domain/entities/user.entity';
-import { IUseCase } from './interface/use-case.interface';
 
-export class GetInstructorProfileUseCase implements IUseCase<string, User> {
+export class GetInstructorProfileUseCase
+  implements IGetInstructorProfileUseCase
+{
   constructor(
     @inject(TYPES.UserRepository)
     private readonly userRepository: IUserRepository,

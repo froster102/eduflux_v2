@@ -1,23 +1,13 @@
-import type { IUseCase } from './interface/use-case.interface';
 import type { IUserRepository } from '@/domain/repositories/user.repository';
+import type {
+  GetInstructorsInput,
+  IGetInstructorsUseCase,
+} from './interface/get-instructors.interface';
 import { User } from '@/domain/entities/user.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
-import { PaginationQueryParams } from '../dto/pagination.dto';
 
-export interface GetInstructorsInput {
-  currentUserId: string;
-  paginationQueryParams: PaginationQueryParams;
-}
-
-export interface GetInstructorsOutput {
-  instructors: User[];
-  total: number;
-}
-
-export class GetInstructorsUseCase
-  implements IUseCase<GetInstructorsInput, GetInstructorsOutput>
-{
+export class GetInstructorsUseCase implements IGetInstructorsUseCase {
   constructor(
     @inject(TYPES.UserRepository) private userRepository: IUserRepository,
   ) {}

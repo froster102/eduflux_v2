@@ -1,9 +1,7 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { IRejectCourseUseCase } from '@/application/use-cases/interface/reject-course.interface';
+import type { ICompleteAssetUploadUseCase } from '@/application/use-cases/interface/complete-asset-upload.interface';
+import type { IApproveCourseUseCase } from '@/application/use-cases/interface/approve-course.interface';
 import type { IFileStorageGateway } from '@/application/ports/file-storage.gateway';
-import { ApproveCourseInput } from '@/application/use-cases/approve-course.use-case';
-import { CompleteAssetUploadDto } from '@/application/use-cases/complete-asset-upload.use-case';
-import { RejectCourseInput } from '@/application/use-cases/reject-course.use-case';
-import { Asset } from '@/domain/entity/asset.entity';
 import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
@@ -21,14 +19,11 @@ export class AdminRoutes {
     @inject(TYPES.FileStorageGateway)
     private readonly fileStorageGateway: IFileStorageGateway,
     @inject(TYPES.CompleteAssetUploadUseCase)
-    private readonly completeAssetUploadUseCase: IUseCase<
-      CompleteAssetUploadDto,
-      Asset
-    >,
+    private readonly completeAssetUploadUseCase: ICompleteAssetUploadUseCase,
     @inject(TYPES.ApproveCourseUseCase)
-    private readonly approveCourseUseCase: IUseCase<ApproveCourseInput, Course>,
+    private readonly approveCourseUseCase: IApproveCourseUseCase,
     @inject(TYPES.RejectCourseUseCase)
-    private readonly rejectCourseUseCase: IUseCase<RejectCourseInput, Course>,
+    private readonly rejectCourseUseCase: IRejectCourseUseCase,
   ) {}
 
   register(): Elysia {
@@ -51,10 +46,8 @@ export class AdminRoutes {
             const paredBody = rejectCourseSchema.parse(body);
             const course = await this.rejectCourseUseCase.execute({
               actor: user,
-              rejectCourseDto: {
-                courseId: params.courseId,
-                feedback: paredBody.feedback,
-              },
+              courseId: params.courseId,
+              feedback: paredBody.feedback,
             });
             return { data: course };
           },

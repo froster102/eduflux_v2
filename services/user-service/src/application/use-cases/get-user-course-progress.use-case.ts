@@ -1,21 +1,15 @@
-import type { IUseCase } from './interface/use-case.interface';
 import type { IProgressRepository } from '@/domain/repositories/progress.repository';
+import type {
+  GetUserCourseProgessInput,
+  GetUserCourseProgressOutput,
+  IGetUserCourseProgressUseCase,
+} from './interface/get-user-course-progress.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 
-export interface GetUserCourseProgessInput {
-  courseId: string;
-  userId: string;
-}
-
-export interface GetUserCourseProgressOutput {
-  id: string;
-  completedLectures: string[];
-}
-
 export class GetUserCourseProgressUseCase
-  implements IUseCase<GetUserCourseProgessInput, GetUserCourseProgressOutput>
+  implements IGetUserCourseProgressUseCase
 {
   constructor(
     @inject(TYPES.ProgressRepository)

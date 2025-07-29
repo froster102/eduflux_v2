@@ -1,31 +1,18 @@
-import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
+import type { ICheckUserEnrollmentUseCase } from '@/application/use-cases/interface/check-user-enrollment.inerface';
+import type { ICreateEnrollmentUseCase } from '@/application/use-cases/interface/create-enrollment.interface';
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { Elysia, t } from 'elysia';
-import {
-  CreateEnrollmentDto,
-  CreateEnrollmentOutputDto,
-} from '@/application/use-cases/create-enrollment.use-case';
 import { createEnrollmentSchema } from '@/infrastructure/http/schema/enrollment.schema';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
-import {
-  CheckEnrollmentOutputDto,
-  CheckUserEnrollmentDto,
-} from '@/application/use-cases/check-user-enrollment.use-case';
 
 @injectable()
 export class EnrollmentRoutes {
   constructor(
     @inject(TYPES.CreateEnrollmentUseCase)
-    private readonly createEnrollmentUseCase: IUseCase<
-      CreateEnrollmentDto,
-      CreateEnrollmentOutputDto
-    >,
+    private readonly createEnrollmentUseCase: ICreateEnrollmentUseCase,
     @inject(TYPES.CheckUserEnrollmentUseCase)
-    private readonly checkUserEnrollmentUseCase: IUseCase<
-      CheckUserEnrollmentDto,
-      CheckEnrollmentOutputDto
-    >,
+    private readonly checkUserEnrollmentUseCase: ICheckUserEnrollmentUseCase,
   ) {}
 
   setupRoutes(): Elysia {

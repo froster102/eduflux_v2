@@ -4,24 +4,13 @@ import { Chapter } from '@/domain/entity/chapter.entity';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
 import { NotFoundException } from '../exceptions/not-found.exception';
-import { AuthenticatedUserDto } from '../dto/authenticated-user.dto';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import { IUseCase } from './interface/use-case.interface';
+import type {
+  CreateChapterInput,
+  ICreateChapterUseCase,
+} from './interface/create-chapter.interface';
 
-export interface CreateChapterDto {
-  courseId: string;
-  title: string;
-  description: string;
-}
-
-export interface CreateChapterInput {
-  createChapterDto: CreateChapterDto;
-  actor: AuthenticatedUserDto;
-}
-
-export class CreateChapterUseCase
-  implements IUseCase<CreateChapterInput, Chapter>
-{
+export class CreateChapterUseCase implements ICreateChapterUseCase {
   constructor(
     @inject(TYPES.CourseRepository)
     private readonly courseRepository: ICourseRepository,
@@ -30,12 +19,12 @@ export class CreateChapterUseCase
   ) {}
 
   async execute(createChapterInput: CreateChapterInput): Promise<Chapter> {
-    const { createChapterDto: dto, actor } = createChapterInput;
+    const { courseId, description, title, actor } = createChapterInput;
 
-    const course = await this.courseRepository.findById(dto.courseId);
+    const course = await this.courseRepository.findById(courseId);
 
     if (!course) {
-      throw new NotFoundException(`Course with ID:${dto.courseId} not found.`);
+      throw new NotFoundException(`Course with ID:${courseId} not found.`);
     }
 
     if (course.instructor.id !== actor.id) {
@@ -44,7 +33,7 @@ export class CreateChapterUseCase
       );
     }
 
-    const chapter = Chapter.create(course.id, dto.title, dto.description, 0, 0);
+    const chapter = Chapter.create(course.id, title, description, 0, 0);
 
     const savedChapter = await this.chapterRepository.save(chapter);
 

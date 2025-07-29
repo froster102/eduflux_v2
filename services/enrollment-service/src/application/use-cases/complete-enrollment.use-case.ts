@@ -1,19 +1,15 @@
 import type { IMessageBrokerGatway } from '../ports/message-broker.gateway';
 import type { IEnrollmentRepository } from '@/domain/repositories/enrollment.repository';
+import type {
+  CompleteEnrollmentInput,
+  ICompleteEnrollmentUseCase,
+} from './interface/complete-enrollment.interface';
 import { inject } from 'inversify';
-import { IUseCase } from './interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ENROLLMENTS_TOPIC } from '@/shared/constants/topics';
 
-export interface CompleteEnrollmentDto {
-  enrollmentId: string;
-  paymentId: string;
-}
-
-export class CompleteEnrollmentUseCase
-  implements IUseCase<CompleteEnrollmentDto, void>
-{
+export class CompleteEnrollmentUseCase implements ICompleteEnrollmentUseCase {
   constructor(
     @inject(TYPES.EnrollmentRepository)
     private readonly enrollmentRepository: IEnrollmentRepository,
@@ -21,8 +17,10 @@ export class CompleteEnrollmentUseCase
     private readonly messageBrokerGateway: IMessageBrokerGatway,
   ) {}
 
-  async execute(completeEnrollmentDto: CompleteEnrollmentDto): Promise<void> {
-    const { enrollmentId, paymentId } = completeEnrollmentDto;
+  async execute(
+    completeEnrollmentInput: CompleteEnrollmentInput,
+  ): Promise<void> {
+    const { enrollmentId, paymentId } = completeEnrollmentInput;
     const enrollment = await this.enrollmentRepository.findById(enrollmentId);
 
     if (!enrollment) {

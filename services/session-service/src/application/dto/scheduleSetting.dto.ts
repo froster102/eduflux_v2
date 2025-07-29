@@ -1,4 +1,4 @@
-import { DailyAvailabilityConfig } from './daily-availability-config.dto';
+import { DailyAvailabilityConfig } from '@/domain/entities/schedule-setting.entity';
 
 export interface ScheduleSettingDto {
   weeklySchedule: DailyAvailabilityConfig[];
