@@ -1,3 +1,5 @@
+import type { ICheckUserEnrollmentUseCase } from '@/application/use-cases/interface/check-user-enrollment.inerface';
+import type { IGetUserEnrollmentsUseCase } from '@/application/use-cases/interface/get-user-enrollments.interface';
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 import {
   CheckUserEnrollmentRequest,
@@ -13,8 +15,6 @@ import { TYPES } from '@/shared/di/types';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { ApplicationException } from '@/application/exceptions/application.exception';
-import { ICheckUserEnrollmentUseCase } from '@/application/use-cases/interface/check-user-enrollment.inerface';
-import { IGetUserEnrollmentsUseCase } from '@/application/use-cases/interface/get-user-enrollments.interface';
 
 export class GrpcEnrollmentService implements EnrollmentServiceServer {
   private logger = new Logger(ENROLLMENT_SERVICE);

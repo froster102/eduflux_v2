@@ -1,12 +1,12 @@
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
+import type {
+  IGetPublishedCourseInfoUseCase,
+  PublishedCourseDto,
+} from './interface/get-published-course-info.interface';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { NotFoundException } from '../exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import {
-  IGetPublishedCourseInfoUseCase,
-  PublishedCourseDto,
-} from './interface/get-published-course-info.interface';
 
 export class GetPublishedCourseInfoUseCase
   implements IGetPublishedCourseInfoUseCase

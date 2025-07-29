@@ -10,7 +10,7 @@ import { TYPES } from '@/shared/di/types';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
-import { IGetPublishedCourseInfoUseCase } from '@/application/use-cases/interface/get-published-course-info.interface';
+import type { IGetPublishedCourseInfoUseCase } from '@/application/use-cases/interface/get-published-course-info.interface';
 
 export class GrpcCourseService implements CourseServiceServer {
   private logger = new Logger('GrpcCourseService');
