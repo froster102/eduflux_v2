@@ -21,12 +21,5 @@ export function useLogout() {
         color: "success",
       });
     },
-    onError: () => {
-      addToast({
-        title: "Logout",
-        description: "Failed to logout user",
-        color: "danger",
-      });
-    },
   });
 }

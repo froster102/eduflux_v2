@@ -17,12 +17,5 @@ export function useResendOtp(onSuccessCallback?: () => void) {
         onSuccessCallback();
       }
     },
-    onError: (error: BetterAuthError) => {
-      addToast({
-        title: "Resend OTP",
-        description: error.message,
-        color: "danger",
-      });
-    },
   });
 }

@@ -17,12 +17,5 @@ export function useResetPassword() {
       });
       navigate({ to: "/auth/sign-in" });
     },
-    onError: (error: BetterAuthError) => {
-      addToast({
-        title: "Reset Password",
-        description: error.message,
-        color: "danger",
-      });
-    },
   });
 }

@@ -13,12 +13,5 @@ export function useUpdatePassword() {
         color: "success",
       });
     },
-    onError: (error: any) => {
-      addToast({
-        title: "Update Password",
-        description: error.message,
-        color: "danger",
-      });
-    },
   });
 }

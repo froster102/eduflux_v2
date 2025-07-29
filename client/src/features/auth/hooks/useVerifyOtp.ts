@@ -18,12 +18,5 @@ export function useVerifyOtp() {
       });
       navigate({ to: "/auth/sign-in" });
     },
-    onError: (error: BetterAuthError) => {
-      addToast({
-        title: "Email verification",
-        description: error.message,
-        color: "danger",
-      });
-    },
   });
 }

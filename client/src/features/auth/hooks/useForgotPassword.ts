@@ -19,12 +19,5 @@ export function useForgotPassword() {
 
       navigate({ to: "/auth/reset-password" });
     },
-    onError: (_error: BetterAuthError) => {
-      addToast({
-        title: "Forgot Password",
-        description: "Something went wrong",
-        color: "danger",
-      });
-    },
   });
 }

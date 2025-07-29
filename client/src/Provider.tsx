@@ -20,6 +20,12 @@ const queryClient = new QueryClient({
           color: "danger",
         });
       }
+      if (error instanceof Error) {
+        addToast({
+          description: error.message || "An unexpected error has occured",
+          color: "danger",
+        });
+      }
     },
   }),
 });

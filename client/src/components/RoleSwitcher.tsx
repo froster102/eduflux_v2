@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import ConfirmationModal from "./ConfirmationModal";
 
 import { useAuthStore } from "@/store/auth-store";
-import { useBecomeAInstructor } from "@/features/learner/hooks/mutations";
+import { useBecomeAInstructor } from "@/features/learner/hooks/useBecomeAInstructor";
 import AcademicIcon from "@/assets/icons/AcademicIcon";
 import LearnerIcon from "@/assets/icons/LearnerIcon";
 
@@ -55,6 +55,7 @@ export default function RoleSwitcher() {
     <>
       <Select
         aria-label="Select view"
+        className="max-w-xs pt-4"
         items={roles}
         renderValue={(items) => {
           return items.map((item) => (
@@ -64,12 +65,10 @@ export default function RoleSwitcher() {
             </p>
           ));
         }}
+        selectedKeys={role}
         onSelectionChange={(value) => {
           handleSelectionChange(value.anchorKey as string);
         }}
-        className="max-w-xs pt-4"
-        // defaultSelectedKeys={currentRole}
-        selectedKeys={role}
       >
         {(role) => (
           <SelectItem key={role.key} textValue={role.label}>

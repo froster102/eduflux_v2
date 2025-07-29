@@ -22,13 +22,5 @@ export function useBecomeAInstructor() {
       });
       navigate({ to: "/instructor" });
     },
-
-    onError: () => {
-      addToast({
-        color: "danger",
-        title: "Instructor",
-        description: "Failed to become instructor",
-      });
-    },
   });
 }

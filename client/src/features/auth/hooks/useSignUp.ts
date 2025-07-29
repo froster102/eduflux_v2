@@ -26,12 +26,5 @@ export function useSignUp() {
         navigate({ to: "/auth/verify", from: "/auth/sign-up" });
       }
     },
-    onError: (error: BetterAuthError) => {
-      addToast({
-        title: "Sign up",
-        description: error.message,
-        color: "danger",
-      });
-    },
   });
 }
