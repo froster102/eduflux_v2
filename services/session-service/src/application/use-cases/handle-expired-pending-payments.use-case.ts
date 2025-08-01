@@ -4,23 +4,24 @@ import type { IUnitOfWork } from '../ports/unit-of-work.interface';
 import type { IHandleExpiredPendingPaymentsUseCase } from './interface/handle-expired-pending-payments.interface';
 import { Session } from '@/domain/entities/session.entity';
 import { Slot } from '@/domain/entities/slot.entity';
-import { SESSION_SERVICE } from '@/shared/constants/services';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 
 export class HandleExpiredPendingPaymentsUseCase
   implements IHandleExpiredPendingPaymentsUseCase
 {
-  private logger = new Logger(SESSION_SERVICE);
   constructor(
+    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.SessionRepository)
     private readonly sessionRepository: ISessionRepository,
     @inject(TYPES.SlotRepository)
     private readonly slotRepository: ISlotRepository,
     @inject(TYPES.UnitOfWork)
     private readonly uow: IUnitOfWork,
-  ) {}
+  ) {
+    this.logger = logger.fromContext(HandleExpiredPendingPaymentsUseCase.name);
+  }
 
   async execute(): Promise<void> {
     this.logger.info('Running HandleExpiredPendingPaymentsUseCase...');

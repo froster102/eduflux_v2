@@ -46,4 +46,7 @@ export const TYPES = {
 
   //Consumers
   PaymentEventsConsumer: Symbol.for('PaymentEventsConsumer'),
+
+  //Logger
+  Logger: Symbol.for('Logger'),
 };

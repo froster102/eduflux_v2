@@ -1,19 +1,19 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { Kafka, Producer } from 'kafkajs';
 import { tryCatch } from '@/shared/utils/try-catch';
-import { Logger } from '@/shared/utils/logger';
 import {
   IUserEvent,
   IMessageBrokerGatway,
 } from '@/application/ports/message-broker.gateway';
 import { kafka } from '../kafka/kafka';
-import { USER_SERVICE } from '@/shared/constants/services';
+import { inject } from 'inversify';
+import { TYPES } from '@/shared/di/types';
 
 export class KafkaProducerAdapter implements IMessageBrokerGatway {
   private kafka: Kafka;
   private producer: Producer;
-  private logger = new Logger(USER_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
     this.kafka = kafka;
     this.producer = this.kafka.producer();
   }

@@ -9,6 +9,7 @@ import { PaymentRoutes } from '@/interface/routes/payment.route';
 import { TransactionMapper } from '@/infrastructure/mappers/transaction.mapper';
 import { DatabaseClient } from '@/infrastructure/database/setup';
 import { GrpcPaymentService } from '@/infrastructure/grpc/services/payment.service';
+import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
 
 const container = new Container();
 
@@ -39,5 +40,8 @@ container.bind(TYPES.DatabaseClient).to(DatabaseClient);
 
 //Mapper
 container.bind(TYPES.PaymentMapper).to(TransactionMapper);
+
+//Logger
+container.bind(TYPES.Logger).to(WinstonLogger);
 
 export { container };

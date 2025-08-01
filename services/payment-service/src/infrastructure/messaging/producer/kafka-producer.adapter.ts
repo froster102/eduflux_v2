@@ -1,3 +1,4 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import {
   IMessageBrokerGatway,
   IPaymentEvent,
@@ -5,15 +6,15 @@ import {
 import { Kafka, Producer } from 'kafkajs';
 import { kafka } from '../kafka/setup';
 import { tryCatch } from '@/shared/utils/try-catch';
-import { Logger } from '@/shared/utils/logger';
-import { PAYMENT_SERVICE } from '@/shared/constants/service';
+import { inject } from 'inversify';
+import { TYPES } from '@/shared/di/types';
 
 export class KafkaProducerAdapter implements IMessageBrokerGatway {
   private kafka: Kafka;
   private producer: Producer;
-  private logger = new Logger(PAYMENT_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(KafkaProducerAdapter.name);
     this.kafka = kafka;
     this.producer = this.kafka.producer();
   }

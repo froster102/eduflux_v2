@@ -1,18 +1,18 @@
-import { Logger } from '@/shared/utils/logger';
 import { credentials, ServiceError } from '@grpc/grpc-js';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { ICourseServiceGateway } from '@/application/ports/course-service.gateway';
 import { CourseServiceClient, Course } from '../generated/course';
 import { courseGrpcServiceConfig } from '@/shared/config/course-service.grpc.config';
-import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
+import { TYPES } from '@/shared/di/types';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 
 @injectable()
 export class GrpcCourseServiceClient implements ICourseServiceGateway {
   private client: CourseServiceClient;
   private address: string;
-  private logger = new Logger(ENROLLMENT_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(GrpcCourseServiceClient.name);
     this.address = courseGrpcServiceConfig.GRPC_COURSE_SERVICE_URL;
     this.client = new CourseServiceClient(
       this.address,

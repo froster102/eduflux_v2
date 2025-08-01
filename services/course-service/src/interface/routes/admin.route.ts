@@ -6,15 +6,13 @@ import { Course } from '@/domain/entity/course.entity';
 import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import { rejectCourseSchema } from '@/infrastructure/http/schema/course.schema';
-import { COURSE_SERVICE } from '@/shared/constants/services';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import Elysia from 'elysia';
 import { inject, injectable } from 'inversify';
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
 
 @injectable()
 export class AdminRoutes {
-  private logger = new Logger(COURSE_SERVICE);
   constructor(
     @inject(TYPES.FileStorageGateway)
     private readonly fileStorageGateway: IFileStorageGateway,
@@ -24,6 +22,7 @@ export class AdminRoutes {
     private readonly approveCourseUseCase: IApproveCourseUseCase,
     @inject(TYPES.RejectCourseUseCase)
     private readonly rejectCourseUseCase: IRejectCourseUseCase,
+    @inject(TYPES.Logger) private readonly logger: ILogger,
   ) {}
 
   register(): Elysia {

@@ -1,7 +1,7 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { injectable } from 'inversify';
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 import { container } from '@/shared/di/container';
-import { Logger } from '@/shared/utils/logger';
 import { TYPES } from '@/shared/di/types';
 import { grpcServerConfig } from '@/shared/config/server.grpc.config';
 import { PaymentServiceService } from './generated/payment';
@@ -9,7 +9,9 @@ import { GrpcPaymentService } from './services/payment.service';
 
 @injectable()
 export class GrpcServer {
-  private logger = new Logger('PAYMENT_SERVICE');
+  private logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('GRPC_SERVER');
   private server: Server;
   private port: number;
 

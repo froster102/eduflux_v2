@@ -1,3 +1,4 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import {
   CheckoutSessionResponse,
   InitiateCheckoutSessionDto,
@@ -5,17 +6,17 @@ import {
   StripeWebhookEvent,
 } from '@/application/ports/stripe.gateway';
 import { stripeConfig } from '@/shared/config/stripe.config';
-import { PAYMENT_SERVICE } from '@/shared/constants/service';
-import { Logger } from '@/shared/utils/logger';
 import Stripe from 'stripe';
 import { StripeException } from '../exception/stripe.exception';
+import { inject } from 'inversify';
+import { TYPES } from '@/shared/di/types';
 
 export class StripeClient implements IStripeGateway {
   private stripe: Stripe;
   private webhookSecret: string;
-  private logger = new Logger(PAYMENT_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(StripeClient.name);
     this.stripe = new Stripe(stripeConfig.STRIPE_API_SECRET, {
       apiVersion: '2025-06-30.basil',
       typescript: true,

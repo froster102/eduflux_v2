@@ -1,11 +1,10 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type { ICreateUserProgressUseCase } from '@/application/use-cases/interface/create-user-progress.interface';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
 import { Consumer, EachMessagePayload } from 'kafkajs';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
-import { USER_SERVICE } from '@/shared/constants/services';
 import { ENROLLMENTS_TOPIC } from '@/shared/constants/topics';
 import { kafka } from '@/infrastructure/messaging/kafka/kafka';
 import { USER_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
@@ -24,13 +23,14 @@ export interface IEnrollmentEvent {
 
 export class EnrollmentEventsConsumer {
   private consumer: Consumer;
-  private logger = new Logger(USER_SERVICE);
   private topic: string;
 
   constructor(
+    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.CreateUserProgressUseCase)
     private readonly createUserProgressUseCase: ICreateUserProgressUseCase,
   ) {
+    this.logger = logger.fromContext(EnrollmentEventsConsumer.name);
     this.topic = ENROLLMENTS_TOPIC;
     this.consumer = kafka.consumer({
       groupId: USER_SERVICE_CONSUMER_GROUP,

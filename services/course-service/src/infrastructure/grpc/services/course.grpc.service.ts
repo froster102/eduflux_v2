@@ -1,4 +1,3 @@
-import { Logger } from '@/shared/utils/logger';
 import {
   Course,
   CourseServiceServer,
@@ -11,9 +10,11 @@ import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import type { IGetPublishedCourseInfoUseCase } from '@/application/use-cases/interface/get-published-course-info.interface';
+import { container } from '@/shared/di/container';
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
 
 export class GrpcCourseService implements CourseServiceServer {
-  private logger = new Logger('GrpcCourseService');
+  private logger = container.get<ILogger>(TYPES.Logger);
 
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;

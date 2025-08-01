@@ -5,12 +5,10 @@ import type {
   IUpdateInstructorWeeklyAvailabilityUseCase,
   UpdateInstructorWeeklyAvailabilityInput,
 } from './interface/update-instructor-weekly-availablity.interface';
-
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { Role } from '@/shared/constants/role';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { InvalidInputException } from '../exceptions/invalid-input.exception';
-import { Logger } from '@/shared/utils/logger';
-import { SESSION_SERVICE } from '@/shared/constants/services';
 import { v4 as uuidv4 } from 'uuid';
 import { Slot } from '@/domain/entities/slot.entity';
 import { inject } from 'inversify';
@@ -22,15 +20,16 @@ import { convertLoacalTimeAndDateToUtc } from '@/shared/utils/date';
 export class UpdateInstructorWeeklyAvailabilityUseCase
   implements IUpdateInstructorWeeklyAvailabilityUseCase
 {
-  private logger = new Logger(SESSION_SERVICE);
-
   constructor(
+    @inject(TYPES.Logger) private logger: ILogger,
     @inject(TYPES.SlotRepository)
     private readonly slotRepository: ISlotRepository,
     @inject(TYPES.ScheduleSettingRepository)
     private readonly scheduleSettingRepository: IScheduleSettingRepository,
     @inject(TYPES.UnitOfWork) private readonly uow: IUnitOfWork,
-  ) {}
+  ) {
+    this.logger.fromContext(UpdateInstructorWeeklyAvailabilityUseCase.name);
+  }
 
   async execute(
     updateInstructorWeeklyAvailabilityInput: UpdateInstructorWeeklyAvailabilityInput,

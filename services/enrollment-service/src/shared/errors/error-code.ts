@@ -1,6 +1,8 @@
+import type { ILogger } from '../common/interface/logger.interface';
 import { status as grpcStatus } from '@grpc/grpc-js';
-import { Logger } from '../utils/logger';
 import httpStatus from 'http-status';
+import { container } from '../di/container';
+import { TYPES } from '../di/types';
 
 export enum AppErrorCode {
   INVALID_INPUT = 'INVALID_INPUT',
@@ -9,6 +11,12 @@ export enum AppErrorCode {
   NOT_FOUND = 'NOT_FOUND',
   UNAUTHORIZED = 'UNAUTHORIZED',
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+}
+
+function getLogger() {
+  if (container) {
+    return container.get<ILogger>(TYPES.Logger).fromContext('ERROR_CODE');
+  }
 }
 
 export const PUBLIC_ERROR_MESSAGES: Record<AppErrorCode, string> = {
@@ -38,9 +46,7 @@ export const getHttpErrorCode = (code: AppErrorCode | string): number => {
     }
   }
 
-  const logger = new Logger('ERROR_HANDLER');
-
-  logger.warn(
+  getLogger()!.warn(
     `[ERROR_HANDLER] Unknown application error code '${code}'. Defaulting to 500.`,
   );
   return httpStatus.INTERNAL_SERVER_ERROR;
@@ -62,9 +68,9 @@ export const getGrpcStatusCode = (code: AppErrorCode | string): number => {
       return statusCode;
     }
 
-    const logger = new Logger('ERROR_HANDLER');
-
-    logger.warn(`[ERROR_HANDLER] Unknown application error code '${code}'`);
+    getLogger()!.warn(
+      `[ERROR_HANDLER] Unknown application error code '${code}'`,
+    );
   }
   return grpcStatus.INTERNAL;
 };

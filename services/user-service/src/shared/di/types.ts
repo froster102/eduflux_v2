@@ -44,4 +44,7 @@ export const TYPES = {
   //Mappers
   ProgressMapper: Symbol.for('ProgressMapper'),
   UserMapper: Symbol.for('UserMapper'),
+
+  //Logger
+  Logger: Symbol.for('Logger'),
 };

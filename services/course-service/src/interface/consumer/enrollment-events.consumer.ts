@@ -1,12 +1,11 @@
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
 import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
 import { Consumer, EachMessagePayload } from 'kafkajs';
 import { kafka } from '@/infrastructure/messaging/kafka/setup';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
-import { COURSE_SERVICE } from '@/shared/constants/services';
 import { COURSE_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { ENROLLMENTS_TOPIC } from '@/shared/constants/topics';
@@ -24,17 +23,18 @@ export interface IEnrollmentEvent {
 
 export class EnrollmentEventsConsumer {
   private consumer: Consumer;
-  private logger = new Logger(COURSE_SERVICE);
   private topic: string;
 
   constructor(
     @inject(TYPES.UpdateCourseEnrollmentCountUseCase)
     private readonly updateCourseEnrollmentCountUseCase: IUseCase<string, void>,
+    @inject(TYPES.Logger) private readonly logger: ILogger,
   ) {
     this.topic = ENROLLMENTS_TOPIC;
     this.consumer = kafka.consumer({
       groupId: COURSE_SERVICE_CONSUMER_GROUP,
     });
+    this.logger = logger.fromContext(EnrollmentEventsConsumer.name);
   }
 
   async connect() {

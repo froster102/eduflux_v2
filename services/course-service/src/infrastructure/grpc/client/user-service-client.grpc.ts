@@ -4,7 +4,6 @@ import {
   UserResponse,
   UserServiceClient,
 } from '../generated/user';
-import { Logger } from '@/shared/utils/logger';
 import { credentials, ServiceError } from '@grpc/grpc-js';
 import { injectable } from 'inversify';
 import { userServiceGrpcConfig } from '@/shared/config/user-service.grpc.config';
@@ -13,7 +12,7 @@ import { userServiceGrpcConfig } from '@/shared/config/user-service.grpc.config'
 export class GrpcUserServiceClient implements IUserServiceGateway {
   private client: UserServiceClient;
   private address: string;
-  private logger = new Logger('GRPC_USER_SERVICE_CLIENT');
+  // private logger = new Logger('GRPC_USER_SERVICE_CLIENT');
 
   constructor() {
     this.address = userServiceGrpcConfig.GRPC_USER_SERVICE_URL;
@@ -21,9 +20,9 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
       this.address,
       credentials.createInsecure(),
     );
-    this.logger.info(
-      `gRPC user service client initialized, target:${this.address}`,
-    );
+    // this.logger.info(
+    //   `gRPC user service client initialized, target:${this.address}`,
+    // );
   }
 
   getUserDetails(userId: string): Promise<UserProfile> {
@@ -34,7 +33,7 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
         request,
         (error: ServiceError | null, response: UserResponse | null) => {
           if (error) {
-            this.logger.error(`Error fetching user details ${error.message}`);
+            // this.logger.error(`Error fetching user details ${error.message}`);
             reject(new Error(error.message));
           }
           if (response) {

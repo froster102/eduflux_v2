@@ -1,22 +1,22 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import {
   GetUserRequest,
   UserResponse,
   UserServiceClient,
 } from '../generated/user';
-import { Logger } from '@/shared/utils/logger';
 import { credentials, ServiceError } from '@grpc/grpc-js';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { IUserServiceGateway } from '@/application/ports/user-service.gateway';
 import { userGrpcServiceConfig } from '@/shared/config/user-service.grpc.config';
-import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
+import { TYPES } from '@/shared/di/types';
 
 @injectable()
 export class GrpcUserServiceClient implements IUserServiceGateway {
   private client: UserServiceClient;
   private address: string;
-  private logger = new Logger(ENROLLMENT_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(GrpcUserServiceClient.name);
     this.address = userGrpcServiceConfig.GRPC_USER_SERVICE_URL;
     this.client = new UserServiceClient(
       this.address,

@@ -1,4 +1,5 @@
 import type { IGetUserUseCase } from '@/application/use-cases/interface/get-user.interface';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type {
   CreateUserInput,
   ICreateUserUseCase,
@@ -7,7 +8,6 @@ import type { IUpdateUserUseCase } from '@/application/use-cases/interface/updat
 import type { IGetUserSessionPriceUseCase } from '@/application/use-cases/interface/get-user-session-price.interface';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import {
   CreateUserRequest,
   GetInstructorSessingPricingRequest,
@@ -25,12 +25,11 @@ import { Role } from '@/shared/types/role';
 
 @injectable()
 export class UserGrpcService implements UserServiceServer {
-  private logger = new Logger('UserGrpcService');
-
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;
 
   constructor(
+    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.GetUserUseCase)
     private readonly getUserUseCase: IGetUserUseCase,
     @inject(TYPES.CreateUserUseCase)
@@ -39,7 +38,9 @@ export class UserGrpcService implements UserServiceServer {
     private readonly updateUserUseCase: IUpdateUserUseCase,
     @inject(TYPES.GetUserSessionPriceUseCase)
     private readonly getUserSessionPriceUseCase: IGetUserSessionPriceUseCase,
-  ) {}
+  ) {
+    this.logger = logger.fromContext(UserGrpcService.name);
+  }
 
   createUser(
     call: ServerUnaryCall<CreateUserRequest, UserResponse>,

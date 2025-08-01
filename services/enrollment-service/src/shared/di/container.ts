@@ -14,6 +14,7 @@ import { GrpcEnrollmentService } from '@/infrastructure/grpc/services/enrollment
 import { GetUserEnrollmentsUseCase } from '@/application/use-cases/get-user-enrollments.use-case';
 import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-producer.adapter';
 import { CheckUserEnrollmentUseCase } from '@/application/use-cases/check-user-enrollment.use-case';
+import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
 
 const container = new Container();
 
@@ -49,5 +50,8 @@ container.bind(TYPES.EnrollmentMapper).to(EnrollmentMapper);
 
 //Database
 container.bind(TYPES.DatabaseClient).to(DatabaseClient);
+
+//Logger
+container.bind(TYPES.Logger).to(WinstonLogger);
 
 export { container };

@@ -1,16 +1,17 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { injectable } from 'inversify';
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 import { container } from '@/shared/di/container';
-import { Logger } from '@/shared/utils/logger';
 import { TYPES } from '@/shared/di/types';
 import { grpcServerConfig } from '@/shared/config/server.grpc.config';
 import { GrpcEnrollmentService } from './services/enrollment.grpc.service';
 import { EnrollmentServiceService } from './generated/enrollment';
-import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
 
 @injectable()
 export class GrpcServer {
-  private logger = new Logger(ENROLLMENT_SERVICE);
+  private logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('GRPC_SERVER');
   private server: Server;
   private port: number;
 

@@ -20,6 +20,7 @@ import { GrpcUserServiceClient } from '@/infrastructure/grpc/client/user-service
 import { GrpcPaymentServiceClient } from '@/infrastructure/grpc/client/payment-service.grpc';
 import { GetInstructorAvailableSlotsUseCase } from '@/application/use-cases/get-instructor-available-slots.use-case';
 import { PaymentEventsConsumer } from '@/interface/consumer/payment-events.consumer';
+import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
 
 const container = new Container();
 
@@ -87,5 +88,8 @@ container.bind(TYPES.PaymentEventsConsumer).to(PaymentEventsConsumer);
 
 //Cron
 container.bind(TYPES.CronServices).to(CronServices);
+
+//Logger
+container.bind(TYPES.Logger).to(WinstonLogger);
 
 export { container };

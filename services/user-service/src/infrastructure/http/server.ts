@@ -1,4 +1,4 @@
-import { Logger } from 'src/shared/utils/logger';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import Elysia from 'elysia';
 import { httpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { errorHandler } from './middlewares/error-handler.middleware';
@@ -10,9 +10,9 @@ import { IRoute } from '@/interface/routes/interface/routes.interface';
 export class Server {
   private app: Elysia;
   private port: number;
-  private logger = new Logger(USER_SERVICE);
-  private userRoutes: IRoute<Elysia>;
-  private progressRoutes: IRoute<Elysia>;
+  private logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('HTTP_SERVER');
 
   constructor(port: number) {
     this.app = new Elysia();
@@ -22,6 +22,7 @@ export class Server {
   }
 
   private setupMiddlewares(): void {
+    this.app.use(correlationIdSetupMiddleware);
     this.app.use(httpLoggerMiddleware);
     this.app.use(errorHandler);
   }

@@ -1,10 +1,9 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type { ICompleteEnrollmentUseCase } from '@/application/use-cases/interface/complete-enrollment.interface';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
 import { Consumer, EachMessagePayload } from 'kafkajs';
 import { ENROLLMENT_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
-import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
 import { kafka } from '@/infrastructure/messaging/kafka/setup';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
@@ -30,13 +29,14 @@ export interface IPaymentEvent {
 
 export class PaymentEventsConsumer {
   private consumer: Consumer;
-  private logger = new Logger(ENROLLMENT_SERVICE);
   private topic: string;
 
   constructor(
     @inject(TYPES.CompleteEnrollmentUseCase)
     private readonly completeEnrollmentUseCase: ICompleteEnrollmentUseCase,
+    @inject(TYPES.Logger) private readonly logger: ILogger,
   ) {
+    this.logger = logger.fromContext(PaymentEventsConsumer.name);
     this.topic = PAYMENTS_TOPIC;
     this.consumer = kafka.consumer({
       groupId: ENROLLMENT_SERVICE_CONSUMER_GROUP,

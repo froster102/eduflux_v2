@@ -1,4 +1,4 @@
-import { Logger } from 'src/shared/utils/logger';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import Elysia from 'elysia';
 import { TYPES } from '@/shared/di/types';
 import { container } from '@/shared/di/container';
@@ -10,7 +10,9 @@ import { PaymentRoutes } from '@/interface/routes/payment.route';
 export class Server {
   private app: Elysia;
   private port: number;
-  private logger = new Logger(PAYMENT_SERVICE);
+  private logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('HTTP_SERVER');
   private paymentRoutes: PaymentRoutes;
 
   constructor(port: number) {

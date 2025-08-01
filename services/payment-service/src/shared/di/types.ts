@@ -21,4 +21,7 @@ export const TYPES = {
 
   //mappers
   PaymentMapper: Symbol.for('PaymentMapper'),
+
+  //Logger
+  Logger: Symbol.for('Logger'),
 };

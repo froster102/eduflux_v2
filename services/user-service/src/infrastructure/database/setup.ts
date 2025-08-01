@@ -1,10 +1,14 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
 import { dbConfig } from '@/shared/config/db.config';
-import { Logger } from '@/shared/utils/logger';
+import { container } from '@/shared/di/container';
 import mongoose from 'mongoose';
+import { TYPES } from '@/shared/di/types';
 
 export class DatabaseClient {
-  private readonly logger = new Logger('DATABASE');
+  private readonly logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('DATABASE');
 
   async connect(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison

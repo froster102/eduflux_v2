@@ -1,3 +1,4 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type { ICheckUserEnrollmentUseCase } from '@/application/use-cases/interface/check-user-enrollment.inerface';
 import type { IGetUserEnrollmentsUseCase } from '@/application/use-cases/interface/get-user-enrollments.interface';
 import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
@@ -8,8 +9,6 @@ import {
   EnrollmentServiceServer,
   GetUserEnrollmentsRequest,
 } from '../generated/enrollment';
-import { Logger } from '@/shared/utils/logger';
-import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { DomainException } from '@/domain/exceptions/domain.exception';
@@ -17,14 +16,15 @@ import { getGrpcStatusCode } from '@/shared/errors/error-code';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 
 export class GrpcEnrollmentService implements EnrollmentServiceServer {
-  private logger = new Logger(ENROLLMENT_SERVICE);
-
   constructor(
     @inject(TYPES.CheckUserEnrollmentUseCase)
     private readonly checkUserEnrollmenntUseCase: ICheckUserEnrollmentUseCase,
     @inject(TYPES.GetUserEnrollmentsUseCase)
     private readonly getUserEnrollmentsUseCase: IGetUserEnrollmentsUseCase,
-  ) {}
+    @inject(TYPES.Logger) private readonly logger: ILogger,
+  ) {
+    this.logger = logger.fromContext(GrpcEnrollmentService.name);
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;

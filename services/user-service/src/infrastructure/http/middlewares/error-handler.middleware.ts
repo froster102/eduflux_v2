@@ -1,3 +1,4 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { Elysia } from 'elysia';
 import httpStatus from 'http-status';
 import { ApplicationException } from '@/application/exceptions/application.exception';
@@ -6,11 +7,11 @@ import {
   getHttpErrorCode,
   PUBLIC_ERROR_MESSAGES,
 } from '@/shared/errors/error-code';
-import { Logger } from '@/shared/utils/logger';
-import { USER_SERVICE } from '@/shared/constants/services';
 import { z, ZodError } from 'zod/v4';
+import { container } from '@/shared/di/container';
+import { TYPES } from '@/shared/di/types';
 
-const logger = new Logger(USER_SERVICE);
+const logger = container.get<ILogger>(TYPES.Logger).fromContext('HTTP');
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, error }) => {

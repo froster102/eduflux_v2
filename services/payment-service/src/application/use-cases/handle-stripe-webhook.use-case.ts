@@ -1,3 +1,4 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type { IPaymentRepository } from '@/domain/repositories/transaction.repository';
 import type {
   IStripeGateway,
@@ -16,22 +17,22 @@ import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { AppErrorCode } from '@/shared/error/error-code';
 import { v4 as uuidV4 } from 'uuid';
-import { Logger } from '@/shared/utils/logger';
 
-import { PAYMENT_SERVICE } from '@/shared/constants/service';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
 import { ApplicationException } from '../exceptions/application.exception';
 
 export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
-  private logger = new Logger(PAYMENT_SERVICE);
   constructor(
+    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.PaymentRepository)
     private readonly paymentRepository: IPaymentRepository,
     @inject(TYPES.StripeGateway) private readonly stipeGateway: IStripeGateway,
     @inject(TYPES.MessageBrokerGateway)
     private readonly messageBrokerGateway: IMessageBrokerGatway,
-  ) {}
+  ) {
+    this.logger = logger.fromContext(HandleStripeWebhookUseCase.name);
+  }
 
   async execute(
     input: HandleStripeWebhookInput,

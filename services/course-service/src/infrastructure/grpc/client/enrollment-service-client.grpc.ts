@@ -10,14 +10,13 @@ import {
   EnrollmentServiceClient,
   GetUserEnrollmentsRequest,
 } from '../generated/enrollment';
-import { Logger } from '@/shared/utils/logger';
 import { enrollmentServiceGrpcConfig } from '@/shared/config/enrollment-service.grpc.config';
 import { credentials, ServiceError } from '@grpc/grpc-js';
 
 export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
   private client: EnrollmentServiceClient;
   private address: string;
-  private logger = new Logger('GRPC_ENROLLMENT_SERVICE');
+  // private logger = new Logger('GRPC_ENROLLMENT_SERVICE');
 
   constructor() {
     this.address = enrollmentServiceGrpcConfig.GRPC_ENROLLMENT_SERVICE_URL;
@@ -25,9 +24,9 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
       this.address,
       credentials.createInsecure(),
     );
-    this.logger.info(
-      `gRPC enrollment service client initialized, target:${this.address}`,
-    );
+    // this.logger.info(
+    //   `gRPC enrollment service client initialized, target:${this.address}`,
+    // );
   }
 
   getUserEnrollments(
@@ -64,9 +63,9 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
         request,
         (error: ServiceError | null, response: Enrollments) => {
           if (error) {
-            this.logger.error(
-              `Error fetching user enrollment details ${error.message}`,
-            );
+            // this.logger.error(
+            //   `Error fetching user enrollment details ${error.message}`,
+            // );
             reject(new Error(error.message));
           }
           if (response) {
@@ -89,9 +88,9 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
         { userId, courseId },
         (error: ServiceError | null, response: CheckUserEnrollmentResponse) => {
           if (error) {
-            this.logger.error(
-              `Error fetching user enrollment details ${error.message}`,
-            );
+            // this.logger.error(
+            //   `Error fetching user enrollment details ${error.message}`,
+            // );
             reject(new Error(error.message));
           }
           if (response) {

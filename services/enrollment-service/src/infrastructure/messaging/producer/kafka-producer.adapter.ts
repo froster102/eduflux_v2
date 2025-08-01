@@ -1,25 +1,30 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { Kafka, Producer } from 'kafkajs';
 import { tryCatch } from '@/shared/utils/try-catch';
-import { Logger } from '@/shared/utils/logger';
 import {
   IEnrollmentEvent,
   IMessageBrokerGatway,
 } from '@/application/ports/message-broker.gateway';
 import { kafka } from '../kafka/setup';
-import { ENROLLMENT_SERVICE } from '@/shared/constants/service';
+import { asyncLocalStorage } from '@/shared/utils/store';
+import { v4 as uuidV4 } from 'uuid';
+import { inject } from 'inversify';
+import { TYPES } from '@/shared/di/types';
 
 export class KafkaProducerAdapter implements IMessageBrokerGatway {
   private kafka: Kafka;
   private producer: Producer;
-  private logger = new Logger(ENROLLMENT_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(KafkaProducerAdapter.name);
     this.kafka = kafka;
     this.producer = this.kafka.producer();
   }
 
   async publish(topic: string, event: IEnrollmentEvent): Promise<void> {
     const messageValue = JSON.stringify(event);
+    const correlationId =
+      asyncLocalStorage.getStore()?.get('correlationId') || uuidV4();
 
     try {
       await this.producer.send({
@@ -29,7 +34,7 @@ export class KafkaProducerAdapter implements IMessageBrokerGatway {
             key: event.type,
             value: messageValue,
             headers: {
-              'x-correlation-id': event.correlationId || '',
+              'x-correlation-id': correlationId,
             },
           },
         ],

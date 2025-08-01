@@ -1,9 +1,10 @@
-import { USER_SERVICE } from '@/shared/constants/services';
-import { Logger } from '@/shared/utils/logger';
 import type { Elysia } from 'elysia';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
+import { container } from '@/shared/di/container';
+import { TYPES } from '@/shared/di/types';
 
 export const httpLoggerMiddleware = (app: Elysia) => {
-  const logger = new Logger(USER_SERVICE);
+  const logger = container.get<ILogger>(TYPES.Logger).fromContext('HTTP');
 
   const start = Date.now();
 

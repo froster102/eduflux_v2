@@ -1,6 +1,6 @@
 import type { IConfirmSessionBookingUseCase } from '@/application/use-cases/interface/confirm-session-booking.interface';
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { TYPES } from '@/shared/di/types';
-import { Logger } from '@/shared/utils/logger';
 import { inject } from 'inversify';
 import { Consumer, EachMessagePayload } from 'kafkajs';
 import { kafka } from '@/infrastructure/messaging/kafka/setup';
@@ -8,7 +8,6 @@ import { tryCatch } from '@/shared/utils/try-catch';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';
 import { PaymentPurpose } from '@/application/ports/payment-service.gateway';
-import { SESSION_SERVICE } from '@/shared/constants/services';
 import { PAYMENTS_TOPIC } from '@/shared/constants/topics';
 import { SESSION_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumer';
 
@@ -31,13 +30,14 @@ export interface IPaymentEvent {
 
 export class PaymentEventsConsumer {
   private consumer: Consumer;
-  private logger = new Logger(SESSION_SERVICE);
   private topic: string;
 
   constructor(
+    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.ConfirmSessionBookingUseCase)
     private readonly confirmSessionBookingUseCase: IConfirmSessionBookingUseCase,
   ) {
+    this.logger = logger.fromContext(PaymentEventsConsumer.name);
     this.topic = PAYMENTS_TOPIC;
     this.consumer = kafka.consumer({
       groupId: SESSION_SERVICE_CONSUMER_GROUP,

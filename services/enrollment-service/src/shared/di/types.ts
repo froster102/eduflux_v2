@@ -28,4 +28,7 @@ export const TYPES = {
 
   //Mappers
   EnrollmentMapper: Symbol.for('EnrollmentMapper'),
+
+  //Logger
+  Logger: Symbol.for('Logger'),
 };

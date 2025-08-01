@@ -1,10 +1,14 @@
 import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
 import { dbConfig } from '@/shared/config/db.config';
-import { Logger } from '@/shared/utils/logger';
+import { container } from '@/shared/di/container';
+import { TYPES } from '@/shared/di/types';
 import mongoose from 'mongoose';
 
 export class DatabaseClient {
-  private readonly logger = new Logger('DATABASE');
+  private readonly logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('DATABASE');
 
   async connect(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
@@ -14,7 +18,7 @@ export class DatabaseClient {
     }
 
     try {
-      await mongoose.connect(dbConfig.MONGO_URI as string);
+      await mongoose.connect(dbConfig.MONGO_URI);
       this.logger.info(
         `Eshtablished connection to database @${mongoose.connection.host}:${mongoose.connection.port}`,
       );

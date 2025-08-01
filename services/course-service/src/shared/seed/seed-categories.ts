@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import { dbConfig } from '../config/db.config';
-import { Logger } from '../utils/logger';
 import Category from '@/infrastructure/database/models/category.model';
+import { container } from '../di/container';
+import type { ILogger } from '../common/interfaces/logger.interface';
+import { TYPES } from '../di/types';
 
 const seedCategories = [
   {
@@ -72,9 +74,9 @@ const seedCategories = [
 ];
 
 async function main() {
-  const logger = new Logger('SEED');
+  const logger = container.get<ILogger>(TYPES.Logger).fromContext('SEED');
   try {
-    await mongoose.connect(dbConfig.MONGO_URI!);
+    await mongoose.connect(dbConfig.MONGO_URI);
     logger.info('Connected to database for seeding');
     await Category.insertMany(seedCategories);
     logger.info('Categories seeded sucessfully.');

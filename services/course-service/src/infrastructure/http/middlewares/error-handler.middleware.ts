@@ -8,10 +8,11 @@ import {
   PUBLIC_ERROR_MESSAGES,
 } from '@/shared/errors/error-code';
 import z, { ZodError } from 'zod/v4';
-import { COURSE_SERVICE } from '@/shared/constants/services';
-import { Logger } from '@/shared/utils/logger';
+import { container } from '@/shared/di/container';
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
+import { TYPES } from '@/shared/di/types';
 
-const logger = new Logger(COURSE_SERVICE);
+const logger = container.get<ILogger>(TYPES.Logger).fromContext('HTTP');
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, error }): HttpResponse<object> => {

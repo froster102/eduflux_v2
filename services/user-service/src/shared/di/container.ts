@@ -23,6 +23,7 @@ import { GetUserSessionPriceUseCase } from '@/application/use-cases/get-user-ses
 import { UpdateUserSessionPriceUseCase } from '@/application/use-cases/update-user-session-price.use-case';
 import { GetInstructorsUseCase } from '@/application/use-cases/get-instructors.use-case';
 import { UserMapper } from '@/infrastructure/mappers/user.mapper';
+import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
 
 const container = new Container();
 
@@ -76,5 +77,8 @@ container.bind(TYPES.GrpcServer).to(GrpcServer);
 //Mapper
 container.bind(TYPES.ProgressMapper).to(ProgressMapper);
 container.bind(TYPES.UserMapper).to(UserMapper);
+
+//Logger
+container.bind(TYPES.Logger).to(WinstonLogger);
 
 export { container };

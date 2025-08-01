@@ -1,9 +1,14 @@
 import { LogEntry, logLevel } from 'kafkajs';
-import { Logger } from './logger';
+import type { ILogger } from '../common/interfaces/logger.interface';
+import { container } from '../di/container';
+import { TYPES } from '../di/types';
 
-const logger = new Logger('KAFKA_JS');
-
-const kafkaLogLevelToWinston: Record<string, string> = {
+function getLogger() {
+  if (container) {
+    return container.get<ILogger>(TYPES.Logger).fromContext('KAFKA');
+  }
+}
+const kafkaLogLevelToWinston: Record<number, keyof ILogger> = {
   [logLevel.ERROR]: 'error',
   [logLevel.WARN]: 'warn',
   [logLevel.INFO]: 'info',
@@ -15,6 +20,24 @@ export const kafkaLogCreator = (): ((entry: LogEntry) => void) => {
     const { message, ...meta } = log;
     const winstonLevel = kafkaLogLevelToWinston[level];
 
-    logger.log(winstonLevel, `[${namespace}] ${message}`);
+    let combinedMeta = {};
+
+    if (typeof getLogger()![winstonLevel] === 'function') {
+      combinedMeta = {
+        namespace,
+        ...meta,
+      };
+
+      if (winstonLevel === 'error' && meta.error instanceof Error) {
+        getLogger()!.error(message, combinedMeta);
+      } else {
+        getLogger()![winstonLevel](message, combinedMeta);
+      }
+    } else {
+      getLogger()!.warn(
+        `Unknown Kafka log level: ${level}. Message: [${namespace}] ${message}`,
+        combinedMeta,
+      );
+    }
   };
 };

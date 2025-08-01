@@ -45,6 +45,7 @@ import { GrpcEnrollmentServiceClient } from '@/infrastructure/grpc/client/enroll
 import { UpdateEnrollmentCountUseCase } from '@/application/use-cases/update-enrollment-count.use-case';
 import { EnrollmentEventsConsumer } from '@/interface/consumer/enrollment-events.consumer';
 import { GetSubscriberLectureUseCase } from '@/application/use-cases/get-subscriber-lecture.use-case';
+import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
 
 const container = new Container();
 
@@ -122,6 +123,9 @@ container.bind(TYPES.CategoryRepository).to(MongoCategoryRepository);
 
 //Consumer
 container.bind(TYPES.EnrollmentEventsConsumer).to(EnrollmentEventsConsumer);
+
+//Logger
+container.bind(TYPES.Logger).to(WinstonLogger).inSingletonScope();
 
 //mappers
 container.bind(TYPES.CourseMapper).to(CourseMapper).inSingletonScope();

@@ -60,6 +60,9 @@ export const TYPES = {
   //Grpc Services
   GrpcCourseService: Symbol.for('GrpcCourseService'),
 
+  //Logger
+  Logger: Symbol.for('Logger'),
+
   //Mappers
   CourseMapper: Symbol.for('CourseMapper'),
   ChapterMapper: Symbol.for('SectionMapper'),

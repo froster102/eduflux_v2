@@ -1,5 +1,5 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import Elysia from 'elysia';
-import { Logger } from '@/shared/utils/logger';
 import { SESSION_SERVICE } from '@/shared/constants/services';
 import { TYPES } from '@/shared/di/types';
 import { httpLoggerMiddleware } from './middlewares/http-logger.middleware';
@@ -10,7 +10,9 @@ import { ScheduleRoutes } from '@/interface/routes/schedule.routes';
 export class Server {
   private app: Elysia;
   private port: number;
-  private logger = new Logger(SESSION_SERVICE);
+  private logger = container
+    .get<ILogger>(TYPES.Logger)
+    .fromContext('HTTP_SERVER');
 
   constructor(port: number) {
     this.app = new Elysia();

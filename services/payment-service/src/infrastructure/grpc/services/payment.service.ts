@@ -1,3 +1,4 @@
+import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type { IInitiatePaymentUseCase } from '@/application/use-cases/interface/initiate-payment.interface';
 import { inject } from 'inversify';
 import {
@@ -12,8 +13,6 @@ import {
   ServiceError,
   status,
 } from '@grpc/grpc-js';
-import { Logger } from '@/shared/utils/logger';
-import { PAYMENT_SERVICE } from '@/shared/constants/service';
 import { Currency } from '@/shared/constants/currency';
 import { PaymentPurpose } from '@/domain/entities/transaction.entity';
 import { DomainException } from '@/domain/exception/domain.exception';
@@ -21,14 +20,15 @@ import { getGrpcStatusCode } from '@/shared/error/error-code';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 
 export class GrpcPaymentService implements PaymentServiceServer {
-  private logger = new Logger(PAYMENT_SERVICE);
-
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;
   constructor(
+    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.InitiatePaymentUseCase)
     private readonly initialPaymentUseCase: IInitiatePaymentUseCase,
-  ) {}
+  ) {
+    this.logger = logger.fromContext(GrpcPaymentService.name);
+  }
 
   initiatePayment(
     call: ServerUnaryCall<InitiatePaymentRequest, InitiatePaymentResponse>,

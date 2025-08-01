@@ -1,19 +1,21 @@
 import Elysia from 'elysia';
 import { httpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { errorHandler } from './middlewares/error-handler.middleware';
-import { Logger } from '@/shared/utils/logger';
 import { container } from '@/shared/di/container';
-import { COURSE_SERVICE } from '@/shared/constants/services';
 import { AdminRoutes } from '@/interface/routes/admin.route';
 import { TYPES } from '@/shared/di/types';
 import { InstructorRoutes } from '@/interface/routes/course.routes';
 import { LearnerRoutes } from '@/interface/routes/learner.routes';
 import { CourseRoutes } from '@/interface/routes/user.routes';
+import { correlationIdSetupMiddleware } from './middlewares/correlation-id-setup.middleware';
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
+import { injectable } from 'inversify';
 
+@injectable()
 export class Server {
   private app: Elysia;
   private port: number;
-  private logger = new Logger(COURSE_SERVICE);
+  private logger = container.get<ILogger>(TYPES.Logger).fromContext('HTTP');
 
   constructor(port: number) {
     this.app = new Elysia();
@@ -21,6 +23,7 @@ export class Server {
   }
 
   private setupMiddlewares(): void {
+    this.app.use(correlationIdSetupMiddleware);
     this.app.use(httpLoggerMiddleware);
     this.app.use(errorHandler);
   }
@@ -45,7 +48,7 @@ export class Server {
       this.setupRoutes();
 
       this.app.listen(this.port);
-      this.logger.info(`[${COURSE_SERVICE}] listening on port ${this.port}`);
+      this.logger.info(`listening on port ${this.port}`);
     } catch (error) {
       console.error(`Faild to start service`, error);
       process.exit(1);
