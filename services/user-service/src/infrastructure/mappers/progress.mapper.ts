@@ -20,4 +20,8 @@ export class ProgressMapper implements IMapper<Progress, IMongoProgress> {
       completedLectures: raw.completedLectures,
     };
   }
+
+  toDomainArray(raw: IMongoProgress[]): Progress[] {
+    return raw.map((r) => this.toDomain(r));
+  }
 }
