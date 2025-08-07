@@ -1,14 +1,21 @@
 import { DateTime } from 'luxon';
 
-export function getAllTimeZones() {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  const timeZones = (Intl as any).supportedValuesOf('timeZone') as string[];
+export function getCanonicalTimeZone(tz: string): string {
+  return new Intl.DateTimeFormat('en-US', { timeZone: tz }).resolvedOptions()
+    .timeZone;
+}
 
-  return new Set(
-    timeZones.filter((timeZone) => {
-      return timeZone !== 'UTC';
-    }),
-  );
+export function isValidTimeZone(tz: string): boolean {
+  const canonicalTz = getCanonicalTimeZone(tz);
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: canonicalTz });
+    return true;
+  } catch (error) {
+    if (error instanceof RangeError) {
+      return false;
+    }
+    throw error;
+  }
 }
 
 export function convertLoacalTimeAndDateToUtc(

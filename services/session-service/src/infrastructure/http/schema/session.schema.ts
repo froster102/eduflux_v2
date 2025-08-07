@@ -1,4 +1,4 @@
-import { getAllTimeZones } from '@/shared/utils/date';
+import { isValidTimeZone } from '@/shared/utils/date';
 import { parseTime } from '@internationalized/date';
 import { z } from 'zod/v4';
 
@@ -68,7 +68,7 @@ export const availabilitySchema = z.object({
   applyForWeeks: z.number().min(1).max(12),
   timeZone: z.string().refine(
     (val) => {
-      return getAllTimeZones().has(val);
+      return isValidTimeZone(val);
     },
     { error: 'Invalid timezone.' },
   ),
@@ -82,7 +82,7 @@ export const dateSchema = z.object({
   date: z.iso.datetime({ error: 'Invalid date.', local: true }),
   timeZone: z.string().refine(
     (val) => {
-      return getAllTimeZones().has(val);
+      return isValidTimeZone(val);
     },
     { error: 'Invalid timezone.' },
   ),
