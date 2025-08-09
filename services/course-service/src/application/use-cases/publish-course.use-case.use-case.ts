@@ -146,7 +146,10 @@ export class PublishCourseUseCase implements IPublishCourseUseCase {
     }
 
     if (errors.length > 0) {
-      throw new InvalidInputException(JSON.stringify(errors));
+      throw new InvalidInputException(
+        JSON.stringify(errors),
+        JSON.stringify(errors),
+      );
     }
 
     foundCourse.publish();
