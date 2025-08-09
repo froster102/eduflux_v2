@@ -20,6 +20,7 @@ const envSchema = z.object({
 
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),
+  JWT_EXP: z.string({ error: 'JWT_EXP is required' }),
 
   CLIENT_URL: z.string({ error: 'CLIENT_URL is required' }),
 

@@ -15,6 +15,7 @@ import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
 import { TYPES } from '@/shared/di/types';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { ErrorMesssage } from '@/shared/errors/error-message';
+import { envVariables } from '@/shared/validation/env-variables';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,
@@ -88,6 +89,7 @@ export const auth = betterAuth({
                   sessionId: newSession.session.id,
                 };
               },
+              expirationTime: envVariables.JWT_EXP,
               getSubject: () => newSession.user.id,
             },
           });
@@ -146,23 +148,10 @@ export const auth = betterAuth({
           }
         }
       }
-      if (ctx.path === '/get-session') {
-        const session = ctx.context.session;
-        if (session) {
-          const jwtToken = await getJwtToken(ctx, {
-            jwt: {
-              issuer: process.env.JWT_ISS,
-              audience: process.env.JWT_AUD,
-              definePayload() {
-                return {
-                  ...session.user,
-                  sessionId: session.session.id,
-                };
-              },
-              getSubject: () => session.user.id,
-            },
-          });
-          ctx.setCookie('user_jwt', jwtToken, {
+      if (ctx.path === '/token') {
+        const token = (ctx.context.returned as { token: string }).token;
+        if (token) {
+          ctx.setCookie('user_jwt', token, {
             httpOnly: true,
             sameSite: 'None',
             secure: true,
@@ -210,6 +199,7 @@ export const auth = betterAuth({
           ...user,
           sessionId: session.id,
         }),
+        expirationTime: envVariables.JWT_EXP,
       },
     }),
     addRole(),
