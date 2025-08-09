@@ -2,7 +2,7 @@
   "name": "course-service",
   "version": "1.0.50",
   "scripts": {
-    "type:check": "bun run tsc --watch",
+    "type:check": "bun run tsc --noEmit --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun --watch src/main.ts",
     "seed": "bun src/shared/seed/seed-categories.ts",
