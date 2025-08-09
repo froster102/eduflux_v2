@@ -1,5 +1,4 @@
 import type { IGetUserUseCase } from '@/application/use-cases/interface/get-user.interface';
-import type { ILogger } from '@/shared/common/interface/logger.interface';
 import type {
   CreateUserInput,
   ICreateUserUseCase,
@@ -29,7 +28,6 @@ export class UserGrpcService implements UserServiceServer {
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;
 
   constructor(
-    @inject(TYPES.Logger) private readonly logger: ILogger,
     @inject(TYPES.GetUserUseCase)
     private readonly getUserUseCase: IGetUserUseCase,
     @inject(TYPES.CreateUserUseCase)
@@ -38,15 +36,12 @@ export class UserGrpcService implements UserServiceServer {
     private readonly updateUserUseCase: IUpdateUserUseCase,
     @inject(TYPES.GetUserSessionPriceUseCase)
     private readonly getUserSessionPriceUseCase: IGetUserSessionPriceUseCase,
-  ) {
-    this.logger = logger.fromContext(UserGrpcService.name);
-  }
+  ) {}
 
   createUser(
     call: ServerUnaryCall<CreateUserRequest, UserResponse>,
     callback: sendUnaryData<UserResponse>,
   ): void {
-    this.logger.info(`Received request for userId: ${call.request.id}`);
     const createUserDto: CreateUserInput = {
       id: call.request.id,
       firstName: call.request.firstName,
@@ -69,9 +64,6 @@ export class UserGrpcService implements UserServiceServer {
           createdAt: user.createdAt ? user.createdAt.toISOString() : '',
           updatedAt: user.updatedAt ? user.updatedAt.toISOString() : '',
         };
-        this.logger.info(
-          `Successfully created user profile for id: ${call.request.id}`,
-        );
         callback(null, response);
       })
       .catch((error: Error) => {
@@ -83,9 +75,6 @@ export class UserGrpcService implements UserServiceServer {
     call: ServerUnaryCall<UpdateUserRequest, UserResponse>,
     callback: sendUnaryData<UserResponse>,
   ) {
-    this.logger.info(
-      `Received request for user update USER_ID:${call.request.id}`,
-    );
     this.updateUserUseCase
       .execute({
         id: call.request.id,
@@ -98,10 +87,10 @@ export class UserGrpcService implements UserServiceServer {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          image: user.image!,
+          image: user.image || '',
           email: user.email,
-          bio: user.bio!,
-          socialLinks: user.socialLinks!,
+          bio: user.bio || '',
+          socialLinks: user.socialLinks || [],
           createdAt: user.createdAt.toISOString(),
           updatedAt: user.updatedAt.toISOString(),
           roles: user.roles,
@@ -117,7 +106,6 @@ export class UserGrpcService implements UserServiceServer {
     call: ServerUnaryCall<GetUserRequest, UserResponse>,
     callback: sendUnaryData<UserResponse>,
   ): void {
-    this.logger.info(`Received request for userID: ${call.request.userId}`);
     this.getUserUseCase
       .execute(call.request.userId)
       .then((user) => {
@@ -128,7 +116,7 @@ export class UserGrpcService implements UserServiceServer {
           image: user.image!,
           email: user.email,
           bio: user.bio!,
-          socialLinks: user.socialLinks!,
+          socialLinks: user.socialLinks || [],
           createdAt: user.createdAt.toISOString(),
           updatedAt: user.updatedAt.toISOString(),
           roles: user.roles,
@@ -147,7 +135,6 @@ export class UserGrpcService implements UserServiceServer {
     >,
     callback: sendUnaryData<InstructorSessionPricingResponse>,
   ) {
-    this.logger.info(`Received request for userID: ${call.request.userId}`);
     this.getUserSessionPriceUseCase
       .execute({ userId: call.request.userId })
       .then((getUserSessionPriceOutput) => {
@@ -170,7 +157,6 @@ export class UserGrpcService implements UserServiceServer {
     error: Error | ApplicationException | DomainException,
     callback: sendUnaryData<T>,
   ) {
-    this.logger.error(`Error processing request: ${error.message}`);
     if (
       error instanceof ApplicationException ||
       error instanceof DomainException

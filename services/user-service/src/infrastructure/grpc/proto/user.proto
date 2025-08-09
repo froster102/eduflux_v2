@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package users;
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+  rpc GetUser(GetUserRequest) returns (UserResponse);
+  rpc GetInstructorSessingPricing(GetInstructorSessingPricingRequest) returns (InstructorSessionPricingResponse);
+}
+
+message CreateUserRequest {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  repeated string roles = 5;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  repeated string roles = 5;
+}
+
+message GetUserRequest {
+  string userId = 1; 
+}
+
+message UserResponse { 
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  repeated string roles = 5;
+  string image = 6;
+  string bio = 7;
+  repeated SocialLinks socialLinks = 8;
+  string createdAt = 9;
+  string updatedAt = 10;
+}
+
+message SocialLinks {
+  string platform = 1;
+  string url = 2;
+}
+
+message GetInstructorSessingPricingRequest {
+  string userId = 1;
+}
+
+message InstructorSessionPricingResponse {
+  string id = 1;
+  float price = 2;
+  string currency = 3;
+  int32 duration = 4;
+}
