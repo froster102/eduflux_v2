@@ -8,7 +8,7 @@ import { Button } from "@heroui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 
-import { useGetCourseCategories } from "../../hooks/queries";
+import { useGetCourseCategories } from "../../hooks/useGetCourseCategories";
 
 import Uploader from "@/components/FileUploader";
 import { updateCourseSchema } from "@/validations/course";
