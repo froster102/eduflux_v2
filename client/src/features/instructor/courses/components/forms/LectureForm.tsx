@@ -57,6 +57,7 @@ export default function LectureForm({
         name="title"
         placeholder="Enter lecture title"
         type="text"
+        variant="faded"
       />
       <Textarea
         {...register("description")}
@@ -66,6 +67,7 @@ export default function LectureForm({
         label="Description"
         labelPlacement="outside"
         placeholder="What is this lecture about"
+        variant="faded"
       />
       {!updateContent ? (
         previewContent &&

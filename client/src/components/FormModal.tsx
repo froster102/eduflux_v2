@@ -16,9 +16,8 @@ export default function FormModal({
   return (
     <Modal
       backdrop="blur"
-      className="bg-background"
       classNames={{
-        backdrop: "bg-secondary-600/10",
+        backdrop: "bg-background/80 backdrop-opacity-50",
       }}
       isOpen={isOpen}
       placement="top-center"

@@ -36,6 +36,7 @@ export default function ChapterForm({
         name="title"
         placeholder="Enter chapter title"
         type="text"
+        variant="faded"
       />
       <Textarea
         {...register("description")}
@@ -45,6 +46,7 @@ export default function ChapterForm({
         label="Description"
         labelPlacement="outside"
         placeholder="What is this chapter about"
+        variant="faded"
       />
       <div className="ml-auto">
         <Button color="danger" variant="flat" onPress={onCancel}>

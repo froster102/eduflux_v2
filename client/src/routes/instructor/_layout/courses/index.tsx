@@ -9,8 +9,10 @@ import { Spinner } from "@heroui/spinner";
 
 import { SearchIcon } from "@/components/Icons";
 import CourseListCard from "@/features/instructor/courses/components/CourseListCard";
-import CreateCourseModal from "@/features/instructor/courses/components/CreateCourseModal";
 import { useGetInstructorCourses } from "@/features/instructor/courses/hooks/useGetInstructorCourses";
+import FormModal from "@/components/FormModal";
+import CreateCourseForm from "@/features/instructor/courses/components/forms/CreateCourseForm";
+import { useCreateCourse } from "@/features/instructor/courses/hooks/useCreateCourse";
 
 export const Route = createFileRoute("/instructor/_layout/courses/")({
   component: RouteComponent,
@@ -20,6 +22,7 @@ function RouteComponent() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(5);
+  const createCourse = useCreateCourse();
 
   const { data, isLoading } = useGetInstructorCourses({
     page,
@@ -40,6 +43,11 @@ function RouteComponent() {
   );
 
   const totalPages = data ? Math.ceil(data.total / limit) : 0;
+
+  function onCreateCourseHandler(data: CreateCourseFormData) {
+    createCourse.mutate(data);
+    setOpenCreateCourseModal(false);
+  }
 
   return (
     <>
@@ -115,8 +123,17 @@ function RouteComponent() {
           ) : null}
         </div>
       </div>
-      <CreateCourseModal
+
+      <FormModal
+        form={
+          <CreateCourseForm
+            isPending={createCourse.isPending}
+            onCancel={() => setOpenCreateCourseModal(false)}
+            onSubmitHandler={onCreateCourseHandler}
+          />
+        }
         isOpen={openCreateCourseModal}
+        title={`Create your course`}
         onClose={() => setOpenCreateCourseModal(false)}
       />
     </>

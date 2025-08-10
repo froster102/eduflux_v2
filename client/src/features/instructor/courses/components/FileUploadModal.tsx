@@ -18,9 +18,8 @@ export default function FileUploadModal({
   return (
     <Modal
       backdrop="blur"
-      className="dark:bg-secondary-700 bg-secondary-400"
       classNames={{
-        backdrop: "bg-secondary-600/10",
+        backdrop: "bg-background/80 backdrop-opacity-50",
       }}
       isOpen={isOpen}
       placement="top-center"
