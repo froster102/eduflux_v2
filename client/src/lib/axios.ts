@@ -31,13 +31,6 @@ const processQueue = (error: any, token: string | null = null) => {
   failedQueue = [];
 };
 
-// api.interceptors.request.use(
-//   async (config) => {
-//     return config;
-//   },
-//   (error) => Promise.reject(error),
-// );
-
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -52,9 +45,7 @@ api.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
         })
-          .then((token) => {
-            originalRequest.headers["Authorization"] = `Bearer ${token}`;
-
+          .then(() => {
             return api(originalRequest);
           })
           .catch((error) => {
@@ -65,7 +56,7 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const { data } = await auth.getSession();
+        const { data } = await auth.token();
 
         if (!data) {
           throw new Error("Invalid session");

@@ -2,6 +2,7 @@ import { createAuthClient } from "better-auth/react";
 import {
   emailOTPClient,
   inferAdditionalFields,
+  jwtClient,
 } from "better-auth/client/plugins";
 
 export const auth = createAuthClient({
@@ -16,7 +17,6 @@ export const auth = createAuthClient({
       },
     }),
     emailOTPClient(),
+    jwtClient(),
   ],
 });
-
-export const { useSession } = auth;
