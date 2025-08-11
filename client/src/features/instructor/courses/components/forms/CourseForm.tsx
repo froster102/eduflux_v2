@@ -10,10 +10,10 @@ import React from "react";
 
 import { useGetCourseCategories } from "../../hooks/useGetCourseCategories";
 
-import Uploader from "@/components/FileUploader";
 import { updateCourseSchema } from "@/validations/course";
 import RichTextEditor from "@/components/text-editor/RichTextEditor";
 import { IMAGE_BASE_URL } from "@/config/image";
+import FileUploader from "@/components/FileUploader";
 
 export default function CourseForm({
   onSubmitHandler,
@@ -61,6 +61,7 @@ export default function CourseForm({
           name="title"
           placeholder="Enter your course title"
           type="text"
+          variant="faded"
         />
       </div>
       <div className="w-full">
@@ -75,6 +76,7 @@ export default function CourseForm({
               labelPlacement="outside"
               placeholder="Select level of the course"
               selectedKeys={new Set([field.value as string])}
+              variant="faded"
               onSelectionChange={(value) => {
                 field.onChange(value.anchorKey);
               }}
@@ -118,6 +120,7 @@ export default function CourseForm({
                 <DollarSign className="text-default-500" width={16} />
               }
               value={Number(field.value)}
+              variant="faded"
               onChange={(e) => {
                 field.onChange(Number((e as any).target.value));
               }}
@@ -157,7 +160,7 @@ export default function CourseForm({
           control={control}
           name={"thumbnail"}
           render={({ field }) => (
-            <Uploader
+            <FileUploader
               acceptedFileType="image"
               maxFiles={1}
               maxSize={5 * 1024 * 1024}
@@ -166,9 +169,6 @@ export default function CourseForm({
             />
           )}
         />
-        {/* <div className="pt-4">
-            <ResourcePreview resourceType="image" src={watch("thumbnail")} />
-          </div> */}
       </div>
       <div className="flex gap-2">
         <Button color="primary" isDisabled={!isDirty} type="submit">

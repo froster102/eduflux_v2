@@ -7,6 +7,8 @@ import axios from "axios";
 import { Image } from "@heroui/image";
 import { Progress } from "@heroui/progress";
 
+import ImageCropper from "./ImageCropper";
+
 import { getUploadCredentials } from "@/features/instructor/courses/services/course";
 import CloseBoldIcon from "@/assets/icons/CloseBoldIcon";
 import UploadIcon from "@/assets/icons/UploadIcon";
@@ -21,6 +23,7 @@ interface UploaderState {
   error: boolean;
   objectUrl?: string;
   fileType: "image" | "video";
+  showCropper: boolean;
 }
 
 interface UploaderProps {
@@ -34,6 +37,8 @@ interface UploaderProps {
     uuid: string,
   ) => void;
   value: string | null;
+  targetWidth?: number;
+  targetHeight?: number;
 }
 
 export default function FileUploader({
@@ -43,6 +48,8 @@ export default function FileUploader({
   value,
   enableMultipleFile,
   onSuccess,
+  targetWidth,
+  targetHeight,
 }: UploaderProps) {
   const accept: Record<string, any> =
     acceptedFileType === "image" ? { "image/*": [] } : { "video/mp4": [] };
@@ -57,15 +64,49 @@ export default function FileUploader({
     key: value ?? null,
     fileType: acceptedFileType,
     objectUrl: value ?? undefined,
+    showCropper: false,
   });
 
+  const checkDimensions = (file: File): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      const img = new window.Image();
+
+      img.src = URL.createObjectURL(file);
+
+      img.onload = () => {
+        resolve(img.width === targetWidth && img.height === targetHeight);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(img.src);
+        reject(false);
+      };
+    });
+  };
+
   const onDropCallback = React.useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0];
 
         if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
           URL.revokeObjectURL(fileState.objectUrl);
+        }
+
+        if (acceptedFileType === "image") {
+          const dimensionsValid = await checkDimensions(file);
+
+          if (!dimensionsValid) {
+            setFileState((prev) => ({
+              ...prev,
+              file,
+              objectUrl: URL.createObjectURL(file),
+              id: uuidv4(),
+              fileType: acceptedFileType,
+              showCropper: true,
+            }));
+
+            return;
+          }
         }
 
         setFileState((prev) => ({
@@ -154,7 +195,7 @@ export default function FileUploader({
     accept,
     multiple: enableMultipleFile ?? false,
     onDropRejected: rejectedFiles,
-    disabled: fileState.uploading,
+    disabled: fileState.uploading || fileState.showCropper,
   });
 
   function rejectedFiles(fileRejection: FileRejection[]) {
@@ -183,7 +224,46 @@ export default function FileUploader({
     }
   }
 
+  const handleCrop = (canvas: HTMLCanvasElement | null) => {
+    if (!canvas) {
+      setFileState((prev) => ({
+        ...prev,
+        showCropper: false,
+        objectUrl: undefined,
+        file: null,
+      }));
+
+      return;
+    }
+    canvas.toBlob((blob) => {
+      if (blob && fileState.file) {
+        const croppedFile = new File([blob], fileState.file.name, {
+          type: fileState.file.type,
+          lastModified: Date.now(),
+        });
+
+        setFileState((prev) => ({
+          ...prev,
+          file: croppedFile,
+          objectUrl: URL.createObjectURL(croppedFile),
+          showCropper: false,
+        }));
+        uploadFile(croppedFile);
+      }
+    }, fileState.file?.type || "image/jpeg");
+  };
+
   function renderContent() {
+    if (fileState.showCropper && fileState.objectUrl) {
+      return (
+        <ImageCropper
+          selectionHeight={422}
+          selectionWidth={750}
+          src={fileState.objectUrl}
+          onCrop={handleCrop}
+        />
+      );
+    }
     if (fileState.uploading) {
       return (
         <Progress
