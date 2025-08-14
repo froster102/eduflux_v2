@@ -13,13 +13,11 @@ export function usePublishCourse(options?: {
     onError: (error: AxiosError<ApiErrorResponse>) => {
       if (options?.onError && error.response?.data.code === "INVALID_INPUT") {
         options.onError(error.response?.data.message);
-      } else {
-        addToast({
-          title: "Course publishment",
-          description: "Failed to publish course.",
-          color: "danger",
-        });
+
+        return;
       }
+
+      return;
     },
 
     onSuccess: () => {

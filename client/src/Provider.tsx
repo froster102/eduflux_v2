@@ -1,33 +1,30 @@
 import { HeroUIProvider } from "@heroui/system";
 import { addToast, ToastProvider } from "@heroui/toast";
-import {
-  MutationCache,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { AxiosError } from "axios";
 
 import { routeTree } from "./routeTree.gen.ts";
 
 const queryClient = new QueryClient({
-  mutationCache: new MutationCache({
-    onError: (error: AxiosError<ApiErrorResponse> | Error) => {
-      if (error instanceof AxiosError) {
-        addToast({
-          description:
-            error.response?.data.message || "An unexpected error has occured",
-          color: "danger",
-        });
-      }
-      if (error instanceof Error) {
-        addToast({
-          description: error.message || "An unexpected error has occured",
-          color: "danger",
-        });
-      }
+  defaultOptions: {
+    mutations: {
+      onError: (error: AxiosError<ApiErrorResponse> | Error) => {
+        if (error instanceof AxiosError) {
+          addToast({
+            description:
+              error.response?.data.message || "An unexpected error has occured",
+            color: "danger",
+          });
+        } else if (error instanceof Error) {
+          addToast({
+            description: error.message || "An unexpected error has occured",
+            color: "danger",
+          });
+        }
+      },
     },
-  }),
+  },
 });
 
 const router = createRouter({ routeTree, context: { queryClient } });
