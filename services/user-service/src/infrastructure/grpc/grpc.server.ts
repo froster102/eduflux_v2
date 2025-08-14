@@ -33,19 +33,17 @@ export class GrpcServer {
   }
 
   loggingInterceptor: ServerInterceptor = (methodDescriptor, call) => {
-    const listener = new ServerListenerBuilder()
-      .withOnReceiveMessage((message, next) => {
-        this.logger.info(`Receive a message ${JSON.stringify(message)}`);
-        next(message);
-      })
-      .build();
+    this.logger.info(`Incoming gRPC call for method: ${methodDescriptor.path}`);
+    const listener = new ServerListenerBuilder().build();
     const responder = new ResponderBuilder()
       .withStart((next) => {
         next(listener);
       })
-      .withSendMessage((message, next) => {
-        this.logger.info(`Send a message ${JSON.stringify(message)}`);
-        next(message);
+      .withSendStatus((status, next) => {
+        this.logger.info(
+          `gRPC call for method '${methodDescriptor.path}' completed with status: ${JSON.stringify(status)}`,
+        );
+        next(status);
       })
       .build();
     return new ServerInterceptingCall(call, responder);

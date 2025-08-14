@@ -28,7 +28,7 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
       this.address,
       credentials.createInsecure(),
       {
-        interceptors: [this.loggingInterceptor],
+        interceptors: [this.createLoggingInterceptor()],
       },
     );
     this.logger.info(
@@ -36,36 +36,33 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
     );
   }
 
-  loggingInterceptor: Interceptor = (options, nextCall) => {
-    const next = nextCall(options);
+  private createLoggingInterceptor(): Interceptor {
+    return (options, nextCall) => {
+      const next = nextCall(options);
 
-    const requester = new RequesterBuilder()
-      .withStart((metadata, listener, nextStart) => {
-        this.logger.info(
-          `Sending metadata: ${JSON.stringify(metadata.getMap())}`,
-        );
-        const customListener = new ListenerBuilder()
-          .withOnReceiveMessage((message, nextMessage) => {
-            this.logger.info(`Response received: ${JSON.stringify(message)}`);
-            nextMessage(message);
-          })
-          .withOnReceiveStatus((status, nextStatus) => {
-            this.logger.info(
-              `Call completed with status: ${JSON.stringify(status)}`,
-            );
-            nextStatus(status);
-          })
-          .build();
-        nextStart(metadata, customListener);
-      })
-      .withSendMessage((message, nextMessage) => {
-        this.logger.info(`Request with message: ${JSON.stringify(message)}`);
-        nextMessage(message);
-      })
-      .build();
+      const requester = new RequesterBuilder()
+        .withStart((metadata, listener, nextStart) => {
+          const customListener = new ListenerBuilder()
+            .withOnReceiveStatus((status, nextStatus) => {
+              this.logger.info(
+                `gRPC call for method '${options.method_definition.path}' completed with status: ${JSON.stringify(status)}`,
+              );
+              nextStatus(status);
+            })
+            .build();
+          nextStart(metadata, customListener);
+        })
+        .withSendMessage((message, nextMessage) => {
+          this.logger.info(
+            `gRPC request started for method: ${options.method_definition.path}`,
+          );
+          nextMessage(message);
+        })
+        .build();
 
-    return new InterceptingCall(next, requester);
-  };
+      return new InterceptingCall(next, requester);
+    };
+  }
 
   async getUserDetails(userId: string): Promise<UserProfile> {
     const request: GetUserRequest = { userId };
