@@ -83,9 +83,8 @@ export default function RoleSwitcher() {
         cancelText="No cancel"
         confirmText="Yes continue"
         isOpen={openConfirmationModal}
-        message="Currently you are not an instructor,By confirming your account will be added with instructor access, you'll be able to create and publish courses, share your expertise with others.
-                  Your account will have access to instructor tools and dashboards.
-                  Are you sure you want to continue"
+        message="Ready to share your expertise? By confirming, you’ll gain instructor access to create and sell courses, offer paid video mentorship sessions, and engage with students through real-time messaging. Unlock powerful tools and dashboards to manage your content and earnings. Are you ready to inspire learners and grow your impact?"
+        title="Become a Instructor"
         onClose={() => {
           setOpenConfirmationModal(false);
         }}
