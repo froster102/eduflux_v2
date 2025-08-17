@@ -5,6 +5,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { AxiosError } from "axios";
 
 import { routeTree } from "./routeTree.gen.ts";
+import { DEFAULT_ERROR_MESSAGE } from "./config/error-messages.ts";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,13 +13,12 @@ const queryClient = new QueryClient({
       onError: (error: AxiosError<ApiErrorResponse> | Error) => {
         if (error instanceof AxiosError) {
           addToast({
-            description:
-              error.response?.data.message || "An unexpected error has occured",
+            description: error.response?.data.message || DEFAULT_ERROR_MESSAGE,
             color: "danger",
           });
         } else if (error instanceof Error) {
           addToast({
-            description: error.message || "An unexpected error has occured",
+            description: error.message || DEFAULT_ERROR_MESSAGE,
             color: "danger",
           });
         }
