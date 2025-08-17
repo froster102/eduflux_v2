@@ -142,6 +142,7 @@ declare global {
     id: string;
     firstName: string;
     lastName: string;
+    bio: string;
     image?: string;
     createdAt: string;
     updatedAt: string;
