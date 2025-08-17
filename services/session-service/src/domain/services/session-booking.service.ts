@@ -38,13 +38,13 @@ export class SessionBookingService {
     originalSession: Session,
     oldAvailability: Slot,
     newAvailability: Slot,
-    userId: string,
+    executorId: string,
   ): {
     updatedSession: Session;
     updatedOldAvailability: Slot;
     updatedNewAvailability: Slot;
   } {
-    if (!originalSession.isParticipant(userId)) {
+    if (!originalSession.isParticipant(executorId)) {
       throw new DomainException(
         'User is not authorized to reschedule this session.',
       );
