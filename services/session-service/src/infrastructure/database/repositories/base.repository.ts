@@ -3,7 +3,7 @@ import type { IBaseRepository } from '@/domain/repositories/base.repository';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
 import { Model } from 'mongoose';
 import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type { QueryOptions } from '@/application/dto/query-options.dto';
 
 export abstract class MongoBaseRepository<TDomain, TPersistence>
   implements IBaseRepository<TDomain>
@@ -113,17 +113,17 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
   }
 
   async findWithPaginationAndFilter(
-    paginationQueryParams: PaginationQueryParams,
+    queryOptions: QueryOptions,
   ): Promise<TDomain[]> {
     const {
       page = 1,
-      limit = 10,
+      pageSize = 10,
       searchQuery,
       searchFields,
       filters,
       sortBy,
       sortOrder = 'asc',
-    } = paginationQueryParams;
+    } = queryOptions;
 
     const query: Record<string, any> = {};
     const options: Record<string, any> = {};
@@ -147,9 +147,9 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
       }
     }
 
-    const skip = (page - 1) * limit;
+    const skip = (page - 1) * pageSize;
     options.skip = skip;
-    options.limit = limit;
+    options.limit = pageSize;
 
     if (sortBy) {
       options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };

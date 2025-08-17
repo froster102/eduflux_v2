@@ -1,6 +1,6 @@
 import { Slot } from '@/domain/entities/slot.entity';
-import { IMapper } from './mapper.interface';
-import { IMongoSlot } from '../database/schema/slot.schema';
+import type { IMapper } from './mapper.interface';
+import type { IMongoSlot } from '../database/schema/slot.schema';
 
 export class SlotMapper implements IMapper<Slot, IMongoSlot> {
   toDomain(raw: IMongoSlot): Slot {

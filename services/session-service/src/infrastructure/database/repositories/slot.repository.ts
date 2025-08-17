@@ -2,7 +2,7 @@ import type { ClientSession } from 'mongoose';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
 import type { IMongoSlot } from '../schema/slot.schema';
 import { MongoBaseRepository } from './base.repository';
-import { ISlotRepository } from '@/domain/repositories/slot.repository';
+import type { ISlotRepository } from '@/domain/repositories/slot.repository';
 import { TYPES } from '@/shared/di/types';
 import { Slot, SlotStatus } from '@/domain/entities/slot.entity';
 import { inject, unmanaged } from 'inversify';

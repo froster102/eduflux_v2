@@ -1,8 +1,7 @@
 import type { ClientSession } from 'mongoose';
-import { IUnitOfWork } from '@/application/ports/unit-of-work.interface';
-import { IScheduleSettingRepository } from '@/domain/repositories/schedule-setting.repository';
-import { ISessionRepository } from '@/domain/repositories/session.repository';
-import { ISlotRepository } from '@/domain/repositories/slot.repository';
+import type { IUnitOfWork } from '@/application/ports/unit-of-work.interface';
+import type { ISessionRepository } from '@/domain/repositories/session.repository';
+import type { ISlotRepository } from '@/domain/repositories/slot.repository';
 import mongoose from 'mongoose';
 import { DatabaseException } from '../exceptions/database.exception';
 import { injectable, unmanaged } from 'inversify';
@@ -10,14 +9,15 @@ import { MongoSlotRepository } from '../database/repositories/slot.repository';
 import { SlotMapper } from '../mapper/slot.mapper';
 import { SessionMapper } from '../mapper/session.mapper';
 import { MongoSessionRepository } from '../database/repositories/session.repository';
-import { ScheduleSettingMapper } from '../mapper/schedule-setting.mapper';
-import { MongoScheduleSettingRepository } from '../database/repositories/schedule-setting';
+import { ScheduleSettingMapper } from '../mapper/session-settings.mapper';
+import type { ISessionSettingsRepository } from '@/domain/repositories/session-settings.repository';
+import { MongoSessionSettingsRepository } from '../database/repositories/session-settings.repository';
 
 @injectable()
 export class MongoUnitOfWork implements IUnitOfWork {
   private _slotRepository: ISlotRepository | undefined;
   private _sessionRepository: ISessionRepository | undefined;
-  private _scheduleSettingRepository: IScheduleSettingRepository | undefined;
+  private _sessionSettingsRepository: ISessionSettingsRepository | undefined;
 
   private session?: ClientSession;
 
@@ -55,19 +55,19 @@ export class MongoUnitOfWork implements IUnitOfWork {
     return this._sessionRepository;
   }
 
-  get scheduleSettingRepository(): IScheduleSettingRepository {
+  get sessionSettingsRepository(): ISessionSettingsRepository {
     if (!this.session) {
       throw new DatabaseException(
         'Unit of Work session not initialized. Call commit() first for transactional operations.',
       );
     }
-    if (!this._scheduleSettingRepository) {
-      this._scheduleSettingRepository = new MongoScheduleSettingRepository(
+    if (!this._sessionSettingsRepository) {
+      this._sessionSettingsRepository = new MongoSessionSettingsRepository(
         new ScheduleSettingMapper(),
         this.session,
       );
     }
-    return this._scheduleSettingRepository;
+    return this._sessionSettingsRepository;
   }
 
   async runTransaction<T>(

@@ -6,6 +6,8 @@ import { httpLoggerMiddleware } from './middlewares/http-logger.middleware';
 import { errorHandler } from './middlewares/error-handler.middleware';
 import { container } from '@/shared/di/container';
 import { ScheduleRoutes } from '@/interface/routes/schedule.routes';
+import { graphqlHandler } from '../graphql/graphql-handler';
+import type { SettingsRoutes } from '@/interface/routes/settings.routes';
 
 export class Server {
   private app: Elysia;
@@ -22,13 +24,17 @@ export class Server {
   private setupMiddlewares(): void {
     this.app.use(httpLoggerMiddleware);
     this.app.use(errorHandler);
+    this.app.use(graphqlHandler);
   }
 
   private setupRoutes(): void {
+    //health check
     this.app.get('/api/sessions/health', () => ({ ok: true }));
     const scheduleRoutes = container.get<ScheduleRoutes>(TYPES.ScheduleRoutes);
+    const settingsRoutes = container.get<SettingsRoutes>(TYPES.SettingsRoutes);
 
     this.app.use(scheduleRoutes.register());
+    this.app.use(settingsRoutes.register());
   }
 
   start(): void {

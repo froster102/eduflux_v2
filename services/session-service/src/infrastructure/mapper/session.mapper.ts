@@ -1,5 +1,5 @@
-import { IMapper } from './mapper.interface';
-import { IMongoSession } from '../database/schema/session.schema';
+import type { IMapper } from './mapper.interface';
+import type { IMongoSession } from '../database/schema/session.schema';
 import { Session } from '@/domain/entities/session.entity';
 
 export class SessionMapper implements IMapper<Session, IMongoSession> {

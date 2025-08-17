@@ -2,7 +2,7 @@ import type { IConfirmSessionBookingUseCase } from '@/application/use-cases/inte
 import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
-import { Consumer, EachMessagePayload } from 'kafkajs';
+import type { Consumer, EachMessagePayload } from 'kafkajs';
 import { kafka } from '@/infrastructure/messaging/kafka/setup';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { ApplicationException } from '@/application/exceptions/application.exception';

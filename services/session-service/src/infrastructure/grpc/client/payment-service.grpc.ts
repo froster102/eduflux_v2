@@ -1,26 +1,26 @@
-import { Logger } from '@/shared/utils/logger';
-import { credentials, ServiceError } from '@grpc/grpc-js';
-import { injectable } from 'inversify';
-import {
+import type { ILogger } from '@/shared/common/interface/logger.interface';
+import { credentials, type ServiceError } from '@grpc/grpc-js';
+import { inject, injectable } from 'inversify';
+import type {
   InitiatePaymentDto,
   InitiatePaymentResponseDto,
   IPaymentServiceGateway,
 } from '@/application/ports/payment-service.gateway';
-import { SESSION_SERVICE } from '@/shared/constants/services';
 import {
   InitiatePaymentRequest,
   InitiatePaymentResponse,
   PaymentServiceClient,
 } from '../generated/payment';
 import { paymentGrpcServiceConfig } from '@/shared/config/payment-service.grpc.config';
+import { TYPES } from '@/shared/di/types';
 
 @injectable()
 export class GrpcPaymentServiceClient implements IPaymentServiceGateway {
   private client: PaymentServiceClient;
   private address: string;
-  private logger = new Logger(SESSION_SERVICE);
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(GrpcPaymentServiceClient.name);
     this.address = paymentGrpcServiceConfig.GRPC_PAYMENT_SERVICE_URL;
     this.client = new PaymentServiceClient(
       this.address,

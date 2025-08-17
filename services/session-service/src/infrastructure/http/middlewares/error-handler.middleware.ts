@@ -1,7 +1,7 @@
 import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { Elysia } from 'elysia';
 import httpStatus from 'http-status';
-import { HttpResponse } from '../interfaces/http-response.interface';
+import type { HttpResponse } from '../interfaces/http-response.interface';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import {
   AppErrorCode,

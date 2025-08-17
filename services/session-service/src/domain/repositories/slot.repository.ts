@@ -1,5 +1,5 @@
 import { Slot } from '../entities/slot.entity';
-import { IBaseRepository } from './base.repository';
+import type { IBaseRepository } from './base.repository';
 
 export interface ISlotRepository extends IBaseRepository<Slot> {
   deleteAvailableOrBlockedByInstructorAndRange(

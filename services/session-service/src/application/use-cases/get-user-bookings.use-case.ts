@@ -1,14 +1,11 @@
-import { inject } from 'inversify';
-import { TYPES } from '@/shared/di/types';
-import { ISessionRepository } from '@/domain/repositories/session.repository';
-import { Role } from '@/shared/constants/role';
-import { InvalidInputException } from '../exceptions/invalid-input.exception';
-import { ForbiddenException } from '../exceptions/forbidden.exception';
-import {
+import type {
   GetUserBookingsInput,
   GetUserBookingsOutput,
   IGetUserBookingsUseCase,
 } from './interface/get-user-bookings.interface';
+import type { ISessionRepository } from '@/domain/repositories/session.repository';
+import { inject } from 'inversify';
+import { TYPES } from '@/shared/di/types';
 
 export class GetUserBookingsUseCase implements IGetUserBookingsUseCase {
   constructor(
@@ -19,31 +16,10 @@ export class GetUserBookingsUseCase implements IGetUserBookingsUseCase {
   async execute(
     getUserBookingsInput: GetUserBookingsInput,
   ): Promise<GetUserBookingsOutput> {
-    const { actor, paginationQueryParams } = getUserBookingsInput;
-    const userRolePreference = paginationQueryParams.role;
-
-    if (!userRolePreference) {
-      throw new InvalidInputException(
-        `Role field not present in the query params`,
-      );
-    }
-
-    if (!actor.hasRole(userRolePreference)) {
-      throw new ForbiddenException(`You are not authroized for this action.`);
-    }
-
-    if (userRolePreference === Role.INSTRUCTOR) {
-      const result = await this.sessionRepository.findInstructorSessions(
-        actor.id,
-        paginationQueryParams,
-      );
-
-      return result;
-    }
-
+    const { userId, queryOptions } = getUserBookingsInput;
     const results = await this.sessionRepository.findLearnerSessions(
-      actor.id,
-      paginationQueryParams,
+      userId,
+      queryOptions,
     );
 
     return results;

@@ -1,4 +1,4 @@
-import { IUseCase } from './use-case.interface';
+import type { IUseCase } from './use-case.interface';
 
 export interface GetInstructorAvailableSlotsInput {
   instructorId: string;

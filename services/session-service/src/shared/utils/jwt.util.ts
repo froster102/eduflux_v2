@@ -1,5 +1,5 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
-import { JwtPayload } from '@/infrastructure/http/interfaces/jwt-payload';
+import type { JwtPayload } from '@/infrastructure/http/interfaces/jwt-payload';
 import { jwtConfig } from '../config/jwt.config';
 
 export async function validateToken(token: string) {
@@ -8,5 +8,6 @@ export async function validateToken(token: string) {
     issuer: jwtConfig.JWT_ISS,
     audience: jwtConfig.JWT_AUD,
   });
+
   return payload;
 }

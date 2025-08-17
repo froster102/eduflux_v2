@@ -7,7 +7,8 @@ import { MongoBaseRepository } from './base.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject, unmanaged } from 'inversify';
 import SessionModel from '../models/session.model';
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type { QueryOptions } from '@/application/dto/query-options.dto';
+import type { GetUserBookingsQueryOptions } from '@/application/use-cases/interface/get-user-bookings.interface';
 
 export class MongoSessionRepository
   extends MongoBaseRepository<Session, IMongoSession>
@@ -36,49 +37,26 @@ export class MongoSessionRepository
 
   async findLearnerSessions(
     learnerId: string,
-    paginationQueryParams: PaginationQueryParams,
+    queryOptions: GetUserBookingsQueryOptions,
   ): Promise<{ sessions: Session[]; total: number }> {
-    const {
-      page = 1,
-      limit = 10,
-      searchQuery,
-      searchFields,
-      filters,
-      sortBy,
-      sortOrder = 'asc',
-    } = paginationQueryParams;
+    const { query, options } = this._buildQuery(queryOptions);
 
-    const query: Record<string, any> = {};
-    const options: Record<string, any> = {};
-
-    if (searchQuery && searchFields && searchFields.length > 0) {
-      query.$or = searchFields.map((field) => ({
-        [field]: { $regex: searchQuery, $options: 'i' },
-      }));
-    }
-
-    if (filters) {
-      for (const key in filters) {
-        if (Object.prototype.hasOwnProperty.call(filters, key)) {
-          const value = filters[key];
-          if (Array.isArray(value)) {
-            query[key] = { $in: value };
-          } else {
-            query[key] = value;
-          }
-        }
+    if (queryOptions.filters) {
+      const { status, startTime_gte, endTime_lte } = queryOptions.filters;
+      if (status) {
+        query.status = status;
+      }
+      if (startTime_gte) {
+        query.startTime = { $gte: startTime_gte };
+      }
+      if (endTime_lte) {
+        query.endTime = { $lte: endTime_lte };
       }
     }
 
-    const skip = (page - 1) * limit;
-    options.skip = skip;
-    options.limit = limit;
+    const finalQuery = { ...query, learnerId };
 
-    if (sortBy) {
-      options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-    }
-
-    const total = await SessionModel.countDocuments(query);
+    const total = await SessionModel.countDocuments(finalQuery);
 
     const result = await SessionModel.find(
       { ...query, learnerId },
@@ -96,17 +74,39 @@ export class MongoSessionRepository
 
   async findInstructorSessions(
     instructorId: string,
-    paginationQueryParams: PaginationQueryParams,
+    queryOptions: QueryOptions,
   ): Promise<{ sessions: Session[]; total: number }> {
+    const { query, options } = this._buildQuery(queryOptions);
+
+    const total = await SessionModel.countDocuments(query);
+
+    const result = await SessionModel.find(
+      { ...query, instructorId },
+      null,
+      options,
+    );
+
+    return result
+      ? {
+          sessions: this.sessionMapper.toDomainArray(result),
+          total,
+        }
+      : { sessions: [], total };
+  }
+
+  private _buildQuery(queryOptions: QueryOptions): {
+    query: Record<string, any>;
+    options: Record<string, any>;
+  } {
     const {
       page = 1,
-      limit = 10,
+      pageSize = 10,
       searchQuery,
       searchFields,
       filters,
       sortBy,
       sortOrder = 'asc',
-    } = paginationQueryParams;
+    } = queryOptions;
 
     const query: Record<string, any> = {};
     const options: Record<string, any> = {};
@@ -130,27 +130,14 @@ export class MongoSessionRepository
       }
     }
 
-    const skip = (page - 1) * limit;
+    const skip = (page - 1) * pageSize;
     options.skip = skip;
-    options.limit = limit;
+    options.limit = pageSize;
 
     if (sortBy) {
       options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
     }
 
-    const total = await SessionModel.countDocuments(query);
-
-    const result = await SessionModel.find(
-      { ...query, instructorId },
-      null,
-      options,
-    );
-
-    return result
-      ? {
-          sessions: this.sessionMapper.toDomainArray(result),
-          total,
-        }
-      : { sessions: [], total };
+    return { query, options };
   }
 }

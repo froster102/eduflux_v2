@@ -1,5 +1,5 @@
 import type { ILogger } from '../common/interface/logger.interface';
-import { LogEntry, logLevel } from 'kafkajs';
+import { type LogEntry, logLevel } from 'kafkajs';
 import { container } from '../di/container';
 import { TYPES } from '../di/types';
 
