@@ -1,15 +1,14 @@
 import { Container } from 'inversify';
 import { TYPES } from './types';
 import { DatabaseClient } from '@/infrastructure/database/setup';
-import { GetInstructorScheduleTemplateUseCase } from '@/application/use-cases/get-instructor-schedule-template.use-case';
-import { UpdateInstructorWeeklyAvailabilityUseCase } from '@/application/use-cases/update-instructor-weekly-availablity.use-case';
+import { GetInstructorSessionSettingsUseCase } from '@/application/use-cases/get-instructor-session-settings.use-case';
 import { ScheduleRoutes } from '@/interface/routes/schedule.routes';
 import { SlotMapper } from '@/infrastructure/mapper/slot.mapper';
 import { SessionMapper } from '@/infrastructure/mapper/session.mapper';
-import { ScheduleSettingMapper } from '@/infrastructure/mapper/schedule-setting.mapper';
+import { ScheduleSettingMapper } from '@/infrastructure/mapper/session-settings.mapper';
 import { MongoSessionRepository } from '@/infrastructure/database/repositories/session.repository';
 import { MongoSlotRepository } from '@/infrastructure/database/repositories/slot.repository';
-import { MongoScheduleSettingRepository } from '@/infrastructure/database/repositories/schedule-setting';
+import { MongoSessionSettingsRepository } from '@/infrastructure/database/repositories/session-settings.repository';
 import { MongoUnitOfWork } from '@/infrastructure/unit-of-work/mongo-unit-of-work';
 import { HandleExpiredPendingPaymentsUseCase } from '@/application/use-cases/handle-expired-pending-payments.use-case';
 import { CronServices } from '@/infrastructure/cron/cron-services';
@@ -21,6 +20,11 @@ import { GrpcPaymentServiceClient } from '@/infrastructure/grpc/client/payment-s
 import { GetInstructorAvailableSlotsUseCase } from '@/application/use-cases/get-instructor-available-slots.use-case';
 import { PaymentEventsConsumer } from '@/interface/consumer/payment-events.consumer';
 import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
+import { GetUserBookingsUseCase } from '@/application/use-cases/get-user-bookings.use-case';
+import { GraphqlResolver } from '@/infrastructure/graphql/resolvers/resolvers';
+import { UpdateInstructorSessionSettingsUseCase } from '@/application/use-cases/update-instructor-session-settings.use-case';
+import { EnableSessionUseCase } from '@/application/use-cases/enable-session.use-case';
+import { SettingsRoutes } from '@/interface/routes/settings.routes';
 
 const container = new Container();
 
@@ -31,19 +35,19 @@ container.bind(TYPES.DatabaseClient).to(DatabaseClient).inSingletonScope();
 container.bind(TYPES.SessionRepository).to(MongoSessionRepository);
 container.bind(TYPES.SlotRepository).to(MongoSlotRepository);
 container
-  .bind(TYPES.ScheduleSettingRepository)
-  .to(MongoScheduleSettingRepository);
+  .bind(TYPES.SessionSettingsRepository)
+  .to(MongoSessionSettingsRepository);
 
 //Unit of work
 container.bind(TYPES.UnitOfWork).to(MongoUnitOfWork).inTransientScope();
 
 //Use Cases
 container
-  .bind(TYPES.GetInstructorScheduleTemplateUseCase)
-  .to(GetInstructorScheduleTemplateUseCase);
+  .bind(TYPES.GetInstructorSessionSettingsUseCase)
+  .to(GetInstructorSessionSettingsUseCase);
 container
-  .bind(TYPES.UpdateInstructorWeeklyAvailabilityUseCase)
-  .to(UpdateInstructorWeeklyAvailabilityUseCase);
+  .bind(TYPES.UpadteInstructorSessionSettingsUseCase)
+  .to(UpdateInstructorSessionSettingsUseCase);
 container
   .bind(TYPES.HandleExpiredPendingPaymentsUseCase)
   .to(HandleExpiredPendingPaymentsUseCase);
@@ -54,12 +58,17 @@ container.bind(TYPES.BookSessionUseCase).to(BookSessionUseCase);
 container
   .bind(TYPES.GetInstructorAvailableSlotsUseCase)
   .to(GetInstructorAvailableSlotsUseCase);
+container.bind(TYPES.GetUserBookingsUseCase).to(GetUserBookingsUseCase);
+container.bind(TYPES.EnableSessionUseCase).to(EnableSessionUseCase);
 
 //Domain service
 container.bind(TYPES.SessionBookingService).to(SessionBookingService);
 
 //Ports
-container.bind(TYPES.UserServiceGateway).to(GrpcUserServiceClient);
+container
+  .bind(TYPES.UserServiceGateway)
+  .to(GrpcUserServiceClient)
+  .inSingletonScope();
 container.bind(TYPES.PaymentServiceGateway).to(GrpcPaymentServiceClient);
 // container
 //   .bind(TYPES.MessageBrokerGateway)
@@ -71,6 +80,7 @@ container.bind(TYPES.PaymentServiceGateway).to(GrpcPaymentServiceClient);
 
 //Http Routes
 container.bind(TYPES.ScheduleRoutes).to(ScheduleRoutes);
+container.bind(TYPES.SettingsRoutes).to(SettingsRoutes);
 
 //Services
 
@@ -91,5 +101,8 @@ container.bind(TYPES.CronServices).to(CronServices);
 
 //Logger
 container.bind(TYPES.Logger).to(WinstonLogger);
+
+//Resolvers
+container.bind(TYPES.GraphqlResolver).to(GraphqlResolver);
 
 export { container };

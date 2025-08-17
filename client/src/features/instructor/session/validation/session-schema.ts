@@ -3,24 +3,6 @@ import { z } from "zod/v4";
 
 import { getAllTimeZones } from "@/utils/date";
 
-export const sessionPricingSchema = z.object({
-  price: z
-    .number({
-      error: "Session price is required",
-    })
-    .min(0.01, "Session price must be greater than 0")
-    .max(10000, "Session price cannot exceed 10,000"),
-  currency: z.string().min(1, "Currency is required"),
-  duration: z
-    .number({
-      error: "Session duration is required",
-    })
-    .min(15, "Session duration must be at least 15 minutes")
-    .max(240, "Session duration cannot exceed 240 minutes (4 hours)"),
-});
-
-export type SessionPricingFormData = z.infer<typeof sessionPricingSchema>;
-
 export const slotSchema = z
   .object({
     dayOfWeek: z.number(),
@@ -82,13 +64,26 @@ export const slotSchema = z
     }
   });
 
-export const availabilitySchema = z.object({
-  weeklySchedule: z.array(slotSchema),
+export const sessionSettingsSchema = z.object({
+  price: z
+    .number({
+      error: "Session price is required",
+    })
+    .min(0.01, "Session price must be greater than 0")
+    .max(10000, "Session price cannot exceed 10,000"),
+  currency: z.string().min(1, "Currency is required"),
+  duration: z
+    .number({
+      error: "Session duration is required",
+    })
+    .min(15, "Session duration must be at least 15 minutes")
+    .max(240, "Session duration cannot exceed 240 minutes (4 hours)"),
+  weeklySchedules: z.array(slotSchema),
   applyForWeeks: z.number().min(1).max(12),
   timeZone: z
     .string()
     .refine((val) => getAllTimeZones().has(val), { error: "Invalid timezone" }),
 });
 
-export type AvailabilityFormData = z.infer<typeof availabilitySchema>;
+export type SessionSettingsFormData = z.infer<typeof sessionSettingsSchema>;
 export type Slot = z.infer<typeof slotSchema>;

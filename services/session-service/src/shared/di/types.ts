@@ -1,10 +1,13 @@
 export const TYPES = {
   //Use cases
   BookSessionUseCase: Symbol.for('BookSessionUseCase'),
-  UpdateInstructorWeeklyAvailabilityUseCase: Symbol.for(
-    'UpdateInstructorWeeklyAvailabilityUseCase',
+  // UpdateInstructorWeeklyAvailabilityUseCase: Symbol.for(
+  //   'UpdateInstructorWeeklyAvailabilityUseCase',
+  // ),
+  UpadteInstructorSessionSettingsUseCase: Symbol.for(
+    'UpdateInstructorSessionSettingsUseCase',
   ),
-  GetInstructorScheduleTemplateUseCase: Symbol.for(
+  GetInstructorSessionSettingsUseCase: Symbol.for(
     'GetInstructorScheduleTemplateUseCase',
   ),
   HandleExpiredPendingPaymentsUseCase: Symbol.for(
@@ -14,9 +17,12 @@ export const TYPES = {
   GetInstructorAvailableSlotsUseCase: Symbol.for(
     'GetInstructorAvailableSlotsUseCase',
   ),
+  GetUserBookingsUseCase: Symbol.for('GetUserBookingsUseCase'),
+  EnableSessionUseCase: Symbol.for('EnableSessionUseCase'),
 
   //Domain services
   SessionBookingService: Symbol.for('SessionBookingService'),
+  SlotGenerationService: Symbol.for('SlotGenerationService'),
 
   //Ports
   UserServiceGateway: Symbol.for('UserServiceGateway'),
@@ -24,7 +30,7 @@ export const TYPES = {
 
   //Repositories
   SessionRepository: Symbol.for('SessionRepository'),
-  ScheduleSettingRepository: Symbol.for('ScheduleSettingRepository'),
+  SessionSettingsRepository: Symbol.for('ScheduleSettingRepository'),
   SlotRepository: Symbol.for('SlotRepository'),
 
   //Unit of work
@@ -35,6 +41,8 @@ export const TYPES = {
 
   //Routes
   ScheduleRoutes: Symbol.for('ScheduleRoutes'),
+  SettingsRoutes: Symbol.for('SettingsRoutes'),
+  GraphqlRoutes: Symbol.for('GraphqlRoutes'),
 
   //Mappers
   SessionMapper: Symbol.for('SessionMapper'),
@@ -49,4 +57,7 @@ export const TYPES = {
 
   //Logger
   Logger: Symbol.for('Logger'),
+
+  //Resolvers
+  GraphqlResolver: Symbol.for('GraphqlResolver'),
 };

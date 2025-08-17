@@ -13,13 +13,16 @@ const DailyAvailabilityConfigSchema = new Schema(
 export interface IMongoScheduleSetting extends Document {
   _id: string;
   instructorId: string;
-  weeklyAvailabilityTemplate: {
+  price: number;
+  currency: string;
+  duration: number;
+  isSessionEnabled: boolean;
+  weeklySchedules: {
     dayOfWeek: number;
     enabled: boolean;
     startTime?: string;
     endTime?: string;
   }[];
-  slotDurationMinutes: number;
   applyForWeeks: number;
   timeZone: string;
   createdAt: Date;
@@ -32,13 +35,18 @@ export const ScheduleSettingSchema = new Schema<IMongoScheduleSetting>(
 
     instructorId: { type: String, required: true },
 
-    weeklyAvailabilityTemplate: {
-      type: [DailyAvailabilityConfigSchema],
-      required: true,
+    price: { type: Number },
+
+    currency: { type: String },
+
+    duration: { type: Number },
+
+    isSessionEnabled: {
+      type: Boolean,
     },
 
-    slotDurationMinutes: {
-      type: Number,
+    weeklySchedules: {
+      type: [DailyAvailabilityConfigSchema],
       required: true,
     },
 

@@ -1,6 +1,9 @@
 declare global {
-  export type ScheduleSetting = {
-    weeklySchedule: DailyAvailabilityConfig[];
+  export type SessionSettings = {
+    price: number;
+    currency: string;
+    duration: number;
+    weeklySchedules: DailyAvailabilityConfig[];
     slotDurationMinutes: number;
     applyForWeeks: number;
     timeZone: string;
@@ -14,13 +17,6 @@ declare global {
     startTime?: string;
     endTime?: string;
   };
-
-  export type SessionPricing = {
-    id: string;
-    price: number;
-    currency: string;
-    duration: number;
-  } | null;
 }
 
 export {};

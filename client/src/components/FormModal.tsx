@@ -5,11 +5,25 @@ interface FormModalProps {
   isOpen: boolean;
   title?: string;
   onClose: () => void;
+  size?:
+    | "full"
+    | "xs"
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "3xl"
+    | "4xl"
+    | "5xl";
+  submitText?: string;
+  cancelText?: string;
 }
 
 export default function FormModal({
   isOpen,
   onClose,
+  size,
   title = "Please complete the form to continue.",
   form,
 }: FormModalProps) {
@@ -22,6 +36,7 @@ export default function FormModal({
       isOpen={isOpen}
       placement="top-center"
       scrollBehavior="inside"
+      size={size}
       onClose={onClose}
       onOpenChange={() => onClose()}
     >

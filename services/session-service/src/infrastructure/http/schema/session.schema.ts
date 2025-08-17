@@ -63,8 +63,9 @@ export const slotSchema = z
     }
   });
 
-export const availabilitySchema = z.object({
-  weeklySchedule: z.array(slotSchema),
+export const enableSessionsSchema = z.object({
+  price: z.number(),
+  weeklySchedules: z.array(slotSchema),
   applyForWeeks: z.number().min(1).max(12),
   timeZone: z.string().refine(
     (val) => {
@@ -73,6 +74,8 @@ export const availabilitySchema = z.object({
     { error: 'Invalid timezone.' },
   ),
 });
+
+export const updateSessionSettingsSchema = enableSessionsSchema.partial();
 
 export const bookingSchema = z.object({
   slotId: z.string({ error: 'Slot id is required' }),

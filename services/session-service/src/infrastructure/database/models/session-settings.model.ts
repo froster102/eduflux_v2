@@ -1,10 +1,10 @@
 import { model } from 'mongoose';
 import {
-  IMongoScheduleSetting,
+  type IMongoScheduleSetting,
   ScheduleSettingSchema,
-} from '../schema/schedule-setting.schema';
+} from '../schema/session-settings.schema';
 
 export const ScheduleSettingModel = model<IMongoScheduleSetting>(
-  'ScheduleSetting',
+  'SessionSettings',
   ScheduleSettingSchema,
 );

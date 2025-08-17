@@ -1,3 +1,5 @@
+import { SessionSettingsFormData } from "../validation/session-schema";
+
 import api from "@/lib/axios";
 
 export async function getUserSessionPricing(): Promise<SessionPricing> {
@@ -6,25 +8,24 @@ export async function getUserSessionPricing(): Promise<SessionPricing> {
   return response.data;
 }
 
-export async function updateUserSessionPricing(data: { price: number }) {
-  const response = await api.put("/users/me/session-pricing", data);
+export async function enableSessions(data: SessionSettingsFormData) {
+  const response = await api.post("/sessions/settings", data);
 
   return response.data;
 }
 
-export async function getInstructorScheduleSetting(): Promise<{
-  setting: ScheduleSetting;
+export async function getInstructorSessionSettings(): Promise<{
+  settings: SessionSettings;
 }> {
-  const response = await api.get("/sessions/me/schedule-setting");
+  const response = await api.get("/sessions/settings");
 
   return response.data;
 }
 
-export async function updateInstructorWeeklyAvailability(data: {
-  weeklySchedule: DailyAvailabilityConfig[];
-  applyForWeeks: number;
-}): Promise<void> {
-  const response = await api.put("/sessions/me/schedule", data);
+export async function updateInstructorSessionSettings(
+  data: Partial<SessionSettings>,
+): Promise<void> {
+  const response = await api.put("/sessions/settings", data);
 
   return response.data;
 }

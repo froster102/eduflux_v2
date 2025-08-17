@@ -256,6 +256,8 @@ declare global {
     onCancel?: () => void;
     mode?: "create" | "edit";
     initialValue?: TFormData;
+    submitText?: string;
+    cancelText?: string;
   };
 
   export type ApiErrorResponse = {
