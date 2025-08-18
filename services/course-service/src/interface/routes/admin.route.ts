@@ -3,7 +3,7 @@ import type { ICompleteAssetUploadUseCase } from '@/application/use-cases/interf
 import type { IApproveCourseUseCase } from '@/application/use-cases/interface/approve-course.interface';
 import type { IFileStorageGateway } from '@/application/ports/file-storage.gateway';
 import { Course } from '@/domain/entity/course.entity';
-import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
+import type { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import { rejectCourseSchema } from '@/infrastructure/http/schema/course.schema';
 import { TYPES } from '@/shared/di/types';

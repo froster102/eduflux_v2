@@ -1,4 +1,4 @@
-import { AssetDto } from './asset.dto';
+import type { AssetDto } from './asset.dto';
 
 export interface LectureDto {
   _class: ClassType;

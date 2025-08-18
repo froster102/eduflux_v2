@@ -1,6 +1,6 @@
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type { PaginationQueryParams } from '@/application/dto/pagination.dto';
 import { Course } from '../entity/course.entity';
-import { IBaseRepository } from './base.repository';
+import type { IBaseRepository } from './base.repository';
 
 export interface ICourseRepository extends IBaseRepository<Course> {
   findCourseByInstructorId(

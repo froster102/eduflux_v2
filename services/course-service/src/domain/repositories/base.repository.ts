@@ -1,4 +1,4 @@
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type { PaginationQueryParams } from '@/application/dto/pagination.dto';
 
 export interface IBaseRepository<TDomain> {
   save(entity: TDomain): Promise<TDomain>;

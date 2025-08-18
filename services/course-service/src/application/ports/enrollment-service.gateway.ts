@@ -1,4 +1,4 @@
-import { PaginationQueryParams } from '../dto/pagination.dto';
+import type { PaginationQueryParams } from '../dto/pagination.dto';
 
 export type EnrollmentStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
 

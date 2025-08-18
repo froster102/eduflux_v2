@@ -1,10 +1,10 @@
-import {
+import type {
   AccessType,
   MediaSource,
   MediaStatus,
   StorageProvider,
 } from '@/domain/entity/asset.entity';
-import { ResourceType } from 'cloudinary';
+import type { ResourceType } from 'cloudinary';
 
 export interface AssetDto {
   _class: ClassType;

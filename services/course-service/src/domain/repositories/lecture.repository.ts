@@ -1,5 +1,5 @@
 import { Lecture } from '../entity/lecture.entity';
-import { IBaseRepository } from './base.repository';
+import type { IBaseRepository } from './base.repository';
 
 export interface ILectureRepository extends IBaseRepository<Lecture> {
   findByCourseId(courseId: string): Promise<Lecture[]>;

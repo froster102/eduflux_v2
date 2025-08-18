@@ -1,5 +1,5 @@
-import { ResourceType } from '@/domain/entity/asset.entity';
-import { IUseCase } from './use-case.interface';
+import type { ResourceType } from '@/domain/entity/asset.entity';
+import type { IUseCase } from './use-case.interface';
 import { AuthenticatedUserDto } from '@/application/dto/authenticated-user.dto';
 
 export interface AddAssetToLectureInput {

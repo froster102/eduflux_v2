@@ -1,12 +1,12 @@
 import { Course } from '@/domain/entity/course.entity';
 import { MongoBaseRepository } from './base.repository';
-import { ICourse } from '../schema/course.schema';
+import type { ICourse } from '../schema/course.schema';
 import CourseModel from '../models/course.model';
-import { ICourseRepository } from '@/domain/repositories/course.repository';
+import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import type { IMapper } from '@/infrastructure/mappers/mapper.interface';
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type { PaginationQueryParams } from '@/application/dto/pagination.dto';
 
 @injectable()
 export class MongoCourseRepository

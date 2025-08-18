@@ -1,9 +1,13 @@
 import {
   Course,
-  CourseServiceServer,
+  type CourseServiceServer,
   GetCourseDetailsRequest,
 } from '../generated/course';
-import { sendUnaryData, ServerUnaryCall, status } from '@grpc/grpc-js';
+import {
+  type sendUnaryData,
+  type ServerUnaryCall,
+  status,
+} from '@grpc/grpc-js';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import { getGrpcStatusCode } from '@/shared/errors/error-code';

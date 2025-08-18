@@ -1,6 +1,6 @@
 import type { IAssetRepository } from '@/domain/repositories/asset.repository';
 import type { IMapper } from '@/infrastructure/mappers/mapper.interface';
-import { IAsset } from '../schema/asset.schema';
+import type { IAsset } from '../schema/asset.schema';
 import { inject, injectable } from 'inversify';
 import { MongoBaseRepository } from './base.repository';
 import { Asset } from '@/domain/entity/asset.entity';

@@ -1,4 +1,4 @@
-import {
+import type {
   AccessType,
   MediaSource,
   MediaStatus,

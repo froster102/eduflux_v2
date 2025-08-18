@@ -1,5 +1,5 @@
-import { CourseStatus } from '@/domain/entity/course.entity';
-import { IUseCase } from './use-case.interface';
+import type { CourseStatus } from '@/domain/entity/course.entity';
+import type { IUseCase } from './use-case.interface';
 
 export interface PublishedCourseDto {
   id: string;

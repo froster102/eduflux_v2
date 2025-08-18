@@ -1,5 +1,9 @@
-import { Asset, MediaSource, ResourceType } from '@/domain/entity/asset.entity';
-import { IUseCase } from './use-case.interface';
+import {
+  Asset,
+  type MediaSource,
+  type ResourceType,
+} from '@/domain/entity/asset.entity';
+import type { IUseCase } from './use-case.interface';
 
 export interface CompleteAssetUploadDto {
   providerSpecificId: string;

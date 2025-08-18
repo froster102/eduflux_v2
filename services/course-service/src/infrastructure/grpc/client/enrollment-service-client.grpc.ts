@@ -1,5 +1,5 @@
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
-import {
+import type { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type {
   EnrollmentDto,
   GetUserEnrollmentsResponseDto,
   IEnrollmentServiceGateway,
@@ -11,11 +11,11 @@ import {
   GetUserEnrollmentsRequest,
 } from '../generated/enrollment';
 import { enrollmentServiceGrpcConfig } from '@/shared/config/enrollment-service.grpc.config';
-import { credentials, ServiceError } from '@grpc/grpc-js';
+import { credentials, type ServiceError } from '@grpc/grpc-js';
 import { createClientLoggingInterceptor } from '../interceptors/client-logging.interceptor';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { ILogger } from '@/shared/common/interfaces/logger.interface';
+import type { ILogger } from '@/shared/common/interfaces/logger.interface';
 
 export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
   private client: EnrollmentServiceClient;

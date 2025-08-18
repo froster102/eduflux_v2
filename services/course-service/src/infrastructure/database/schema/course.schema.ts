@@ -1,4 +1,4 @@
-import { CourseLevel } from '@/domain/entity/course.entity';
+import type { CourseLevel } from '@/domain/entity/course.entity';
 import { Schema } from 'mongoose';
 
 type Status =

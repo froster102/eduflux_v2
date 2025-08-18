@@ -1,6 +1,6 @@
 import { AuthenticatedUserDto } from '@/application/dto/authenticated-user.dto';
-import { IUseCase } from './use-case.interface';
-import { CreateLectureInput } from './create-lecture.interface';
+import type { IUseCase } from './use-case.interface';
+import type { CreateLectureInput } from './create-lecture.interface';
 import { Lecture } from '@/domain/entity/lecture.entity';
 
 export interface UpdateLectureDto extends Partial<CreateLectureInput> {

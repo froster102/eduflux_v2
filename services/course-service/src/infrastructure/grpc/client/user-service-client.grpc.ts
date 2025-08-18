@@ -1,4 +1,4 @@
-import { credentials, ServiceError } from '@grpc/grpc-js';
+import { credentials, type ServiceError } from '@grpc/grpc-js';
 import { inject } from 'inversify';
 import { userServiceGrpcConfig } from '@/shared/config/user-service.grpc.config';
 import { TYPES } from '@/shared/di/types';
@@ -8,7 +8,7 @@ import {
   UserResponse,
   UserServiceClient,
 } from '../generated/user';
-import { IUserServiceGateway } from '@/application/ports/user-service.gateway';
+import type { IUserServiceGateway } from '@/application/ports/user-service.gateway';
 import { createClientLoggingInterceptor } from '../interceptors/client-logging.interceptor';
 
 export class GrpcUserServiceClient implements IUserServiceGateway {

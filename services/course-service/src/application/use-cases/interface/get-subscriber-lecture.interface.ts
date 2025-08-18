@@ -1,5 +1,5 @@
-import { LectureDto } from '@/application/dto/lecture.dto';
-import { IUseCase } from './use-case.interface';
+import type { LectureDto } from '@/application/dto/lecture.dto';
+import type { IUseCase } from './use-case.interface';
 
 export interface GetSubscriberLectureInput {
   userId: string;

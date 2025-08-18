@@ -1,4 +1,4 @@
-import { LogEntry, logLevel } from 'kafkajs';
+import { type LogEntry, logLevel } from 'kafkajs';
 import type { ILogger } from '../common/interfaces/logger.interface';
 import { container } from '../di/container';
 import { TYPES } from '../di/types';

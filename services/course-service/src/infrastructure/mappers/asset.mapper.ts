@@ -1,6 +1,6 @@
 import { Asset } from '@/domain/entity/asset.entity';
-import { IAsset } from '../database/schema/asset.schema';
-import { IMapper } from './mapper.interface';
+import type { IAsset } from '../database/schema/asset.schema';
+import type { IMapper } from './mapper.interface';
 import { injectable } from 'inversify';
 
 @injectable()

@@ -1,4 +1,4 @@
-import { ILogger } from '@/shared/common/interfaces/logger.interface';
+import { type ILogger } from '@/shared/common/interfaces/logger.interface';
 import {
   InterceptingCall,
   ListenerBuilder,

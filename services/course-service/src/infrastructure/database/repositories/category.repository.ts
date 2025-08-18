@@ -1,8 +1,8 @@
 import type { IMapper } from '@/infrastructure/mappers/mapper.interface';
 import { inject, injectable } from 'inversify';
 import { MongoBaseRepository } from './base.repository';
-import { ICategory } from '../schema/category.schema';
-import { ICategoryRepository } from '@/domain/repositories/category.repository';
+import type { ICategory } from '../schema/category.schema';
+import type { ICategoryRepository } from '@/domain/repositories/category.repository';
 import { TYPES } from '@/shared/di/types';
 import CategoryModel from '../models/category.model';
 import { Category } from '@/domain/entity/category.entity';

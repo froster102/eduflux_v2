@@ -1,5 +1,5 @@
 import { Lecture } from '@/domain/entity/lecture.entity';
-import { ILecture } from '../database/schema/lecture.schema';
+import type { ILecture } from '../database/schema/lecture.schema';
 import type { IMapper } from './mapper.interface';
 import { injectable } from 'inversify';
 

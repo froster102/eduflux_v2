@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
-import { IMapper } from './mapper.interface';
+import type { IMapper } from './mapper.interface';
 import { Category } from '@/domain/entity/category.entity';
-import { ICategory } from '../database/schema/category.schema';
+import type { ICategory } from '../database/schema/category.schema';
 
 @injectable()
 export class CategoryMapper implements IMapper<Category, ICategory> {

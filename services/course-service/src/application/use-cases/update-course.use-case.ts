@@ -4,7 +4,7 @@ import type { ICourseRepository } from '@/domain/repositories/course.repository'
 import { Course } from '@/domain/entity/course.entity';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
-import {
+import type {
   IUpdateCourseUseCase,
   UpdateCourseInput,
 } from './interface/update-course.interface';

@@ -1,8 +1,8 @@
-import { ILogger } from '@/shared/common/interfaces/logger.interface';
+import { type ILogger } from '@/shared/common/interfaces/logger.interface';
 import {
   ResponderBuilder,
   ServerInterceptingCall,
-  ServerInterceptor,
+  type ServerInterceptor,
   ServerListenerBuilder,
 } from '@grpc/grpc-js';
 

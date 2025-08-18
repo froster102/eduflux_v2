@@ -6,7 +6,7 @@ import { MongoBaseRepository } from './base.repository';
 import ChapterModel from '../models/chapter.model';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import { AnyBulkWriteOperation } from 'mongoose';
+import type { AnyBulkWriteOperation } from 'mongoose';
 
 export class MongoChapterRepository
   extends MongoBaseRepository<Chapter, IChapter>

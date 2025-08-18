@@ -5,7 +5,7 @@ import { inject } from 'inversify';
 import { NotFoundException } from '@/application/exceptions/not-found.exception';
 import { ForbiddenException } from '../exceptions/forbidden.exception';
 import { Lecture } from '@/domain/entity/lecture.entity';
-import {
+import type {
   IUpdateLectureUseCase,
   UpdateLectureInput,
 } from './interface/update-lecture.interface';

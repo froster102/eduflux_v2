@@ -1,6 +1,6 @@
 import { Chapter } from '@/domain/entity/chapter.entity';
 import type { IMapper } from './mapper.interface';
-import { IChapter } from '../database/schema/chapter.schema';
+import type { IChapter } from '../database/schema/chapter.schema';
 
 export class ChapterMapper implements IMapper<Chapter, IChapter> {
   toDomain(raw: IChapter): Chapter {

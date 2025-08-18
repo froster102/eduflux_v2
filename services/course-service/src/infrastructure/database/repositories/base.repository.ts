@@ -2,7 +2,7 @@ import type { IMapper } from '@/infrastructure/mappers/mapper.interface';
 import { Model } from 'mongoose';
 import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
 import type { IBaseRepository } from '@/domain/repositories/base.repository';
-import { PaginationQueryParams } from '@/application/dto/pagination.dto';
+import type { PaginationQueryParams } from '@/application/dto/pagination.dto';
 
 export abstract class MongoBaseRepository<TDomain, TPersistence>
   implements IBaseRepository<TDomain>

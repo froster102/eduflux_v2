@@ -2,7 +2,7 @@ import type { IEnrollmentServiceGateway } from '../ports/enrollment-service.gate
 import type { ICourseRepository } from '@/domain/repositories/course.repository';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
-import {
+import type {
   GetUserSubscribedCoursesInput,
   GetUserSubscribedCoursesOutput,
   IGetUserSubscribedCoursesUseCase,

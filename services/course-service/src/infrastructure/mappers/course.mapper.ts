@@ -1,6 +1,6 @@
 import { Course } from '@/domain/entity/course.entity';
 import type { IMapper } from './mapper.interface';
-import { ICourse } from '../database/schema/course.schema';
+import type { ICourse } from '../database/schema/course.schema';
 
 export class CourseMapper implements IMapper<Course, ICourse> {
   toDomain(raw: ICourse): Course {

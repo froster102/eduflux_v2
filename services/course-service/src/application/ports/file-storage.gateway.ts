@@ -1,4 +1,8 @@
-import { Asset, MediaSource, ResourceType } from '@/domain/entity/asset.entity';
+import {
+  Asset,
+  type MediaSource,
+  type ResourceType,
+} from '@/domain/entity/asset.entity';
 
 export interface IFileStorageGateway {
   getAccessUrl(

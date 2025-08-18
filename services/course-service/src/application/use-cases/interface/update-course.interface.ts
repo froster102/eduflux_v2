@@ -1,6 +1,6 @@
-import { IUseCase } from './use-case.interface';
+import type { IUseCase } from './use-case.interface';
 import { AuthenticatedUserDto } from '@/application/dto/authenticated-user.dto';
-import { Course, CourseLevel } from '@/domain/entity/course.entity';
+import { Course, type CourseLevel } from '@/domain/entity/course.entity';
 
 export interface UpdateCourseInput {
   courseId: string;

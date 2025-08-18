@@ -6,7 +6,7 @@ import { MongoBaseRepository } from './base.repository';
 import { inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import LectureModel from '../models/lecture.model';
-import { AnyBulkWriteOperation } from 'mongoose';
+import type { AnyBulkWriteOperation } from 'mongoose';
 
 export class MongoLectureRepository
   extends MongoBaseRepository<Lecture, ILecture>

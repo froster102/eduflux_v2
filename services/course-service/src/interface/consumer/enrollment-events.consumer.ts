@@ -2,7 +2,7 @@ import type { ILogger } from '@/shared/common/interfaces/logger.interface';
 import type { IUseCase } from '@/application/use-cases/interface/use-case.interface';
 import { TYPES } from '@/shared/di/types';
 import { inject } from 'inversify';
-import { Consumer, EachMessagePayload } from 'kafkajs';
+import type { Consumer, EachMessagePayload } from 'kafkajs';
 import { kafka } from '@/infrastructure/messaging/kafka/setup';
 import { ApplicationException } from '@/application/exceptions/application.exception';
 import { DomainException } from '@/domain/exceptions/domain.exception';

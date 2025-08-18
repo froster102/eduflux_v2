@@ -13,7 +13,7 @@ import type { IDeleteLectureUseCase } from '@/application/use-cases/interface/de
 import type { IPublishCourseUseCase } from '@/application/use-cases/interface/publish-course.use-case.interface';
 import type { IGetCourseCategoriesUseCase } from '@/application/use-cases/interface/get-course-categories.interface';
 import { Course } from '@/domain/entity/course.entity';
-import { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
+import type { HttpResponse } from '@/infrastructure/http/interfaces/http-response.interface';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import {
   addAssetToLectureSchema,
