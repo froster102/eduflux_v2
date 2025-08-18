@@ -6,6 +6,7 @@ import { TYPES } from '@/shared/di/types';
 import { grpcServerConfig } from '@/shared/config/server.grpc.config';
 import { PaymentServiceService } from './generated/payment';
 import { GrpcPaymentService } from './services/payment.service';
+import { createServerLoggingInterceptor } from './interceptors/server-logging.interceptor';
 
 @injectable()
 export class GrpcServer {
@@ -16,7 +17,9 @@ export class GrpcServer {
   private port: number;
 
   constructor() {
-    this.server = new Server();
+    this.server = new Server({
+      interceptors: [createServerLoggingInterceptor(this.logger)],
+    });
     this.port = Number(grpcServerConfig.PORT);
   }
 
