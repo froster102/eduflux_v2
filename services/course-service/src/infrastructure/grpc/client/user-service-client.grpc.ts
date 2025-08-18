@@ -1,11 +1,4 @@
-import {
-  credentials,
-  Interceptor,
-  RequesterBuilder,
-  ServiceError,
-  InterceptingCall,
-  ListenerBuilder,
-} from '@grpc/grpc-js';
+import { credentials, ServiceError } from '@grpc/grpc-js';
 import { inject } from 'inversify';
 import { userServiceGrpcConfig } from '@/shared/config/user-service.grpc.config';
 import { TYPES } from '@/shared/di/types';
@@ -16,6 +9,7 @@ import {
   UserServiceClient,
 } from '../generated/user';
 import { IUserServiceGateway } from '@/application/ports/user-service.gateway';
+import { createClientLoggingInterceptor } from '../interceptors/client-logging.interceptor';
 
 export class GrpcUserServiceClient implements IUserServiceGateway {
   private client: UserServiceClient;
@@ -28,42 +22,13 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
       this.address,
       credentials.createInsecure(),
       {
-        interceptors: [this.createLoggingInterceptor()],
+        interceptors: [createClientLoggingInterceptor(this.logger)],
       },
     );
     this.logger.info(
       `gRPC user service client created, target:${this.address}`,
     );
   }
-
-  private createLoggingInterceptor(): Interceptor {
-    return (options, nextCall) => {
-      const next = nextCall(options);
-
-      const requester = new RequesterBuilder()
-        .withStart((metadata, listener, nextStart) => {
-          const customListener = new ListenerBuilder()
-            .withOnReceiveStatus((status, nextStatus) => {
-              this.logger.info(
-                `gRPC call for method '${options.method_definition.path}' completed with status: ${JSON.stringify(status)}`,
-              );
-              nextStatus(status);
-            })
-            .build();
-          nextStart(metadata, customListener);
-        })
-        .withSendMessage((message, nextMessage) => {
-          this.logger.info(
-            `gRPC request started for method: ${options.method_definition.path}`,
-          );
-          nextMessage(message);
-        })
-        .build();
-
-      return new InterceptingCall(next, requester);
-    };
-  }
-
   async getUserDetails(userId: string): Promise<UserProfile> {
     const request: GetUserRequest = { userId };
     return new Promise((resolve, reject) => {

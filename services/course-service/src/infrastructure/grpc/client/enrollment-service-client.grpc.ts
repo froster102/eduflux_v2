@@ -12,17 +12,24 @@ import {
 } from '../generated/enrollment';
 import { enrollmentServiceGrpcConfig } from '@/shared/config/enrollment-service.grpc.config';
 import { credentials, ServiceError } from '@grpc/grpc-js';
+import { createClientLoggingInterceptor } from '../interceptors/client-logging.interceptor';
+import { inject } from 'inversify';
+import { TYPES } from '@/shared/di/types';
+import { ILogger } from '@/shared/common/interfaces/logger.interface';
 
 export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
   private client: EnrollmentServiceClient;
   private address: string;
-  // private logger = new Logger('GRPC_ENROLLMENT_SERVICE');
 
-  constructor() {
+  constructor(@inject(TYPES.Logger) private readonly logger: ILogger) {
+    this.logger = logger.fromContext(GrpcEnrollmentServiceClient.name);
     this.address = enrollmentServiceGrpcConfig.GRPC_ENROLLMENT_SERVICE_URL;
     this.client = new EnrollmentServiceClient(
       this.address,
       credentials.createInsecure(),
+      {
+        interceptors: [createClientLoggingInterceptor(this.logger)],
+      },
     );
     // this.logger.info(
     //   `gRPC enrollment service client initialized, target:${this.address}`,

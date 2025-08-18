@@ -6,6 +6,7 @@ import { GrpcCourseService } from './services/course.grpc.service';
 import { grpcServerConfig } from '@/shared/config/server.grpc.config';
 import { CourseServiceService } from './generated/course';
 import type { ILogger } from '@/shared/common/interfaces/logger.interface';
+import { createServerLoggingInterceptor } from './interceptors/server-logging.interceptor';
 
 @injectable()
 export class GrpcServer {
@@ -14,7 +15,9 @@ export class GrpcServer {
   private port: number;
 
   constructor() {
-    this.server = new Server();
+    this.server = new Server({
+      interceptors: [createServerLoggingInterceptor(this.logger)],
+    });
     this.port = Number(grpcServerConfig.PORT);
   }
 
