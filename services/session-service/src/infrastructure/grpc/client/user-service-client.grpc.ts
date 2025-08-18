@@ -10,7 +10,7 @@ import { inject, injectable } from 'inversify';
 import { userGrpcServiceConfig } from '@/shared/config/user-service.grpc.config';
 import { Role } from '@/shared/constants/role';
 import { TYPES } from '@/shared/di/types';
-import { createLoggingInterceptor } from '../interceptors/logging.interceptor';
+import { createClientLoggingInterceptor } from '../interceptors/client-logging.interceptor';
 
 @injectable()
 export class GrpcUserServiceClient implements IUserServiceGateway {
@@ -23,7 +23,7 @@ export class GrpcUserServiceClient implements IUserServiceGateway {
     this.client = new UserServiceClient(
       this.address,
       credentials.createInsecure(),
-      { interceptors: [createLoggingInterceptor(this.logger)] },
+      { interceptors: [createClientLoggingInterceptor(this.logger)] },
     );
     this.logger.info(
       `gRPC user service client initialized, target:${this.address}`,

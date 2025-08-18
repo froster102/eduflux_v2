@@ -13,6 +13,7 @@ import {
 } from '../generated/payment';
 import { paymentGrpcServiceConfig } from '@/shared/config/payment-service.grpc.config';
 import { TYPES } from '@/shared/di/types';
+import { createClientLoggingInterceptor } from '../interceptors/client-logging.interceptor';
 
 @injectable()
 export class GrpcPaymentServiceClient implements IPaymentServiceGateway {
@@ -25,6 +26,9 @@ export class GrpcPaymentServiceClient implements IPaymentServiceGateway {
     this.client = new PaymentServiceClient(
       this.address,
       credentials.createInsecure(),
+      {
+        interceptors: [createClientLoggingInterceptor(this.logger)],
+      },
     );
     this.logger.info(
       `gRPC payment service client initialized, target:${this.address}`,
