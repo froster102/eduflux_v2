@@ -16,8 +16,6 @@ export const TYPES = {
   CreateUserProgressUseCase: Symbol.for('CreateUserProgressUseCase'),
   AddLectureProgressUseCase: Symbol.for('AddLectureProgressUseCase'),
   DeleteLectureProgressUseCase: Symbol.for('DeleteLectureProgressUseCase'),
-  GetUserSessionPriceUseCase: Symbol.for('GetUserSessionPriceUseCase'),
-  UpdateUserSessionPriceUseCase: Symbol.for('UpdateUserSessionPriceUseCase'),
   GetInstructorsUseCase: Symbol.for('GetInstructorsUseCase'),
 
   //Ports
@@ -47,4 +45,7 @@ export const TYPES = {
 
   //Logger
   Logger: Symbol.for('Logger'),
+
+  //Resolvers
+  GraphqlResolver: Symbol.for('GraphqlResolver'),
 };

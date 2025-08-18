@@ -7,7 +7,4 @@ export interface GetInstructorPricingOutputDto {
 
 export interface IUserServiceGateway {
   getUserDetails(userId: string): Promise<User>;
-  getInstructorSessionPricng(
-    userId: string,
-  ): Promise<GetInstructorPricingOutputDto>;
 }

@@ -4,14 +4,11 @@ import type {
   ICreateUserUseCase,
 } from '@/application/use-cases/interface/create-user.interface';
 import type { IUpdateUserUseCase } from '@/application/use-cases/interface/update-user.interface';
-import type { IGetUserSessionPriceUseCase } from '@/application/use-cases/interface/get-user-session-price.interface';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@/shared/di/types';
 import {
   CreateUserRequest,
-  GetInstructorSessingPricingRequest,
   GetUserRequest,
-  InstructorSessionPricingResponse,
   UpdateUserRequest,
   UserResponse,
   UserServiceServer,
@@ -34,8 +31,6 @@ export class UserGrpcService implements UserServiceServer {
     private readonly createUserUseCase: ICreateUserUseCase,
     @inject(TYPES.UpdateUserUseCase)
     private readonly updateUserUseCase: IUpdateUserUseCase,
-    @inject(TYPES.GetUserSessionPriceUseCase)
-    private readonly getUserSessionPriceUseCase: IGetUserSessionPriceUseCase,
   ) {}
 
   createUser(
@@ -122,31 +117,6 @@ export class UserGrpcService implements UserServiceServer {
           roles: user.roles,
         };
         callback(null, response);
-      })
-      .catch((error: Error) => {
-        this.handleError(error, callback);
-      });
-  }
-
-  getInstructorSessingPricing(
-    call: ServerUnaryCall<
-      GetInstructorSessingPricingRequest,
-      InstructorSessionPricingResponse
-    >,
-    callback: sendUnaryData<InstructorSessionPricingResponse>,
-  ) {
-    this.getUserSessionPriceUseCase
-      .execute({ userId: call.request.userId })
-      .then((getUserSessionPriceOutput) => {
-        if (getUserSessionPriceOutput) {
-          const response: InstructorSessionPricingResponse = {
-            id: getUserSessionPriceOutput.id,
-            price: getUserSessionPriceOutput.price,
-            currency: getUserSessionPriceOutput.currency,
-            duration: getUserSessionPriceOutput.duration,
-          };
-          callback(null, response);
-        }
       })
       .catch((error: Error) => {
         this.handleError(error, callback);

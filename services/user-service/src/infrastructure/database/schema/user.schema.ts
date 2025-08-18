@@ -1,4 +1,3 @@
-import { SessionPricing } from '@/domain/entities/user.entity';
 import { Role } from '@/shared/types/role';
 import { Schema } from 'mongoose';
 
@@ -7,7 +6,6 @@ export interface IMongoUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  sessionPricing: SessionPricing | null;
   roles: Role[];
   image?: string;
   bio?: string;
@@ -31,15 +29,6 @@ const SocialLinkSchema = new Schema(
   { _id: false },
 );
 
-const SessionPricingSchema = new Schema(
-  {
-    price: { type: Number },
-    currency: { type: String },
-    durationMinutes: { type: Number },
-  },
-  { _id: false },
-);
-
 export const UserSchema = new Schema<IMongoUser>(
   {
     _id: {
@@ -54,7 +43,6 @@ export const UserSchema = new Schema<IMongoUser>(
       type: String,
     },
     email: { type: String },
-    sessionPricing: SessionPricingSchema,
     image: {
       type: String,
     },

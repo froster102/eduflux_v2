@@ -1,19 +1,13 @@
 import type { IUpdateUserUseCase } from '@/application/use-cases/interface/update-user.interface';
 import type { IGetUserUseCase } from '@/application/use-cases/interface/get-user.interface';
 import type { IGetInstructorProfileUseCase } from '@/application/use-cases/interface/get-instructor-profile.interface';
-import type { IGetUserSessionPriceUseCase } from '@/application/use-cases/interface/get-user-session-price.interface';
-import type { IUpdateUserSessionPriceUseCase } from '@/application/use-cases/interface/update-user-session-price.interface';
 import type { IGetInstructorsUseCase } from '@/application/use-cases/interface/get-instructors.interface';
-
 import { TYPES } from '@/shared/di/types';
 import { inject, injectable } from 'inversify';
 import { Elysia } from 'elysia';
 import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authentication.middleware';
 import httpStatus from 'http-status';
-import {
-  updateUserSchema,
-  updateUserSessionPricingSchema,
-} from '@/infrastructure/http/schema/user';
+import { updateUserSchema } from '@/infrastructure/http/schema/user';
 import { paginationQuerySchema } from '@/infrastructure/http/schema/pagination';
 
 @injectable()
@@ -25,10 +19,6 @@ export class UserRoutes {
     private readonly updateUserUseCase: IUpdateUserUseCase,
     @inject(TYPES.GetInstructorProfileUseCase)
     private readonly getInstructorProfileUseCase: IGetInstructorProfileUseCase,
-    @inject(TYPES.GetUserSessionPriceUseCase)
-    private readonly getUserSessionPriceUseCase: IGetUserSessionPriceUseCase,
-    @inject(TYPES.UpdateUserSessionPriceUseCase)
-    private readonly updateUserSessionPriceUseCase: IUpdateUserSessionPriceUseCase,
     @inject(TYPES.GetInstructorsUseCase)
     private readonly getInstructorsUseCase: IGetInstructorsUseCase,
   ) {}
@@ -42,41 +32,19 @@ export class UserRoutes {
           set.status = httpStatus.OK;
           return foundUser.toJSON();
         })
-        .put(
-          '/me',
-          async ({ body, user }) => {
-            const { firstName, lastName, bio, socialLinks, image } = body;
-            const updatedUser = await this.updateUserUseCase.execute({
-              id: user.id,
-              firstName,
-              lastName,
-              bio,
-              image,
-              socialLinks,
-            });
-            return { ...updatedUser.toJSON() };
-          },
-          {
-            body: updateUserSchema,
-          },
-        )
-        .get('/me/session-pricing', async ({ user }) => {
-          const pricing = await this.getUserSessionPriceUseCase.execute({
-            userId: user.id,
+        .put('/me', async ({ body, user }) => {
+          const { firstName, lastName, bio, image, socialLinks } =
+            updateUserSchema.parse(body);
+          const updatedUser = await this.updateUserUseCase.execute({
+            id: user.id,
+            firstName,
+            lastName,
+            bio,
+            image,
+            socialLinks,
           });
-          return pricing;
+          return { ...updatedUser.toJSON() };
         })
-        .put(
-          '/me/session-pricing',
-          async ({ user, body }) => {
-            await this.updateUserSessionPriceUseCase.execute({
-              actor: user,
-              price: body.price,
-            });
-            return;
-          },
-          { body: updateUserSessionPricingSchema },
-        )
         .get('/instructors', async ({ query, user }) => {
           const parsedQuery = paginationQuerySchema.parse(query);
           const response = await this.getInstructorsUseCase.execute({

@@ -19,11 +19,10 @@ import { GetUserCourseProgressUseCase } from '@/application/use-cases/get-user-c
 import { EnrollmentEventsConsumer } from '@/interface/consumers/enrollment-events.consumer';
 import { CreateUserProgressUseCase } from '@/application/use-cases/create-user-progress.use-case';
 import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-producer.adapter';
-import { GetUserSessionPriceUseCase } from '@/application/use-cases/get-user-session-price.use-case';
-import { UpdateUserSessionPriceUseCase } from '@/application/use-cases/update-user-session-price.use-case';
 import { GetInstructorsUseCase } from '@/application/use-cases/get-instructors.use-case';
 import { UserMapper } from '@/infrastructure/mappers/user.mapper';
 import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
+import { GraphqlResolver } from '@/infrastructure/graphql/resolvers/resolvers';
 
 const container = new Container();
 
@@ -39,10 +38,6 @@ container.bind(TYPES.CreateUserUseCase).to(CreateUserUseCase);
 container.bind(TYPES.UpdateUserUseCase).to(UpdateUserUseCase);
 container.bind(TYPES.GetUserUseCase).to(GetUserUseCase);
 container.bind(TYPES.CreateUserProgressUseCase).to(CreateUserProgressUseCase);
-container.bind(TYPES.GetUserSessionPriceUseCase).to(GetUserSessionPriceUseCase);
-container
-  .bind(TYPES.UpdateUserSessionPriceUseCase)
-  .to(UpdateUserSessionPriceUseCase);
 container
   .bind(TYPES.GetInstructorProfileUseCase)
   .to(GetInstructorProfileUseCase);
@@ -80,5 +75,8 @@ container.bind(TYPES.UserMapper).to(UserMapper);
 
 //Logger
 container.bind(TYPES.Logger).to(WinstonLogger);
+
+//Resolvers
+container.bind(TYPES.GraphqlResolver).to(GraphqlResolver);
 
 export { container };

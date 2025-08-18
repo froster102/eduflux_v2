@@ -1,17 +1,10 @@
 import { Role } from '@/shared/types/role';
 
-export interface SessionPricing {
-  price: number;
-  currency: string;
-  durationMinutes: number;
-}
-
 export class User {
   private readonly _id: string;
   private _firstName: string;
   private _lastName: string;
   private _email: string;
-  private _sessionPricing: SessionPricing | null;
   private _image?: string;
   private _roles: Role[];
   private _bio?: string;
@@ -27,7 +20,6 @@ export class User {
     firstName: string,
     lastName: string,
     email: string,
-    sessionPricing: SessionPricing | null,
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
@@ -42,7 +34,6 @@ export class User {
     this._firstName = firstName;
     this._lastName = lastName;
     this._email = email;
-    this._sessionPricing = sessionPricing;
     this._roles = roles;
     this._image = image;
     this._bio = bio;
@@ -69,7 +60,6 @@ export class User {
       firstName,
       lastName,
       email,
-      null,
       roles,
       now,
       now,
@@ -84,7 +74,6 @@ export class User {
     firstName: string,
     lastName: string,
     email: string,
-    sessionPricing: SessionPricing | null,
     roles: Role[],
     createdAt: Date,
     updatedAt: Date,
@@ -100,7 +89,6 @@ export class User {
       firstName,
       lastName,
       email,
-      sessionPricing,
       roles,
       createdAt,
       updatedAt,
@@ -124,10 +112,6 @@ export class User {
 
   public get email(): string {
     return this._email;
-  }
-
-  public get sessionPricing(): SessionPricing | null {
-    return this._sessionPricing;
   }
 
   public get image(): string | undefined {
@@ -191,14 +175,6 @@ export class User {
     return `${this._firstName} ${this._lastName}`;
   }
 
-  public setSessionPrice(price: number): void {
-    this._sessionPricing = {
-      currency: 'USD',
-      durationMinutes: 60,
-      price,
-    };
-  }
-
   public update(
     dto: Partial<{
       firstName: string;
@@ -257,7 +233,6 @@ export class User {
       id: this.id,
       firstName: this.firstName,
       lastName: this.lastName,
-      sessionPricing: this.sessionPricing,
       image: this.image,
       email: this.email,
       bio: this.bio,

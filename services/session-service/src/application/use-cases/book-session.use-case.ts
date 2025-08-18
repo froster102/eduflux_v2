@@ -18,6 +18,7 @@ import { envVariables } from '@/shared/validation/env-variables';
 import { imageConfig } from '@/shared/config/image.config';
 import { Session } from '@/domain/entities/session.entity';
 import { Slot } from '@/domain/entities/slot.entity';
+import type { ISessionSettingsRepository } from '@/domain/repositories/session-settings.repository';
 
 export class BookSessionUseCase implements IBookSessionUseCase {
   constructor(
@@ -30,6 +31,8 @@ export class BookSessionUseCase implements IBookSessionUseCase {
     @inject(TYPES.SessionBookingService)
     private readonly sessionBookingService: SessionBookingService,
     @inject(TYPES.UnitOfWork) private readonly uow: IUnitOfWork,
+    @inject(TYPES.SessionSettingsRepository)
+    private readonly sessionSettingsRepository: ISessionSettingsRepository,
   ) {}
 
   async execute(
@@ -54,21 +57,26 @@ export class BookSessionUseCase implements IBookSessionUseCase {
       throw new NotFoundException('Instructor details not found.');
     }
 
-    const { price: sessionPrice } =
-      await this.userServiceGateway.getInstructorSessionPricng(
-        slot.instructorId,
-      );
+    const sessionSettings = await this.sessionSettingsRepository.findByUserId(
+      slot.instructorId,
+    );
+
+    if (!sessionSettings) {
+      throw new NotFoundException('Instructor settings not found.');
+    }
+
+    const { price } = sessionSettings;
 
     const { newSession, updatedSlot } =
       this.sessionBookingService.createPendingSession(
         slot,
         userId,
-        sessionPrice,
+        price,
         'USD',
       );
 
     const { checkoutUrl } = await this.paymentServiceGateway.initiatePayment({
-      amount: sessionPrice * 100,
+      amount: price * 100,
       currency: 'USD',
       payerId: userId,
       paymentPurpose: PaymentPurpose.INSTRUCTOR_SESSION,
