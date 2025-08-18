@@ -1,18 +1,12 @@
 import type { ILogger } from '@/shared/common/interface/logger.interface';
 import { injectable } from 'inversify';
-import {
-  ResponderBuilder,
-  Server,
-  ServerCredentials,
-  ServerInterceptingCall,
-  ServerInterceptor,
-  ServerListenerBuilder,
-} from '@grpc/grpc-js';
+import { Server, ServerCredentials } from '@grpc/grpc-js';
 import { UserServiceService } from './generated/user';
 import { container } from '@/shared/di/container';
 import { UserGrpcService } from './services/user.service';
 import { TYPES } from '@/shared/di/types';
 import { grpcServerConfig } from '@/shared/config/server.grpc.config';
+import { createServerLoggingInterceptor } from './interceptors/server-logging.interceptor';
 
 @injectable()
 export class GrpcServer {
@@ -23,7 +17,9 @@ export class GrpcServer {
   private port: number;
 
   constructor() {
-    this.server = new Server({ interceptors: [this.loggingInterceptor] });
+    this.server = new Server({
+      interceptors: [createServerLoggingInterceptor(this.logger)],
+    });
     this.port = Number(grpcServerConfig.PORT);
   }
 
@@ -31,23 +27,6 @@ export class GrpcServer {
     const userService = container.get<UserGrpcService>(TYPES.UserGrpcService);
     this.server.addService(UserServiceService, userService);
   }
-
-  loggingInterceptor: ServerInterceptor = (methodDescriptor, call) => {
-    this.logger.info(`Incoming gRPC call for method: ${methodDescriptor.path}`);
-    const listener = new ServerListenerBuilder().build();
-    const responder = new ResponderBuilder()
-      .withStart((next) => {
-        next(listener);
-      })
-      .withSendStatus((status, next) => {
-        this.logger.info(
-          `gRPC call for method '${methodDescriptor.path}' completed with status: ${JSON.stringify(status)}`,
-        );
-        next(status);
-      })
-      .build();
-    return new ServerInterceptingCall(call, responder);
-  };
 
   public start(): void {
     this.server.bindAsync(
