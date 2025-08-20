@@ -1,12 +1,12 @@
 import axios from "axios";
 
-import { BACKEND_URL } from "./constants";
+import { API_BASE_URL } from "./constants";
 import { auth } from "./better-auth/auth";
 
 import { useAuthStore } from "@/store/auth-store";
 
 const api = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
