@@ -1,0 +1,1 @@
+export const QUERY_SERVICE = "QUERY_SERVICE";

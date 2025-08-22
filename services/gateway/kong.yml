@@ -2,20 +2,31 @@ _format_version: "3.0"
 _transform: true
 
 plugins:
-      - name: cors
-        config:
-          origins:
-            - "http://localhost:5173"
-          methods:
-            - GET
-            - POST
-            - OPTIONS
-            - PUT
-            - PATCH
-            - DELETE
-          credentials: true
+  - name: cors
+    config:
+      origins:
+        - "http://localhost:5173"
+      methods:
+        - GET
+        - POST
+        - OPTIONS
+        - PUT
+        - PATCH
+        - DELETE
+      credentials: true
 
 services:
+  - name: query-service
+    url: http://query-service:3009
+    routes:
+      - name: quey-service-routes
+        paths:
+          - /api/graphql
+        methods:
+          - POST
+          - OPTIONS
+        strip_path: false
+
   - name: auth-service
     url: http://auth-service:3001
     routes:
@@ -23,7 +34,7 @@ services:
         paths:
           - /api/auth
         strip_path: false
-        
+
   - name: user-service
     url: http://user-service:3002
     routes:
@@ -47,7 +58,7 @@ services:
         paths:
           - /api/uploads
         strip_path: false
-    
+
   - name: enrollment-service
     url: http://enrollment-service:3005
     routes:
@@ -55,7 +66,7 @@ services:
         paths:
           - /api/enrollments
         strip_path: false
-       
+
   - name: payment-service
     url: http://payment-service:3006
     routes:
