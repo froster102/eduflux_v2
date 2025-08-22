@@ -1,51 +1,50 @@
-import { t } from 'elysia';
+import { CONTENT_LIMITS } from '@/shared/config/content-limits';
+import z from 'zod/v4';
 
-export const updateUserSchema = t.Object({
-  firstName: t.String({
-    minLength: 2,
-    maxLength: 50,
-    description: "User's first name",
-  }),
-  lastName: t.String({
-    minLength: 2,
-    maxLength: 50,
-    description: "User's last name",
-  }),
-  image: t.Optional(t.String({})),
-  bio: t.Optional(
-    t.String({
-      maxLength: 500,
-      description: "User's biography",
-    }),
-  ),
-  socialLinks: t.Optional(
-    t.Array(
-      t.Object(
-        {
-          platform: t.String({
-            enum: [
-              'x',
-              'facebook',
-              'instagram',
-              'linkedin',
-              'youtube',
-              'website',
-            ],
-            description: 'Platform name for the social link',
-          }),
-          url: t.String({
-            format: 'uri',
-            description: 'URL for the social link',
-          }),
-        },
-        {
-          description: 'A social media link object',
-        },
-      ),
-    ),
-  ),
+export const updateUserSchema = z.object({
+  firstName: z
+    .string()
+    .min(CONTENT_LIMITS.FIRST_NAME.MIN_LENGTH)
+    .max(CONTENT_LIMITS.FIRST_NAME.MAX_LENGTH),
+  lastName: z
+    .string()
+    .min(CONTENT_LIMITS.LAST_NAME.MIN_LENGTH)
+    .max(CONTENT_LIMITS.LAST_NAME.MAX_LENGTH),
+  bio: z
+    .string()
+    .refine(
+      (val) => {
+        if (typeof val !== 'string' || val.length === 0) {
+          return true;
+        }
+
+        const words = val.split(' ');
+        return (
+          words.length >= CONTENT_LIMITS.BIO.MIN_LENGTH &&
+          words.length <= CONTENT_LIMITS.BIO.MAX_LENGTH
+        );
+      },
+      {
+        error: `Bio words should be between ${CONTENT_LIMITS.BIO.MIN_LENGTH} and ${CONTENT_LIMITS.BIO.MAX_LENGTH} words`,
+      },
+    )
+    .optional(),
+  image: z.string().optional(),
+  socialLinks: z
+    .array(
+      z.object({
+        platform: z.enum([
+          'x',
+          'facebook',
+          'instagram',
+          'linkedin',
+          'youtube',
+          'website',
+        ]),
+        url: z.url(),
+      }),
+    )
+    .optional(),
 });
 
-export const updateUserSessionPricingSchema = t.Object({
-  price: t.Number(),
-});
+export const updateUserSessionPricingSchema = z.object({ price: z.number() });
