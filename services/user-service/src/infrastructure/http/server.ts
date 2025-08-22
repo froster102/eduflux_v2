@@ -5,7 +5,9 @@ import { errorHandler } from './middlewares/error-handler.middleware';
 import { USER_SERVICE } from '@/shared/constants/services';
 import { TYPES } from '@/shared/di/types';
 import { container } from '@/shared/di/container';
-import { IRoute } from '@/interface/routes/interface/routes.interface';
+import { correlationIdSetupMiddleware } from './middlewares/correlation-id-setup.middleware';
+import { UserRoutes } from '@/interface/routes/user.routes';
+import { ProgressRoutes } from '@/interface/routes/progress.routes';
 
 export class Server {
   private app: Elysia;
@@ -17,8 +19,6 @@ export class Server {
   constructor(port: number) {
     this.app = new Elysia();
     this.port = port;
-    this.userRoutes = container.get<IRoute<Elysia>>(TYPES.UserRoutes);
-    this.progressRoutes = container.get<IRoute<Elysia>>(TYPES.ProgressRoutes);
   }
 
   private setupMiddlewares(): void {
@@ -28,9 +28,11 @@ export class Server {
   }
 
   private setupRoutes(): void {
-    this.app.get('/api/users/ok', () => ({ ok: true }));
-    this.app.use(this.userRoutes.register());
-    this.app.use(this.progressRoutes.register());
+    const userRoutes = container.get<UserRoutes>(TYPES.UserRoutes);
+    const progressRoutes = container.get<ProgressRoutes>(TYPES.ProgressRoutes);
+    this.app.use(userRoutes.register());
+    this.app.use(progressRoutes.register());
+    this.app.use(graphqlHandler);
   }
 
   start(): void {
