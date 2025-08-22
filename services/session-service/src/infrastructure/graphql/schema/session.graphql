@@ -1,0 +1,53 @@
+type Session @key(fields: "id") {
+  id: ID!
+  instructor: User!
+  learner: User!
+  startTime: String!
+  endTime: String!
+  status: SessionStatus!
+}
+
+extend type User @key(fields: "id") {
+  id: ID! @external
+}
+
+type Pagination {
+  currentPage: Int
+  totalPages: Int
+}
+
+type SessionConnection {
+  sessions: [Session!]!
+  pagination: Pagination!
+}
+
+type Filters {
+  name: String!
+  options: [String]
+}
+
+type Query {
+  sessions(
+    page: Int
+    limit: Int
+    filters: SessionFilters
+    type: String
+  ): SessionConnection!
+}
+
+enum SessionStatus {
+  PENDING_PAYMENT
+  BOOKED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+  NO_SHOW
+  INSTRUCTOR_NO_SHOW
+  PAYMENT_EXPIRED
+}
+
+input SessionFilters {
+  status: String
+}

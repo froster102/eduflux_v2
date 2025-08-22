@@ -59,5 +59,5 @@ export const TYPES = {
   Logger: Symbol.for('Logger'),
 
   //Resolvers
-  GraphqlResolver: Symbol.for('GraphqlResolver'),
+  SessionResolver: Symbol.for('SessionResolver'),
 };

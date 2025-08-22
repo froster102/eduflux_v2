@@ -24,6 +24,7 @@ import { UpdateInstructorSessionSettingsUseCase } from '@/application/use-cases/
 import { EnableSessionUseCase } from '@/application/use-cases/enable-session.use-case';
 import { SettingsRoutes } from '@/interface/routes/settings.routes';
 import { GetSessionsUseCase } from '@/application/use-cases/get-sessions.use-case';
+import { SessionResolver } from '@/infrastructure/graphql/resolvers/session-resolver';
 
 const container = new Container();
 
@@ -57,8 +58,8 @@ container.bind(TYPES.BookSessionUseCase).to(BookSessionUseCase);
 container
   .bind(TYPES.GetInstructorAvailableSlotsUseCase)
   .to(GetInstructorAvailableSlotsUseCase);
-container.bind(TYPES.GetUserBookingsUseCase).to(GetUserBookingsUseCase);
 container.bind(TYPES.EnableSessionUseCase).to(EnableSessionUseCase);
+container.bind(TYPES.GetSessionUseCase).to(GetSessionsUseCase);
 
 //Domain service
 container.bind(TYPES.SessionBookingService).to(SessionBookingService);
@@ -102,6 +103,6 @@ container.bind(TYPES.CronServices).to(CronServices);
 container.bind(TYPES.Logger).to(WinstonLogger);
 
 //Resolvers
-container.bind(TYPES.GraphqlResolver).to(GraphqlResolver);
+container.bind(TYPES.SessionResolver).to(SessionResolver);
 
 export { container };
