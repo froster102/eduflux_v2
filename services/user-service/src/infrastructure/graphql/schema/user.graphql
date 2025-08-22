@@ -1,0 +1,7 @@
+type User @key(fields: "id") {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String
+  image: String
+}

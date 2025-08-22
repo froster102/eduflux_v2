@@ -17,6 +17,7 @@ export const TYPES = {
   AddLectureProgressUseCase: Symbol.for('AddLectureProgressUseCase'),
   DeleteLectureProgressUseCase: Symbol.for('DeleteLectureProgressUseCase'),
   GetInstructorsUseCase: Symbol.for('GetInstructorsUseCase'),
+  GetUsersUseCase: Symbol.for('GetUsersUseCase'),
 
   //Ports
   MessageBrokerGateway: Symbol.for('MessageBrokerGateway'),
@@ -47,5 +48,5 @@ export const TYPES = {
   Logger: Symbol.for('Logger'),
 
   //Resolvers
-  GraphqlResolver: Symbol.for('GraphqlResolver'),
+  UserResolver: Symbol.for('GraphqlResolver'),
 };

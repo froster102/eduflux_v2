@@ -41,4 +41,14 @@ export abstract class BaseMongoRepositoryImpl<TPersistence, TDomain>
       });
     return found ? this.mapper.toDomain(found.toObject()) : null;
   }
+
+  async findByIds(ids: string[]): Promise<TDomain[]> {
+    const docs = await this.model
+      .find({ _id: { $in: ids } })
+      .catch((error: Record<string, any>) => {
+        throw new DatabaseException(error.message as string);
+      });
+
+    return docs ? this.mapper.toDomainArray(docs) : [];
+  }
 }

@@ -22,7 +22,8 @@ import { KafkaProducerAdapter } from '@/infrastructure/messaging/producer/kafka-
 import { GetInstructorsUseCase } from '@/application/use-cases/get-instructors.use-case';
 import { UserMapper } from '@/infrastructure/mappers/user.mapper';
 import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
-import { GraphqlResolver } from '@/infrastructure/graphql/resolvers/resolvers';
+import { GetUsersUseCase } from '@/application/use-cases/get-users.use-case';
+import { UserResolver } from '@/infrastructure/graphql/resolvers/user-resolver';
 
 const container = new Container();
 
@@ -49,6 +50,7 @@ container
   .bind(TYPES.GetUserCourseProgressUseCase)
   .to(GetUserCourseProgressUseCase);
 container.bind(TYPES.GetInstructorsUseCase).to(GetInstructorsUseCase);
+container.bind(TYPES.GetUsersUseCase).to(GetUsersUseCase);
 
 //Ports
 container
@@ -77,6 +79,6 @@ container.bind(TYPES.UserMapper).to(UserMapper);
 container.bind(TYPES.Logger).to(WinstonLogger);
 
 //Resolvers
-container.bind(TYPES.GraphqlResolver).to(GraphqlResolver);
+container.bind(TYPES.UserResolver).to(UserResolver);
 
 export { container };

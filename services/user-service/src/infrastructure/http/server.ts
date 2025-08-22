@@ -8,6 +8,7 @@ import { container } from '@/shared/di/container';
 import { correlationIdSetupMiddleware } from './middlewares/correlation-id-setup.middleware';
 import { UserRoutes } from '@/interface/routes/user.routes';
 import { ProgressRoutes } from '@/interface/routes/progress.routes';
+import { graphqlHandler } from '../graphql/graphql-handler';
 
 export class Server {
   private app: Elysia;
@@ -28,6 +29,7 @@ export class Server {
   }
 
   private setupRoutes(): void {
+    this.app.get('/health', () => ({ ok: true }));
     const userRoutes = container.get<UserRoutes>(TYPES.UserRoutes);
     const progressRoutes = container.get<ProgressRoutes>(TYPES.ProgressRoutes);
     this.app.use(userRoutes.register());
