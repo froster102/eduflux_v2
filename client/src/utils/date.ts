@@ -1,5 +1,5 @@
 import { format, parseISO } from "date-fns";
-import { DateFormatter } from "@internationalized/date";
+import { DateFormatter, parseAbsolute } from "@internationalized/date";
 
 export function formatISOstring(ISOstring: string) {
   if (ISOstring) {
@@ -48,4 +48,50 @@ export function getAllTimeZones() {
   const timeZones = (Intl as any).supportedValuesOf("timeZone") as string[];
 
   return new Set(timeZones);
+}
+
+export function getCurrentTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+export function convertIsoUtcToLocalDate(isoDateString: string) {
+  return parseAbsolute(isoDateString, getCurrentTimeZone());
+}
+
+export function formatSessionDataTime(
+  startTime: string,
+  endTime: string,
+  timeZone: string = getCurrentTimeZone(),
+) {
+  const start = parseAbsolute(startTime, timeZone);
+  const end = parseAbsolute(endTime, timeZone);
+
+  const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    timeZone,
+  });
+
+  const timeFormatter = new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone,
+  });
+
+  const formattedDate = dateFormatter.format(start.toDate());
+  const formattedStartTime = timeFormatter
+    .format(start.toDate())
+    .replace(":", ".");
+  const formattedEndTime = timeFormatter.format(end.toDate()).replace(":", ".");
+
+  const durationMs = end.toDate().getTime() - start.toDate().getTime();
+  const durationMins = Math.round(durationMs / 60000);
+
+  return {
+    date: formattedDate,
+    timeRange: `${formattedStartTime} - ${formattedEndTime}`,
+    duration: `${durationMins}m`,
+  };
 }

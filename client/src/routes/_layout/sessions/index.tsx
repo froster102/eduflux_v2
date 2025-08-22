@@ -10,6 +10,9 @@ import ClockIcon from "@/assets/icons/ClockIcon";
 import ReviewIcon from "@/assets/icons/ReviewIcon";
 import { sessionSearchSchema } from "@/features/learner/sessions/schema/session-search.schema";
 import BookingStatusModal from "@/features/learner/sessions/components/BookingStatusModal";
+import { useGetSessions } from "@/features/learner/sessions/hooks/useGetUserBookings";
+import { formatSessionDataTime } from "@/utils/date";
+import { IMAGE_BASE_URL } from "@/config/image";
 
 export const Route = createFileRoute("/_layout/sessions/")({
   validateSearch: sessionSearchSchema,
@@ -22,63 +25,72 @@ function RouteComponent() {
     Object.values(searchParams).length > 0,
   );
   const navigate = useNavigate();
+  const { data: sessions } = useGetSessions({ type: "learner" });
 
   return (
     <>
       <div>
-        {new Array(12).fill(0).map((_, i) => (
-          <div key={i} className={`pt-2`}>
-            <Card
-              className="border border-default-200 bg-background"
-              shadow="none"
-            >
-              <CardBody>
-                <div className="flex justify-between items-center">
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                      <User
-                        avatarProps={{
-                          size: "sm",
-                          src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                        }}
-                        name="Jane Doe"
-                      />
-                      <Chip color="success" variant="flat">
-                        Completed
-                      </Chip>
-                    </div>
-                    <p>Fri Oct 12 </p>
-                    <small>10.00AM - 11.00AM </small>
-                    <p className="inline-flex text-xs items-center text-default-700 gap-1">
-                      <ClockIcon width={16} />
-                      15m
-                    </p>
-                    <p className="inline-flex text-xs items-center text-default-700 gap-1">
-                      <VideoIcon width={16} />
-                      App
-                    </p>
-                  </div>
-                  <Button
-                    className="text-sm"
-                    color="primary"
-                    size="sm"
-                    startContent={<ReviewIcon width={16} />}
-                    variant="bordered"
-                  >
-                    <p className="text-sm">Write a review</p>
-                  </Button>
-                  {/* <Button
+        {sessions &&
+          sessions.map((session) => {
+            const { date, duration, timeRange } = formatSessionDataTime(
+              session.startTime,
+              session.endTime,
+            );
+
+            return (
+              <div key={session.id} className={`pt-2`}>
+                <Card
+                  className="border border-default-200 bg-background"
+                  shadow="none"
+                >
+                  <CardBody>
+                    <div className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <User
+                            avatarProps={{
+                              size: "sm",
+                              src: `${IMAGE_BASE_URL}${session.instructor.image}`,
+                            }}
+                            name={`${session.instructor.firstName} ${session.instructor.lastName}`}
+                          />
+                          <Chip color="success" variant="flat">
+                            {session.status}
+                          </Chip>
+                        </div>
+                        <p>{date}</p>
+                        <small>{timeRange}</small>
+                        <p className="inline-flex text-xs items-center text-default-700 gap-1">
+                          <ClockIcon width={16} />
+                          {duration}
+                        </p>
+                        <p className="inline-flex text-xs items-center text-default-700 gap-1">
+                          <VideoIcon width={16} />
+                          App
+                        </p>
+                      </div>
+                      <Button
+                        className="text-sm"
+                        color="primary"
+                        size="sm"
+                        startContent={<ReviewIcon width={16} />}
+                        variant="bordered"
+                      >
+                        <p className="text-sm">Write a review</p>
+                      </Button>
+                      {/* <Button
                   color="primary"
                   size="sm"
                   startContent={<VideoIcon width={18} />}
                   >
                   Join
                   </Button> */}
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-        ))}
+                    </div>
+                  </CardBody>
+                </Card>
+              </div>
+            );
+          })}
       </div>
       <BookingStatusModal
         bookingStatus={searchParams}

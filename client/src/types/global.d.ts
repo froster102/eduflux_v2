@@ -250,6 +250,12 @@ declare global {
     sortOrder?: "asc" | "desc";
   };
 
+  export type QueryParmeters = {
+    page?: number;
+    limit?: number;
+    search?: string;
+  };
+
   export type DefaultFormProps<TFormData> = {
     onSubmitHandler(data: TFormData): void;
     isPending?: boolean;
