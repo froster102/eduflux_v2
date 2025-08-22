@@ -1,3 +1,5 @@
+import { SessionStatus } from '@/domain/entities/session.entity';
+import { paginationConfig } from '@/shared/config/pagination.config';
 import { isValidTimeZone } from '@/shared/utils/date';
 import { parseTime } from '@internationalized/date';
 import { z } from 'zod/v4';
@@ -89,4 +91,17 @@ export const dateSchema = z.object({
     },
     { error: 'Invalid timezone.' },
   ),
+});
+
+export const sessionFiltersSchema = z
+  .object({
+    status: z.enum(SessionStatus),
+  })
+  .optional();
+
+export const sessionQueryParametersSchema = z.object({
+  page: z.number().default(1),
+  limit: z.number().default(paginationConfig.defaultPageSize),
+  filters: sessionFiltersSchema,
+  type: z.enum(['learner', 'instructor']).default('learner'),
 });

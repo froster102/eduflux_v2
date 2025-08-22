@@ -1,14 +1,16 @@
-import type { ClientSession } from 'mongoose';
+import type { ClientSession, FilterQuery } from 'mongoose';
 import type { IMongoSession } from '../schema/session.schema';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
-import type { ISessionRepository } from '@/domain/repositories/session.repository';
+import type {
+  ISessionRepository,
+  SessionQueryParameters,
+  SessionQueryResults,
+} from '@/domain/repositories/session.repository';
 import { Session, SessionStatus } from '@/domain/entities/session.entity';
 import { MongoBaseRepository } from './base.repository';
 import { TYPES } from '@/shared/di/types';
 import { inject, unmanaged } from 'inversify';
 import SessionModel from '../models/session.model';
-import type { QueryOptions } from '@/application/dto/query-options.dto';
-import type { GetUserBookingsQueryOptions } from '@/application/use-cases/interface/get-user-bookings.interface';
 
 export class MongoSessionRepository
   extends MongoBaseRepository<Session, IMongoSession>
@@ -35,109 +37,33 @@ export class MongoSessionRepository
     return this.sessionMapper.toDomainArray(docs);
   }
 
-  async findLearnerSessions(
-    learnerId: string,
-    queryOptions: GetUserBookingsQueryOptions,
-  ): Promise<{ sessions: Session[]; total: number }> {
-    const { query, options } = this._buildQuery(queryOptions);
-
-    if (queryOptions.filters) {
-      const { status, startTime_gte, endTime_lte } = queryOptions.filters;
-      if (status) {
-        query.status = status;
-      }
-      if (startTime_gte) {
-        query.startTime = { $gte: startTime_gte };
-      }
-      if (endTime_lte) {
-        query.endTime = { $lte: endTime_lte };
-      }
+  async listSessions(
+    participantId: string,
+    query?: SessionQueryParameters,
+  ): Promise<SessionQueryResults> {
+    const dbQuery: FilterQuery<IMongoSession> = {};
+    if (query?.type === 'instructor') {
+      dbQuery.instructorId = participantId;
+    } else {
+      dbQuery.learnerId = participantId;
     }
-
-    const finalQuery = { ...query, learnerId };
-
-    const total = await SessionModel.countDocuments(finalQuery);
-
-    const result = await SessionModel.find(
-      { ...query, learnerId },
-      null,
-      options,
-    );
-
-    return result
-      ? {
-          sessions: this.sessionMapper.toDomainArray(result),
-          total,
-        }
-      : { sessions: [], total };
-  }
-
-  async findInstructorSessions(
-    instructorId: string,
-    queryOptions: QueryOptions,
-  ): Promise<{ sessions: Session[]; total: number }> {
-    const { query, options } = this._buildQuery(queryOptions);
-
-    const total = await SessionModel.countDocuments(query);
-
-    const result = await SessionModel.find(
-      { ...query, instructorId },
-      null,
-      options,
-    );
-
-    return result
-      ? {
-          sessions: this.sessionMapper.toDomainArray(result),
-          total,
-        }
-      : { sessions: [], total };
-  }
-
-  private _buildQuery(queryOptions: QueryOptions): {
-    query: Record<string, any>;
-    options: Record<string, any>;
-  } {
-    const {
-      page = 1,
-      pageSize = 10,
-      searchQuery,
-      searchFields,
-      filters,
-      sortBy,
-      sortOrder = 'asc',
-    } = queryOptions;
-
-    const query: Record<string, any> = {};
-    const options: Record<string, any> = {};
-
-    if (searchQuery && searchFields && searchFields.length > 0) {
-      query.$or = searchFields.map((field) => ({
-        [field]: { $regex: searchQuery, $options: 'i' },
-      }));
-    }
-
-    if (filters) {
-      for (const key in filters) {
-        if (Object.prototype.hasOwnProperty.call(filters, key)) {
-          const value = filters[key];
-          if (Array.isArray(value)) {
-            query[key] = { $in: value };
-          } else {
-            query[key] = value;
-          }
+    if (query) {
+      if (query.filters) {
+        if (query.filters.status) {
+          dbQuery.status = query.filters.status;
         }
       }
     }
+    const limit = query?.limit || this.defaultLimit;
+    const skip = query?.offset || this.defaultOffset;
 
-    const skip = (page - 1) * pageSize;
-    options.skip = skip;
-    options.limit = pageSize;
+    const totalCount = await SessionModel.countDocuments(dbQuery);
 
-    if (sortBy) {
-      options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-    }
+    const sessions = await SessionModel.find(dbQuery).limit(limit).skip(skip);
 
-    return { query, options };
+    return {
+      totalCount,
+      sessions: this.sessionMapper.toDomainArray(sessions),
+    };
   }
 }

@@ -7,7 +7,7 @@ import { inject } from 'inversify';
 import {
   bookingSchema,
   dateSchema,
-} from '@/infrastructure/http/schema/session.schema';
+} from '@/infrastructure/http/schema/session';
 
 export class ScheduleRoutes {
   constructor(

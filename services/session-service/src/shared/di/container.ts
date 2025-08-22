@@ -20,11 +20,10 @@ import { GrpcPaymentServiceClient } from '@/infrastructure/grpc/client/payment-s
 import { GetInstructorAvailableSlotsUseCase } from '@/application/use-cases/get-instructor-available-slots.use-case';
 import { PaymentEventsConsumer } from '@/interface/consumer/payment-events.consumer';
 import { WinstonLogger } from '@/infrastructure/logging/winston.logger';
-import { GetUserBookingsUseCase } from '@/application/use-cases/get-user-bookings.use-case';
-import { GraphqlResolver } from '@/infrastructure/graphql/resolvers/resolvers';
 import { UpdateInstructorSessionSettingsUseCase } from '@/application/use-cases/update-instructor-session-settings.use-case';
 import { EnableSessionUseCase } from '@/application/use-cases/enable-session.use-case';
 import { SettingsRoutes } from '@/interface/routes/settings.routes';
+import { GetSessionsUseCase } from '@/application/use-cases/get-sessions.use-case';
 
 const container = new Container();
 

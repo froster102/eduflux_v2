@@ -3,12 +3,13 @@ import type { IBaseRepository } from '@/domain/repositories/base.repository';
 import type { IMapper } from '@/infrastructure/mapper/mapper.interface';
 import { Model } from 'mongoose';
 import { DatabaseException } from '@/infrastructure/exceptions/database.exception';
-import type { QueryOptions } from '@/application/dto/query-options.dto';
 
 export abstract class MongoBaseRepository<TDomain, TPersistence>
   implements IBaseRepository<TDomain>
 {
   protected session?: ClientSession;
+  protected defaultOffset = 0;
+  protected defaultLimit = 10;
 
   constructor(
     private readonly model: Model<TPersistence>,
@@ -110,54 +111,6 @@ export abstract class MongoBaseRepository<TDomain, TPersistence>
       .limit(limit);
 
     return enities ? this.mapper.toDomainArray(enities) : [];
-  }
-
-  async findWithPaginationAndFilter(
-    queryOptions: QueryOptions,
-  ): Promise<TDomain[]> {
-    const {
-      page = 1,
-      pageSize = 10,
-      searchQuery,
-      searchFields,
-      filters,
-      sortBy,
-      sortOrder = 'asc',
-    } = queryOptions;
-
-    const query: Record<string, any> = {};
-    const options: Record<string, any> = {};
-
-    if (searchQuery && searchFields && searchFields.length > 0) {
-      query.$or = searchFields.map((field) => ({
-        [field]: { $regex: searchQuery, $options: 'i' },
-      }));
-    }
-
-    if (filters) {
-      for (const key in filters) {
-        if (Object.prototype.hasOwnProperty.call(filters, key)) {
-          const value = filters[key];
-          if (Array.isArray(value)) {
-            query[key] = { $in: value };
-          } else {
-            query[key] = value;
-          }
-        }
-      }
-    }
-
-    const skip = (page - 1) * pageSize;
-    options.skip = skip;
-    options.limit = pageSize;
-
-    if (sortBy) {
-      options.sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-    }
-
-    const result = await this.model.find(query, null, options);
-
-    return result ? this.mapper.toDomainArray(result) : [];
   }
 
   async deleteById(id: string): Promise<boolean> {

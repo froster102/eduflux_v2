@@ -17,8 +17,8 @@ export const TYPES = {
   GetInstructorAvailableSlotsUseCase: Symbol.for(
     'GetInstructorAvailableSlotsUseCase',
   ),
-  GetUserBookingsUseCase: Symbol.for('GetUserBookingsUseCase'),
   EnableSessionUseCase: Symbol.for('EnableSessionUseCase'),
+  GetSessionUseCase: Symbol.for('GetSessionsUseCase'),
 
   //Domain services
   SessionBookingService: Symbol.for('SessionBookingService'),

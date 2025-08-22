@@ -5,7 +5,7 @@ import { authenticaionMiddleware } from '@/infrastructure/http/middlewares/authe
 import {
   enableSessionsSchema,
   updateSessionSettingsSchema,
-} from '@/infrastructure/http/schema/session.schema';
+} from '@/infrastructure/http/schema/session';
 import { TYPES } from '@/shared/di/types';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
