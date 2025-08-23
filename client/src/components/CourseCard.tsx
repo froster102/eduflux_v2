@@ -5,7 +5,7 @@ import { Chip } from "@heroui/chip";
 import { Button } from "@heroui/button";
 
 import { IMAGE_BASE_URL } from "@/config/image";
-import UsersIcon from "@/assets/icons/UsersIcon";
+import UsersIcon from "@/components/icons/UsersIcon";
 import { courseLevelMap } from "@/config/course-level";
 
 interface CourseCardProps {

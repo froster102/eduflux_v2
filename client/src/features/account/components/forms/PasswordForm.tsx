@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
-import { updatePasswordSchema } from "@/features/auth/validations/auth";
+
+import { updatePasswordSchema } from "../schemas/account-schema";
 
 export default function PasswordForm({
   onSubmitHandler,

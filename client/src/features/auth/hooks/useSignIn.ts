@@ -2,10 +2,10 @@ import { addToast } from "@heroui/toast";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 
-import { signIn } from "../services/auth";
-
 import { useAuthStore } from "@/store/auth-store";
 import { auth } from "@/lib/better-auth/auth";
+
+import { signIn } from "../services/auth";
 
 export function useSignIn() {
   const navigate = useNavigate();

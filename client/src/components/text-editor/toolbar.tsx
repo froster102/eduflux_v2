@@ -11,7 +11,7 @@ import {
   Underline,
 } from "lucide-react";
 
-import BoldIcon from "@/assets/icons/BoldIcon";
+import BoldIcon from "@/components/icons/BoldIcon";
 
 interface ToolbarProps {
   editor: Editor | null;

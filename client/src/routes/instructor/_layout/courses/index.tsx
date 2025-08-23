@@ -8,11 +8,11 @@ import { Pagination } from "@heroui/pagination";
 import { Spinner } from "@heroui/spinner";
 
 import { SearchIcon } from "@/components/Icons";
-import CourseListCard from "@/features/instructor/courses/components/CourseListCard";
-import { useGetInstructorCourses } from "@/features/instructor/courses/hooks/useGetInstructorCourses";
+import CourseListCard from "@/features/course/components/CourseListCard";
 import FormModal from "@/components/FormModal";
-import CreateCourseForm from "@/features/instructor/courses/components/forms/CreateCourseForm";
-import { useCreateCourse } from "@/features/instructor/courses/hooks/useCreateCourse";
+import { useCreateCourse } from "@/features/course/hooks/useCreateCourse";
+import { useGetInstructorCourses } from "@/features/course/hooks/useGetInstructorCourses";
+import CreateCourseForm from "@/features/course/components/forms/CreateCourseForm";
 
 export const Route = createFileRoute("/instructor/_layout/courses/")({
   component: RouteComponent,
@@ -21,12 +21,11 @@ export const Route = createFileRoute("/instructor/_layout/courses/")({
 function RouteComponent() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const [limit, setLimit] = React.useState(5);
   const createCourse = useCreateCourse();
 
   const { data, isLoading } = useGetInstructorCourses({
     page,
-    limit,
+    limit: 10,
     searchFields: ["title"],
     searchQuery,
   });
@@ -42,7 +41,7 @@ function RouteComponent() {
     [],
   );
 
-  const totalPages = data ? Math.ceil(data.total / limit) : 0;
+  const totalPages = data ? Math.ceil(data.total / 10) : 0;
 
   function onCreateCourseHandler(data: CreateCourseFormData) {
     createCourse.mutate(data);

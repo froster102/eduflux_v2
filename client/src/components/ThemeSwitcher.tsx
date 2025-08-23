@@ -1,8 +1,8 @@
 import { Button } from "@heroui/button";
 import { useTheme } from "@heroui/use-theme";
 
-import SunIcon from "@/assets/icons/SunIcon";
-import MoonIcon from "@/assets/icons/MoonIcon";
+import SunIcon from "@/components/icons/SunIcon";
+import MoonIcon from "@/components/icons/MoonIcon";
 
 interface ThemeSwitcherProps {
   className?: string;

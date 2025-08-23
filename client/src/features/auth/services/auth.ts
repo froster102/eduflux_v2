@@ -93,13 +93,3 @@ export async function resendOtp(email: string) {
 
   return data;
 }
-
-export async function logout() {
-  const { data, error } = await auth.signOut();
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
-}

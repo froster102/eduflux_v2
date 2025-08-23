@@ -6,11 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Link } from "@tanstack/react-router";
 
-import { signInSchema } from "../../validations/auth";
-
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
 import { auth } from "@/lib/better-auth/auth";
-import GoogleIcon from "@/assets/icons/GoogleIcon";
+import GoogleIcon from "@/components/icons/GoogleIcon";
+
+import { signInSchema } from "../../validations/auth";
 
 export default function SignInForm({
   onSubmitHandler,

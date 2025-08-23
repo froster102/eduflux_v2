@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Spinner } from "@heroui/spinner";
 
-import { useGetInstructors } from "@/features/learner/sessions/hooks/useGetInstructor";
-import InstructorCard from "@/features/learner/sessions/components/InstructorCard";
+import { useGetInstructors } from "@/features/instructor/hooks/useGetInstructors";
+import InstructorCard from "@/features/instructor/components/InstructorCard";
 
 export const Route = createFileRoute("/_layout/instructors/")({
   component: RouteComponent,

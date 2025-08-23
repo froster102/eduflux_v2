@@ -5,12 +5,12 @@ import { Chip } from "@heroui/chip";
 import { Button } from "@heroui/button";
 import React from "react";
 
-import VideoIcon from "@/assets/icons/VideoIcon";
-import ClockIcon from "@/assets/icons/ClockIcon";
-import ReviewIcon from "@/assets/icons/ReviewIcon";
-import { sessionSearchSchema } from "@/features/learner/sessions/schema/session-search.schema";
-import BookingStatusModal from "@/features/learner/sessions/components/BookingStatusModal";
-import { useGetSessions } from "@/features/learner/sessions/hooks/useGetUserBookings";
+import VideoIcon from "@/components/icons/VideoIcon";
+import ClockIcon from "@/components/icons/ClockIcon";
+import ReviewIcon from "@/components/icons/ReviewIcon";
+import { sessionSearchSchema } from "@/features/session/schemas/session-search.schema";
+import BookingStatusModal from "@/features/session/components/BookingStatusModal";
+import { useGetSessions } from "@/features/session/hooks/useGetSessions";
 import { formatSessionDataTime } from "@/utils/date";
 import { IMAGE_BASE_URL } from "@/config/image";
 

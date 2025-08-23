@@ -8,12 +8,12 @@ import { Checkbox } from "@heroui/checkbox";
 import { Spinner } from "@heroui/spinner";
 
 import HLSPlayer from "@/components/HLSPlayer";
-import { useGetCourseInfo } from "@/features/learner/courses/hooks/useGetCourseInfo";
-import { useGetPublishedCourseCurriculum } from "@/features/learner/courses/hooks/useGetPublishedCourseCurriculum";
-import { useGetSubscribedCourseCurriculumItem } from "@/features/learner/courses/hooks/useGetSubscribedCourseCurriculumItem";
-import { useAddCourseLectureProgress } from "@/features/learner/courses/hooks/useAddCourseLectureProgress";
-import { useDeleteCourseLectureProgress } from "@/features/learner/courses/hooks/useDeleteCourseLectureProgress";
-import { useGetCourseProgress } from "@/features/learner/courses/hooks/useGetCourseProgress";
+import { useGetCourseInfo } from "@/features/course/hooks/useGetCourseInfo";
+import { useGetPublishedCourseCurriculum } from "@/features/course/hooks/useGetPublishedCourseCurriculum";
+import { useGetSubscribedCourseCurriculumItem } from "@/features/course/hooks/useGetSubscribedCourseCurriculumItem";
+import { useAddCourseProgress } from "@/features/progress/hooks/useAddCourseProgress";
+import { useDeleteCourseProgress } from "@/features/progress/hooks/useDeleteCourseProgress";
+import { useGetCourseProgress } from "@/features/progress/hooks/useGetCourseProgress";
 
 export const Route = createFileRoute("/_layout/courses/$courseId/learn/")({
   component: RouteComponent,
@@ -29,8 +29,8 @@ function RouteComponent() {
     React.useState<CurriculumItem | null>(null);
   const { data: itemContent, isLoading: isItemContentLoading } =
     useGetSubscribedCourseCurriculumItem(selectedCurriculumItem);
-  const addCourseLectureProgress = useAddCourseLectureProgress();
-  const deleteLectureProgress = useDeleteCourseLectureProgress();
+  const addCourseLectureProgress = useAddCourseProgress();
+  const deleteLectureProgress = useDeleteCourseProgress();
   const { data: courseProgress } = useGetCourseProgress(courseId);
 
   React.useEffect(() => {

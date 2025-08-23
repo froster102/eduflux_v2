@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { addToast } from "@heroui/toast";
 
-import { updateUserPassword } from "../services/account";
+import { updateUserPassword } from "../service/account";
 
 export function useUpdatePassword() {
   return useMutation({

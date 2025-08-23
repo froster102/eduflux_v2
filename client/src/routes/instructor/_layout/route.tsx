@@ -2,13 +2,12 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { User } from "@heroui/user";
 
 import { useAuthStore } from "@/store/auth-store";
-import RoleSwitcher from "@/components/RoleSwitcher";
-import DefaultLayout from "@/components/DefaultLayout";
-import HomeIcon from "@/assets/icons/HomeIcon";
-import CourseIcon from "@/assets/icons/CourseIcon";
-import SessionIcon from "@/assets/icons/SessionIcon";
-import MessageIcon from "@/assets/icons/MessageIcon";
-import AccountIcon from "@/assets/icons/AccountIcon";
+import RoleSwitcher from "@/features/instructor/components/RoleSwitcher";
+import HomeIcon from "@/components/icons/HomeIcon";
+import CourseIcon from "@/components/icons/CourseIcon";
+import SessionIcon from "@/components/icons/SessionIcon";
+import MessageIcon from "@/components/icons/MessageIcon";
+import DefaultLayout from "@/layout/DefaultLayout";
 
 export const Route = createFileRoute("/instructor/_layout")({
   component: Layout,
@@ -47,11 +46,6 @@ function Layout() {
       path: "/instructor/messages",
       icon: <MessageIcon width={24} />,
       label: "Messages",
-    },
-    {
-      path: "/instructor/account",
-      icon: <AccountIcon width={24} />,
-      label: "Account",
     },
   ];
 

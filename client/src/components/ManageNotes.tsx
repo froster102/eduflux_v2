@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Divider } from "@heroui/divider";
 import { Button } from "@heroui/button";
 import { PlusIcon, Search } from "lucide-react";
@@ -7,13 +6,14 @@ import { AnimatePresence, motion } from "motion/react";
 import { Input } from "@heroui/input";
 
 import NoteCard from "@/components/NoteCard";
+import DraftCard from "@/components/DraftCard";
+
 import {
   useAddNoteMutation,
   useDeleteNoteMutation,
   useUpdateNoteMutation,
 } from "@/features/notes/hooks/mutations";
 import { useGetNotesQuery } from "@/features/notes/hooks/queries";
-import DraftCard from "@/components/DraftCard";
 
 export default function ManageNotes() {
   const [draftNote, setDraftNote] = React.useState<{

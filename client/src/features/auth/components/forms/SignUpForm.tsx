@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "@tanstack/react-router";
 
-import { signUpSchema } from "../../validations/auth";
-
 import { auth } from "@/lib/better-auth/auth";
-import GoogleIcon from "@/assets/icons/GoogleIcon";
+import GoogleIcon from "@/components/icons/GoogleIcon";
+
+import { signUpSchema } from "../../validations/auth";
 
 export default function SignUpForm({
   onSubmitHandler,
@@ -17,7 +17,6 @@ export default function SignUpForm({
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),

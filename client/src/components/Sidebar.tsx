@@ -9,11 +9,11 @@ import {
 } from "@heroui/drawer";
 import { Link } from "@tanstack/react-router";
 
+import LogoutIcon from "@/components/icons/LogoutIcon";
+import { useLogout } from "@/hooks/useLogout";
+
 import ConfirmationModal from "./ConfirmationModal";
 import { ThemeSwitcher } from "./ThemeSwitcher";
-
-import LogoutIcon from "@/assets/icons/LogoutIcon";
-import { useLogout } from "@/features/auth/hooks/useLogout";
 
 interface SidebarProps {
   topContent?: React.ReactNode;
@@ -62,7 +62,7 @@ export default function Sidebar({
               >
                 <Card
                   className={`text-base
-                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"} 
+                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"}
                      `}
                   shadow="none"
                 >
@@ -126,7 +126,7 @@ export default function Sidebar({
                     >
                       <Card
                         className={`text-base
-                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"} 
+                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"}
                      `}
                         shadow="none"
                       >

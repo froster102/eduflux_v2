@@ -38,9 +38,7 @@ export default function NoteCard({
     <Card
       className={`${note.color} relative max-h-[224px] min-h-[224px] w-full h-full`}
       disableAnimation={true}
-      onDoubleClick={() => {
-        console.log("Double click");
-      }}
+      onDoubleClick={() => {}}
       onMouseEnter={() => {
         setHovered(true);
       }}

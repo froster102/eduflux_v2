@@ -3,18 +3,18 @@ import React from "react";
 import { Spinner } from "@heroui/spinner";
 import { Tab, Tabs } from "@heroui/tabs";
 
-import CoursesList from "@/features/learner/courses/components/CoursesList";
-import { useGetSubsribedCourses } from "@/features/learner/courses/hooks/useGetSubsribedCourses";
-import { useGetCourses } from "@/features/learner/courses/hooks/useGetCourses";
+import CoursesList from "@/features/course/components/CoursesList";
+import { useGetSubsribedCourses } from "@/features/course/hooks/useGetSubsribedCourses";
+import { useGetCourses } from "@/features/course/hooks/useGetCourses";
 
 export const Route = createFileRoute("/_layout/courses/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
-  const [limit, setLimit] = React.useState(8);
+  const [limit] = React.useState(8);
   const [currentTab, setCurrentTab] = React.useState<
     "all-courses" | "my-courses"
   >("all-courses");

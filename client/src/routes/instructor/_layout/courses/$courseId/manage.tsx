@@ -3,9 +3,10 @@ import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, Tab } from "@heroui/tabs";
 
-import DroppableCurriculumItems from "@/features/instructor/courses/components/DroppableCurriculumItems";
+import DroppableCurriculumItems from "@/features/course/components/DroppableCurriculumItems";
+import CourseErrorModal from "@/features/course/components/CourseErrorModal";
+
 import CourseForm from "@/features/instructor/courses/components/forms/CourseForm";
-import CourseErrorModal from "@/features/instructor/courses/components/CourseErrorModal";
 import { useGetInstructorCourse } from "@/features/instructor/courses/hooks/useGetInstructorCourse";
 import { useGetInstructorCourseCurriculum } from "@/features/instructor/courses/hooks/useGetInstructorCourseCurriculum";
 import { useUpdateInstructorCourse } from "@/features/instructor/courses/hooks/useUpdateInstructorCourse";

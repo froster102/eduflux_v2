@@ -7,11 +7,11 @@ import axios from "axios";
 import { Image } from "@heroui/image";
 import { Progress } from "@heroui/progress";
 
-import ImageCropper from "./ImageCropper";
+import CloseBoldIcon from "@/components/icons/CloseBoldIcon";
+import UploadIcon from "@/components/icons/UploadIcon";
+import { getUploadCredentials } from "@/services/upload";
 
-import { getUploadCredentials } from "@/features/instructor/courses/services/course";
-import CloseBoldIcon from "@/assets/icons/CloseBoldIcon";
-import UploadIcon from "@/assets/icons/UploadIcon";
+import ImageCropper from "./ImageCropper";
 
 interface UploaderState {
   id: string | null;
@@ -177,8 +177,7 @@ export default function FileUploader({
           response.data.public_id,
         );
       }
-    } catch (e) {
-      console.log(e);
+    } catch {
       setFileState((prev) => ({
         ...prev,
         error: true,

@@ -6,7 +6,7 @@ import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import { Badge } from "@heroui/badge";
 
-import NotificationIcon from "@/assets/icons/NotificationIcon";
+import NotificationIcon from "@/components/icons/NotificationIcon";
 
 // import { useNotificationStore } from "@/store/notification-store";
 

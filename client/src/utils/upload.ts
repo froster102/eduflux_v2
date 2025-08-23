@@ -1,8 +1,8 @@
 import axios from "axios";
 
-import { nanoid } from "./nanoid";
-
 import api from "@/lib/axios";
+
+import { nanoid } from "./nanoid";
 
 interface SignedUrlResponse {
   fileId: string;

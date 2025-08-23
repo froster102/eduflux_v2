@@ -5,5 +5,5 @@ export const Route = createFileRoute("/_layout/messages/")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_layout/messages/"!</div>;
+  return <div>Hello &quot;/_layout/messages/&quot;!</div>;
 }

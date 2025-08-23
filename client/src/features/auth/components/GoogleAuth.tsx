@@ -1,7 +1,8 @@
 import { Navigate } from "@tanstack/react-router";
 
-import { useSession } from "@/lib/auth-client";
 import ScreenLoader from "@/components/ScreenLoader";
+
+import { useSession } from "@/lib/auth-client";
 
 export default function GoogleAuth() {
   const { data, isPending } = useSession();

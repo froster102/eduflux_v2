@@ -7,15 +7,15 @@ import { Button } from "@heroui/button";
 import { getLocalTimeZone } from "@internationalized/date";
 import { format } from "date-fns";
 
-import { getInstructorProfileOptions } from "@/features/learner/hooks/queries";
-import SessionScheduler from "@/features/learner/sessions/components/SessionScheduler";
-import InstructorPageSkeleton from "@/features/learner/sessions/components/InstructorPageSkeleton";
+import SessionScheduler from "@/features/session/components/SessionScheduler";
+import InstructorPageSkeleton from "@/features/instructor/components/InstructorPageSkeleton";
 import { IMAGE_BASE_URL } from "@/config/image";
-import BoltIcon from "@/assets/icons/BoltIcon";
-import MessageIcon from "@/assets/icons/MessageIcon";
-import { useGetInstructorAvailableSlots } from "@/features/learner/sessions/hooks/useGetInstructorAvailableSlots";
-import { useBookSession } from "@/features/learner/sessions/hooks/useBookSession";
+import BoltIcon from "@/components/icons/BoltIcon";
+import MessageIcon from "@/components/icons/MessageIcon";
+import { useBookSession } from "@/features/session/hooks/useBookSession";
 import { tryCatch } from "@/utils/try-catch";
+import { getInstructorProfileOptions } from "@/features/instructor/hooks/useGetInstructorProfile";
+import { useGetInstructorAvailableSlots } from "@/features/instructor/hooks/useGetInstructorAvailableSlots";
 
 export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -54,7 +54,6 @@ function RouteComponent() {
     const { data: response } = await tryCatch(bookSession.mutateAsync(data));
 
     if (response) {
-      console.log(response);
       window.location.assign(response.checkoutUrl);
     }
   }
