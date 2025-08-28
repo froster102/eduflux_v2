@@ -1,0 +1,38 @@
+import { User } from '@core/domain/user/entity/User';
+import type { IMongooseUser } from '@infrastructure/adapter/persistence/mongoose/models/user/UserModel';
+
+export class UserMapper {
+  static toDomain(mongooseUser: IMongooseUser): User {
+    const domainUser: User = new User({
+      id: mongooseUser._id,
+      firstName: mongooseUser.firstName,
+      lastName: mongooseUser.lastName,
+      email: mongooseUser.email,
+      roles: mongooseUser.roles,
+      image: mongooseUser.image,
+      bio: mongooseUser.bio,
+      socialLinks: mongooseUser.socialLinks,
+    });
+    return domainUser;
+  }
+
+  static toPersistence(domainUser: User): Partial<IMongooseUser> {
+    const mongooseUser: Partial<IMongooseUser> = {
+      _id: domainUser.getId(),
+      firstName: domainUser.getFirstName(),
+      lastName: domainUser.getLastName(),
+      email: domainUser.getEmail(),
+      roles: domainUser.getRoles(),
+      image: domainUser.getImage(),
+      bio: domainUser.getBio(),
+      socialLinks: domainUser.getSocialLinks(),
+      createdAt: domainUser.getCreatedAt(),
+      updatedAt: domainUser.getUpdatedAt(),
+    };
+    return mongooseUser;
+  }
+
+  static toDomainEntities(raw: IMongooseUser[]): User[] {
+    return raw.map((r) => this.toDomain(r));
+  }
+}

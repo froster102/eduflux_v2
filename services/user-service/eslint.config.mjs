@@ -3,14 +3,14 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
+import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 
 export default tseslint.config(
+  {
+    plugins: {
+      'no-relative-import-paths': noRelativeImportPaths,
+    }
+  },
   {
     ignores: ['eslint.config.mjs'],
   },
@@ -33,6 +33,7 @@ export default tseslint.config(
   },
   {
     rules: {
+      'no-relative-import-paths/no-relative-import-paths': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',

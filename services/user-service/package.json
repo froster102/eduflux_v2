@@ -5,6 +5,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "type:check": "bun run tsc --noEmit --watch",
     "dev": "bun run --watch src/main.ts",
+    "graphql:gen": "graphql-codegen",
     "proto:gen": "grpc_tools_node_protoc  --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto  --ts_proto_out=./src/infrastructure/grpc/generated  --ts_proto_opt=outputServices=grpc-js  --proto_path=./src/proto  ./src/proto/user.proto"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "@typescript-eslint/parser": "^8.32.1",
     "bun-types": "latest",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-no-relative-import-paths": "^1.6.1",
     "eslint-plugin-prettier": "^5.4.0",
     "globals": "^16.2.0",
     "grpc-tools": "^1.13.0",

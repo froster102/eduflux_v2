@@ -1,0 +1,37 @@
+import { KafkaEventsConsumer } from '@application/api/consumers/KafkaEventsConsumer';
+import { UserResolver } from '@application/api/graphql/resolvers/UserResolver';
+import { GrpcUserServiceController } from '@application/api/grpc/controller/GrpcUserServiceController';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { EventBusPort } from '@core/common/message/EventBustPort';
+import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { KafkaEventBusConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
+import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/message/kafka/KafkaEventBusProducerAdapter';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import { WinstonLogger } from '@infrastructure/logging/WinstonLoggerAdapter';
+import { ContainerModule } from 'inversify';
+
+export const InfrastructureModule: ContainerModule = new ContainerModule(
+  (options) => {
+    options.bind<LoggerPort>(CoreDITokens.Logger).to(WinstonLogger);
+    options
+      .bind<GrpcUserServiceController>(
+        InfrastructureDITokens.GrpcUserServiceController,
+      )
+      .to(GrpcUserServiceController);
+    options
+      .bind<KafkaEventBusConnection>(
+        InfrastructureDITokens.KafkaEventBusConnection,
+      )
+      .to(KafkaEventBusConnection)
+      .inSingletonScope();
+    options
+      .bind<EventBusPort>(CoreDITokens.EventBus)
+      .to(KafkaEventBusProducerAdapter);
+    options
+      .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
+      .to(KafkaEventsConsumer);
+    options
+      .bind<UserResolver>(InfrastructureDITokens.UserResolvers)
+      .to(UserResolver);
+  },
+);
