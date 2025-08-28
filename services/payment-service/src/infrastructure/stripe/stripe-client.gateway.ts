@@ -39,7 +39,8 @@ export class StripeClient implements IStripeGateway {
               product_data: {
                 name: (metadata.name as string) || 'unknown_product',
                 images: [metadata.image] as string[],
-                description: (metadata.description as string) || '',
+                description:
+                  (metadata.description as string) || 'unknown_product',
               },
               unit_amount: amount,
             },
