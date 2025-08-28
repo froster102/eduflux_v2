@@ -6,7 +6,7 @@ import tailwindCssTypography from "@tailwindcss/typography";
 module.exports = {
   content: [
     "./index.html",
-    "./src/layouts/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/layout/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/routes/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/features/**/*.{js,ts,jsx,tsx}",

@@ -44,7 +44,7 @@ export default function SettingsLayout({
         className="flex flex-col md:flex md:flex-row w-full max-h-screen h-full gap-4 md:overflow-x-scroll scrollbar-hide scroll-smooth"
         data-lenis="false"
       >
-        <div className="flex flex-col gap-4 max-w-md w-full">
+        <div className="flex flex-col gap-4 md:max-w-md w-full">
           <ProfileCard
             email={user!.email}
             image={`${IMAGE_BASE_URL}${user?.image}`}
@@ -94,7 +94,7 @@ export default function SettingsLayout({
             <CardBody>{getSelectedTab(selectedTab)}</CardBody>
           </Card>
         </div>
-        <div className="block md:hidden">
+        <div className="md:hidden">
           {isSessionsLoading ? (
             new Array(3).fill(0).map((_, i) => (
               <Skeleton key={i}>

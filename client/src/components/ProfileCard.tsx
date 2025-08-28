@@ -20,7 +20,7 @@ export default function ProfileCard({
 }: ProfileCardProps) {
   return (
     <Card
-      className="bg-background border border-default-200"
+      className="bg-background border border-default-200 w-full"
       radius="sm"
       shadow="sm"
     >
