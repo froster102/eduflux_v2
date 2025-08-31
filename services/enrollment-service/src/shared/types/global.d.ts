@@ -27,7 +27,7 @@ declare global {
     price: number | null;
     isFree: boolean;
     status: string;
-    instructor?: { id: string; name: string };
+    instructor: { id: string; name: string };
     averageRating: number;
     ratingCount: number;
     enrollmentCount: number;
@@ -37,6 +37,18 @@ declare global {
   };
 
   export type PaymentPurpose = 'COURSE_ENROLLMENT' | 'INSTRUCTOR_SESSION';
+
+  export type JwtPayload = {
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image: string | null;
+    createdAt: string;
+    updatedAt: string;
+    roles: string[];
+    id: string;
+    sessionId: string;
+  };
 }
 
 export {};
