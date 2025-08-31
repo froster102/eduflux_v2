@@ -8,19 +8,15 @@ service EnrollmentService{
     rpc VerifyChatAccess(VerifyChatAccessRequest) returns (VerifyChatAccessResponse);
 }
 
-message PaginationQueryParams {
-    int32 page = 1;
-    int32 limit = 2;
-    string search_query = 3;
-    repeated string search_fields = 4;
-    map<string,string> filters = 5;
-    string sort_by = 6;
-    string sort_order = 7;
+message EnrollmentQueryParameters {
+  int32 page = 1;
+  int32 limit = 2;
+  map<string,string> filters = 3;
 }
 
 message GetUserEnrollmentsRequest {
     string user_id = 1;
-    PaginationQueryParams pagination = 2;
+    EnrollmentQueryParameters query_parameters = 2;
 }
 
 message Enrollments {

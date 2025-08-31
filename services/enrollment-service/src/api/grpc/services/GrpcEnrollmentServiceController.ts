@@ -74,7 +74,10 @@ export class GrpcEnrollmentServiceController
       .execute({
         userId: call.request.userId,
         queryParameters: {
-          ...call.request.pagination,
+          limit: call.request.queryParameters?.limit,
+          offset:
+            ((call.request.queryParameters?.page || 1) - 1) *
+            (call.request.queryParameters?.limit || 10),
         },
       })
       .then((result) => {

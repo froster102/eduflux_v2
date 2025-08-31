@@ -1,5 +1,6 @@
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
+import { EnrollmentUseCaseDto } from '@core/application/enrollment/port/usecase/dto/EnrollmentUseCaseDto';
 import type { GetUserEnrollmentsPorts } from '@core/application/enrollment/port/usecase/GetUserEnrollmentsPort';
 import type { GetUserEnrollmentsUseCaseResult } from '@core/application/enrollment/port/usecase/type/GetUserEnrollmentsUseCaseResult';
 import type { GetUserEnrollmentsUseCase } from '@core/application/enrollment/usecase/GetUserEnrollmentsUseCase';
@@ -21,6 +22,9 @@ export class GetUserEnrollmentsService implements GetUserEnrollmentsUseCase {
       queryParameters,
     );
 
-    return result;
+    return {
+      totalCount: result.totalCount,
+      enrollments: EnrollmentUseCaseDto.fromEntities(result.enrollments),
+    };
   }
 }

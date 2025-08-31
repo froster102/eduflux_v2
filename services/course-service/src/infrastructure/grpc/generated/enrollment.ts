@@ -21,24 +21,20 @@ import {
 
 export const protobufPackage = "enrollment";
 
-export interface PaginationQueryParams {
+export interface EnrollmentQueryParameters {
   page: number;
   limit: number;
-  searchQuery: string;
-  searchFields: string[];
   filters: { [key: string]: string };
-  sortBy: string;
-  sortOrder: string;
 }
 
-export interface PaginationQueryParams_FiltersEntry {
+export interface EnrollmentQueryParameters_FiltersEntry {
   key: string;
   value: string;
 }
 
 export interface GetUserEnrollmentsRequest {
   userId: string;
-  pagination: PaginationQueryParams | undefined;
+  queryParameters: EnrollmentQueryParameters | undefined;
 }
 
 export interface Enrollments {
@@ -65,40 +61,37 @@ export interface CheckUserEnrollmentResponse {
   isEnrolled: boolean;
 }
 
-function createBasePaginationQueryParams(): PaginationQueryParams {
-  return { page: 0, limit: 0, searchQuery: "", searchFields: [], filters: {}, sortBy: "", sortOrder: "" };
+export interface VerifyChatAccessRequest {
+  learnerId: string;
+  instructorId: string;
 }
 
-export const PaginationQueryParams: MessageFns<PaginationQueryParams> = {
-  encode(message: PaginationQueryParams, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export interface VerifyChatAccessResponse {
+  hasAccess: boolean;
+}
+
+function createBaseEnrollmentQueryParameters(): EnrollmentQueryParameters {
+  return { page: 0, limit: 0, filters: {} };
+}
+
+export const EnrollmentQueryParameters: MessageFns<EnrollmentQueryParameters> = {
+  encode(message: EnrollmentQueryParameters, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.page !== 0) {
       writer.uint32(8).int32(message.page);
     }
     if (message.limit !== 0) {
       writer.uint32(16).int32(message.limit);
     }
-    if (message.searchQuery !== "") {
-      writer.uint32(26).string(message.searchQuery);
-    }
-    for (const v of message.searchFields) {
-      writer.uint32(34).string(v!);
-    }
     Object.entries(message.filters).forEach(([key, value]) => {
-      PaginationQueryParams_FiltersEntry.encode({ key: key as any, value }, writer.uint32(42).fork()).join();
+      EnrollmentQueryParameters_FiltersEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
     });
-    if (message.sortBy !== "") {
-      writer.uint32(50).string(message.sortBy);
-    }
-    if (message.sortOrder !== "") {
-      writer.uint32(58).string(message.sortOrder);
-    }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): PaginationQueryParams {
+  decode(input: BinaryReader | Uint8Array, length?: number): EnrollmentQueryParameters {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePaginationQueryParams();
+    const message = createBaseEnrollmentQueryParameters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -123,42 +116,10 @@ export const PaginationQueryParams: MessageFns<PaginationQueryParams> = {
             break;
           }
 
-          message.searchQuery = reader.string();
-          continue;
-        }
-        case 4: {
-          if (tag !== 34) {
-            break;
+          const entry3 = EnrollmentQueryParameters_FiltersEntry.decode(reader, reader.uint32());
+          if (entry3.value !== undefined) {
+            message.filters[entry3.key] = entry3.value;
           }
-
-          message.searchFields.push(reader.string());
-          continue;
-        }
-        case 5: {
-          if (tag !== 42) {
-            break;
-          }
-
-          const entry5 = PaginationQueryParams_FiltersEntry.decode(reader, reader.uint32());
-          if (entry5.value !== undefined) {
-            message.filters[entry5.key] = entry5.value;
-          }
-          continue;
-        }
-        case 6: {
-          if (tag !== 50) {
-            break;
-          }
-
-          message.sortBy = reader.string();
-          continue;
-        }
-        case 7: {
-          if (tag !== 58) {
-            break;
-          }
-
-          message.sortOrder = reader.string();
           continue;
         }
       }
@@ -170,38 +131,26 @@ export const PaginationQueryParams: MessageFns<PaginationQueryParams> = {
     return message;
   },
 
-  fromJSON(object: any): PaginationQueryParams {
+  fromJSON(object: any): EnrollmentQueryParameters {
     return {
       page: isSet(object.page) ? globalThis.Number(object.page) : 0,
       limit: isSet(object.limit) ? globalThis.Number(object.limit) : 0,
-      searchQuery: isSet(object.searchQuery) ? globalThis.String(object.searchQuery) : "",
-      searchFields: globalThis.Array.isArray(object?.searchFields)
-        ? object.searchFields.map((e: any) => globalThis.String(e))
-        : [],
       filters: isObject(object.filters)
         ? Object.entries(object.filters).reduce<{ [key: string]: string }>((acc, [key, value]) => {
           acc[key] = String(value);
           return acc;
         }, {})
         : {},
-      sortBy: isSet(object.sortBy) ? globalThis.String(object.sortBy) : "",
-      sortOrder: isSet(object.sortOrder) ? globalThis.String(object.sortOrder) : "",
     };
   },
 
-  toJSON(message: PaginationQueryParams): unknown {
+  toJSON(message: EnrollmentQueryParameters): unknown {
     const obj: any = {};
     if (message.page !== 0) {
       obj.page = Math.round(message.page);
     }
     if (message.limit !== 0) {
       obj.limit = Math.round(message.limit);
-    }
-    if (message.searchQuery !== "") {
-      obj.searchQuery = message.searchQuery;
-    }
-    if (message.searchFields?.length) {
-      obj.searchFields = message.searchFields;
     }
     if (message.filters) {
       const entries = Object.entries(message.filters);
@@ -212,42 +161,32 @@ export const PaginationQueryParams: MessageFns<PaginationQueryParams> = {
         });
       }
     }
-    if (message.sortBy !== "") {
-      obj.sortBy = message.sortBy;
-    }
-    if (message.sortOrder !== "") {
-      obj.sortOrder = message.sortOrder;
-    }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PaginationQueryParams>, I>>(base?: I): PaginationQueryParams {
-    return PaginationQueryParams.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<EnrollmentQueryParameters>, I>>(base?: I): EnrollmentQueryParameters {
+    return EnrollmentQueryParameters.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PaginationQueryParams>, I>>(object: I): PaginationQueryParams {
-    const message = createBasePaginationQueryParams();
+  fromPartial<I extends Exact<DeepPartial<EnrollmentQueryParameters>, I>>(object: I): EnrollmentQueryParameters {
+    const message = createBaseEnrollmentQueryParameters();
     message.page = object.page ?? 0;
     message.limit = object.limit ?? 0;
-    message.searchQuery = object.searchQuery ?? "";
-    message.searchFields = object.searchFields?.map((e) => e) || [];
     message.filters = Object.entries(object.filters ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = globalThis.String(value);
       }
       return acc;
     }, {});
-    message.sortBy = object.sortBy ?? "";
-    message.sortOrder = object.sortOrder ?? "";
     return message;
   },
 };
 
-function createBasePaginationQueryParams_FiltersEntry(): PaginationQueryParams_FiltersEntry {
+function createBaseEnrollmentQueryParameters_FiltersEntry(): EnrollmentQueryParameters_FiltersEntry {
   return { key: "", value: "" };
 }
 
-export const PaginationQueryParams_FiltersEntry: MessageFns<PaginationQueryParams_FiltersEntry> = {
-  encode(message: PaginationQueryParams_FiltersEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const EnrollmentQueryParameters_FiltersEntry: MessageFns<EnrollmentQueryParameters_FiltersEntry> = {
+  encode(message: EnrollmentQueryParameters_FiltersEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -257,10 +196,10 @@ export const PaginationQueryParams_FiltersEntry: MessageFns<PaginationQueryParam
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): PaginationQueryParams_FiltersEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number): EnrollmentQueryParameters_FiltersEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePaginationQueryParams_FiltersEntry();
+    const message = createBaseEnrollmentQueryParameters_FiltersEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -289,14 +228,14 @@ export const PaginationQueryParams_FiltersEntry: MessageFns<PaginationQueryParam
     return message;
   },
 
-  fromJSON(object: any): PaginationQueryParams_FiltersEntry {
+  fromJSON(object: any): EnrollmentQueryParameters_FiltersEntry {
     return {
       key: isSet(object.key) ? globalThis.String(object.key) : "",
       value: isSet(object.value) ? globalThis.String(object.value) : "",
     };
   },
 
-  toJSON(message: PaginationQueryParams_FiltersEntry): unknown {
+  toJSON(message: EnrollmentQueryParameters_FiltersEntry): unknown {
     const obj: any = {};
     if (message.key !== "") {
       obj.key = message.key;
@@ -307,15 +246,15 @@ export const PaginationQueryParams_FiltersEntry: MessageFns<PaginationQueryParam
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PaginationQueryParams_FiltersEntry>, I>>(
+  create<I extends Exact<DeepPartial<EnrollmentQueryParameters_FiltersEntry>, I>>(
     base?: I,
-  ): PaginationQueryParams_FiltersEntry {
-    return PaginationQueryParams_FiltersEntry.fromPartial(base ?? ({} as any));
+  ): EnrollmentQueryParameters_FiltersEntry {
+    return EnrollmentQueryParameters_FiltersEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<PaginationQueryParams_FiltersEntry>, I>>(
+  fromPartial<I extends Exact<DeepPartial<EnrollmentQueryParameters_FiltersEntry>, I>>(
     object: I,
-  ): PaginationQueryParams_FiltersEntry {
-    const message = createBasePaginationQueryParams_FiltersEntry();
+  ): EnrollmentQueryParameters_FiltersEntry {
+    const message = createBaseEnrollmentQueryParameters_FiltersEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
     return message;
@@ -323,7 +262,7 @@ export const PaginationQueryParams_FiltersEntry: MessageFns<PaginationQueryParam
 };
 
 function createBaseGetUserEnrollmentsRequest(): GetUserEnrollmentsRequest {
-  return { userId: "", pagination: undefined };
+  return { userId: "", queryParameters: undefined };
 }
 
 export const GetUserEnrollmentsRequest: MessageFns<GetUserEnrollmentsRequest> = {
@@ -331,8 +270,8 @@ export const GetUserEnrollmentsRequest: MessageFns<GetUserEnrollmentsRequest> = 
     if (message.userId !== "") {
       writer.uint32(10).string(message.userId);
     }
-    if (message.pagination !== undefined) {
-      PaginationQueryParams.encode(message.pagination, writer.uint32(18).fork()).join();
+    if (message.queryParameters !== undefined) {
+      EnrollmentQueryParameters.encode(message.queryParameters, writer.uint32(18).fork()).join();
     }
     return writer;
   },
@@ -357,7 +296,7 @@ export const GetUserEnrollmentsRequest: MessageFns<GetUserEnrollmentsRequest> = 
             break;
           }
 
-          message.pagination = PaginationQueryParams.decode(reader, reader.uint32());
+          message.queryParameters = EnrollmentQueryParameters.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -372,7 +311,9 @@ export const GetUserEnrollmentsRequest: MessageFns<GetUserEnrollmentsRequest> = 
   fromJSON(object: any): GetUserEnrollmentsRequest {
     return {
       userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
-      pagination: isSet(object.pagination) ? PaginationQueryParams.fromJSON(object.pagination) : undefined,
+      queryParameters: isSet(object.queryParameters)
+        ? EnrollmentQueryParameters.fromJSON(object.queryParameters)
+        : undefined,
     };
   },
 
@@ -381,8 +322,8 @@ export const GetUserEnrollmentsRequest: MessageFns<GetUserEnrollmentsRequest> = 
     if (message.userId !== "") {
       obj.userId = message.userId;
     }
-    if (message.pagination !== undefined) {
-      obj.pagination = PaginationQueryParams.toJSON(message.pagination);
+    if (message.queryParameters !== undefined) {
+      obj.queryParameters = EnrollmentQueryParameters.toJSON(message.queryParameters);
     }
     return obj;
   },
@@ -393,8 +334,8 @@ export const GetUserEnrollmentsRequest: MessageFns<GetUserEnrollmentsRequest> = 
   fromPartial<I extends Exact<DeepPartial<GetUserEnrollmentsRequest>, I>>(object: I): GetUserEnrollmentsRequest {
     const message = createBaseGetUserEnrollmentsRequest();
     message.userId = object.userId ?? "";
-    message.pagination = (object.pagination !== undefined && object.pagination !== null)
-      ? PaginationQueryParams.fromPartial(object.pagination)
+    message.queryParameters = (object.queryParameters !== undefined && object.queryParameters !== null)
+      ? EnrollmentQueryParameters.fromPartial(object.queryParameters)
       : undefined;
     return message;
   },
@@ -768,6 +709,140 @@ export const CheckUserEnrollmentResponse: MessageFns<CheckUserEnrollmentResponse
   },
 };
 
+function createBaseVerifyChatAccessRequest(): VerifyChatAccessRequest {
+  return { learnerId: "", instructorId: "" };
+}
+
+export const VerifyChatAccessRequest: MessageFns<VerifyChatAccessRequest> = {
+  encode(message: VerifyChatAccessRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.learnerId !== "") {
+      writer.uint32(10).string(message.learnerId);
+    }
+    if (message.instructorId !== "") {
+      writer.uint32(18).string(message.instructorId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyChatAccessRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyChatAccessRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.learnerId = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.instructorId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VerifyChatAccessRequest {
+    return {
+      learnerId: isSet(object.learnerId) ? globalThis.String(object.learnerId) : "",
+      instructorId: isSet(object.instructorId) ? globalThis.String(object.instructorId) : "",
+    };
+  },
+
+  toJSON(message: VerifyChatAccessRequest): unknown {
+    const obj: any = {};
+    if (message.learnerId !== "") {
+      obj.learnerId = message.learnerId;
+    }
+    if (message.instructorId !== "") {
+      obj.instructorId = message.instructorId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<VerifyChatAccessRequest>, I>>(base?: I): VerifyChatAccessRequest {
+    return VerifyChatAccessRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VerifyChatAccessRequest>, I>>(object: I): VerifyChatAccessRequest {
+    const message = createBaseVerifyChatAccessRequest();
+    message.learnerId = object.learnerId ?? "";
+    message.instructorId = object.instructorId ?? "";
+    return message;
+  },
+};
+
+function createBaseVerifyChatAccessResponse(): VerifyChatAccessResponse {
+  return { hasAccess: false };
+}
+
+export const VerifyChatAccessResponse: MessageFns<VerifyChatAccessResponse> = {
+  encode(message: VerifyChatAccessResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.hasAccess !== false) {
+      writer.uint32(8).bool(message.hasAccess);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyChatAccessResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyChatAccessResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.hasAccess = reader.bool();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VerifyChatAccessResponse {
+    return { hasAccess: isSet(object.hasAccess) ? globalThis.Boolean(object.hasAccess) : false };
+  },
+
+  toJSON(message: VerifyChatAccessResponse): unknown {
+    const obj: any = {};
+    if (message.hasAccess !== false) {
+      obj.hasAccess = message.hasAccess;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<VerifyChatAccessResponse>, I>>(base?: I): VerifyChatAccessResponse {
+    return VerifyChatAccessResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VerifyChatAccessResponse>, I>>(object: I): VerifyChatAccessResponse {
+    const message = createBaseVerifyChatAccessResponse();
+    message.hasAccess = object.hasAccess ?? false;
+    return message;
+  },
+};
+
 export type EnrollmentServiceService = typeof EnrollmentServiceService;
 export const EnrollmentServiceService = {
   getUserEnrollments: {
@@ -791,11 +866,23 @@ export const EnrollmentServiceService = {
       Buffer.from(CheckUserEnrollmentResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): CheckUserEnrollmentResponse => CheckUserEnrollmentResponse.decode(value),
   },
+  verifyChatAccess: {
+    path: "/enrollment.EnrollmentService/VerifyChatAccess",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: VerifyChatAccessRequest): Buffer =>
+      Buffer.from(VerifyChatAccessRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): VerifyChatAccessRequest => VerifyChatAccessRequest.decode(value),
+    responseSerialize: (value: VerifyChatAccessResponse): Buffer =>
+      Buffer.from(VerifyChatAccessResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): VerifyChatAccessResponse => VerifyChatAccessResponse.decode(value),
+  },
 } as const;
 
 export interface EnrollmentServiceServer extends UntypedServiceImplementation {
   getUserEnrollments: handleUnaryCall<GetUserEnrollmentsRequest, Enrollments>;
   checkUserEnrollment: handleUnaryCall<CheckUserEnrollmentRequest, CheckUserEnrollmentResponse>;
+  verifyChatAccess: handleUnaryCall<VerifyChatAccessRequest, VerifyChatAccessResponse>;
 }
 
 export interface EnrollmentServiceClient extends Client {
@@ -828,6 +915,21 @@ export interface EnrollmentServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: CheckUserEnrollmentResponse) => void,
+  ): ClientUnaryCall;
+  verifyChatAccess(
+    request: VerifyChatAccessRequest,
+    callback: (error: ServiceError | null, response: VerifyChatAccessResponse) => void,
+  ): ClientUnaryCall;
+  verifyChatAccess(
+    request: VerifyChatAccessRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: VerifyChatAccessResponse) => void,
+  ): ClientUnaryCall;
+  verifyChatAccess(
+    request: VerifyChatAccessRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: VerifyChatAccessResponse) => void,
   ): ClientUnaryCall;
 }
 

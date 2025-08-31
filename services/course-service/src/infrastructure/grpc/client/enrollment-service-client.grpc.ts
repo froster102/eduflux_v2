@@ -55,14 +55,10 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
     }
     const request: GetUserEnrollmentsRequest = {
       userId,
-      pagination: {
+      queryParameters: {
         page: paginationQueryParams.page ?? 0,
         filters: processedFilters,
-        limit: paginationQueryParams.limit ?? 0,
-        searchFields: paginationQueryParams.searchFields ?? [''],
-        searchQuery: paginationQueryParams.searchQuery ?? '',
-        sortBy: paginationQueryParams.sortBy ?? '',
-        sortOrder: paginationQueryParams.sortBy ?? 'asc',
+        limit: paginationQueryParams.limit ?? 10,
       },
     };
     return new Promise((resolve, reject) =>
@@ -70,9 +66,6 @@ export class GrpcEnrollmentServiceClient implements IEnrollmentServiceGateway {
         request,
         (error: ServiceError | null, response: Enrollments) => {
           if (error) {
-            // this.logger.error(
-            //   `Error fetching user enrollment details ${error.message}`,
-            // );
             reject(new Error(error.message));
           }
           if (response) {
