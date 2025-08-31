@@ -29,7 +29,7 @@ export class Server {
 
   private setupRoutes(): void {
     //health check
-    this.app.get('/api/sessions/health', () => ({ ok: true }));
+    this.app.get('/health', () => ({ ok: true }));
     const scheduleRoutes = container.get<ScheduleRoutes>(TYPES.ScheduleRoutes);
     const settingsRoutes = container.get<SettingsRoutes>(TYPES.SettingsRoutes);
 
