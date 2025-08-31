@@ -39,7 +39,10 @@ function RouteComponent() {
 
             return (
               <div key={session.id} className={`pt-2`}>
-                <Card className="border border-default-300 " shadow="none">
+                <Card
+                  className="border bg-background border-default-300 "
+                  shadow="none"
+                >
                   <CardBody>
                     <div className="flex justify-between items-center">
                       <div className="flex flex-col">
