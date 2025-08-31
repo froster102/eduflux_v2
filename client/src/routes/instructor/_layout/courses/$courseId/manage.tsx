@@ -5,12 +5,11 @@ import { Tabs, Tab } from "@heroui/tabs";
 
 import DroppableCurriculumItems from "@/features/course/components/DroppableCurriculumItems";
 import CourseErrorModal from "@/features/course/components/CourseErrorModal";
-
-import CourseForm from "@/features/instructor/courses/components/forms/CourseForm";
-import { useGetInstructorCourse } from "@/features/instructor/courses/hooks/useGetInstructorCourse";
-import { useGetInstructorCourseCurriculum } from "@/features/instructor/courses/hooks/useGetInstructorCourseCurriculum";
-import { useUpdateInstructorCourse } from "@/features/instructor/courses/hooks/useUpdateInstructorCourse";
-import { usePublishCourse } from "@/features/instructor/courses/hooks/usePublishCourse";
+import { useGetInstructorCourse } from "@/features/course/hooks/useGetInstructorCourse";
+import { useGetInstructorCourseCurriculum } from "@/features/course/hooks/useGetInstructorCourseCurriculum";
+import { useUpdateInstructorCourse } from "@/features/course/hooks/useUpdateCourse";
+import { usePublishCourse } from "@/features/course/hooks/usePublishCourse";
+import CourseForm from "@/features/course/components/forms/CourseForm";
 
 export const Route = createFileRoute(
   "/instructor/_layout/courses/$courseId/manage",
