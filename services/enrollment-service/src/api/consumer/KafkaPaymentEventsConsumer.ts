@@ -100,10 +100,12 @@ export class KafkaEventsConsumer {
     try {
       switch (event.type) {
         case 'payment.success':
-          await this.completeEnrollmentUseCase.execute({
-            enrollmentId: event.data.metadata.enrollmentId as string,
-            paymentId: event.data.paymentId,
-          });
+          if (event.data.paymentPurpose === 'COURSE_ENROLLMENT') {
+            await this.completeEnrollmentUseCase.execute({
+              enrollmentId: event.data.metadata.enrollmentId as string,
+              paymentId: event.data.paymentId,
+            });
+          }
       }
     } catch (error) {
       if (error instanceof Exception || error instanceof Error) {

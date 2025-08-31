@@ -98,10 +98,12 @@ export class PaymentEventsConsumer {
     try {
       switch (event.type) {
         case 'payment.success':
-          await this.confirmSessionBookingUseCase.execute({
-            sessionId: event.data.metadata.sessionId as string,
-            paymentId: event.data.paymentId,
-          });
+          if (event.data.paymentPurpose === PaymentPurpose.INSTRUCTOR_SESSION) {
+            await this.confirmSessionBookingUseCase.execute({
+              sessionId: event.data.metadata.sessionId as string,
+              paymentId: event.data.paymentId,
+            });
+          }
       }
     } catch (error) {
       if (
