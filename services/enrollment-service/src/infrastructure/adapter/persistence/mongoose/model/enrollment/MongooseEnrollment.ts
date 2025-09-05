@@ -26,6 +26,10 @@ export const EnrollmentSchema = new Schema<MongooseEnrollment>(
       type: String,
     },
 
+    instructorId: {
+      type: String,
+    },
+
     status: {
       type: String,
     },
