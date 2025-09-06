@@ -38,6 +38,10 @@ export const graphqlHandler = new Elysia().use(
             name: "session-service",
             url: envVariables.GRAPHQL_SESSION_SERVICE_URL,
           },
+          {
+            name: "chat-service",
+            url: envVariables.GRAPHQL_CHAT_SERVICE_URL,
+          },
         ],
       }),
 

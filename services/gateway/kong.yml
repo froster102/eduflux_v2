@@ -6,6 +6,8 @@ plugins:
     config:
       origins:
         - "http://localhost:5173"
+        #websocket testing
+        - "http://127.0.0.1:3000"
       methods:
         - GET
         - POST
@@ -81,4 +83,16 @@ services:
       - name: session-route
         paths:
           - /api/sessions
+        strip_path: false
+
+  - name: chat-service
+    url: http://chat-service:3007
+    routes:
+      - name: chat-rest-route
+        paths:
+          - /api/chats
+        strip_path: false
+      - name: chat-websocket-route
+        paths:
+          - /ws/
         strip_path: false
