@@ -49,9 +49,9 @@ function Layout() {
       label: "Instructors",
     },
     {
-      path: "/messages",
+      path: "/chats",
       icon: <MessageIcon width={24} />,
-      label: "Messages",
+      label: "Chats",
     },
     {
       path: "/settings",

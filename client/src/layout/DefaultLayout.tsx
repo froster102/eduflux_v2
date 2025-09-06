@@ -35,7 +35,7 @@ export default function DefaultLayout({
           <div className="flex flex-col w-full h-full flex-1 overflow-hidden">
             <Header onOpenSidebar={onOpen} />
             <div className="flex-1 overflow-y-auto min-h-0 scrollbar-hide">
-              {children}
+              <div className="h-full pt-4">{children}</div>
             </div>
           </div>
         </div>

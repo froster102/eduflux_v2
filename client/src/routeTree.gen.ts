@@ -24,10 +24,10 @@ import { Route as InstructorLayoutRouteRouteImport } from './routes/instructor/_
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
 import { Route as LayoutSettingsIndexRouteImport } from './routes/_layout/settings/index'
 import { Route as LayoutSessionsIndexRouteImport } from './routes/_layout/sessions/index'
-import { Route as LayoutMessagesIndexRouteImport } from './routes/_layout/messages/index'
 import { Route as LayoutInstructorsIndexRouteImport } from './routes/_layout/instructors/index'
 import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index'
 import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
+import { Route as LayoutChatsIndexRouteImport } from './routes/_layout/chats/index'
 import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
 import { Route as InstructorLayoutMessagesIndexRouteImport } from './routes/instructor/_layout/messages/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
@@ -106,11 +106,6 @@ const LayoutSessionsIndexRoute = LayoutSessionsIndexRouteImport.update({
   path: '/sessions/',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
-const LayoutMessagesIndexRoute = LayoutMessagesIndexRouteImport.update({
-  id: '/messages/',
-  path: '/messages/',
-  getParentRoute: () => LayoutRouteRoute,
-} as any)
 const LayoutInstructorsIndexRoute = LayoutInstructorsIndexRouteImport.update({
   id: '/instructors/',
   path: '/instructors/',
@@ -124,6 +119,11 @@ const LayoutHomeIndexRoute = LayoutHomeIndexRouteImport.update({
 const LayoutCoursesIndexRoute = LayoutCoursesIndexRouteImport.update({
   id: '/courses/',
   path: '/courses/',
+  getParentRoute: () => LayoutRouteRoute,
+} as any)
+const LayoutChatsIndexRoute = LayoutChatsIndexRouteImport.update({
+  id: '/chats/',
+  path: '/chats/',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
 const InstructorLayoutSessionsIndexRoute =
@@ -179,10 +179,10 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/chats': typeof LayoutChatsIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
   '/home': typeof LayoutHomeIndexRoute
   '/instructors': typeof LayoutInstructorsIndexRoute
-  '/messages': typeof LayoutMessagesIndexRoute
   '/sessions': typeof LayoutSessionsIndexRoute
   '/settings': typeof LayoutSettingsIndexRoute
   '/instructor/': typeof InstructorLayoutIndexRoute
@@ -203,10 +203,10 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
+  '/chats': typeof LayoutChatsIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
   '/home': typeof LayoutHomeIndexRoute
   '/instructors': typeof LayoutInstructorsIndexRoute
-  '/messages': typeof LayoutMessagesIndexRoute
   '/sessions': typeof LayoutSessionsIndexRoute
   '/settings': typeof LayoutSettingsIndexRoute
   '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
@@ -230,10 +230,10 @@ export interface FileRoutesById {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/_layout/chats/': typeof LayoutChatsIndexRoute
   '/_layout/courses/': typeof LayoutCoursesIndexRoute
   '/_layout/home/': typeof LayoutHomeIndexRoute
   '/_layout/instructors/': typeof LayoutInstructorsIndexRoute
-  '/_layout/messages/': typeof LayoutMessagesIndexRoute
   '/_layout/sessions/': typeof LayoutSessionsIndexRoute
   '/_layout/settings/': typeof LayoutSettingsIndexRoute
   '/instructor/_layout/': typeof InstructorLayoutIndexRoute
@@ -257,10 +257,10 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/chats'
     | '/courses'
     | '/home'
     | '/instructors'
-    | '/messages'
     | '/sessions'
     | '/settings'
     | '/instructor/'
@@ -281,10 +281,10 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth'
+    | '/chats'
     | '/courses'
     | '/home'
     | '/instructors'
-    | '/messages'
     | '/sessions'
     | '/settings'
     | '/courses/$courseId'
@@ -307,10 +307,10 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/_layout/chats/'
     | '/_layout/courses/'
     | '/_layout/home/'
     | '/_layout/instructors/'
-    | '/_layout/messages/'
     | '/_layout/sessions/'
     | '/_layout/settings/'
     | '/instructor/_layout/'
@@ -430,13 +430,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSessionsIndexRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
-    '/_layout/messages/': {
-      id: '/_layout/messages/'
-      path: '/messages'
-      fullPath: '/messages'
-      preLoaderRoute: typeof LayoutMessagesIndexRouteImport
-      parentRoute: typeof LayoutRouteRoute
-    }
     '/_layout/instructors/': {
       id: '/_layout/instructors/'
       path: '/instructors'
@@ -456,6 +449,13 @@ declare module '@tanstack/react-router' {
       path: '/courses'
       fullPath: '/courses'
       preLoaderRoute: typeof LayoutCoursesIndexRouteImport
+      parentRoute: typeof LayoutRouteRoute
+    }
+    '/_layout/chats/': {
+      id: '/_layout/chats/'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof LayoutChatsIndexRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
     '/instructor/_layout/sessions/': {
@@ -511,10 +511,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface LayoutRouteRouteChildren {
+  LayoutChatsIndexRoute: typeof LayoutChatsIndexRoute
   LayoutCoursesIndexRoute: typeof LayoutCoursesIndexRoute
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute
   LayoutInstructorsIndexRoute: typeof LayoutInstructorsIndexRoute
-  LayoutMessagesIndexRoute: typeof LayoutMessagesIndexRoute
   LayoutSessionsIndexRoute: typeof LayoutSessionsIndexRoute
   LayoutSettingsIndexRoute: typeof LayoutSettingsIndexRoute
   LayoutCoursesCourseIdIndexRoute: typeof LayoutCoursesCourseIdIndexRoute
@@ -523,10 +523,10 @@ interface LayoutRouteRouteChildren {
 }
 
 const LayoutRouteRouteChildren: LayoutRouteRouteChildren = {
+  LayoutChatsIndexRoute: LayoutChatsIndexRoute,
   LayoutCoursesIndexRoute: LayoutCoursesIndexRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
   LayoutInstructorsIndexRoute: LayoutInstructorsIndexRoute,
-  LayoutMessagesIndexRoute: LayoutMessagesIndexRoute,
   LayoutSessionsIndexRoute: LayoutSessionsIndexRoute,
   LayoutSettingsIndexRoute: LayoutSettingsIndexRoute,
   LayoutCoursesCourseIdIndexRoute: LayoutCoursesCourseIdIndexRoute,

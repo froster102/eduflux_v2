@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -11,11 +11,14 @@ import SessionScheduler from "@/features/session/components/SessionScheduler";
 import InstructorPageSkeleton from "@/features/instructor/components/InstructorPageSkeleton";
 import { IMAGE_BASE_URL } from "@/config/image";
 import BoltIcon from "@/components/icons/BoltIcon";
-import MessageIcon from "@/components/icons/MessageIcon";
 import { useBookSession } from "@/features/session/hooks/useBookSession";
 import { tryCatch } from "@/utils/try-catch";
 import { getInstructorProfileOptions } from "@/features/instructor/hooks/useGetInstructorProfile";
 import { useGetInstructorAvailableSlots } from "@/features/instructor/hooks/useGetInstructorAvailableSlots";
+import { useCreateChat } from "@/features/chat/hooks/useCreateChat";
+import { useGetChat } from "@/features/chat/hooks/useGetChat";
+import StartChatButton from "@/features/chat/components/StartChatButton";
+import { useChatStore } from "@/store/useChatStore";
 
 export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -48,7 +51,32 @@ function RouteComponent() {
       date: selectedDate,
       timeZone: getLocalTimeZone(),
     });
+  const {
+    data: existingChat,
+    isLoading: isExistingChat,
+    isError: isChatError,
+  } = useGetChat(instructorId);
+  const navigte = useNavigate();
+  const { setSelectedChat } = useChatStore();
+
   const bookSession = useBookSession();
+  const createChat = useCreateChat();
+
+  async function chatWithInstructorHandler() {
+    if (existingChat && existingChat.chat) {
+      setSelectedChat(existingChat.chat);
+      navigte({ to: `/chats` });
+
+      return;
+    }
+
+    const createdChat = await tryCatch(createChat.mutateAsync(instructorId));
+
+    if (createdChat.data) {
+      setSelectedChat(createdChat.data);
+      navigte({ to: `/chats` });
+    }
+  }
 
   async function bookSessionHandler(data: { slotId: string }) {
     const { data: response } = await tryCatch(bookSession.mutateAsync(data));
@@ -103,13 +131,14 @@ function RouteComponent() {
               >
                 Book Session
               </Button>
-              <Button
-                color="primary"
-                startContent={<MessageIcon />}
-                variant="bordered"
-              >
-                Send a message
-              </Button>
+              <StartChatButton
+                errorLoading={isChatError}
+                existingChat={
+                  !isExistingChat && existingChat ? existingChat.chat : null
+                }
+                isLoading={isExistingChat}
+                onClickHandler={chatWithInstructorHandler}
+              />
             </CardBody>
           </Card>
         </div>
