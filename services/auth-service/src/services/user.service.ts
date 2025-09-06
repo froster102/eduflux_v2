@@ -1,6 +1,6 @@
 import { db } from '@/database/db';
 import { user } from '@/database/schema';
-import { User } from 'better-auth/types';
+import type { User } from 'better-auth/types';
 import { eq } from 'drizzle-orm';
 
 export async function updateUser(data: Partial<User> & { id: string }) {

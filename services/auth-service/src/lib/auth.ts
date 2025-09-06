@@ -1,4 +1,4 @@
-import { betterAuth, BetterAuthError, User } from 'better-auth';
+import { betterAuth, BetterAuthError, type User } from 'better-auth';
 import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import * as schema from '@/database/schema';
@@ -11,7 +11,7 @@ import { db } from '@/database/db';
 import { signUpSchema } from '@/shared/validation/schema/sign-up.schema';
 import { emailService } from '@/services';
 import { container } from '@/shared/di/container';
-import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
+import type { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
 import { TYPES } from '@/shared/di/types';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { ErrorMesssage } from '@/shared/errors/error-message';
@@ -107,7 +107,7 @@ export const auth = betterAuth({
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             user: {
               ...returned.user,
-              roles: newSession.user.roles as string[],
+              roles: newSession!.user.roles as string[],
             },
           };
         }

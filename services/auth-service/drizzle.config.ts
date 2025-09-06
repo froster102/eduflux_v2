@@ -1,3 +1,4 @@
+import { envVariables } from '@/shared/validation/env-variables';
 import './src/shared/polyfills/compression-polyfill';
 import { defineConfig } from 'drizzle-kit';
 
@@ -6,6 +7,6 @@ export default defineConfig({
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: envVariables.DATABASE_URL,
   },
 });

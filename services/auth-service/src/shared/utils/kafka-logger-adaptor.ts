@@ -1,4 +1,4 @@
-import { LogEntry, logLevel } from 'kafkajs';
+import { type LogEntry, logLevel } from 'kafkajs';
 import { Logger } from './logger';
 
 const logger = new Logger('KAFKA_JS');

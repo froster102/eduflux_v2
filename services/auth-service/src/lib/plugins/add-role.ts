@@ -1,6 +1,6 @@
 import { db } from '@/database/db';
 import { user } from '@/database/schema';
-import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
+import type { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
 import { container } from '@/shared/di/container';
 import { TYPES } from '@/shared/di/types';
 import {
@@ -9,7 +9,7 @@ import {
   sessionMiddleware,
 } from 'better-auth/api';
 import { getJwtToken } from 'better-auth/plugins';
-import { BetterAuthPlugin } from 'better-auth/types';
+import type { BetterAuthPlugin } from 'better-auth/types';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -53,6 +53,13 @@ export const addRole = () => {
           const foundUser = await db.query.user.findFirst({
             where: eq(user.id, session.user.id),
           });
+
+          if (!foundUser) {
+            throw new APIError('NOT_FOUND', {
+              code: 'NOT_FOUND',
+              message: 'User not found.',
+            });
+          }
 
           if (foundUser.roles.includes(result.data.role)) {
             throw new APIError('BAD_REQUEST', {

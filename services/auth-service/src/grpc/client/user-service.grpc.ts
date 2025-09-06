@@ -1,4 +1,4 @@
-import { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
+import type { IUserGrpcService } from '@/interfaces/user-service.grpc.interface';
 import {
   CreateUserRequest,
   UpdateUserRequest,
@@ -7,7 +7,7 @@ import {
 } from '../generated/user';
 import { Logger } from '@/shared/utils/logger';
 import { userGrpcServiceConfig } from '@/shared/config/user-service.grpc.config';
-import { credentials, ServiceError } from '@grpc/grpc-js';
+import { credentials, type ServiceError } from '@grpc/grpc-js';
 
 export class UserGrpcServiceClient implements IUserGrpcService {
   private client: UserServiceClient;

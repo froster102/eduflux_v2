@@ -1,5 +1,5 @@
 import { Logger } from '@/shared/utils/logger';
-import { Consumer, EachMessagePayload } from 'kafkajs';
+import type { Consumer, EachMessagePayload } from 'kafkajs';
 import { AUTH_SERVICE } from '@/shared/constants/services';
 import { tryCatch } from '@/shared/utils/try-catch';
 import { USERS_TOPIC } from '@/shared/constants/topics';

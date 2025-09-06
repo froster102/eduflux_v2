@@ -1,4 +1,4 @@
-import { Context } from 'hono';
+import type { Context } from 'hono';
 import httpStatus from 'http-status';
 
 export function notFoundHandler(c: Context) {

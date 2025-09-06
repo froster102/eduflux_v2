@@ -1,6 +1,6 @@
 import { kafkaProducer } from '@/messaging/kafka/kafka';
 import { AUTH_SERVICE } from '@/shared/constants/services';
-import { IEventPayload } from '@/shared/interfaces/event.interface';
+import { type IEventPayload } from '@/shared/interfaces/event.interface';
 import { Logger } from '@/shared/utils/logger';
 import { tryCatch } from '@/shared/utils/try-catch';
 
