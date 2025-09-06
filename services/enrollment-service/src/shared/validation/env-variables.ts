@@ -37,6 +37,8 @@ const envSchema = z.object({
   PAYMENT_SUCCESS_URL: z.string({ error: 'PAYMENT_SUCCESS_URL is required.' }),
   PAYMENT_CANCEL_URL: z.string({ error: 'PAYMENT_CANCEL_URL is required.' }),
 
+  CLIENT_BASE_URL: z.string({ error: 'CLIENT_BASE_URL is required.' }),
+
   IMAGE_BASE_URL: z.string({ error: 'IMAGE_BASE_URL is required.' }),
 });
 

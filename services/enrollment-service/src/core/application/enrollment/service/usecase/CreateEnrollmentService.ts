@@ -15,6 +15,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { inject } from 'inversify';
 import { Enrollment } from '@core/domain/enrollment/entity/Enrollment';
 import { ImageMetaConfig } from 'src/shared/config/ImageMetaConfig';
+import { envVariables } from '@shared/validation/env-variables';
 
 export class CreateEnrollmentService implements CreateEnrollmentUseCase {
   constructor(
@@ -80,7 +81,7 @@ export class CreateEnrollmentService implements CreateEnrollmentUseCase {
         image: `${ImageMetaConfig.IMAGE_BASE_URL}${course.thumbnail}`,
         enrollmentId: enrollment.id,
       },
-      successUrl: process.env.PAYMENT_SUCCESS_URL!,
+      successUrl: `${envVariables.CLIENT_BASE_URL}/courses/${courseId}`,
       cancelUrl: process.env.PAYMENT_CANCEL_URL!,
     });
 
