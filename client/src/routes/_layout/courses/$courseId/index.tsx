@@ -5,7 +5,6 @@ import Dompurify from "dompurify";
 import { Button } from "@heroui/button";
 import React from "react";
 import { Avatar } from "@heroui/avatar";
-import { addToast } from "@heroui/toast";
 import { Image } from "@heroui/image";
 import { VideoIcon } from "lucide-react";
 
@@ -89,20 +88,10 @@ function RouteComponent() {
   }
 
   async function handleEnrollForCourse() {
-    const { data, error } = await tryCatch(
-      enrollForCourse.mutateAsync(courseId),
-    );
+    const { data } = await tryCatch(enrollForCourse.mutateAsync(courseId));
 
     if (data) {
       window.location.assign(data.checkoutUrl);
-    }
-
-    if (error) {
-      addToast({
-        title: "Enrollment",
-        description: "Failed to enroll for course.",
-        color: "danger",
-      });
     }
   }
 
