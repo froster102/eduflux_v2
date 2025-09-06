@@ -15,6 +15,11 @@ app.use(httpLoggerMiddleware);
 app.notFound(notFoundHandler);
 app.onError(errorHandler);
 
+//health check route
+app.get('/health', (c) => {
+  return c.json({ status: 'ok' });
+});
+
 app.on(['POST', 'GET'], '/api/auth/*', (c) => {
   return auth.handler(c.req.raw);
 });
