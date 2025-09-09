@@ -1,21 +1,27 @@
-import { Server as Engine } from "@socket.io/bun-engine";
 import { Server } from "socket.io";
+import type { Server as HTTPServer } from "node:http";
 
-const io = new Server();
+export class SocketIOServer {
+  private readonly io: Server;
 
-export const engine = new Engine();
+  constructor(httpServer: HTTPServer) {
+    this.io = new Server(httpServer, { path: "/ws/" });
+    this.setupSocketListeners();
+  }
 
-io.bind(engine);
+  setupSocketListeners() {
+    this.io.on("connection", (socket) => {
+      // console.log("Handshake headers:", socket.handshake.headers);
+      console.log("A user connected:", socket.id);
 
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
+      socket.on("message", (data) => {
+        console.log("Message received:", data);
+        socket.emit("message", `Server received: ${data}`);
+      });
 
-  socket.on("message", (data) => {
-    console.log("Message received:", data);
-    socket.emit("message", `Server received: ${data}`);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
+      socket.on("disconnect", () => {
+        console.log("User disconnected:", socket.id);
+      });
+    });
+  }
+}

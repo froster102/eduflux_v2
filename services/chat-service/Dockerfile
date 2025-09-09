@@ -1,6 +1,8 @@
-FROM oven/bun:1.2.15-alpine
+FROM node:24-alpine3.21
 
 RUN apk add --no-cache curl
+
+RUN npm install -g bun
 
 WORKDIR /app
 

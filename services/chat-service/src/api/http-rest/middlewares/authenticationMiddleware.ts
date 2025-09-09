@@ -1,19 +1,25 @@
 import { UnauthorizedException } from "@core/common/exception/UnauthorizedException";
+import type { JwtPayload } from "@shared/types/JwtPayload";
 import { validateToken } from "@shared/utils/jwt.util";
-import Elysia from "elysia";
+import { getCookie } from "hono/cookie";
+import { createMiddleware } from "hono/factory";
 
-export const authenticaionMiddleware = new Elysia().derive(
-  { as: "global" },
-  async ({ cookie }) => {
-    const token = cookie?.user_jwt.value;
+export type Env = {
+  Variables: {
+    user: JwtPayload;
+  };
+};
+
+export const authenticaionMiddleware = createMiddleware<Env>(
+  async (c, next) => {
+    const token = getCookie(c, "user_jwt");
     if (!token) {
       throw new UnauthorizedException("Authentication Token Not Found");
     }
     const payload = await validateToken(token).catch(() => {
-      throw new UnauthorizedException(
-        "Invalid token or token has been expired",
-      );
+      throw new UnauthorizedException("Invalid token");
     });
-    return { user: payload };
+    c.set("user", payload);
+    await next();
   },
 );

@@ -1,56 +1,49 @@
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import Elysia from "elysia";
 import { z, ZodError } from "zod/v4";
 import httpStatus from "http-status";
 import { Exception } from "@core/common/exception/Exception";
 import { getHttpErrorCode } from "@shared/errors/error-code";
 import { Code } from "@core/common/error/Code";
 import { container } from "@di/RootModule";
+import type { Context } from "hono";
+import type { StatusCode } from "hono/utils/http-status";
+import type { HTTPResponseError } from "hono/types";
 
-export const errorHandler = (app: Elysia) => {
+export const errorHandler = (error: Error | HTTPResponseError, c: Context) => {
   const logger = container
     .get<LoggerPort>(CoreDITokens.Logger)
     .fromContext("HTTP");
+  console.log(error);
+  logger.error(error?.message, error as Record<string, any>);
+  if (error instanceof ZodError) {
+    c.status(httpStatus.BAD_REQUEST);
+    return c.json({
+      message: "Invalid input data",
+      code: "VALIDATION_ERROR",
+      error: z.treeifyError(error),
+    });
+  }
+  if (error instanceof Exception) {
+    c.status(getHttpErrorCode(error.code) as StatusCode);
+    return c.json({
+      message: error.message,
+      code: error.code,
+    });
+  }
 
-  app
-    .onError(({ code, set, error }) => {
-      // internal logging
-      logger.error((error as Error)?.message, error as Record<string, any>);
+  c.status(httpStatus.INTERNAL_SERVER_ERROR);
 
-      // external client response use generic error messages
-      if (error instanceof ZodError) {
-        set.status = httpStatus.BAD_REQUEST;
-        return {
-          message: "Invalid input data",
-          code: "VALIDATION_ERROR",
-          error: z.treeifyError(error),
-        };
-      }
+  return c.json({
+    message: Code.INTERNAL_ERROR.message,
+    code: Code.INTERNAL_ERROR.code,
+  });
+};
 
-      if (code === "NOT_FOUND") {
-        set.status = httpStatus.NOT_FOUND;
-        return {
-          message: Code.NOT_FOUND_ERROR.message,
-          code: Code.NOT_FOUND_ERROR.code,
-        };
-      }
-
-      if (error instanceof Exception) {
-        set.status = getHttpErrorCode(error.code);
-        return {
-          message: error.message,
-          code: error.code,
-        };
-      }
-
-      set.status = httpStatus.INTERNAL_SERVER_ERROR;
-      return {
-        message: Code.INTERNAL_ERROR.message,
-        code: Code.INTERNAL_ERROR.code,
-      };
-    })
-    .as("global");
-
-  return app;
+export const notFoundHandler = (c: Context) => {
+  c.status(httpStatus.NOT_FOUND);
+  return c.json({
+    message: Code.NOT_FOUND_ERROR.message,
+    code: Code.NOT_FOUND_ERROR.code,
+  });
 };

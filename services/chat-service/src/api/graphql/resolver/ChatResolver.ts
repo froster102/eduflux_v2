@@ -3,7 +3,7 @@ import type { SubgraphContext } from "@api/graphql/handler/graphqlHandler";
 import { getChatsSchema } from "@api/graphql/validation/schema";
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { GetChatsUseCase } from "@core/application/chat/usecase/GetChatsUseCase";
-import type { AuthenticatedUserDto } from "@core/common/dto/AuthenticatedDto";
+import { AuthenticatedUserDto } from "@core/common/dto/AuthenticatedDto";
 import { UnauthorizedException } from "@core/common/exception/UnauthorizedException";
 import { inject } from "inversify";
 
@@ -46,12 +46,25 @@ export class ChatResolver {
   }
 
   private getAuthenticatedUser(context: SubgraphContext): AuthenticatedUserDto {
-    const user = context.user;
-
-    if (!user) {
+    const userHeader = context.req.header("X-User");
+    if (!userHeader) {
       throw new UnauthorizedException("Unauthorized");
     }
+    if (userHeader) {
+      const parsedUserFromHeader = JSON.parse(userHeader) as {
+        id: string;
+        name: string;
+        email: string;
+        roles: Role[];
+      };
+      context.user = new AuthenticatedUserDto(
+        parsedUserFromHeader.id,
+        parsedUserFromHeader.name,
+        parsedUserFromHeader.email,
+        parsedUserFromHeader.roles,
+      );
+    }
 
-    return user;
+    return context.user!;
   }
 }

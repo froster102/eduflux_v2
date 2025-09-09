@@ -1,31 +1,28 @@
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import type Elysia from "elysia";
+import type { Context, Next } from "hono";
 import { container } from "src/di/RootModule";
+import { getConnInfo } from "@hono/node-server/conninfo";
 
-export const httpLoggerMiddleware = (app: Elysia) => {
+export const httpLoggerMiddleware = async (c: Context, next: Next) => {
   const logger = container
     .get<LoggerPort>(CoreDITokens.Logger)
     .fromContext("HTTP");
 
   const start = Date.now();
 
-  app.onRequest(({ server, request }) => {
-    logger.info(`Incomming request: ${request.method} ${request.url}`, {
-      ip: server?.requestIP(request)?.address,
-      userAgent: request.headers.get("user-agent"),
-    });
+  logger.info(`Incomming request: ${c.req.method} ${c.req.url}`, {
+    ip: getConnInfo(c).remote.address,
+    userAgent: c.req.header("user-agent"),
   });
 
-  app.onAfterResponse(({ set, request }) => {
-    const duration = Date.now() - start;
-    const statusCode = set.status as number;
-    const logLevel = statusCode >= 400 ? "error" : "info";
-    logger[logLevel](`Request completed: ${request.method} ${request.url}`, {
-      statusCode,
-      duration: `${duration}ms`,
-    });
-  });
+  await next();
 
-  return app;
+  const duration = Date.now() - start;
+  const statusCode = c.res.status;
+  const logLevel = statusCode >= 400 ? "error" : "info";
+  logger[logLevel](`Request completed: ${c.req.method} ${c.req.url}`, {
+    statusCode,
+    duration: `${duration}ms`,
+  });
 };

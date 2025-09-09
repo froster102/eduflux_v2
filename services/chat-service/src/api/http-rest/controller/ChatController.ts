@@ -1,9 +1,16 @@
-import { authenticaionMiddleware } from "@api/http-rest/middlewares/authenticationMiddleware";
+import {
+  authenticaionMiddleware,
+  type Env,
+} from "@api/http-rest/middlewares/authenticationMiddleware";
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { CreateChatUseCase } from "@core/application/chat/usecase/CreateChatUseCase";
 import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
-import Elysia, { t } from "elysia";
+import { Hono } from "hono";
 import { inject } from "inversify";
+import {
+  createChatSchema,
+  getChatExistsSchema,
+} from "@api/http-rest/validation/schema";
 
 export class ChatController {
   constructor(
@@ -13,40 +20,24 @@ export class ChatController {
     private readonly getChatUseCase: GetChatUseCase,
   ) {}
 
-  register(): Elysia {
-    return new Elysia().group("/api/chats", (group) =>
-      group
-        .use(authenticaionMiddleware)
-        .post(
-          "/",
-          async ({ user, body }) => {
-            const response = await this.createChatUseCase.execute({
-              instructorId: body.instructorId,
-              userId: user.id,
-            });
-            return JSON.stringify(response);
-          },
-          {
-            body: t.Object({
-              instructorId: t.String(),
-            }),
-          },
-        )
-        .get(
-          "/exists",
-          async ({ query, user }) => {
-            const response = await this.getChatUseCase.execute({
-              instructorId: query.instructorId,
-              learnerId: user.id,
-            });
-            return response;
-          },
-          {
-            query: t.Object({
-              instructorId: t.String(),
-            }),
-          },
-        ),
-    );
+  register() {
+    return new Hono<Env>()
+      .use(authenticaionMiddleware)
+      .post("/", async (c) => {
+        const parsedBody = createChatSchema.parse(c.body);
+        const response = await this.createChatUseCase.execute({
+          instructorId: parsedBody.instructorId,
+          userId: c.get("user").id,
+        });
+        return c.json(response);
+      })
+      .get("/exists", async (c) => {
+        const parsedQuery = getChatExistsSchema.parse(c.req.query());
+        const response = await this.getChatUseCase.execute({
+          instructorId: parsedQuery.instructorId,
+          learnerId: c.get("user").id,
+        });
+        return c.json(response);
+      });
   }
 }

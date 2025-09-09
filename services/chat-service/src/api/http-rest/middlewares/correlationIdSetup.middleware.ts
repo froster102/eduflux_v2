@@ -1,17 +1,14 @@
 import { asyncLocalStorage } from "@shared/utils/store";
-import Elysia from "elysia";
+import type { Context, Next } from "hono";
 import { v4 as uuidV4 } from "uuid";
 
-export const correlationIdSetupMiddleware = (app: Elysia) => {
-  app.onRequest(({ request }) => {
-    const store = new Map<string, string>();
-    const correlationIdHeader = request.headers.get("x-correlation-id");
-    const correlationId = correlationIdHeader || uuidV4();
+export const correlationIdSetupMiddleware = async (c: Context, next: Next) => {
+  const store = new Map<string, string>();
+  const correlationIdHeader = c.req.header("x-correlation-id");
+  const correlationId = correlationIdHeader || uuidV4();
 
-    store.set("correlationId", correlationId);
+  store.set("correlationId", correlationId);
 
-    asyncLocalStorage.enterWith(store);
-  });
-
-  return app;
+  asyncLocalStorage.enterWith(store);
+  await next();
 };
