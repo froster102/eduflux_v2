@@ -10,7 +10,8 @@ import { inject } from "inversify";
 import {
   createChatSchema,
   getChatExistsSchema,
-} from "@api/http-rest/validation/schema";
+  getMessagesSchema,
+} from "@api/validation/schema";
 
 export class ChatController {
   constructor(

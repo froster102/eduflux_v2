@@ -1,3 +1,3 @@
 export class PaginationConfig {
-  public static readonly DefaultPageSize = 10;
+  public static readonly DefaultPageSize = 20;
 }

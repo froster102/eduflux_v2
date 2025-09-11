@@ -1,6 +1,6 @@
 import type { Resolvers } from "@api/graphql/__generated__/resolvers-types";
 import type { SubgraphContext } from "@api/graphql/handler/graphqlHandler";
-import { getChatsSchema } from "@api/graphql/validation/schema";
+import { getChatsSchema } from "@api/validation/schema";
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { GetChatsUseCase } from "@core/application/chat/usecase/GetChatsUseCase";
 import { AuthenticatedUserDto } from "@core/common/dto/AuthenticatedDto";
