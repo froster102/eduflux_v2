@@ -44,7 +44,7 @@ export class HttpServer {
       return c.json({ message: "Api running successfully." });
     });
     this.app.route("/", graphqlHandler);
-    this.app.route("/api/chats", this.chatController.register());
+    this.app.route("/api/chats/", this.chatController.register());
   }
 
   private initSocketIOServer(server: HTTPServer) {
