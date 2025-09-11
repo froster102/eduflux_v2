@@ -1,19 +1,17 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Skeleton } from "@heroui/skeleton";
 
-import ChatItem from "@/features/chat/components/ChatItem";
-
-interface ChatHistoryProps {
-  chatHistory: Chat[];
-}
-
-export default function ChatHistory({ chatHistory }: ChatHistoryProps) {
+export default function ChatHistorySkeleton() {
   return (
     <Card className="w-full h-full bg-background border border-default-200">
       <CardHeader className="text-xl font-semibold">My Chats</CardHeader>
       <CardBody className="pt-0">
-        {chatHistory.map((chat, i) => (
+        {new Array(14).fill(0).map((_, i) => (
           <div key={i} className="pt-2">
-            <ChatItem chat={chat} />
+            <Skeleton
+              className="!bg-default-200 w-full h-12 rounded-lg"
+              isLoaded={false}
+            />
           </div>
         ))}
       </CardBody>

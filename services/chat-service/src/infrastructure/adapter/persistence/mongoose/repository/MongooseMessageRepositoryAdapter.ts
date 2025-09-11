@@ -23,17 +23,17 @@ export class MongooseMessageRepositoryAdapter
     queryParameters?: MessageQueryParameters,
   ): Promise<MessageQueryResult> {
     const query: FilterQuery<MongooseMessage> = { chatId };
-    const limit = (queryParameters?.limit || this.defaultLimit) + 1;
-    const offset = (queryParameters?.offset || this.defaultOffset) + 1;
-    const before = queryParameters?.before;
+    const limit = queryParameters?.limit || this.defaultLimit;
+    const before = queryParameters?.before || new Date().toISOString();
 
     if (before) {
       query.createdAt = { $lt: before };
     }
 
     const totalCount = await MessageModel.countDocuments(query);
-
-    const messages = await MessageModel.find(query).skip(offset).limit(limit);
+    const messages = await MessageModel.find(query)
+      .sort({ createdAt: -1 })
+      .limit(limit);
 
     return {
       totalCount,

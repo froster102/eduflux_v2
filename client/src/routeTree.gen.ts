@@ -29,8 +29,8 @@ import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index
 import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
 import { Route as LayoutChatsIndexRouteImport } from './routes/_layout/chats/index'
 import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
-import { Route as InstructorLayoutMessagesIndexRouteImport } from './routes/instructor/_layout/messages/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
+import { Route as InstructorLayoutChatsIndexRouteImport } from './routes/instructor/_layout/chats/index'
 import { Route as LayoutInstructorsInstructorIdIndexRouteImport } from './routes/_layout/instructors/$instructorId/index'
 import { Route as LayoutCoursesCourseIdIndexRouteImport } from './routes/_layout/courses/$courseId/index'
 import { Route as LayoutCoursesCourseIdLearnIndexRouteImport } from './routes/_layout/courses/$courseId/learn/index'
@@ -132,16 +132,16 @@ const InstructorLayoutSessionsIndexRoute =
     path: '/sessions/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
-const InstructorLayoutMessagesIndexRoute =
-  InstructorLayoutMessagesIndexRouteImport.update({
-    id: '/messages/',
-    path: '/messages/',
-    getParentRoute: () => InstructorLayoutRouteRoute,
-  } as any)
 const InstructorLayoutCoursesIndexRoute =
   InstructorLayoutCoursesIndexRouteImport.update({
     id: '/courses/',
     path: '/courses/',
+    getParentRoute: () => InstructorLayoutRouteRoute,
+  } as any)
+const InstructorLayoutChatsIndexRoute =
+  InstructorLayoutChatsIndexRouteImport.update({
+    id: '/chats/',
+    path: '/chats/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
 const LayoutInstructorsInstructorIdIndexRoute =
@@ -188,8 +188,8 @@ export interface FileRoutesByFullPath {
   '/instructor/': typeof InstructorLayoutIndexRoute
   '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
   '/instructors/$instructorId': typeof LayoutInstructorsInstructorIdIndexRoute
+  '/instructor/chats': typeof InstructorLayoutChatsIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
-  '/instructor/messages': typeof InstructorLayoutMessagesIndexRoute
   '/instructor/sessions': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/courses/$courseId/learn': typeof LayoutCoursesCourseIdLearnIndexRoute
@@ -211,8 +211,8 @@ export interface FileRoutesByTo {
   '/settings': typeof LayoutSettingsIndexRoute
   '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
   '/instructors/$instructorId': typeof LayoutInstructorsInstructorIdIndexRoute
+  '/instructor/chats': typeof InstructorLayoutChatsIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
-  '/instructor/messages': typeof InstructorLayoutMessagesIndexRoute
   '/instructor/sessions': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/courses/$courseId/learn': typeof LayoutCoursesCourseIdLearnIndexRoute
@@ -239,8 +239,8 @@ export interface FileRoutesById {
   '/instructor/_layout/': typeof InstructorLayoutIndexRoute
   '/_layout/courses/$courseId/': typeof LayoutCoursesCourseIdIndexRoute
   '/_layout/instructors/$instructorId/': typeof LayoutInstructorsInstructorIdIndexRoute
+  '/instructor/_layout/chats/': typeof InstructorLayoutChatsIndexRoute
   '/instructor/_layout/courses/': typeof InstructorLayoutCoursesIndexRoute
-  '/instructor/_layout/messages/': typeof InstructorLayoutMessagesIndexRoute
   '/instructor/_layout/sessions/': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/_layout/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/_layout/courses/$courseId/learn/': typeof LayoutCoursesCourseIdLearnIndexRoute
@@ -266,8 +266,8 @@ export interface FileRouteTypes {
     | '/instructor/'
     | '/courses/$courseId'
     | '/instructors/$instructorId'
+    | '/instructor/chats'
     | '/instructor/courses'
-    | '/instructor/messages'
     | '/instructor/sessions'
     | '/instructor/courses/$courseId/manage'
     | '/courses/$courseId/learn'
@@ -289,8 +289,8 @@ export interface FileRouteTypes {
     | '/settings'
     | '/courses/$courseId'
     | '/instructors/$instructorId'
+    | '/instructor/chats'
     | '/instructor/courses'
-    | '/instructor/messages'
     | '/instructor/sessions'
     | '/instructor/courses/$courseId/manage'
     | '/courses/$courseId/learn'
@@ -316,8 +316,8 @@ export interface FileRouteTypes {
     | '/instructor/_layout/'
     | '/_layout/courses/$courseId/'
     | '/_layout/instructors/$instructorId/'
+    | '/instructor/_layout/chats/'
     | '/instructor/_layout/courses/'
-    | '/instructor/_layout/messages/'
     | '/instructor/_layout/sessions/'
     | '/instructor/_layout/courses/$courseId/manage'
     | '/_layout/courses/$courseId/learn/'
@@ -465,18 +465,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutSessionsIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
-    '/instructor/_layout/messages/': {
-      id: '/instructor/_layout/messages/'
-      path: '/messages'
-      fullPath: '/instructor/messages'
-      preLoaderRoute: typeof InstructorLayoutMessagesIndexRouteImport
-      parentRoute: typeof InstructorLayoutRouteRoute
-    }
     '/instructor/_layout/courses/': {
       id: '/instructor/_layout/courses/'
       path: '/courses'
       fullPath: '/instructor/courses'
       preLoaderRoute: typeof InstructorLayoutCoursesIndexRouteImport
+      parentRoute: typeof InstructorLayoutRouteRoute
+    }
+    '/instructor/_layout/chats/': {
+      id: '/instructor/_layout/chats/'
+      path: '/chats'
+      fullPath: '/instructor/chats'
+      preLoaderRoute: typeof InstructorLayoutChatsIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
     '/_layout/instructors/$instructorId/': {
@@ -563,16 +563,16 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface InstructorLayoutRouteRouteChildren {
   InstructorLayoutIndexRoute: typeof InstructorLayoutIndexRoute
+  InstructorLayoutChatsIndexRoute: typeof InstructorLayoutChatsIndexRoute
   InstructorLayoutCoursesIndexRoute: typeof InstructorLayoutCoursesIndexRoute
-  InstructorLayoutMessagesIndexRoute: typeof InstructorLayoutMessagesIndexRoute
   InstructorLayoutSessionsIndexRoute: typeof InstructorLayoutSessionsIndexRoute
   InstructorLayoutCoursesCourseIdManageRoute: typeof InstructorLayoutCoursesCourseIdManageRoute
 }
 
 const InstructorLayoutRouteRouteChildren: InstructorLayoutRouteRouteChildren = {
   InstructorLayoutIndexRoute: InstructorLayoutIndexRoute,
+  InstructorLayoutChatsIndexRoute: InstructorLayoutChatsIndexRoute,
   InstructorLayoutCoursesIndexRoute: InstructorLayoutCoursesIndexRoute,
-  InstructorLayoutMessagesIndexRoute: InstructorLayoutMessagesIndexRoute,
   InstructorLayoutSessionsIndexRoute: InstructorLayoutSessionsIndexRoute,
   InstructorLayoutCoursesCourseIdManageRoute:
     InstructorLayoutCoursesCourseIdManageRoute,

@@ -3,8 +3,8 @@ export class MessageDITokens {
   static readonly CreateMessageUseCase: unique symbol = Symbol(
     "CreateMessageUseCase",
   );
-  static readonly GetMessageUseCase: unique symbol =
-    Symbol("GetMessageUseCase");
+  static readonly GetMessagesUseCase: unique symbol =
+    Symbol("GetMessagesUseCase");
   static readonly UpdateMessageStatusUseCase: unique symbol = Symbol(
     "UpdateMessageStatusUseCase",
   );

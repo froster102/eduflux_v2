@@ -7,6 +7,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { useBecomeAInstructor } from "@/features/instructor/hooks/useBecomeAInstructor";
 import AcademicIcon from "@/components/icons/AcademicIcon";
 import LearnerIcon from "@/components/icons/LearnerIcon";
+import { useChatStore } from "@/store/useChatStore";
 
 import ConfirmationModal from "../../../components/ConfirmationModal";
 
@@ -23,6 +24,7 @@ export default function RoleSwitcher() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const becomeAInstructor = useBecomeAInstructor();
+  const { resetSelectedChat } = useChatStore();
 
   const roles: Array<{ key: string; label: string; icon: React.ReactNode }> = [
     {
@@ -43,10 +45,12 @@ export default function RoleSwitcher() {
         setOpenConfirmationModal(true);
       } else {
         setRole(new Set(["INSTRUCTOR"]));
+        resetSelectedChat();
         navigate({ to: "/instructor" });
       }
     } else if (value === "LEARNER") {
       setRole(new Set(["LEARNER"]));
+      resetSelectedChat();
       navigate({ to: "/home" });
     }
   }

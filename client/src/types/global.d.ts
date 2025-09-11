@@ -137,14 +137,6 @@ declare global {
     updatedAt: string;
   };
 
-  export type RefUser = {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    image: string;
-  };
-
   export type Role = "ADMIN" | "LEARNER" | "INSTRUCTOR";
 
   export type Note = {

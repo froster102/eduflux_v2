@@ -1,7 +1,12 @@
 declare global {
   export type Chat = {
     id: string;
-    participants: RefUser[];
+    participants: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      image: string;
+    }[];
     lastMessagePreview: String | null;
     lastMessageAt: String;
   };
@@ -18,8 +23,16 @@ declare global {
   };
 
   export type GetChatsQueryParmeters = {
-    role: "INSTRUCTOR" | "LEARNER";
+    role: ChatRole;
   } & QueryParmeters;
+
+  export type GetMessagesQueryParameters = {
+    before: string;
+  } & QueryParmeters;
+
+  export type GetMessagesResponse = {
+    messages: Message[];
+  };
 }
 
 export {};

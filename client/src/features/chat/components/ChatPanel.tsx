@@ -4,46 +4,77 @@ import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Input } from "@heroui/input";
 import React from "react";
+import { Form } from "@heroui/form";
+import { Spinner } from "@heroui/spinner";
 
 import SendIcon from "@/components/icons/SendIcon";
+import { useAuthStore } from "@/store/auth-store";
+import { useChatStore } from "@/store/useChatStore";
+import { IMAGE_BASE_URL } from "@/config/image";
+import { useChatContext } from "@/context/ChatContext";
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
+import { formatRelative } from "@/utils/date";
 
-export interface ChatPanelProps {
-  currentUser: User;
+interface ChatPanelProps {
   messages: Message[];
-  recipient: UserProfile;
+  onScrollEnd: () => void;
+  isFetchingNextPage: boolean;
 }
 
 export default function ChatPanel({
   messages,
-  recipient,
-  currentUser,
+  onScrollEnd,
+  isFetchingNextPage,
 }: ChatPanelProps) {
+  const { user: currentUser } = useAuthStore();
+  const { selectedChat } = useChatStore();
+  const [textInput, setTextInput] = React.useState("");
+  const { sendMessage } = useChatContext();
+  const [autoScrollToBottom, setAutoScrollToBottom] = React.useState(true);
+
+  const messageInputRef = React.useRef<HTMLInputElement>(null);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const prevScrollHeightRef = React.useRef<number>(0);
+
+  const recipient = selectedChat
+    ? selectedChat.participants.find(
+        (participant) => participant.id !== currentUser!.id,
+      )
+    : null;
+
   const messageEndRef = React.useRef<HTMLDivElement | null>(null);
 
-  console.log(currentUser);
+  React.useEffect(() => {
+    if (autoScrollToBottom && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop =
+        scrollContainerRef.current.scrollHeight;
+      setAutoScrollToBottom(false);
+    }
+  }, [autoScrollToBottom]);
 
   React.useEffect(() => {
-    if (messageEndRef.current && messages) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (scrollContainerRef.current) {
+      const currentScrollHeight = scrollContainerRef.current.scrollHeight;
+
+      if (prevScrollHeightRef.current > 0) {
+        const heightDiff = currentScrollHeight - prevScrollHeightRef.current;
+
+        scrollContainerRef.current.scrollTop += heightDiff;
+      }
+      prevScrollHeightRef.current = currentScrollHeight;
     }
-  }, [messages]);
+  }, [messages.length]);
 
   let lastDate: string = "";
 
-  const formatDate = (timestamp: string) => {
-    const now = new Date();
-    const date = new Date(timestamp);
-    const diffInDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-
-    if (diffInDays < 1 && now.getDate() === date.getDate()) {
-      return "Today";
-    } else if (diffInDays < 2 && now.getDate() - date.getDate() === 1) {
-      return "Yesterday";
-    } else {
-      const options = { day: "numeric", month: "long", year: "numeric" };
-
-      return date.toLocaleDateString("en-US", options);
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    sendMessage(selectedChat!.id, textInput);
+    setTextInput("");
+    if (messageInputRef) {
+      messageInputRef.current?.focus();
     }
+    setAutoScrollToBottom(true);
   };
 
   return (
@@ -52,12 +83,11 @@ export default function ChatPanel({
         <Card className="w-full">
           <CardBody className="p-4">
             <div className="flex items-center gap-2">
-              <Avatar
-                size="lg"
-                src="https://heroui.com/images/hero-card-complete.jpeg"
-              />
+              <Avatar size="lg" src={`${IMAGE_BASE_URL}${recipient?.image}`} />
               <div>
-                <p className="text-lg font-medium">{recipient.firstName}</p>
+                <p className="text-lg font-medium capitalize">
+                  {recipient!.firstName + " " + recipient!.lastName}
+                </p>
                 <Chip className="border-0 p-0" color="success" variant="dot">
                   Online
                 </Chip>
@@ -66,63 +96,91 @@ export default function ChatPanel({
           </CardBody>
         </Card>
       </CardHeader>
-      <CardBody className="flex-1 overflow-y-auto pt-0">
-        {messages.map((message) => {
-          const currentDate = new Date(message.createdAt).toDateString();
-          const showDateSeparator = currentDate !== lastDate;
-
-          lastDate = currentDate;
-
-          return (
-            <React.Fragment key={message.id}>
-              {showDateSeparator && (
-                <div className="flex justify-center my-4">
-                  <span className="bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full">
-                    {formatDate(message.createdAt)}
-                  </span>
+      <CardBody className="flex-1  pt-0">
+        <div ref={scrollContainerRef} className="overflow-y-auto">
+          <InfiniteScrollContainer
+            scrollDirection="top"
+            onEndReached={() => {
+              onScrollEnd();
+            }}
+          >
+            {isFetchingNextPage && (
+              <div className="flex w-full justify-center pt-4">
+                <div>
+                  <Spinner />
                 </div>
-              )}
-              <div
-                className={`w-full flex ${message.senderId === currentUser.id ? "justify-end" : "justify-start"} pt-2`}
-              >
-                <Card
-                  className="border border-default-200 min-w-32"
-                  shadow="none"
-                >
-                  <CardBody>
-                    {message.content}
-                    <small
-                      className={`pt-0  text-right text-[0.6rem]  ${message.senderId === currentUser.id ? "text-white/80" : "text-gray-500"}`}
-                    >
-                      {new Date(message.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </small>
-                  </CardBody>
-                </Card>
               </div>
-            </React.Fragment>
-          );
-        })}
+            )}
+            {[...messages].reverse().map((message) => {
+              const currentDate = new Date(message.createdAt).toDateString();
+              const showDateSeparator = currentDate !== lastDate;
+
+              lastDate = currentDate;
+
+              return (
+                <React.Fragment key={message.id}>
+                  {showDateSeparator && (
+                    <div className="flex justify-center my-4">
+                      <span className="bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-1 rounded-full capitalize">
+                        {formatRelative(message.createdAt)}
+                      </span>
+                    </div>
+                  )}
+                  <div
+                    className={`w-full flex ${message.senderId === currentUser!.id ? "justify-end" : "justify-start"} pt-2`}
+                  >
+                    <Card
+                      className="border border-default-200 min-w-32"
+                      shadow="none"
+                    >
+                      <CardBody>
+                        {message.content}
+                        <small
+                          className={`pt-0  text-right text-[0.6rem]  ${message.senderId === currentUser!.id ? "text-white/80" : "text-gray-500"}`}
+                        >
+                          {new Date(message.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </small>
+                      </CardBody>
+                    </Card>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </InfiniteScrollContainer>
+        </div>
+
         <div ref={messageEndRef} />
       </CardBody>
       <CardFooter>
         <div className="w-full">
-          <Input
-            classNames={{
-              inputWrapper: "h-14 bg-default-200/90",
-            }}
-            endContent={
-              <Button isIconOnly color="primary" size="sm">
-                <SendIcon />
-              </Button>
-            }
-            name="message"
-            placeholder="Message"
-            type="text"
-            variant="faded"
-          />
+          <Form onSubmit={onSubmit}>
+            <Input
+              ref={messageInputRef}
+              classNames={{
+                inputWrapper: "h-14 bg-default-200/90",
+              }}
+              endContent={
+                <Button
+                  isIconOnly
+                  color="primary"
+                  isDisabled={textInput === ""}
+                  size="sm"
+                  type="submit"
+                >
+                  <SendIcon />
+                </Button>
+              }
+              name="message"
+              placeholder="Message"
+              type="text"
+              value={textInput}
+              variant="faded"
+              onValueChange={setTextInput}
+            />
+          </Form>
         </div>
       </CardFooter>
     </Card>

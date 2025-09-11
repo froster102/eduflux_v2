@@ -51,35 +51,27 @@ export function getDeviceName(userAgent: string) {
   };
 }
 
-export function buildQueryUrlParams(params: PaginationQueryParams): string {
+export function buildQueryUrlParams(params: Record<string, any>): string {
   const urlSearchParams = new URLSearchParams();
 
-  if (params.page !== undefined) {
-    urlSearchParams.append("page", String(params.page));
-  }
-  if (params.limit !== undefined) {
-    urlSearchParams.append("limit", String(params.limit));
-  }
-  if (params.searchQuery) {
-    urlSearchParams.append("searchQuery", params.searchQuery);
-  }
-  if (params.searchFields && params.searchFields.length > 0) {
-    urlSearchParams.append("searchFields", params.searchFields.join(","));
-  }
+  for (const key in params) {
+    if (Object.prototype.hasOwnProperty.call(params, key)) {
+      const value = params[key];
 
-  if (params.sortBy) {
-    urlSearchParams.append("sortBy", params.sortBy);
-  }
-  if (params.sortOrder) {
-    urlSearchParams.append("sortOrder", params.sortOrder);
-  }
-
-  if (params.filters) {
-    try {
-      const filtersString = JSON.stringify(params.filters);
-
-      urlSearchParams.append("filters", filtersString);
-    } catch {}
+      if (value !== undefined && value !== null) {
+        if (Array.isArray(value)) {
+          urlSearchParams.append(key, value.join(","));
+        } else if (typeof value === "object") {
+          try {
+            urlSearchParams.append(key, JSON.stringify(value));
+          } catch {
+            console.error(`Could not stringify value for key: ${key}`);
+          }
+        } else {
+          urlSearchParams.append(key, String(value));
+        }
+      }
+    }
   }
 
   const queryString = urlSearchParams.toString();

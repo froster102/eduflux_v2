@@ -30,6 +30,6 @@ export class Code {
   };
   public static INTERNAL_ERROR: CodeDescription = {
     code: "INTERNAL_ERROR",
-    message: "Internal error",
+    message: "An unexpected error has occured, please try again later",
   };
 }

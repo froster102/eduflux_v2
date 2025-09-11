@@ -4,6 +4,9 @@ export class ChatDITokens {
     Symbol("CreateChatUseCase");
   static readonly GetChatsUseCase: unique symbol = Symbol("GetChatsUseCase");
   static readonly GetChatUseCase: unique symbol = Symbol("GetChatUseCase");
+  static readonly VerifyChatParticipantUseCase: unique symbol = Symbol(
+    "VerifyChatParticipantUseCase",
+  );
 
   //Repository
   static readonly ChatRepository: unique symbol = Symbol("ChatRepository");

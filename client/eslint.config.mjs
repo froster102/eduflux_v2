@@ -14,7 +14,6 @@ import tsParser from "@typescript-eslint/parser";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
@@ -32,8 +31,8 @@ export default defineConfig([
         "plugin:prettier/recommended",
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
-        "plugin:@tanstack/eslint-plugin-router/recommended",
-      ),
+        "plugin:@tanstack/eslint-plugin-router/recommended"
+      )
     ),
 
     plugins: {
@@ -49,7 +48,7 @@ export default defineConfig([
     languageOptions: {
       globals: {
         ...Object.fromEntries(
-          Object.entries(globals.browser).map(([key]) => [key, "off"]),
+          Object.entries(globals.browser).map(([key]) => [key, "off"])
         ),
         ...globals.node,
       },
@@ -70,10 +69,10 @@ export default defineConfig([
         version: "detect",
       },
       "import/resolver": {
-        "typescript": {
-          "alwaysTryTypes": true,
-          "project": "./tsconfig.json"
-        }
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.json",
+        },
       },
       "boundaries/include": ["src/**/*"],
 
@@ -83,17 +82,19 @@ export default defineConfig([
           type: "shared",
           pattern: [
             "src/components/**/*",
+            "src/shared/**/*",
             "src/config/**/*",
             "src/hooks/**/*",
             "src/lib/**/*",
             "src/layout/**/*",
             "src/store/**/*",
+            "src/context/**/*",
             "src/styles/**/*",
             "src/types/**/*",
             "src/utils/**/*",
             "src/services/**/*",
             "src/Provider.tsx",
-            "src/routeTree.gen.ts"
+            "src/routeTree.gen.ts",
           ],
         },
         {
@@ -106,7 +107,7 @@ export default defineConfig([
           mode: "full",
           type: "app",
           capture: ["_", "fileName"],
-          pattern: ["src/routes/**/*","src/main.tsx"],
+          pattern: ["src/routes/**/*", "src/main.tsx"],
         },
         {
           mode: "full",
@@ -160,7 +161,7 @@ export default defineConfig([
           ],
         },
       ],
-      "no-console": "warn",
+      "no-console": ["warn", { allow: ["error"] }],
       "react/prop-types": "off",
       "react/jsx-uses-react": "off",
       "react/react-in-jsx-scope": "off",

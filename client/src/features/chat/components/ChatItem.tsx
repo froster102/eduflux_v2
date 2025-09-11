@@ -4,6 +4,7 @@ import { Card } from "@heroui/card";
 import { useAuthStore } from "@/store/auth-store";
 import { IMAGE_BASE_URL } from "@/config/image";
 import { useChatStore } from "@/store/useChatStore";
+import { useChatContext } from "@/context/ChatContext";
 
 interface ChatItemProps {
   chat: Chat;
@@ -13,6 +14,7 @@ export default function ChatItem({ chat }: ChatItemProps) {
   const { user } = useAuthStore();
   const otherParticipant = chat.participants.find((p) => p.id !== user!.id);
   const { selectedChat, setSelectedChat } = useChatStore();
+  const { joinChat } = useChatContext();
 
   return (
     <Card
@@ -21,6 +23,7 @@ export default function ChatItem({ chat }: ChatItemProps) {
       shadow="none"
       onPress={() => {
         setSelectedChat(chat);
+        joinChat(chat.id);
       }}
     >
       <Avatar size="md" src={`${IMAGE_BASE_URL}${otherParticipant?.image}`} />

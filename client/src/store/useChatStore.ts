@@ -7,6 +7,7 @@ export interface InitialState {
 
 export interface ChatStore extends InitialState {
   setSelectedChat: (chat: Chat | null) => void;
+  resetSelectedChat: () => void;
 }
 
 const initialState: InitialState = {
@@ -19,6 +20,11 @@ export const useChatStore = create<ChatStore>()(
     setSelectedChat: (chat) => {
       set((state) => {
         state.selectedChat = chat;
+      });
+    },
+    resetSelectedChat: () => {
+      set((state) => {
+        state.selectedChat = null;
       });
     },
   })),

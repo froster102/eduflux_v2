@@ -1,4 +1,8 @@
-import { format, parseISO } from "date-fns";
+import {
+  format,
+  parseISO,
+  formatRelative as dateFnsFormatRelative,
+} from "date-fns";
 import { DateFormatter, parseAbsolute } from "@internationalized/date";
 
 export function formatISOstring(ISOstring: string) {
@@ -93,4 +97,23 @@ export function formatSessionDataTime(
     timeRange: `${formattedStartTime} - ${formattedEndTime}`,
     duration: `${durationMins}m`,
   };
+}
+
+export function formatRelative(ISOstring: string): string {
+  const targetDate = parseISO(ISOstring);
+  const now = new Date();
+
+  const formattedRelative = dateFnsFormatRelative(targetDate, now);
+
+  let output = "";
+
+  if (formattedRelative.startsWith("today")) {
+    output = "today";
+  } else if (formattedRelative.startsWith("yesterday")) {
+    output = "yesterday";
+  } else {
+    output = format(targetDate, "MM/dd/yyyy");
+  }
+
+  return output;
 }

@@ -64,16 +64,43 @@ function RouteComponent() {
 
   async function chatWithInstructorHandler() {
     if (existingChat && existingChat.chat) {
-      setSelectedChat(existingChat.chat);
+      console.log("chat exists");
+      setSelectedChat({
+        id: existingChat.chat.id,
+        lastMessageAt: existingChat.chat.lastMessageAt,
+        lastMessagePreview: existingChat.chat.lastMessagePreview,
+        participants: [
+          {
+            id: instructorProfile.id,
+            firstName: instructorProfile.firstName,
+            lastName: instructorProfile.lastName,
+            image: instructorProfile.image,
+          },
+        ],
+      });
       navigte({ to: `/chats` });
 
       return;
     }
 
-    const createdChat = await tryCatch(createChat.mutateAsync(instructorId));
+    const { data: createdChat } = await tryCatch(
+      createChat.mutateAsync(instructorId),
+    );
 
-    if (createdChat.data) {
-      setSelectedChat(createdChat.data);
+    if (createdChat) {
+      setSelectedChat({
+        id: createdChat.id,
+        lastMessageAt: createdChat.lastMessageAt,
+        lastMessagePreview: createdChat.lastMessagePreview,
+        participants: [
+          {
+            id: instructorProfile.id,
+            firstName: instructorProfile.firstName,
+            lastName: instructorProfile.lastName,
+            image: instructorProfile.image,
+          },
+        ],
+      });
       navigte({ to: `/chats` });
     }
   }
