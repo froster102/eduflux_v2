@@ -10,7 +10,7 @@ export const Route = createFileRoute("/auth/sign-up")({
 function SignUpPage() {
   const signUp = useSignUp();
 
-  const onSubmit = async (data: SignInFormData) => {
+  const onSubmit = async (data: SignUpFormData) => {
     signUp.mutate(data);
   };
 

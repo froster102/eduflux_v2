@@ -20,3 +20,5 @@ export const auth = createAuthClient({
     jwtClient(),
   ],
 });
+
+export const { useSession } = auth;

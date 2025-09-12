@@ -16,9 +16,7 @@ declare global {
   };
 
   export type ResetPasswordFormData = {
-    email: string;
     otp: string;
-    password: string;
     newPassword: string;
     confirmPassword: string;
   };

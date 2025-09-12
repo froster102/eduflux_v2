@@ -105,7 +105,6 @@ export function findNodePosition(props: {
         return { pos: nodePos!, node: nodeAtPos };
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error("Error checking node at position:", error);
 
       return null;
