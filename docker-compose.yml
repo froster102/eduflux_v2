@@ -3,17 +3,17 @@ name: eduflux
 services:
 
   ngrok:
-    image: ngrok/ngrok:latest 
+    image: ngrok/ngrok:latest
     container_name: ngrok
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    command: ["http", "kong:8000", "--domain=${NGROK_STATIC_DOMAIN}","--log=stdout"] 
+    command: ["http", "kong:8000", "--domain=${NGROK_STATIC_DOMAIN}","--log=stdout"]
     ports:
       - "4040:4040"
     networks:
       - eduflux-network
     depends_on:
-      - kong 
+      - kong
     restart: "no"
 
   kong:
@@ -47,6 +47,15 @@ services:
       timeout: 10s
       retries: 10
     restart: on-failure
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      session-service:
+        condition: service_healthy
+      chat-service:
+        condition: service_healthy
 
   auth-service:
     container_name: auth-service
@@ -65,6 +74,12 @@ services:
       - auth_service_modules:/app/node_modules
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     depends_on:
       auth-db:
         condition: service_started
@@ -85,6 +100,12 @@ services:
     volumes:
       - ./services/user-service:/app
       - user_service_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     depends_on:
       user-db:
         condition: service_started
@@ -109,7 +130,7 @@ services:
     depends_on:
       course-db:
         condition: service_started
-  
+
   upload-service:
     container_name: upload-service
     build:
@@ -164,75 +185,74 @@ services:
       kafka:
         condition: service_healthy
 
+  session-service:
+    container_name: session-service
+    build:
+      context: ./services/session-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - eduflux-network
+    env_file:
+      - ./services/session-service/.env
+    volumes:
+      - ./services/session-service:/app
+      - session_service_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3008/health"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      session-db:
+        condition: service_started
+      kafka:
+        condition: service_healthy
 
-  # notification-service:
-  #   container_name: notification-service
-  #   build:
-  #     context: ./services/notification-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   ports:
-  #     - 8080:8080
-  #   env_file:
-  #     - ./services/notification-service/.env
-  #   volumes:
-  #     - ./services/notification-service:/app
-  #     - notification_service_modules:/app/node_modules
-  #   depends_on:
-  #     notification-db:
-  #       condition: service_started
-  #     rabbitmq:
-  #       condition: service_healthy
-  #       restart: true
-  # meeting-service:
-  #   container_name: meeting-service
-  #   build:
-  #     context: ./services/meeting-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   ports:
-  #     - 8081:8081
-  #   env_file:
-  #     - ./services/meeting-service/.env
-  #   volumes:
-  #     - ./services/meeting-service:/app
-  #     - meeting_service_node_modules:/app/node_modules
+  query-service:
+    container_name: query-service
+    build:
+      context: ./services/query-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - eduflux-network
+    env_file:
+      - ./services/query-service/.env
+    volumes:
+      - ./services/query-service:/app
+      - query_service_modules:/app/node_modules
+    depends_on:
+      user-service:
+        condition: service_healthy
+      session-service:
+        condition: service_healthy
+      chat-service:
+        condition: service_healthy
 
-  # chatbot-service:
-  #   container_name: chatbot-service
-  #   build:
-  #     context: ./services/chatbot-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   env_file:
-  #     - ./services/chatbot-service/.env
-  #   volumes:
-  #     - ./services/chatbot-service:/app
-  #     - chatbot_service_node_modules:/app/node_modules
- 
-  # analytics-service:
-  #   container_name: analytics-service
-  #   build:
-  #     context: ./services/analytics-service
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   networks:
-  #     - eduflux-network
-  #   env_file:
-  #     - ./services/analytics-service/.env
-  #   volumes:
-  #     - ./services/analytics-service:/app
-  #     - analytics_service_node_modules:/app/node_modules
-  #   depends_on:
-  #     kafka:
-  #       condition: service_healthy
-  #       restart: true
+  chat-service:
+    container_name: chat-service
+    build:
+      context: ./services/chat-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - eduflux-network
+    env_file:
+      - ./services/chat-service/.env
+    volumes:
+      - ./services/chat-service:/app
+      - chat_service_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3007/health"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      chat-db:
+        condition: service_healthy
 
   auth-db:
     container_name: auth-db
@@ -298,27 +318,46 @@ services:
     volumes:
       - paymentdb_data:/data/db
 
-  # notification-db:
-  #   container_name: notification-db
-  #   image: mongo:8.0
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=root_user
-  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
-  #   networks:
-  #     - eduflux-network
-  #   volumes:
-  #     - notificationdb_data:/data/db
+  session-db:
+    container_name: session-db
+    image: mongo:8.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root_user
+      - MONGO_INITDB_ROOT_PASSWORD=super_root
+    ports:
+      - 27021:27017
+    networks:
+      - eduflux-network
+    volumes:
+      - sessiondb_data:/data/db
+      - ./mongo-keyfile/init.js:/docker-entrypoint-initdb.d/init-mongo.js
+      - ./mongo-keyfile/mongo-keyfile:/etc/mongo-keyfile
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5m
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all","--keyFile", "/etc/mongo-keyfile"]
 
-  # analytics-db:
-  #   container_name: analytics-db
-  #   image: mongo:8.0
-  #   environment:
-  #     - MONGO_INITDB_ROOT_USERNAME=root_user
-  #     - MONGO_INITDB_ROOT_PASSWORD=super_root
-  #   networks:
-  #     - eduflux-network
-  #   volumes:
-  #     - analytics_data:/data/db
+  chat-db:
+    container_name: chat-db
+    image: mongo:8.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root_user
+      - MONGO_INITDB_ROOT_PASSWORD=super_root
+    ports:
+      - 27022:27017
+    networks:
+      - eduflux-network
+    volumes:
+      - chatdb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5m
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   redis:
     container_name: redis
@@ -401,7 +440,7 @@ services:
   #       datasources:
   #       - name: Loki
   #         type: loki
-  #         access: proxy 
+  #         access: proxy
   #         orgId: 1
   #         url: http://loki:3100
   #         basicAuth: false
@@ -416,14 +455,6 @@ services:
   #   networks:
   #     - eduflux-network
 
-  mongo-compass:
-    container_name: mongo-compass
-    image: haohanyang/compass-web
-    ports:
-      - 8080:8080
-    networks:
-      - eduflux-network
-
 volumes:
   auth_service_modules:
   user_service_modules:
@@ -431,19 +462,17 @@ volumes:
   upload_service_modules:
   enrollment_service_modules:
   payment_service_modules:
-  # notification_service_modules:
-  # meeting_service_node_modules:
-  # chatbot_service_node_modules:
-  # analytics_service_node_modules:
+  query_service_modules:
+  session_service_modules:
+  chat_service_modules:
   authdb_data:
   userdb_data:
   coursedb_data:
   enrollmentdb_data:
   paymentdb_data:
-  # notificationdb_data:
-  # analytics_data:
+  sessiondb_data:
+  chatdb_data:
   redis_data:
-  # meeting_data:
   kafka_data:
 
 
