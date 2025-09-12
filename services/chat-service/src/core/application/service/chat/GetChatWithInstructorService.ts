@@ -2,11 +2,13 @@ import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { ChatRepositoryPort } from "@core/application/chat/port/persistence/ChatRepositoryPort";
 import type { GetChatPort } from "@core/application/chat/port/usecase/GetChatPort";
 import { ChatUseCaseDto } from "@core/application/chat/usecase/dto/ChatUseCaseDto";
-import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
+import type { GetChatWithInstructorUseCase } from "@core/application/chat/usecase/GetChatWithInstructorUseCase";
 import type { GetChatUseCaseResult } from "@core/application/chat/usecase/type/GetChatUseCaseResult";
 import { inject } from "inversify";
 
-export class GetChatService implements GetChatUseCase {
+export class GetChatWithInstructorService
+  implements GetChatWithInstructorUseCase
+{
   constructor(
     @inject(ChatDITokens.ChatRepository)
     private readonly chatRepository: ChatRepositoryPort,

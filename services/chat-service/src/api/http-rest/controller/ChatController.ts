@@ -4,7 +4,7 @@ import {
 } from "@api/http-rest/middlewares/authenticationMiddleware";
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { CreateChatUseCase } from "@core/application/chat/usecase/CreateChatUseCase";
-import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
+import type { GetChatWithInstructorUseCase } from "@core/application/chat/usecase/GetChatWithInstructorUseCase";
 import { Hono } from "hono";
 import { inject } from "inversify";
 
@@ -20,8 +20,8 @@ export class ChatController {
   constructor(
     @inject(ChatDITokens.CreateChatUseCase)
     private readonly createChatUseCase: CreateChatUseCase,
-    @inject(ChatDITokens.GetChatUseCase)
-    private readonly getChatUseCase: GetChatUseCase,
+    @inject(ChatDITokens.GetChatWithInstructorUseCase)
+    private readonly getChatWithInstructorUseCase: GetChatWithInstructorUseCase,
     @inject(MessageDITokens.GetMessagesUseCase)
     private readonly getMessagesUseCase: GetMessagesUseCase,
   ) {}
@@ -39,7 +39,7 @@ export class ChatController {
       })
       .get("/exists", async (c) => {
         const parsedQuery = getChatExistsSchema.parse(c.req.query());
-        const response = await this.getChatUseCase.execute({
+        const response = await this.getChatWithInstructorUseCase.execute({
           instructorId: parsedQuery.instructorId,
           learnerId: c.get("user").id,
         });

@@ -42,7 +42,7 @@ export async function getChatChatHistory(
   return response.chats.chats;
 }
 
-export async function getChat(
+export async function getChatWithInstructor(
   instructorId: string,
 ): Promise<{ chat: Chat | null }> {
   const response = await api.get(`/chats/exists?instructorId=${instructorId}`);

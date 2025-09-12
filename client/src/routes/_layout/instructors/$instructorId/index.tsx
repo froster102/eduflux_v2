@@ -16,9 +16,9 @@ import { tryCatch } from "@/utils/try-catch";
 import { getInstructorProfileOptions } from "@/features/instructor/hooks/useGetInstructorProfile";
 import { useGetInstructorAvailableSlots } from "@/features/instructor/hooks/useGetInstructorAvailableSlots";
 import { useCreateChat } from "@/features/chat/hooks/useCreateChat";
-import { useGetChat } from "@/features/chat/hooks/useGetChat";
 import StartChatButton from "@/features/chat/components/StartChatButton";
 import { useChatStore } from "@/store/useChatStore";
+import { useGetChatWithInstructor } from "@/features/chat/hooks/useGetChatWithInstructor";
 
 export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -55,7 +55,7 @@ function RouteComponent() {
     data: existingChat,
     isLoading: isExistingChat,
     isError: isChatError,
-  } = useGetChat(instructorId);
+  } = useGetChatWithInstructor(instructorId);
   const navigte = useNavigate();
   const { setSelectedChat } = useChatStore();
 

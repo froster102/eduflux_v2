@@ -3,10 +3,10 @@ import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { ChatRepositoryPort } from "@core/application/chat/port/persistence/ChatRepositoryPort";
 import type { CreateChatUseCase } from "@core/application/chat/usecase/CreateChatUseCase";
 import type { GetChatsUseCase } from "@core/application/chat/usecase/GetChatsUseCase";
-import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
+import type { GetChatWithInstructorUseCase } from "@core/application/chat/usecase/GetChatWithInstructorUseCase";
 import type { VerifyChatParticipantUseCase } from "@core/application/chat/usecase/VerifyChatParticipantUseCase";
 import { CreateChatService } from "@core/application/service/chat/CreateChatService";
-import { GetChatService } from "@core/application/service/chat/GetChatService";
+import { GetChatWithInstructorService } from "@core/application/service/chat/GetChatWithInstructorService";
 import { GetChatsService } from "@core/application/service/chat/GetChatsService";
 import { VerifyChatParticipantService } from "@core/application/service/chat/VerifyChatParticipantService";
 import { MongooseChatRepositoryAdapter } from "@infrastructure/adapter/persistence/mongoose/repository/MongooseChatRepositoryAdapter";
@@ -20,7 +20,11 @@ export const chatModule: ContainerModule = new ContainerModule((options) => {
   options
     .bind<GetChatsUseCase>(ChatDITokens.GetChatsUseCase)
     .to(GetChatsService);
-  options.bind<GetChatUseCase>(ChatDITokens.GetChatUseCase).to(GetChatService);
+  options
+    .bind<GetChatWithInstructorUseCase>(
+      ChatDITokens.GetChatWithInstructorUseCase,
+    )
+    .to(GetChatWithInstructorService);
   options
     .bind<VerifyChatParticipantUseCase>(
       ChatDITokens.VerifyChatParticipantUseCase,
