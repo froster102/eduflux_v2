@@ -11,6 +11,8 @@ import { GetChatsService } from "@core/application/service/chat/GetChatsService"
 import { VerifyChatParticipantService } from "@core/application/service/chat/VerifyChatParticipantService";
 import { MongooseChatRepositoryAdapter } from "@infrastructure/adapter/persistence/mongoose/repository/MongooseChatRepositoryAdapter";
 import { ContainerModule } from "inversify";
+import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
+import { GetChatService } from "@core/application/service/chat/GetChatService";
 
 export const chatModule: ContainerModule = new ContainerModule((options) => {
   //Use-cases
@@ -25,6 +27,7 @@ export const chatModule: ContainerModule = new ContainerModule((options) => {
       ChatDITokens.GetChatWithInstructorUseCase,
     )
     .to(GetChatWithInstructorService);
+  options.bind<GetChatUseCase>(ChatDITokens.GetChatUseCase).to(GetChatService);
   options
     .bind<VerifyChatParticipantUseCase>(
       ChatDITokens.VerifyChatParticipantUseCase,

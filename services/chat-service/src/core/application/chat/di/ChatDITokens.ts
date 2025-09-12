@@ -6,6 +6,7 @@ export class ChatDITokens {
   static readonly GetChatWithInstructorUseCase: unique symbol = Symbol(
     "GetChatWithInstructorUseCase",
   );
+  static readonly GetChatUseCase: unique symbol = Symbol("GetChatUseCase");
   static readonly VerifyChatParticipantUseCase: unique symbol = Symbol(
     "VerifyChatParticipantUseCase",
   );

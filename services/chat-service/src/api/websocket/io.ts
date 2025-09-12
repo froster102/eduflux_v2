@@ -15,6 +15,8 @@ import type { CreateMessageUseCase } from "@core/application/message/usecase/Cre
 import { MessageDITokens } from "@core/application/message/di/MessageDITokens";
 import type { UpdateMessageStatusUseCase } from "@core/application/message/usecase/UpdateMessageStatusUseCase";
 import { MessageStatus } from "@core/common/enum/MessageStatus";
+import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
+import type { Socket } from "socket.io";
 
 interface SocketData {
   user: AuthenticatedUserDto;
@@ -31,6 +33,7 @@ export class SocketIOServer {
   >;
   private readonly createMessageUseCase: CreateMessageUseCase;
   private readonly updateMessageStatusUseCase: UpdateMessageStatusUseCase;
+  private readonly getChatUseCase: GetChatUseCase;
   private readonly verifyChatParticipantUseCase: VerifyChatParticipantUseCase;
 
   constructor(httpServer: HTTPServer) {
@@ -40,7 +43,9 @@ export class SocketIOServer {
     this.createMessageUseCase = container.get<CreateMessageUseCase>(
       MessageDITokens.CreateMessageUseCase,
     );
-
+    this.getChatUseCase = container.get<GetChatUseCase>(
+      ChatDITokens.GetChatUseCase,
+    );
     this.updateMessageStatusUseCase = container.get<UpdateMessageStatusUseCase>(
       MessageDITokens.UpdateMessageStatusUseCase,
     );
@@ -97,25 +102,54 @@ export class SocketIOServer {
 
       socket.on(
         WebSocketEvents.MESSAGE_SEND,
-        async (data: { chatId: string; content: string }) => {
-          const { chatId, content } = data;
+        async (payload: { chatId: string; content: string }) => {
+          const { chatId, content } = payload;
           const senderId = socket.data.user.id;
 
-          const { data: message, error } = await tryCatch(
+          const { data: chat, error: getChatUseCaseError } = await tryCatch(
+            this.getChatUseCase.execute({ chatId }),
+          );
+
+          if (getChatUseCaseError) {
+            this.handleError(socket, getChatUseCaseError);
+            return;
+          }
+
+          const { data: savedMessage, error } = await tryCatch(
             this.createMessageUseCase.execute({ chatId, senderId, content }),
           );
 
           if (error) {
-            this.logger.error(`Failed to create message: ${error.message}`);
-            socket.emit(WebSocketEvents.ERROR, {
-              message: error.message || Code.INTERNAL_ERROR.message,
-            });
+            this.handleError(socket, error);
             return;
           }
 
-          if (message) {
-            this.io.to(chatId).emit(WebSocketEvents.MESSAGE_NEW, { message });
+          let messageStatusToEmit = savedMessage.status;
+
+          const recipientId = chat.participants.find(
+            (p) => p.userId !== socket.data.user.id,
+          )?.userId;
+
+          if (recipientId && this.onlineUsers.has(recipientId)) {
+            const { error } = await tryCatch(
+              this.updateMessageStatusUseCase.execute({
+                chatId,
+                executorId: recipientId,
+                messageId: savedMessage.id,
+                status: MessageStatus.DELIVERED,
+              }),
+            );
+
+            if (error) {
+              this.handleError(socket, error);
+              return;
+            }
+            messageStatusToEmit = MessageStatus.DELIVERED;
           }
+
+          this.io.to(chatId).emit(WebSocketEvents.MESSAGE_NEW, {
+            message: { ...savedMessage, status: messageStatusToEmit },
+          });
         },
       );
 
@@ -128,7 +162,7 @@ export class SocketIOServer {
         );
 
         if (error) {
-          socket.emit(WebSocketEvents.ERROR, { message: error?.message });
+          this.handleError(socket, error);
           return;
         }
 
@@ -139,6 +173,7 @@ export class SocketIOServer {
         }
 
         await socket.join(data.chatId);
+
         this.logger.debug(
           `User ${socket.data.user.id} has join room ${data.chatId}`,
         );
@@ -158,9 +193,7 @@ export class SocketIOServer {
           );
 
           if (error) {
-            this.logger.error(
-              `Failed to update message status to delivered: ${error.message}`,
-            );
+            this.handleError(socket, error);
             return;
           }
 
@@ -212,5 +245,14 @@ export class SocketIOServer {
         console.log("User disconnected:", socket.id);
       });
     });
+  }
+
+  private handleError(socket: Socket, error: Error) {
+    this.logger.error(
+      `An error has occurred: ${error.message}`,
+      error as Record<string, any>,
+    );
+
+    socket.emit(WebSocketEvents.ERROR, { message: error.message });
   }
 }
