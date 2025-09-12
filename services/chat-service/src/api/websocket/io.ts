@@ -22,6 +22,7 @@ interface SocketData {
 
 export class SocketIOServer {
   private readonly logger: LoggerPort;
+  private readonly onlineUsers: Map<string, string> = new Map();
   private readonly io: Server<
     DefaultEventsMap,
     DefaultEventsMap,
@@ -29,8 +30,8 @@ export class SocketIOServer {
     SocketData
   >;
   private readonly createMessageUseCase: CreateMessageUseCase;
-  private readonly verifyChatParticipantUseCase: VerifyChatParticipantUseCase;
   private readonly updateMessageStatusUseCase: UpdateMessageStatusUseCase;
+  private readonly verifyChatParticipantUseCase: VerifyChatParticipantUseCase;
 
   constructor(httpServer: HTTPServer) {
     this.logger = container
@@ -39,13 +40,15 @@ export class SocketIOServer {
     this.createMessageUseCase = container.get<CreateMessageUseCase>(
       MessageDITokens.CreateMessageUseCase,
     );
+
+    this.updateMessageStatusUseCase = container.get<UpdateMessageStatusUseCase>(
+      MessageDITokens.UpdateMessageStatusUseCase,
+    );
     this.verifyChatParticipantUseCase =
       container.get<VerifyChatParticipantUseCase>(
         ChatDITokens.VerifyChatParticipantUseCase,
       );
-    this.updateMessageStatusUseCase = container.get<UpdateMessageStatusUseCase>(
-      MessageDITokens.UpdateMessageStatusUseCase,
-    );
+
     this.io = new Server<
       DefaultEventsMap,
       DefaultEventsMap,
@@ -87,8 +90,10 @@ export class SocketIOServer {
   }
 
   setupSocketListeners() {
-    this.io.on("connection", (socket) => {
+    this.io.on(WebSocketEvents.CONNECTION, (socket) => {
       console.log("A user connected:", socket.id);
+
+      this.onlineUsers.set(socket.data.user.id, socket.id);
 
       socket.on(
         WebSocketEvents.MESSAGE_SEND,
@@ -115,13 +120,8 @@ export class SocketIOServer {
       );
 
       socket.on(WebSocketEvents.CHAT_JOIN, async (data: { chatId: string }) => {
-        const verifyChatParticipantUseCase =
-          container.get<VerifyChatParticipantUseCase>(
-            ChatDITokens.VerifyChatParticipantUseCase,
-          );
-
         const { data: result, error } = await tryCatch(
-          verifyChatParticipantUseCase.execute({
+          this.verifyChatParticipantUseCase.execute({
             userId: socket.data.user.id,
             chatId: data.chatId,
           }),
@@ -208,7 +208,7 @@ export class SocketIOServer {
         },
       );
 
-      socket.on("disconnect", () => {
+      socket.on(WebSocketEvents.DISCONNECT, () => {
         console.log("User disconnected:", socket.id);
       });
     });

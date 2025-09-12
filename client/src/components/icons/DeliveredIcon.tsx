@@ -1,0 +1,18 @@
+export default function DeliveredIcon(props: IconSvgProps) {
+  return (
+    <svg
+      height={24}
+      viewBox="0 0 24 24"
+      width={24}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        clipRule="evenodd"
+        d="M18.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
+    </svg>
+  );
+}

@@ -1,3 +1,5 @@
+import { MessageStatus } from "@/features/chat/contants/MessageStatus";
+
 declare global {
   export type Chat = {
     id: string;
@@ -16,7 +18,7 @@ declare global {
     chatId: string;
     senderId: string;
     content: string;
-    status: string;
+    status: MessageStatus;
     isRead: boolean;
     createdAt: string;
     updatedAt: string;

@@ -39,8 +39,8 @@ export class UpdateMessageStatusService implements UpdateMessageStatusUseCase {
 
     if (message.senderId === executorId) {
       if (status === MessageStatus.DELIVERED || status === MessageStatus.READ) {
-      throw new ForbiddenException();
-    }
+        throw new ForbiddenException();
+      }
     }
 
     message.updateStatus(status);

@@ -14,17 +14,39 @@ import { IMAGE_BASE_URL } from "@/config/image";
 import { useChatContext } from "@/context/ChatContext";
 import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import { formatRelative } from "@/utils/date";
+import { MessageStatus } from "@/features/chat/contants/MessageStatus";
+import ReadIcon from "@/components/icons/ReadIcon";
+import DeliveredIcon from "@/components/icons/DeliveredIcon";
 
 interface ChatPanelProps {
   messages: Message[];
   onScrollEnd: () => void;
   isFetchingNextPage: boolean;
+  onMessageRead: (messageId: string) => void;
 }
+
+const getStatusIcon = (status: MessageStatus) => {
+  switch (status) {
+    case MessageStatus.READ: {
+      return <ReadIcon />;
+    }
+    case MessageStatus.DELIVERED: {
+      return <DeliveredIcon />;
+    }
+    case MessageStatus.SENT: {
+      return <DeliveredIcon />;
+    }
+    default: {
+      return null;
+    }
+  }
+};
 
 export default function ChatPanel({
   messages,
   onScrollEnd,
   isFetchingNextPage,
+  onMessageRead,
 }: ChatPanelProps) {
   const { user: currentUser } = useAuthStore();
   const { selectedChat } = useChatStore();
@@ -35,6 +57,8 @@ export default function ChatPanel({
   const messageInputRef = React.useRef<HTMLInputElement>(null);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const prevScrollHeightRef = React.useRef<number>(0);
+
+  const messageRefs = React.useRef<Map<string, HTMLDivElement>>(new Map());
 
   const recipient = selectedChat
     ? selectedChat.participants.find(
@@ -64,6 +88,46 @@ export default function ChatPanel({
       prevScrollHeightRef.current = currentScrollHeight;
     }
   }, [messages.length]);
+
+  React.useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+
+    const messagesToObserve = messages.filter(
+      (msg) =>
+        msg.senderId !== currentUser.id &&
+        msg.status === MessageStatus.DELIVERED,
+    );
+
+    if (messagesToObserve.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const messageId = entry.target.getAttribute("data-message-id");
+
+            if (messageId) {
+              onMessageRead(messageId);
+            }
+          }
+        }),
+      { root: scrollContainerRef.current, threshold: 0.5 },
+    );
+
+    messagesToObserve.forEach((message) => {
+      const el = messageRefs.current.get(message.id);
+
+      if (el) {
+        observer.observe(el);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [messages, onMessageRead, currentUser]);
 
   let lastDate: string = "";
 
@@ -127,21 +191,31 @@ export default function ChatPanel({
                     </div>
                   )}
                   <div
+                    ref={(el) => {
+                      if (el) {
+                        messageRefs.current.set(message.id, el);
+                      } else {
+                        messageRefs.current.delete(message.id);
+                      }
+                    }}
                     className={`w-full flex ${message.senderId === currentUser!.id ? "justify-end" : "justify-start"} pt-2`}
+                    data-message-id={message.id}
                   >
                     <Card
                       className="border border-default-200 min-w-32"
                       shadow="none"
                     >
-                      <CardBody>
+                      <CardBody className="p-2">
                         {message.content}
                         <small
-                          className={`pt-0  text-right text-[0.6rem]  ${message.senderId === currentUser!.id ? "text-white/80" : "text-gray-500"}`}
+                          className={`pt-0  text-right text-[0.6rem] flex justify-end items-center gap-1 ${message.senderId === currentUser!.id ? "text-white/80" : "text-gray-500"}`}
                         >
                           {new Date(message.createdAt).toLocaleTimeString([], {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
+                          {message.senderId === currentUser!.id &&
+                            getStatusIcon(message.status)}
                         </small>
                       </CardBody>
                     </Card>
