@@ -10,6 +10,7 @@ import { CoreAssert } from "@core/common/util/assert/CoreAssert";
 import { inject } from "inversify";
 import { MessageNotFoundException } from "@core/application/message/exceptions/MessageNotFoundException";
 import { ForbiddenException } from "@core/common/exception/ForbiddenException";
+import { MessageStatus } from "@core/common/enum/MessageStatus";
 
 export class UpdateMessageStatusService implements UpdateMessageStatusUseCase {
   constructor(
@@ -36,8 +37,10 @@ export class UpdateMessageStatusService implements UpdateMessageStatusUseCase {
       new MessageNotFoundException(chatId, messageId),
     );
 
-    if (message.senderId !== executorId) {
+    if (message.senderId === executorId) {
+      if (status === MessageStatus.DELIVERED || status === MessageStatus.READ) {
       throw new ForbiddenException();
+    }
     }
 
     message.updateStatus(status);
