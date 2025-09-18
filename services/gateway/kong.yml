@@ -96,3 +96,11 @@ services:
         paths:
           - /ws/
         strip_path: false
+
+  - name: notification-service
+    url: http://notification-service:3010
+    routes:
+      - name: notification-rest-route
+        paths:
+          - /api/notifications
+        strip_path: false
