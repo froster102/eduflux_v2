@@ -37,6 +37,7 @@ export class CompleteEnrollmentService implements CompleteEnrollmentUseCase {
         enrollmentId: enrollment.id,
         occuredAt: enrollment.updatedAt.toISOString(),
         userId: enrollment.userId,
+        path: `/courses/${enrollment.courseId}`,
       },
     });
   }
