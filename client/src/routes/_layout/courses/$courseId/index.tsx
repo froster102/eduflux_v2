@@ -140,6 +140,7 @@ function RouteComponent() {
                     </p>
                   ) : null}
                   <Button
+                    className="mt-2"
                     color="primary"
                     isLoading={
                       isUserEnrollmentStatusLoading || enrollForCourse.isPending
@@ -154,7 +155,7 @@ function RouteComponent() {
                     }
                   >
                     {userEnrollmentStatus && userEnrollmentStatus.isEnrolled
-                      ? "Got to course"
+                      ? "Go to course"
                       : "Buy course now"}
                   </Button>
                 </div>

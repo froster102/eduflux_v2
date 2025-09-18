@@ -64,7 +64,6 @@ function RouteComponent() {
 
   async function chatWithInstructorHandler() {
     if (existingChat && existingChat.chat) {
-      console.log("chat exists");
       setSelectedChat({
         id: existingChat.chat.id,
         lastMessageAt: existingChat.chat.lastMessageAt,
