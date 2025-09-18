@@ -22,7 +22,7 @@ export class MongooseNotificatoinRepositoryAdapter
       userId,
       status: NotificationStatus.UNSEEN,
     })
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .catch((error: Error) => {
         throw new DatabaseException(error?.message);
       });
