@@ -4,8 +4,9 @@ import { Button } from "@heroui/button";
 
 import { useAuthStore } from "@/store/auth-store";
 import { IMAGE_BASE_URL } from "@/config/image";
-import Notifications from "@/components/Notifications";
 import MenuIcon from "@/components/icons/MenuIcon";
+// eslint-disable-next-line boundaries/element-types
+import Notifications from "@/features/notification/components/Notifications";
 
 interface HeaderProps {
   onOpenSidebar: () => void;
@@ -65,7 +66,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
             startContent={<SearchIcon />}
           />
         </div> */}
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center pr-1">
           <div className="hidden md:block">
             <User
               avatarProps={{

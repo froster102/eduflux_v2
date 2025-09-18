@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { AxiosError } from "axios";
 
+import { NotificationProvider } from "@/context/NotificationContext.tsx";
+
 import { routeTree } from "./routeTree.gen.ts";
 import { DEFAULT_ERROR_MESSAGE } from "./config/error-messages.ts";
 
@@ -38,11 +40,13 @@ declare module "@tanstack/react-router" {
 export function Provider({ children }: { children?: React.ReactNode }) {
   return (
     <HeroUIProvider className="h-full">
-      <ToastProvider placement={"top-right"} />
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        {children}
-      </QueryClientProvider>
+      <NotificationProvider>
+        <ToastProvider placement={"top-right"} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          {children}
+        </QueryClientProvider>
+      </NotificationProvider>
     </HeroUIProvider>
   );
 }

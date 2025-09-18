@@ -6,3 +6,5 @@ export const BACKEND_BASE_URL =
 export const API_BASE_URL = `${BACKEND_BASE_URL}/api`;
 
 export const CHAT_WEBSOCKET_URL = `${BACKEND_BASE_URL}`;
+
+export const NOTIFICATION_SSE_URL = `${API_BASE_URL}/notifications/events`;
