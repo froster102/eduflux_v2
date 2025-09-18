@@ -4,7 +4,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/main.ts",
-    "type:check": "bun run tsc --watch --noEmit",
+    "typecheck": "bun run tsc --watch --noEmit",
+    "lint": "eslint ./src --ext .ts --fix",
     "graphql:gen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {

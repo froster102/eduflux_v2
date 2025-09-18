@@ -1,8 +1,9 @@
-import { BaseException } from '@/shared/exception/base.exception';
+import { Code } from '@core/common/error/Code';
+import { Exception } from '@core/common/exception/Exception';
 
-export class DatabaseException extends BaseException {
-  constructor(message: string) {
-    super(message, 'DATABASE_ERROR');
+export class DatabaseException extends Exception<void> {
+  constructor(message?: string) {
+    super({ codeDescription: Code.INTERNAL_ERROR });
     this.name = 'DatabaseException';
   }
 }

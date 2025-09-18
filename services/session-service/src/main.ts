@@ -1,29 +1,29 @@
 import 'reflect-metadata';
-import { Server } from './infrastructure/http/server';
-import { container } from './shared/di/container';
-import { DatabaseClient } from './infrastructure/database/setup';
-import { TYPES } from './shared/di/types';
-import { httpServerConfig } from './shared/config/http-server.config';
-import type { ICronServices } from './infrastructure/cron/interface/cron-services.interface';
-import { PaymentEventsConsumer } from './interface/consumer/payment-events.consumer';
+import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
+import { HttpServer } from '@api/http-rest/HttpServer';
+import { container } from '@di/RootModule';
+import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
+import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 
 async function bootstrap() {
   //http
-  const httpServer = new Server(httpServerConfig.PORT);
+  const httpServer = new HttpServer();
   httpServer.start();
 
   //database
-  const databaseClient = container.get<DatabaseClient>(TYPES.DatabaseClient);
-  await databaseClient.connect();
+  await MongooseConnection.connect();
 
   //Consumers
-  const kafkaConsumer = container.get<PaymentEventsConsumer>(
-    TYPES.PaymentEventsConsumer,
+  const kafkaConsumer = container.get<KafkaEventsConsumer>(
+    InfrastructureDITokens.KafkaEventsConsumer,
   );
   await kafkaConsumer.connect();
 
   //Cron services
-  const cronServices = container.get<ICronServices>(TYPES.CronServices);
+  const cronServices = container.get<ICronServices>(
+    InfrastructureDITokens.CronServices,
+  );
 
   cronServices.register();
 }
