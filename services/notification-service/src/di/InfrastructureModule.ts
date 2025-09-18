@@ -27,6 +27,7 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     //external services
     options
       .bind<CourseServicePort>(CoreDITokens.CourseService)
-      .to(GrpcCourseServiceAdapter);
+      .to(GrpcCourseServiceAdapter)
+      .inSingletonScope();
   },
 );
