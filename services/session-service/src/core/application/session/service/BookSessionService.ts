@@ -11,6 +11,7 @@ import type { BookSessionUseCaseResult } from '@core/application/session/usecase
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { InvalidInputException } from '@core/common/exception/InvalidInputException';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
 import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
 import { CoreAssert } from '@core/common/util/assert/CoreAssert';
@@ -40,6 +41,12 @@ export class BookSessionService implements BookSessionUseCase {
       await this.slotRepository.findById(slotId),
       new NotFoundException(`Availability slot with ID ${slotId} not found.`),
     );
+
+    if (slot.endTime < new Date()) {
+      throw new InvalidInputException(
+        'Cannot book a slot that has already passed.',
+      );
+    }
 
     const learnerDetails = await this.userService.getUserDetails(userId);
 
