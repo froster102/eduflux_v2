@@ -90,7 +90,7 @@ export class SessionSettings extends Entity<string> {
     const now = new Date();
     return new SessionSettings({
       ...payload,
-      weeklySchedules: [],
+      weeklySchedules: payload.template,
       createdAt: now,
       updatedAt: now,
     });
