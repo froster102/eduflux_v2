@@ -1,5 +1,6 @@
 import React from "react";
 import { addToast } from "@heroui/toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { NOTIFICATION_SSE_URL } from "@/lib/constants";
 import { ServerEvents } from "@/shared/constants/ServerEvents";
@@ -16,6 +17,7 @@ export const NotificationProvider = ({
   children: React.ReactNode;
 }) => {
   const eventSourceRef = React.useRef<EventSource | null>(null);
+  const queryClient = useQueryClient();
 
   React.useEffect(() => {
     const evtSourse = new EventSource(NOTIFICATION_SSE_URL, {
@@ -42,6 +44,11 @@ export const NotificationProvider = ({
           title: data.title,
           description: data.description,
         });
+
+        queryClient.setQueryData(
+          ["notifications"],
+          (old: AppNotification[]) => [...old, data],
+        );
       },
     );
   };

@@ -40,13 +40,13 @@ declare module "@tanstack/react-router" {
 export function Provider({ children }: { children?: React.ReactNode }) {
   return (
     <HeroUIProvider className="h-full">
-      <NotificationProvider>
-        <ToastProvider placement={"top-right"} />
-        <QueryClientProvider client={queryClient}>
+      <ToastProvider placement={"top-right"} />
+      <QueryClientProvider client={queryClient}>
+        <NotificationProvider>
           <RouterProvider router={router} />
           {children}
-        </QueryClientProvider>
-      </NotificationProvider>
+        </NotificationProvider>
+      </QueryClientProvider>
     </HeroUIProvider>
   );
 }
