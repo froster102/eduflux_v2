@@ -12,8 +12,8 @@ extend type User @key(fields: "id") {
 }
 
 type Pagination {
-  currentPage: Int
-  totalPages: Int
+  currentPage: Int!
+  totalPages: Int!
 }
 
 type SessionConnection {
