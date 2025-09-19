@@ -13,6 +13,7 @@ import BookingStatusModal from "@/features/session/components/BookingStatusModal
 import { useGetSessions } from "@/features/session/hooks/useGetSessions";
 import { formatSessionDataTime } from "@/utils/date";
 import { IMAGE_BASE_URL } from "@/config/image";
+import PaginationWithNextAndPrevious from "@/components/Pagination";
 
 export const Route = createFileRoute("/_layout/sessions/")({
   validateSearch: sessionSearchSchema,
@@ -25,13 +26,17 @@ function RouteComponent() {
     Object.values(searchParams).length > 0,
   );
   const navigate = useNavigate();
-  const { data: sessions } = useGetSessions({ type: "learner" });
+  const [page, setPage] = React.useState(1);
+  const { data: sessionsQueryResult } = useGetSessions({
+    page,
+    type: "learner",
+  });
 
   return (
     <>
       <div>
-        {sessions &&
-          sessions.map((session) => {
+        {sessionsQueryResult &&
+          sessionsQueryResult.sessions.map((session) => {
             const { date, duration, timeRange } = formatSessionDataTime(
               session.startTime,
               session.endTime,
@@ -91,6 +96,16 @@ function RouteComponent() {
               </div>
             );
           })}
+        {sessionsQueryResult &&
+          sessionsQueryResult.pagination.totalPages > 1 && (
+            <div className="pt-4 flex w-full justify-center">
+              <PaginationWithNextAndPrevious
+                currentPage={sessionsQueryResult.pagination.currentPage}
+                totalPages={sessionsQueryResult.pagination.totalPages}
+                onPageChange={(page) => setPage(page)}
+              />
+            </div>
+          )}
       </div>
       <BookingStatusModal
         bookingStatus={searchParams}

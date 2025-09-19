@@ -52,11 +52,11 @@ export async function getSessions(
   `);
 
   const response = await graphqlClient.request(getSessionQuery, {
-    page: 1,
+    page: queryParameters.page,
     type: queryParameters.type,
   });
 
-  return response.sessions.sessions;
+  return response.sessions;
 }
 
 export async function getSessionSettings(): Promise<{

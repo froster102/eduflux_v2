@@ -7,6 +7,7 @@
     "dev": "vite --host",
     "build": "tsc && vite build",
     "lint": "eslint src --ext .ts,.tsx --fix",
+    "graphql:gen": "gql-tada generate-output --output ./src/lib/graphql/__generated__/graphql-env.d.ts",
     "preview": "vite preview"
   },
   "dependencies": {

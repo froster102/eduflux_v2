@@ -1,7 +1,5 @@
-import { Button } from "@heroui/button";
-import { Pagination } from "@heroui/pagination";
-
 import CourseCard from "@/components/CourseCard";
+import PaginationWithNextAndPrevious from "@/components/Pagination";
 
 interface CoursesListProps {
   courses: Course[];
@@ -30,40 +28,13 @@ export default function CoursesList({
         ))}
       </div>
       <div className="pt-4 flex w-full justify-center">
-        <>
-          <Button
-            className="mr-2"
-            color="primary"
-            isDisabled={currentPage === 1}
-            size="sm"
-            variant="flat"
-            onPress={() =>
-              onPageChange(currentPage > 1 ? currentPage - 1 : currentPage)
-            }
-          >
-            Previous
-          </Button>
-          <Pagination
-            color="primary"
-            page={currentPage}
-            total={totalPages}
-            onChange={onPageChange}
+        {totalPages > 1 && (
+          <PaginationWithNextAndPrevious
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
           />
-          <Button
-            className="ml-2"
-            color="primary"
-            isDisabled={currentPage >= totalPages}
-            size="sm"
-            variant="flat"
-            onPress={() =>
-              onPageChange(
-                currentPage < totalPages ? currentPage + 1 : currentPage,
-              )
-            }
-          >
-            Next
-          </Button>
-        </>
+        )}
       </div>
     </div>
   );
