@@ -44,6 +44,12 @@ export class GetInstructorAvailableSlotsService
       data.endUtc,
     );
 
-    return SlotUseCaseDto.fromEntities(availableSlots);
+    const currentUtcTime = new Date().getTime();
+
+    const filteredSlots = availableSlots.filter(
+      (slot) => slot.startTime.getTime() > currentUtcTime,
+    );
+
+    return SlotUseCaseDto.fromEntities(filteredSlots);
   }
 }
