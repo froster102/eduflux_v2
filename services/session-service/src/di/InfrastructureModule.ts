@@ -14,6 +14,7 @@ import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
 import { MongooseUnitOfWork } from '@infrastructure/unit-of-work/MongooseUnitOfWork';
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
 import { CronServices } from '@infrastructure/cron/CronServices';
+import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducerAdapter';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -30,6 +31,12 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
       .to(KafkaEventsConsumer)
+      .inSingletonScope();
+
+    //Kafka producer
+    options
+      .bind<KafkaEventBusProducerAdapter>(CoreDITokens.EventBus)
+      .to(KafkaEventBusProducerAdapter)
       .inSingletonScope();
 
     //Graphql resolver

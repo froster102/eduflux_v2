@@ -29,6 +29,23 @@ declare global {
     updatedAt: string;
     publishedAt: string;
   };
+
+  type User = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+    bio: string;
+    roles: Role[];
+    socialLinks: SocialLinks[];
+    createdAt: string;
+    updatedAt: string;
+  };
+
+  type SocialLinks = {
+    platform: string;
+    url: string;
+  };
 }
 
 export {};

@@ -1,8 +1,10 @@
 import { KafkaEventsConsumer } from "@api/consumers/KafkaEventsConsumer";
 import type { CourseServicePort } from "@core/application/notification/port/gateway/CourseServicePort";
+import type { UserServicePort } from "@core/application/notification/port/gateway/UserServicePort";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
 import { GrpcCourseServiceAdapter } from "@infrastructure/adapter/grpc/client/GrpcCourseServiceAdapter";
+import { GrpcUserServiceAdapter } from "@infrastructure/adapter/grpc/client/GrpcUserServiceAdapter";
 import { WinstonLoggerAdapter } from "@infrastructure/adapter/logger/WinstonLoggerAdapter";
 import { KafkaConnection } from "@infrastructure/adapter/messaging/kafka/KafkaConnection";
 import { InfrastructureDITokens } from "@infrastructure/di/InfrastructureDITokens";
@@ -28,6 +30,10 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<CourseServicePort>(CoreDITokens.CourseService)
       .to(GrpcCourseServiceAdapter)
+      .inSingletonScope();
+    options
+      .bind<UserServicePort>(CoreDITokens.UserService)
+      .to(GrpcUserServiceAdapter)
       .inSingletonScope();
   },
 );

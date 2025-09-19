@@ -14,6 +14,9 @@ export class NotificationDITokens {
   static readonly EnrollmentEventHandler: unique symbol = Symbol(
     "EnrollmentEventHandler",
   );
+  static readonly SessionEventHandler: unique symbol = Symbol(
+    "SessionEventHandler",
+  );
 
   //respository
   static readonly NotificationRepository: unique symbol = Symbol(

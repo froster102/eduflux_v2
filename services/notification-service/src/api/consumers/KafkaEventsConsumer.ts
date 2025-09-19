@@ -1,11 +1,12 @@
 import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
 import type { EnrollmentEventHandler } from "@core/application/notification/handler/EnrollmentEventHandler";
+import type { SessionEventHandler } from "@core/application/notification/handler/SessionEventHandler";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
 import type { KafkaConnection } from "@infrastructure/adapter/messaging/kafka/KafkaConnection";
 import { InfrastructureDITokens } from "@infrastructure/di/InfrastructureDITokens";
 import { NOTIFICATION_SERVICE_CONSUMER_GROUP } from "@shared/constants/consumer";
-import { ENROLLMENTS_TOPIC } from "@shared/constants/topic";
+import { ENROLLMENTS_TOPIC, SESSION_TOPIC } from "@shared/constants/topic";
 import type { NotificationEvent } from "@shared/events/NotificationEvent";
 import { tryCatch } from "@shared/util/try-catch";
 import { inject } from "inversify";
@@ -16,6 +17,7 @@ export class KafkaEventsConsumer {
   private topics: string[];
   private readonly logger: LoggerPort;
   private readonly enrollmentEventHandler: EnrollmentEventHandler;
+  private readonly sessionEventHandler: SessionEventHandler;
 
   constructor(
     @inject(InfrastructureDITokens.KafkaConnection)
@@ -23,13 +25,16 @@ export class KafkaEventsConsumer {
     @inject(CoreDITokens.Logger) logger: LoggerPort,
     @inject(NotificationDITokens.EnrollmentEventHandler)
     enrollmentEventHandler: EnrollmentEventHandler,
+    @inject(NotificationDITokens.SessionEventHandler)
+    sessionEventHandler: SessionEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
     this.enrollmentEventHandler = enrollmentEventHandler;
+    this.sessionEventHandler = sessionEventHandler;
     this.consumer = this.kafkaConnection.getConsumer(
       NOTIFICATION_SERVICE_CONSUMER_GROUP,
     );
-    this.topics = [ENROLLMENTS_TOPIC];
+    this.topics = [ENROLLMENTS_TOPIC, SESSION_TOPIC];
   }
 
   async run(): Promise<void> {
@@ -70,9 +75,13 @@ export class KafkaEventsConsumer {
                 await this.enrollmentEventHandler.handle(event);
                 break;
               }
+              case "session.confirmed": {
+                await this.sessionEventHandler.handle(event);
+                break;
+              }
               default:
                 this.logger.warn(
-                  `Unknown event type received: ${event?.type as string}`,
+                  `Unknown event type received: ${(event as Record<string, any>)?.type as string}`,
                 );
             }
           } catch (error) {
