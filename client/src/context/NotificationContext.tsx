@@ -35,10 +35,12 @@ export const NotificationProvider = ({
   const handleEvents = (evtSource: EventSource) => {
     evtSource.addEventListener(
       ServerEvents.USER_NOTIFICATON,
-      (e: MessageEvent<AppNotification>) => {
+      (e: MessageEvent) => {
+        const data: AppNotification = JSON.parse(e.data);
+
         addToast({
-          title: e.data.title,
-          description: e.data.description,
+          title: data.title,
+          description: data.description,
         });
       },
     );
