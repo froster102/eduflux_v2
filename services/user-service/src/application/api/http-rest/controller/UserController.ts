@@ -1,6 +1,6 @@
 import { authenticaionMiddleware } from '@application/api/http-rest/middleware/authenticationMiddleware';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
-import type { GetInstructorsUseCase } from '@core/domain/user/usecase/GetInstructorsUseCase';
+import type { GetInstructorsUseCase } from '@core/domain/instructor/usecase/GetInstructorsUseCase';
 import type { GetUserUseCase } from '@core/domain/user/usecase/GetUserUseCase';
 import type { UpdateUserUseCase } from '@core/domain/user/usecase/UpdateUserUseCase';
 import Elysia from 'elysia';
@@ -12,6 +12,7 @@ import { CoreAssert } from '@core/util/assert/CoreAssert';
 import { Role } from '@core/common/enums/Role';
 import { Exception } from '@core/common/errors/Exception';
 import { Code } from '@core/common/errors/Code';
+import { InstructorDITokens } from '@core/domain/instructor/di/InstructorDITokens';
 
 export class UserController {
   constructor(
@@ -19,7 +20,7 @@ export class UserController {
     private readonly getUserUseCase: GetUserUseCase,
     @inject(UserDITokens.UpdateUserUseCase)
     private readonly updateUserUseCase: UpdateUserUseCase,
-    @inject(UserDITokens.GetInstructorsUseCase)
+    @inject(InstructorDITokens.GetInstructorsUseCase)
     private readonly getInstructorsUseCase: GetInstructorsUseCase,
   ) {}
 

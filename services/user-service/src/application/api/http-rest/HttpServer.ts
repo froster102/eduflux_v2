@@ -11,7 +11,6 @@ import { UserDITokens } from '@core/domain/user/di/UserDITokens';
 import { HttpServerConfig } from '@infrastructure/config/HttpServerConfig';
 import { USER_SERVICE } from '@shared/constants/services';
 import Elysia from 'elysia';
-import { graphqlHandler } from 'src/application/api/graphql/graphqlHandler';
 
 export class HttpServer {
   private app: Elysia;
@@ -40,7 +39,6 @@ export class HttpServer {
     );
     this.app.use(userRoutes.register());
     this.app.use(progressRoutes.register());
-    this.app.use(graphqlHandler);
   }
 
   start(): void {

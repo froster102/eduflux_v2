@@ -6,9 +6,6 @@ export class UserDITokens {
   static readonly UpdateUserUseCase: unique symbol =
     Symbol('UpdateUserUseCase');
   static readonly GetUsersUseCase: unique symbol = Symbol('GetUsersUseCase');
-  static readonly GetInstructorsUseCase: unique symbol = Symbol(
-    'GetInstructorsUseCase',
-  );
 
   //Controller
   static readonly UserController: unique symbol = Symbol('UserController');

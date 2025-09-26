@@ -2,7 +2,6 @@ import { Role } from '@core/common/enums/Role';
 import type { QueryParameters } from '@core/common/persistence/type/QueryParameters';
 import { User } from '@core/domain/user/entity/User';
 import type {
-  InstructorQueryResults,
   UserQueryParameters,
   UserQueryResults,
 } from '@core/domain/user/port/persistence/type/UserQueryParameter';
@@ -25,11 +24,21 @@ export class MongooseUserRepositoryAdapter
 
   async findUsers(
     queryParameters: UserQueryParameters,
+    excludeId?: string,
   ): Promise<UserQueryResults> {
     const query: FilterQuery<IMongooseUser> = {};
+
+    if (excludeId) {
+      query._id = { $ne: excludeId };
+    }
+
+    if (queryParameters.roles) {
+      query.roles = { $in: queryParameters.roles };
+    }
+
     const totalCount = await MongooseUser.countDocuments(query);
 
-    const users = await MongooseUser.find({})
+    const users = await MongooseUser.find(query)
       .limit(queryParameters.limit || this.defaultLimit)
       .skip(queryParameters.offset || this.defaultOffset);
 
@@ -39,7 +48,7 @@ export class MongooseUserRepositoryAdapter
   async findInstructors(
     currentUserId: string,
     queryParameters: QueryParameters,
-  ): Promise<InstructorQueryResults> {
+  ): Promise<UserQueryResults> {
     const query: FilterQuery<IMongooseUser> = {
       roles: { $in: [Role.INSTRUCTOR] },
       _id: { $ne: currentUserId },
@@ -52,7 +61,7 @@ export class MongooseUserRepositoryAdapter
 
     return {
       totalCount,
-      instructors: UserMapper.toDomainEntities(instructors),
+      users: UserMapper.toDomainEntities(instructors),
     };
   }
 }
