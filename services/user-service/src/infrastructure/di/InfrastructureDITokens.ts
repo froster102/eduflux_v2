@@ -4,9 +4,6 @@ export class InfrastructureDITokens {
     'KafkaEventBusConnection',
   );
 
-  //Graphql Resolvers
-  public static readonly UserResolvers: unique symbol = Symbol('UserResolvers');
-
   //Grpc controllers
   public static readonly GrpcUserServiceController: unique symbol = Symbol(
     'GrpcUserServiceController',

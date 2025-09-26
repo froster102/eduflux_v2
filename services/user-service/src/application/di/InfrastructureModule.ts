@@ -1,5 +1,4 @@
 import { KafkaEventsConsumer } from '@application/api/consumers/KafkaEventsConsumer';
-import { UserResolver } from '@application/api/graphql/resolvers/UserResolver';
 import { GrpcUserServiceController } from '@application/api/grpc/controller/GrpcUserServiceController';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { EventBusPort } from '@core/common/message/EventBustPort';
@@ -30,8 +29,5 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
       .to(KafkaEventsConsumer);
-    options
-      .bind<UserResolver>(InfrastructureDITokens.UserResolvers)
-      .to(UserResolver);
   },
 );
