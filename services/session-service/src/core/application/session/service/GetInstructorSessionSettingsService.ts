@@ -4,8 +4,6 @@ import type { GetInstructorSessionSettingsPort } from '@core/application/session
 import { SessionSettingsUseCaseDto } from '@core/application/session-settings/usecase/dto/SessionSettingsUseCaseDto';
 import type { GetInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/GetInstructorSessionSettingsUseCase';
 import type { GetInstructorSessionSettingsUseCaseResult } from '@core/application/session-settings/usecase/type/GetInstructorSessionSettingsUseCaseResult';
-import { Role } from '@core/common/enums/Role';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
 import { inject } from 'inversify';
 
 export class GetInstructorSessionSettingsService
@@ -19,14 +17,10 @@ export class GetInstructorSessionSettingsService
   async execute(
     payload: GetInstructorSessionSettingsPort,
   ): Promise<GetInstructorSessionSettingsUseCaseResult> {
-    const { actor } = payload;
-
-    if (!actor.hasRole(Role.INSTRUCTOR)) {
-      throw new ForbiddenException();
-    }
+    const { instructorId } = payload;
 
     const sessionSettings =
-      await this.sessionSessionSettingsRepository.findByUserId(actor.id);
+      await this.sessionSessionSettingsRepository.findByUserId(instructorId);
 
     if (sessionSettings) {
       return {

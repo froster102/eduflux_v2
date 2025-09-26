@@ -1,4 +1,3 @@
-import { SessionResolver } from '@api/graphql/resolvers/session-resolver';
 import type { PaymentServicePort } from '@core/application/session/port/gateway/PaymentServicePort';
 import type { UserServicePort } from '@core/application/session/port/gateway/UserServicePort';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
@@ -38,11 +37,6 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       .bind<KafkaEventBusProducerAdapter>(CoreDITokens.EventBus)
       .to(KafkaEventBusProducerAdapter)
       .inSingletonScope();
-
-    //Graphql resolver
-    options
-      .bind<SessionResolver>(InfrastructureDITokens.SessionResolver)
-      .to(SessionResolver);
 
     //external services
     options

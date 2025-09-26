@@ -8,7 +8,4 @@ export class InfrastructureDITokens {
 
   //Cron services
   static readonly CronServices: unique symbol = Symbol('CronServices');
-
-  //GrahqlResolver
-  static readonly SessionResolver: unique symbol = Symbol('SessionResolver');
 }

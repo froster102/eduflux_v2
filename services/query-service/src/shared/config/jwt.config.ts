@@ -1,4 +1,4 @@
-import { envVariables } from "../validation/env-variables";
+import { envVariables } from "../env/env-variables";
 
 export const jwtConfig = {
   JWT_ISS: envVariables.JWT_ISS,

@@ -1,0 +1,13 @@
+import type { UserChat } from "@core/application/user-chat/entity/UserChat";
+import type { UserChatQueryResult } from "@core/application/user-chat/port/persistence/types/UserChatQueryResult";
+import type { BaseRepositoryPort } from "@core/common/port/persistence/BaseRepositoryPort";
+import type { QueryParameters } from "@core/common/port/persistence/type/QueryParameters";
+import type { Role } from "@shared/constants/roles";
+
+export interface UserChatRepositoryPort extends BaseRepositoryPort<UserChat> {
+  findByUserIdAndRole(
+    userId: string,
+    role: Role,
+    queryParameters?: QueryParameters,
+  ): Promise<UserChatQueryResult>;
+}

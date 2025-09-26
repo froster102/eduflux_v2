@@ -1,3 +1,3 @@
 export class InfrastructureDITokens {
-  static readonly ChatResolver: unique symbol = Symbol("ChatResolver");
+  static readonly KafkaConnection: unique symbol = Symbol("KafkaConnection");
 }

@@ -1,4 +1,4 @@
-import { EntityIdEmptyException } from '@core/common/exception/EntityIdEmptyException';
+import { EntityIdEmptyException } from "@core/common/exception/EntityIdEmptyException";
 
 export abstract class Entity<TIdentifier extends string | number> {
   protected readonly _id?: TIdentifier;
@@ -8,7 +8,7 @@ export abstract class Entity<TIdentifier extends string | number> {
   }
 
   get id(): TIdentifier {
-    if (typeof this._id === 'undefined') {
+    if (typeof this._id === "undefined") {
       throw new EntityIdEmptyException(this.constructor.name);
     }
     return this._id;

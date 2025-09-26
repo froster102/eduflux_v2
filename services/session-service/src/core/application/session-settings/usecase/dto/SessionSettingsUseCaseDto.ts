@@ -2,6 +2,7 @@ import type { SessionSettings } from '@core/domain/session-settings/entity/Sessi
 import type { DailyAvailabilityConfig } from '@core/domain/session-settings/entity/types/DailyAvailabilityConfig';
 
 export class SessionSettingsUseCaseDto {
+  readonly instructorId: string;
   readonly price: number;
   readonly currency: string;
   readonly duration: number;
@@ -12,6 +13,7 @@ export class SessionSettingsUseCaseDto {
   readonly updatedAt: Date;
 
   private constructor(sessionSettings: SessionSettings) {
+    this.instructorId = sessionSettings.instructorId;
     this.price = sessionSettings.price;
     this.currency = sessionSettings.currency;
     this.duration = sessionSettings.duration;

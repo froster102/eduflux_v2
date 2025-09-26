@@ -23,10 +23,7 @@ services:
     routes:
       - name: quey-service-routes
         paths:
-          - /api/graphql
-        methods:
-          - POST
-          - OPTIONS
+          - /api/query
         strip_path: false
 
   - name: auth-service

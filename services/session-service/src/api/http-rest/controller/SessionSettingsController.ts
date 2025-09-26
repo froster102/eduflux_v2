@@ -26,7 +26,7 @@ export class SessionSettingsController {
         .use(authenticaionMiddleware)
         .get('/', async ({ user }) => {
           const response = await this.getInstructorSessionSettings.execute({
-            actor: user,
+            instructorId: user.id,
           });
           return response;
         })

@@ -1,24 +1,23 @@
 import "reflect-metadata";
 import { HttpServer } from "@api/http-rest/HttpServer";
 import { MongooseConnection } from "@infrastructure/adapter/persistence/mongoose/MongooseConnection";
+import { container } from "@di/RootModule";
+import type { KafkaEventBusProducerAdapter } from "@infrastructure/adapter/kafka/KafkaEventBusProducerAdapter";
+import { CoreDITokens } from "@core/common/di/CoreDITokens";
 
 async function bootstrap() {
-  //http
-  const server = new HttpServer();
-  server.start();
-
   //database
   await MongooseConnection.connect();
 
-  //Grpc server
-  // const grpcServer = new GrpcServer();
-  // grpcServer.start();
-
   //kafka produer
-  // const kafkaEventBusConnection = container.get<KafkaEventBusConnection>(
-  //   InfrastructureDITokens.KafkaEventBusConnection,
-  // );
-  // await kafkaEventBusConnection.connectProducer();
+  const kafkaProducer = container.get<KafkaEventBusProducerAdapter>(
+    CoreDITokens.EventBus,
+  );
+  await kafkaProducer.connect();
+
+  //http
+  const server = new HttpServer();
+  server.start();
 }
 
 void bootstrap();

@@ -1,4 +1,5 @@
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
+import type { UserChatCreatedEvent } from "@core/application/chat/events/UserChatCreatedEvent";
 import { ChatAlreadyExistsException } from "@core/application/chat/exceptions/ChatAlreadyExistsException";
 import { InstructorNotFoundException } from "@core/application/chat/exceptions/InstructorNotFoundException";
 import { NoInstructorRoleException } from "@core/application/chat/exceptions/NoInstructorRoleException";
@@ -11,6 +12,7 @@ import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import { Role } from "@core/common/enum/Role";
 import type { EnrollmentServicePort } from "@core/common/gateway/EnrollmentServicePort";
 import type { UserServicePort } from "@core/common/gateway/UserServicePort";
+import type { EventBusPort } from "@core/common/port/message/EventBusPort";
 import { CoreAssert } from "@core/common/util/assert/CoreAssert";
 import { Chat } from "@core/domain/chat/entity/Chat";
 import { inject } from "inversify";
@@ -24,6 +26,7 @@ export class CreateChatService implements CreateChatUseCase {
     private readonly userService: UserServicePort,
     @inject(ChatDITokens.ChatRepository)
     private readonly chatRepository: ChatRepositoryPort,
+    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
   ) {}
 
   async execute(payload: CreateChatPort): Promise<ChatUseCaseDto> {
@@ -71,6 +74,15 @@ export class CreateChatService implements CreateChatUseCase {
 
     await this.chatRepository.save(chat);
 
-    return ChatUseCaseDto.fromEntity(chat);
+    const chatUseCaseDto = ChatUseCaseDto.fromEntity(chat);
+
+    const userChatCreatedEvent: UserChatCreatedEvent = {
+      type: "user.chat.created",
+      data: chatUseCaseDto,
+    };
+
+    await this.eventBus.sendEvent(userChatCreatedEvent);
+
+    return chatUseCaseDto;
   }
 }

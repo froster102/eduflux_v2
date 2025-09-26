@@ -38,6 +38,7 @@ export class ConfirmSessionBookingService
         sessionId: session.id,
         learnerId: session.learnerId,
         instructorId: session.instructorId,
+        status: session.status,
         startTime: session.startTime,
         endTime: session.endTime,
         path: `/sessions/${session.id}`,

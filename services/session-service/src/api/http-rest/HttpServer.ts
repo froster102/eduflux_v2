@@ -1,4 +1,3 @@
-import { graphqlHandler } from '@api/graphql/graphql-handler';
 import { errorHandler } from '@api/http-rest/middlewares/errorHandlerMiddleware';
 import { httpLoggerMiddleware } from '@api/http-rest/middlewares/httpLoggerMiddleware';
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
@@ -38,7 +37,6 @@ export class HttpServer {
     this.app.use(httpLoggerMiddleware);
     this.app.use(correlationIdSetupMiddleware);
     this.app.use(errorHandler);
-    this.app.use(graphqlHandler);
   }
 
   private setupRoutes(): void {

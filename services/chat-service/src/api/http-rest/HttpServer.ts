@@ -14,7 +14,6 @@ import {
   errorHandler,
   notFoundHandler,
 } from "@api/http-rest/middlewares/errorHandlerMiddleware";
-import { graphqlHandler } from "@api/graphql/handler/graphqlHandler";
 
 export class HttpServer {
   private app: Hono;
@@ -43,7 +42,6 @@ export class HttpServer {
     this.app.get("/health", (c) => {
       return c.json({ message: "Api running successfully." });
     });
-    this.app.route("/", graphqlHandler);
     this.app.route("/api/chats/", this.chatController.register());
   }
 

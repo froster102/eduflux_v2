@@ -1,8 +1,12 @@
-import { WinstonLogger } from "@/logging/winston.logger";
+import { CoreDITokens } from "@core/common/di/CoreDITokens";
+import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
+import { container } from "@di/RootModule";
 import { status as grpcStatus } from "@grpc/grpc-js";
 import httpStatus from "http-status";
 
-const logger = new WinstonLogger().fromContext("ERROR");
+const logger = container
+  .get<LoggerPort>(CoreDITokens.Logger)
+  .fromContext("ERROR");
 
 export enum AppErrorCode {
   INVALID_INPUT = "INVALID_INPUT",
