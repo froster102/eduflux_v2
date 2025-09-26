@@ -28,7 +28,7 @@ export default function ChatItem({ chat }: ChatItemProps) {
     >
       <Avatar size="md" src={`${IMAGE_BASE_URL}${otherParticipant?.image}`} />
       <div className="flex-1 w-full">
-        <p className="text-left font-medium">{otherParticipant?.firstName}</p>
+        <p className="text-left font-medium">{otherParticipant?.name}</p>
         <div className="flex items-end gap-2 w-full">
           <p className="text-sm text-default-500">Last message preview...</p>
           <p className="text-xs text-default-400">{chat.lastMessageAt}</p>

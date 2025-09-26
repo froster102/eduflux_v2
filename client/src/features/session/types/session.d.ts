@@ -17,6 +17,29 @@ declare global {
     startTime?: string;
     endTime?: string;
   };
+
+  export type SessionParticipant = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    image?: string;
+  };
+
+  export type UserSession = {
+    id: string;
+    startTime: string;
+    endTime: string;
+    status: SessionStatus;
+    learner: SessionParticipant;
+    instructor: SessionParticipant;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+
+  export type GetUserSessionsResult = {
+    sessions: UserSession[];
+    pagination: Pagination;
+  };
 }
 
 export {};

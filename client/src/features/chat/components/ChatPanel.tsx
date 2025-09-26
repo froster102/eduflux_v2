@@ -150,7 +150,7 @@ export default function ChatPanel({
               <Avatar size="lg" src={`${IMAGE_BASE_URL}${recipient?.image}`} />
               <div>
                 <p className="text-lg font-medium capitalize">
-                  {recipient!.firstName + " " + recipient!.lastName}
+                  {recipient!.name}
                 </p>
                 <Chip className="border-0 p-0" color="success" variant="dot">
                   Online

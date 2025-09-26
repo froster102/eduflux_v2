@@ -1,7 +1,4 @@
-import { graphql } from "gql.tada";
-
 import api from "@/lib/axios";
-import { graphqlClient } from "@/lib/graphql/graphql-client";
 import { buildQueryUrlParams } from "@/utils/helpers";
 
 export async function createChat(instructorId: string): Promise<Chat> {
@@ -10,36 +7,14 @@ export async function createChat(instructorId: string): Promise<Chat> {
   return response.data;
 }
 
-export async function getChatChatHistory(
+export async function getUserChatChatHistory(
   queryParameters: GetChatsQueryParmeters,
-) {
-  const getChatsQuery = graphql(`
-    query ($page: Int, $limit: Int, $role: Role) {
-      chats(page: $page, limit: $limit, role: $role) {
-        chats {
-          id
-          lastMessageAt
-          createdAt
-          lastMessagePreview
-          participants {
-            firstName
-            lastName
-            email
-            id
-            image
-          }
-        }
-      }
-    }
-  `);
+): Promise<GetUserChatsQueryResult> {
+  const queryString = buildQueryUrlParams(queryParameters);
 
-  const response = await graphqlClient.request(getChatsQuery, {
-    page: queryParameters.page,
-    limit: queryParameters.limit,
-    role: queryParameters.role,
-  });
+  const response = await api.get(`/query/chats${queryString}`);
 
-  return response.chats.chats;
+  return response.data;
 }
 
 export async function getChatWithInstructor(

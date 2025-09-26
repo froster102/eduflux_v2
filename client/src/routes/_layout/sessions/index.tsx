@@ -10,7 +10,7 @@ import ClockIcon from "@/components/icons/ClockIcon";
 import ReviewIcon from "@/components/icons/ReviewIcon";
 import { sessionSearchSchema } from "@/features/session/schemas/session-search.schema";
 import BookingStatusModal from "@/features/session/components/BookingStatusModal";
-import { useGetSessions } from "@/features/session/hooks/useGetSessions";
+import { useGetUserSessions } from "@/features/session/hooks/useGetUserSessions";
 import { formatSessionDataTime } from "@/utils/date";
 import { IMAGE_BASE_URL } from "@/config/image";
 import PaginationWithNextAndPrevious from "@/components/Pagination";
@@ -27,7 +27,7 @@ function RouteComponent() {
   );
   const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
-  const { data: sessionsQueryResult } = useGetSessions({
+  const { data: sessionsQueryResult } = useGetUserSessions({
     page,
     type: "learner",
   });

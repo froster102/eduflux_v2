@@ -9,5 +9,5 @@ interface ChatHistoryLoaderProps {
 export default function ChatHistoryLoader({ role }: ChatHistoryLoaderProps) {
   const { data: chatHistory } = useGetChatHistory({ role });
 
-  return <ChatHistory chatHistory={chatHistory} />;
+  return <ChatHistory chatHistory={chatHistory.chats} />;
 }

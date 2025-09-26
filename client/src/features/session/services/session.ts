@@ -1,6 +1,3 @@
-import { graphql } from "gql.tada";
-
-import { graphqlClient } from "@/lib/graphql/graphql-client";
 import api from "@/lib/axios";
 
 import { SessionSettingsFormData } from "../validation/session-schema";
@@ -19,44 +16,12 @@ export async function bookSession(data: {
   return response.data;
 }
 
-export async function getSessions(
+export async function getUserSessions(
   queryParameters: QueryParmeters & { type: "learner" | "instructor" },
-) {
-  const getSessionQuery = graphql(`
-    query ($page: Int, $type: String) {
-      sessions(page: $page, type: $type) {
-        sessions {
-          id
-          startTime
-          status
-          endTime
-          instructor {
-            firstName
-            lastName
-            email
-            image
-          }
-          learner {
-            firstName
-            lastName
-            email
-            image
-          }
-        }
-        pagination {
-          currentPage
-          totalPages
-        }
-      }
-    }
-  `);
+): Promise<GetUserSessionsResult> {
+  const response = await api.get("/query/sessions/");
 
-  const response = await graphqlClient.request(getSessionQuery, {
-    page: queryParameters.page,
-    type: queryParameters.type,
-  });
-
-  return response.sessions;
+  return response.data;
 }
 
 export async function getSessionSettings(): Promise<{

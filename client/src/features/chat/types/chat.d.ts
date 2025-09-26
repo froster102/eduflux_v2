@@ -5,8 +5,7 @@ declare global {
     id: string;
     participants: {
       id: string;
-      firstName: string;
-      lastName: string;
+      name: string;
       image: string;
     }[];
     lastMessagePreview: String | null;
@@ -34,6 +33,11 @@ declare global {
 
   export type GetMessagesResponse = {
     messages: Message[];
+  };
+
+  export type GetUserChatsQueryResult = {
+    chats: Chat[];
+    pagination: Pagination;
   };
 }
 

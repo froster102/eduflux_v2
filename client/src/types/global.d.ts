@@ -127,6 +127,11 @@ declare global {
     id: string;
   };
 
+  export type Pagination = {
+    totalPages: number;
+    currentPage: number;
+  };
+
   export type UserProfile = {
     id: string;
     firstName: string;

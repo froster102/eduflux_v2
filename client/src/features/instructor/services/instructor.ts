@@ -18,11 +18,11 @@ export async function becomeAInstructor() {
 }
 
 export async function getInstructors(
-  paginationQueryParams: PaginationQueryParams,
-): Promise<{ instructors: InstructorProfile[]; total: number }> {
-  const params = buildQueryUrlParams(paginationQueryParams);
+  queryParameters: GetInstructorsQueryParameters,
+): Promise<GetInstructorsResult> {
+  const queryString = buildQueryUrlParams(queryParameters);
 
-  const response = await api.get(`/users/instructors${params}`);
+  const response = await api.get(`/users/instructors${queryString}`);
 
   return response.data;
 }

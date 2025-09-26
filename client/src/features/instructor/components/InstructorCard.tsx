@@ -10,7 +10,7 @@ import CourseIcon from "@/components/icons/CourseIcon";
 import InstructorIcon from "@/components/icons/InstructorIcon";
 
 interface InstructorCardProps {
-  instructor: InstructorProfile;
+  instructor: Instructor;
 }
 
 export default function InstructorCard({ instructor }: InstructorCardProps) {
@@ -21,7 +21,7 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
       <CardHeader className="flex flex-col items-start w-full">
         <User
           avatarProps={{
-            src: `${instructor.image ? `${IMAGE_BASE_URL}${instructor.image}` : undefined}`,
+            src: `${instructor.user.image ? `${IMAGE_BASE_URL}${instructor.user.image}` : undefined}`,
             // size: "lg",
             className: "w-16 h-16",
             radius: "md",
@@ -32,23 +32,17 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
             wrapper: "flex flex-col",
           }}
           description={"Lead Developer"}
-          name={`${instructor.firstName} ${instructor.lastName}`}
+          name={`${instructor.user.firstName} ${instructor.user.lastName}`}
         />
       </CardHeader>
       <CardBody className="py-0 gap-2">
-        <div>
-          <p className=" w-full line-clamp-6">
-            {" "}
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ex
-            repellendus rem accusamus libero distinctio beatae.
-          </p>
-        </div>
+        <p className="w-full line-clamp-4 break-words">{instructor.user.bio}</p>
         <div className="flex flex-col gap-1 text-default-700 text-small">
           <p className="flex gap-2 items-center">
             <span>
               <InstructorIcon width={20} />
             </span>{" "}
-            132 sessions conducted
+            {instructor.sessionsConducted} sessions conducted
           </p>
           <div className="flex h-6 overflow-hidden items-center space-x-4">
             <p className="flex gap-2 items-center">
@@ -56,28 +50,23 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
               <span>
                 <CourseIcon width={20} />
               </span>{" "}
-              12 Courses
+              {instructor.totalCourses} Courses
             </p>
             <Divider orientation="vertical" />
             <p className="flex gap-2 items-center">
               <UsersIcon width={20} />
-              1102 Learners
+              {instructor.totalLearners} Learners
             </p>
           </div>
         </div>
       </CardBody>
       <CardFooter>
-        {/* {instructor.sessionPricing ? ( */}
-        <p className="text-xl font-semibold">
-          ${instructor.sessionPricing?.price}/hr
-        </p>
-        {/* ) : null} */}
         <Button
           className="ml-auto"
           color="primary"
           size="sm"
           onPress={() => {
-            navigate({ to: `/instructors/${instructor.id}` });
+            navigate({ to: `/instructors/${instructor.user.id}` });
           }}
         >
           Learn more..

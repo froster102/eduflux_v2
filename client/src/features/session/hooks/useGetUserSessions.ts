@@ -2,15 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuthStore } from "@/store/auth-store";
 
-import { getSessions } from "../services/session";
+import { getUserSessions } from "../services/session";
 
-export function useGetSessions(
+export function useGetUserSessions(
   queryParmeters: QueryParmeters & { type: "learner" | "instructor" },
 ) {
   const { user } = useAuthStore();
 
   return useQuery({
     queryKey: [`user-${user?.id}-bookings`, queryParmeters],
-    queryFn: () => getSessions(queryParmeters),
+    queryFn: () => getUserSessions(queryParmeters),
   });
 }
