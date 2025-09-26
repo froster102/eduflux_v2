@@ -251,9 +251,7 @@ services:
     depends_on:
       user-service:
         condition: service_healthy
-      session-service:
-        condition: service_healthy
-      chat-service:
+      kafka:
         condition: service_healthy
 
   chat-service:
@@ -277,6 +275,8 @@ services:
       start_period: 30s
     depends_on:
       chat-db:
+        condition: service_healthy
+      kafka:
         condition: service_healthy
 
   auth-db:
@@ -403,6 +403,25 @@ services:
       retries: 5
       start_period: 40s
 
+  query-db:
+    container_name: query-db
+    image: mongo:8.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root_user
+      - MONGO_INITDB_ROOT_PASSWORD=super_root
+    ports:
+      - 27024:27017
+    networks:
+      - eduflux-network
+    volumes:
+      - querydb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5m
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
   redis:
     container_name: redis
     image: redis:8.0-M04-alpine
@@ -516,6 +535,7 @@ volumes:
   paymentdb_data:
   sessiondb_data:
   notificationdb_data:
+  querydb_data:
   chatdb_data:
   redis_data:
   kafka_data:
