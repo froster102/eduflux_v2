@@ -1,4 +1,4 @@
-import type { UserChat } from "@core/application/user-chat/entity/UserChat";
+import type { UserChat } from "@core/domain/user-chat/entity/UserChat";
 
 export type UserChatQueryResult = {
   chats: UserChat[];

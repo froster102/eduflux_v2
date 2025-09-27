@@ -9,7 +9,7 @@ import {
   UserChatModel,
   type MongooseUserChat,
 } from "@infrastructure/adapter/persistence/mongoose/model/user-chat/MongooseUserChat";
-import type { UserChat } from "@core/application/user-chat/entity/UserChat";
+import type { UserChat } from "@core/domain/user-chat/entity/UserChat";
 import { MongooseUserChatMapper } from "@infrastructure/adapter/persistence/mongoose/model/user-chat/mapper/MongooseUserChatMapper";
 
 export class MongooseUserChatRepositoryAdapter

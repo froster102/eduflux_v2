@@ -8,7 +8,7 @@ import type { UserChatRepositoryPort } from "@core/application/user-chat/port/pe
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
 import type { UserServicePort } from "@core/common/port/gateway/UserServicePort";
-import { UserChat } from "@core/application/user-chat/entity/UserChat";
+import { UserChat } from "@core/domain/user-chat/entity/UserChat";
 
 export class UserChatCreatedEventHandlerService
   implements UserChatCreatedEventHandler

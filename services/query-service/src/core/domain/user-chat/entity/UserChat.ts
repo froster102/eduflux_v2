@@ -1,5 +1,5 @@
-import type { ChatParticipant } from "@core/application/user-chat/entity/types/ChatParticipant";
-import type { CreateUserChatPayload } from "@core/application/user-chat/entity/types/CreateUserChatPayload";
+import type { ChatParticipant } from "@core/domain/user-chat/entity/types/ChatParticipant";
+import type { CreateUserChatPayload } from "@core/domain/user-chat/entity/types/CreateUserChatPayload";
 import { Entity } from "@core/common/entity/Entity";
 
 export class UserChat extends Entity<string> {

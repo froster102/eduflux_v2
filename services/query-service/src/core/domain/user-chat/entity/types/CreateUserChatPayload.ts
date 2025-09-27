@@ -1,4 +1,4 @@
-import type { ChatParticipant } from "@core/application/user-chat/entity/types/ChatParticipant";
+import type { ChatParticipant } from "@core/domain/user-chat/entity/types/ChatParticipant";
 
 export type CreateUserChatPayload = {
   id: string;
