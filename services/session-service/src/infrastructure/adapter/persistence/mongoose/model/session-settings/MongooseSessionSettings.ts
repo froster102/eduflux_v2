@@ -62,6 +62,7 @@ export const ScheduleSettingSchema = new Schema<MongooseSessionSettings>(
   },
   {
     timestamps: true,
+    collection: 'session_settings',
   },
 );
 
