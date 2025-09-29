@@ -16,8 +16,7 @@ export interface MongooseUserSession extends Document {
 const SessionParticipantSchema = new Schema<SessionParticipant>(
   {
     id: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    name: { type: String, required: true },
     image: { type: String, required: false },
   },
   { _id: false },
@@ -52,6 +51,7 @@ export const UserSessionSchema = new Schema<MongooseUserSession>(
   },
   {
     timestamps: true,
+    collection: "user_sessions",
   },
 );
 

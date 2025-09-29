@@ -2,7 +2,7 @@ import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { EventBusPort } from '@core/common/message/EventBustPort';
 import { KafkaEventBusConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
 import type { LoggerPort } from '@core/common/port/LoggerPort';
-import { USERS_TOPIC } from '@shared/constants/topics';
+import { INSTRUCTOR_TOPIC, USERS_TOPIC } from '@shared/constants/topics';
 import { inject } from 'inversify';
 import type { Producer } from 'kafkajs';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
@@ -26,8 +26,10 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
     let topic: string;
     if (event.type.startsWith('user')) {
       topic = USERS_TOPIC;
+    } else if (event.type.startsWith('instructor')) {
+      topic = INSTRUCTOR_TOPIC;
     } else {
-      this.logger.warn('Event no published as not topic was defined');
+      this.logger.warn('Event not published as not topic was defined');
       return;
     }
 

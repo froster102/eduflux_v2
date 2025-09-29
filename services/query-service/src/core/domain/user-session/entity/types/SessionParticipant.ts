@@ -1,6 +1,5 @@
 export type SessionParticipant = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   image?: string;
 };

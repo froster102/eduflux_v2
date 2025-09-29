@@ -14,7 +14,7 @@ import VideoIcon from "@/components/icons/VideoIcon";
 interface SessionSchedulerProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  instructorProfile: InstructorProfile;
+  instructor: Instructor;
   availableSlots: AvailableSlots[];
   isSlotsLoading: boolean;
   onSlotSelectionChange: (slot: AvailableSlots) => void;
@@ -28,7 +28,7 @@ interface SessionSchedulerProps {
 export default function SessionScheduler({
   isOpen,
   onOpenChange,
-  instructorProfile,
+  instructor,
   availableSlots,
   isSlotsLoading,
   onSlotSelectionChange,
@@ -62,15 +62,15 @@ export default function SessionScheduler({
                 <div className="flex flex-col gap-2 p-6 lg:w-[220px] lg:px-4 lg:pt-8">
                   <div>
                     <Avatar
-                      src={`${IMAGE_BASE_URL}${instructorProfile.image}`}
+                      src={`${IMAGE_BASE_URL}${instructor.profile.image}`}
                     />
                     <small className="text-default-500">
-                      {instructorProfile.firstName} {instructorProfile.lastName}
+                      {instructor.profile.name}
                     </small>
                     <p className="font-medium">Video call</p>
                   </div>
                   <p className="text-sm line-clamp-5">
-                    {instructorProfile.bio}
+                    {instructor.profile.bio}
                   </p>
                   <div className="flex flex-col">
                     <p className="inline-flex text-xs items-center text-default-700 gap-1">

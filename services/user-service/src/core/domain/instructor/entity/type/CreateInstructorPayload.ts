@@ -3,4 +3,5 @@ export type CreateInstructorPayload = {
   sessionsConducted: number;
   totalCourses: number;
   totalLearners: number;
+  isSessionEnabled: boolean;
 };

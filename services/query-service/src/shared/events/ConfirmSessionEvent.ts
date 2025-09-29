@@ -1,8 +1,8 @@
 import type { SessionStatus } from "@core/domain/user-session/enum/SessionStatus";
+import type { UserSessionEvents } from "@core/domain/user-session/events/enum/UserSessionEvents";
 
 export type ConfirmSessionEvent = {
-  type: "session.confirmed";
-  correlationId: "";
+  type: UserSessionEvents.SESSION_CONFIRMED;
   data: {
     sessionId: string;
     learnerId: string;

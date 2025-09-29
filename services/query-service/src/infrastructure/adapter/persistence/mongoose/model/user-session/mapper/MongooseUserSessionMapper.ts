@@ -6,15 +6,13 @@ export class MongooseUserSessionMapper {
   static toDomain(document: MongooseUserSession): UserSession {
     const learner: SessionParticipant = {
       id: document.learner.id,
-      firstName: document.learner.firstName,
-      lastName: document.learner.lastName,
+      name: document.learner.name,
       image: document.learner.image,
     };
 
     const instructor: SessionParticipant = {
       id: document.instructor.id,
-      firstName: document.instructor.firstName,
-      lastName: document.instructor.lastName,
+      name: document.instructor.name,
       image: document.instructor.image,
     };
 
@@ -38,14 +36,12 @@ export class MongooseUserSessionMapper {
       status: entity.status,
       learner: {
         id: entity.learner.id,
-        firstName: entity.learner.firstName,
-        lastName: entity.learner.lastName,
+        name: entity.learner.name,
         image: entity.learner.image,
       },
       instructor: {
         id: entity.instructor.id,
-        firstName: entity.instructor.firstName,
-        lastName: entity.instructor.lastName,
+        name: entity.instructor.name,
         image: entity.instructor.image,
       },
     };

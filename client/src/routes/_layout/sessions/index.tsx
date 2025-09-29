@@ -57,7 +57,7 @@ function RouteComponent() {
                               size: "sm",
                               src: `${IMAGE_BASE_URL}${session.instructor.image}`,
                             }}
-                            name={`${session.instructor.firstName} ${session.instructor.lastName}`}
+                            name={`${session.instructor.name}`}
                           />
                           <Chip color="success" variant="flat">
                             {session.status}

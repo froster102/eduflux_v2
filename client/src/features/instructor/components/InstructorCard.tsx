@@ -21,7 +21,7 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
       <CardHeader className="flex flex-col items-start w-full">
         <User
           avatarProps={{
-            src: `${instructor.user.image ? `${IMAGE_BASE_URL}${instructor.user.image}` : undefined}`,
+            src: `${instructor.profile.image ? `${IMAGE_BASE_URL}${instructor.profile.image}` : undefined}`,
             // size: "lg",
             className: "w-16 h-16",
             radius: "md",
@@ -31,18 +31,19 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
             base: "",
             wrapper: "flex flex-col",
           }}
-          description={"Lead Developer"}
-          name={`${instructor.user.firstName} ${instructor.user.lastName}`}
+          name={`${instructor.profile.name}`}
         />
       </CardHeader>
       <CardBody className="py-0 gap-2">
-        <p className="w-full line-clamp-4 break-words">{instructor.user.bio}</p>
+        <p className="w-full line-clamp-4 break-words">
+          {instructor.profile.bio}
+        </p>
         <div className="flex flex-col gap-1 text-default-700 text-small">
           <p className="flex gap-2 items-center">
             <span>
               <InstructorIcon width={20} />
             </span>{" "}
-            {instructor.sessionsConducted} sessions conducted
+            {instructor.sessionsConducted} Sessions conducted
           </p>
           <div className="flex h-6 overflow-hidden items-center space-x-4">
             <p className="flex gap-2 items-center">
@@ -61,12 +62,15 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
         </div>
       </CardBody>
       <CardFooter>
+        {instructor.pricing.isSchedulingEnabled ? (
+          <p className="text-2xl font-semibold">${instructor.pricing.price}</p>
+        ) : null}
         <Button
           className="ml-auto"
           color="primary"
           size="sm"
           onPress={() => {
-            navigate({ to: `/instructors/${instructor.user.id}` });
+            navigate({ to: `/instructors/${instructor.id}` });
           }}
         >
           Learn more..

@@ -1,8 +1,10 @@
+import type { InstructorViewController } from "@api/http-rest/controller/InstructorViewController";
 import type { UserChatController } from "@api/http-rest/controller/UserChatController";
 import type { UserSessionController } from "@api/http-rest/controller/UserSessionController";
 import { correlationIdSetupMiddleware } from "@api/http-rest/middleware/correlationIdMiddleware";
 import { errorHandler } from "@api/http-rest/middleware/errorHandlerMiddleware";
 import { httpLoggerMiddleware } from "@api/http-rest/middleware/httpLoggerMiddleware";
+import { InstructorViewDITokens } from "@core/application/instructor-view/di/InstructorViewDITokens";
 import { UserChatDITokens } from "@core/application/user-chat/di/UserChatDITokens";
 import { UserSessionDITokens } from "@core/application/user-session/di/UserSessionDITokens";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
@@ -17,6 +19,7 @@ export class HttpServer {
   private readonly logger: LoggerPort;
   private readonly userSessionController: UserSessionController;
   private readonly userChatController: UserChatController;
+  private readonly instructorViewController: InstructorViewController;
 
   constructor() {
     this.app = new Elysia();
@@ -29,6 +32,9 @@ export class HttpServer {
     );
     this.userChatController = container.get<UserChatController>(
       UserChatDITokens.UserChatController,
+    );
+    this.instructorViewController = container.get<InstructorViewController>(
+      InstructorViewDITokens.InstructorViewController,
     );
   }
 
@@ -44,6 +50,7 @@ export class HttpServer {
     });
     this.app.use(this.userSessionController.register());
     this.app.use(this.userChatController.register());
+    this.app.use(this.instructorViewController.register());
   }
 
   start(): void {

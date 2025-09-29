@@ -1,4 +1,4 @@
-import type { Nullable, Optional } from "@core/common/type/CommonTypes";
+import type { Nullable, Optional } from "@core/common/types/CommonTypes";
 
 export class CoreAssert {
   public static isTrue(expression: boolean, exeception: Error) {

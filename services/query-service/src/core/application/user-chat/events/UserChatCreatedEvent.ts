@@ -1,7 +1,8 @@
+import type { UserChatEvents } from "@core/domain/user-chat/events/enum/UserChatEvents";
 import type { Role } from "@shared/constants/roles";
 
 export type UserChatCreatedEvent = {
-  type: "user.chat.created";
+  type: UserChatEvents.USER_CHAT_CREATED;
   data: {
     readonly id: string;
     readonly participants: { userId: string; role: Role }[];

@@ -45,6 +45,7 @@ export class CreateUserService implements CreateUserUseCase {
     if (newUser.getRoles().includes(Role.INSTRUCTOR)) {
       const newInstructor = Instructor.new({
         id: newUser.getId(),
+        isSessionEnabled: false,
         sessionsConducted: 0,
         totalCourses: 0,
         totalLearners: 0,

@@ -1,14 +1,16 @@
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { Events } from '@core/common/enums/Events';
 import { Role } from '@core/common/enums/Role';
 import { Code } from '@core/common/errors/Code';
 import { Exception } from '@core/common/errors/Exception';
 import type { EventBusPort } from '@core/common/message/EventBustPort';
 import { InstructorDITokens } from '@core/domain/instructor/di/InstructorDITokens';
 import { Instructor } from '@core/domain/instructor/entity/Instructor';
+import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
 import type { InstructorRepositoryPort } from '@core/domain/instructor/port/persistence/InstructorRepositoryPort';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
-import { UserCreateEvent } from '@core/domain/user/events/UserCreateEvent';
+import { InstructorCreatedEvent } from '@core/domain/user/events/InstructorCreatedEvent';
+import { UserEvents } from '@core/domain/user/events/UserEvents';
+import { UserUpdatedEvent } from '@core/domain/user/events/UserUpdatedEvent';
 import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
 import type { UpdateUserPort } from '@core/domain/user/port/usecase/UpdateUserPort';
 import { UserDto } from '@core/domain/user/usecase/dto/UserDto';
@@ -39,11 +41,28 @@ export class UpdateUserService implements UpdateUserUseCase {
     ) {
       const newInstructor = Instructor.new({
         id: user.getId(),
+        isSessionEnabled: false,
         sessionsConducted: 0,
         totalCourses: 0,
         totalLearners: 0,
       });
       await this.instructorRepository.save(newInstructor);
+      await this.eventBusPort.sendEvent({
+        correlationId: '',
+        ...InstructorCreatedEvent.new({
+          id: newInstructor.getId(),
+          type: InstructorEvents.INSTRUCTOR_CREATED,
+          profile: {
+            name: user.getFullName(),
+            bio: user.getBio(),
+            image: user.getImage(),
+          },
+          sessionsConducted: 0,
+          totalCourses: 0,
+          totalLearners: 0,
+          occuredAt: new Date().toISOString(),
+        }),
+      });
     }
 
     user.update(payload);
@@ -55,14 +74,14 @@ export class UpdateUserService implements UpdateUserUseCase {
     if (updatedUser) {
       await this.eventBusPort.sendEvent({
         correlationId: '',
-        type: 'user.update',
-        data: UserCreateEvent.new(
-          Events.USER_UPDATE,
-          user.getId(),
-          user.getImage()!,
-          user.getFullName(),
-          new Date().toISOString(),
-        ),
+        ...UserUpdatedEvent.new({
+          type: UserEvents.USER_UPDATED,
+          id: user.getId(),
+          image: user.getImage(),
+          name: user.getFullName(),
+          bio: user.getBio(),
+          occuredAt: new Date().toISOString(),
+        }),
       });
     }
 

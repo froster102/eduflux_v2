@@ -6,6 +6,7 @@ export class Instructor extends Entity<string> {
   private sessionsConducted: number;
   private totalCourses: number;
   private totalLearners: number;
+  private isSessionEnabled: boolean;
   private readonly createdAt: Date;
   private updatedAt: Date;
 
@@ -13,6 +14,7 @@ export class Instructor extends Entity<string> {
     super();
     this.id = payload.id;
     this.sessionsConducted = payload.sessionsConducted;
+    this.isSessionEnabled = payload.isSessionEnabled;
     this.totalCourses = payload.totalCourses;
     this.totalLearners = payload.totalLearners;
     this.createdAt = payload.createdAt;
@@ -37,6 +39,10 @@ export class Instructor extends Entity<string> {
 
   public getUpdatedAt(): Date {
     return this.updatedAt;
+  }
+
+  public getIsSessionEnabled(): boolean {
+    return this.isSessionEnabled;
   }
 
   public incrementSessionsConducted(): void {

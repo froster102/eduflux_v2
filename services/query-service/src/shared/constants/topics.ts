@@ -1,2 +1,4 @@
 export const SESSION_TOPIC = "SESSION_TOPIC";
 export const CHAT_TOPIC = "CHAT_TOPIC";
+export const INSTRUCTOR_TOPIC = "INSTRUCTOR_TOPIC";
+export const USERS_TOPIC = "USERS_TOPIC";

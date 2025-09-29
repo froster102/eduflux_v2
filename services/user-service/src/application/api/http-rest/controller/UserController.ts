@@ -8,11 +8,8 @@ import { inject } from 'inversify';
 import httpStatus from 'http-status';
 import { updateUserSchema } from '@application/api/http-rest/schema/user';
 import { queryParametersSchema } from '@application/api/http-rest/schema/queryParametersSchema';
-import { CoreAssert } from '@core/util/assert/CoreAssert';
-import { Role } from '@core/common/enums/Role';
-import { Exception } from '@core/common/errors/Exception';
-import { Code } from '@core/common/errors/Code';
 import { InstructorDITokens } from '@core/domain/instructor/di/InstructorDITokens';
+import type { GetInstructorUseCase } from '@core/domain/instructor/usecase/GetInstructorUseCase';
 
 export class UserController {
   constructor(
@@ -22,6 +19,8 @@ export class UserController {
     private readonly updateUserUseCase: UpdateUserUseCase,
     @inject(InstructorDITokens.GetInstructorsUseCase)
     private readonly getInstructorsUseCase: GetInstructorsUseCase,
+    @inject(InstructorDITokens.GetInstructorUseCase)
+    private readonly getInstructorUseCase: GetInstructorUseCase,
   ) {}
 
   register(): Elysia {
@@ -67,14 +66,11 @@ export class UserController {
           };
         })
         .get('/:id', async ({ params }) => {
-          const user = await this.getUserUseCase.execute({
-            userId: params.id,
+          const instructor = await this.getInstructorUseCase.execute({
+            instructorId: params.id,
           });
-          CoreAssert.isTrue(
-            user.roles.includes(Role.INSTRUCTOR),
-            Exception.new({ code: Code.ACCESS_DENIED_ERROR }),
-          );
-          return JSON.stringify(user);
+
+          return JSON.stringify(instructor);
         }),
     );
   }

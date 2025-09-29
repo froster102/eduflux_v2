@@ -27,7 +27,7 @@ function RouteComponent() {
         ) : (
           result &&
           result.instructors.map((instructor) => (
-            <InstructorCard key={instructor.user.id} instructor={instructor} />
+            <InstructorCard key={instructor.id} instructor={instructor} />
           ))
         )}
       </div>

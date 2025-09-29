@@ -1,6 +1,6 @@
 import type { UserChatQueryResult } from "@core/application/user-chat/port/persistence/types/UserChatQueryResult";
 import type { UserChatRepositoryPort } from "@core/application/user-chat/port/persistence/UserChatRepositoryPort";
-import type { QueryParameters } from "@core/common/port/persistence/type/QueryParameters";
+import type { QueryParameters } from "@core/common/port/persistence/types/QueryParameters";
 import type { Role } from "@shared/constants/roles";
 import { MongooseBaseRepositoryAdpater } from "@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter";
 
@@ -45,5 +45,26 @@ export class MongooseUserChatRepositoryAdapter
       chats: MongooseUserChatMapper.toDomainEntities(chats),
       totalCount,
     };
+  }
+
+  async updateUser(
+    userId: string,
+    payload: { name: string; image?: string },
+  ): Promise<void> {
+    const setUpdates: Record<string, any> = {
+      "participants.$[elem].name": payload.name,
+    };
+
+    if (payload.image !== undefined) {
+      setUpdates["participants.$[elem].image"] = payload.image;
+    }
+
+    await UserChatModel.updateMany(
+      { "participants.id": userId },
+      { $set: setUpdates },
+      {
+        arrayFilters: [{ "elem.id": userId }],
+      },
+    );
   }
 }

@@ -31,12 +31,9 @@ export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   pendingComponent: () => <InstructorPageSkeleton />,
 });
 
-const sampleBio =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturideleniti id commodi quis aliquam obcaecati tenetur atque. Veritatisdolore doloribus, ipsum eaque soluta nam, aspernatur fugitperferendis optio officiis id. Lorem ipsum dolor sit amet consecteturadipisicing elit. Excepturi deleniti id commodi quis aliquam obcaecatitenetur atque. Veritatis dolore doloribus, ipsum eaque soluta nam,aspernatur fugit perferendis optio officiis id. Lorem ipsum dolor sitamet consectetur adipisicing elit. Excepturi deleniti id commodi quisaliquam obcaecati tenetur atque. Veritatis dolore doloribus, ipsumeaque soluta nam, aspernatur fugit perferendis optio officiis id.Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturideleniti id commodi quis aliquam obcaecati tenetur atque. Veritatisdolore doloribus, ipsum eaque soluta nam, aspernatur fugitperferendis optio officiis id. Lorem ipsum dolor sit amet consecteturadipisicing elit. Excepturi deleniti id commodi quis aliquam obcaecatitenetur atque. Veritatis dolore doloribus, ipsum eaque soluta nam,aspernatur fugit perferendis optio officiis id. Lorem ipsum dolor sitamet consectetur adipisicing elit. Excepturi deleniti id commodi quisaliquam obcaecati tenetur atque. Veritatis dolore doloribus, ipsumeaque soluta nam, aspernatur fugit perferendis optio officiis id.";
-
 function RouteComponent() {
   const { instructorId } = Route.useParams();
-  const { data: instructorProfile } = useSuspenseQuery(
+  const { data: instructor } = useSuspenseQuery(
     getInstructorProfileOptions(instructorId),
   );
   const [selectedDate, setSelectedDate] = React.useState(
@@ -70,10 +67,10 @@ function RouteComponent() {
         lastMessagePreview: existingChat.chat.lastMessagePreview,
         participants: [
           {
-            id: instructorProfile.id,
-            firstName: instructorProfile.firstName,
-            lastName: instructorProfile.lastName,
-            image: instructorProfile.image,
+            id: instructor.profile.id,
+            name:
+              instructor.profile.firstName + " " + instructor.profile.lastName,
+            image: instructor.profile.image!,
           },
         ],
       });
@@ -93,10 +90,9 @@ function RouteComponent() {
         lastMessagePreview: createdChat.lastMessagePreview,
         participants: [
           {
-            id: instructorProfile.id,
-            firstName: instructorProfile.firstName,
-            lastName: instructorProfile.lastName,
-            image: instructorProfile.image,
+            id: instructor.profile.id,
+            name: `${instructor.profile.firstName + " " + instructor.profile.lastName}`,
+            image: instructor.profile.image!,
           },
         ],
       });
@@ -121,15 +117,7 @@ function RouteComponent() {
               <p>About Me</p>
             </CardHeader>
             <CardBody className="pt-0">
-              <p>{sampleBio}</p>
-            </CardBody>
-          </Card>
-          <Card className="w-full h-fit bg-background border border-default-200">
-            <CardHeader className="text-lg font-medium flex pb-0">
-              <p>My Courses(7)</p>
-            </CardHeader>
-            <CardBody className="pt-0">
-              <p>list courses</p>
+              <p>{instructor.profile.bio}</p>
             </CardBody>
           </Card>
         </div>
@@ -138,18 +126,21 @@ function RouteComponent() {
           <Card className="md:max-w-lg w-full bg-background border border-default-200">
             <CardHeader>
               <Image
+                className="max-h-"
                 height={400}
-                src={`${IMAGE_BASE_URL}${instructorProfile.image}`}
+                src={`${IMAGE_BASE_URL}${instructor.profile.image}`}
                 width={500}
               />
             </CardHeader>
             <CardBody className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <p className="font-medium">Price</p>
-                <p className="text-2xl font-semibold">
-                  ${instructorProfile?.sessionPricing?.price}/hr
-                </p>
-              </div>
+              {/* <Skeleton isLoaded={!isSessionSettingsLoading}>
+                <div className="flex items-center justify-between">
+                  <p className="font-medium">Price</p>
+                  <p className="text-2xl font-semibold">
+                    ${sessionSettings?.settings.price}/hr
+                  </p>
+                </div>
+              </Skeleton> */}
               <Button
                 color="primary"
                 startContent={<BoltIcon />}
@@ -171,7 +162,7 @@ function RouteComponent() {
       </div>
       <SessionScheduler
         availableSlots={availableSlots!}
-        instructorProfile={instructorProfile!}
+        instructor={instructor}
         isConfirmBookingPending={bookSession.isPending}
         isOpen={openScheduler}
         isSlotsLoading={isAvailableSlotsLoading}

@@ -7,6 +7,7 @@ export class InstructorMapper {
       id: mongooseInstructor._id,
       sessionsConducted: mongooseInstructor.sessionsConducted,
       totalCourses: mongooseInstructor.totalCourses,
+      isSessionEnabled: mongooseInstructor.isSessionEnabled,
       totalLearners: mongooseInstructor.totalLearners,
       createdAt: mongooseInstructor.createdAt,
       updatedAt: mongooseInstructor.updatedAt,
@@ -20,6 +21,7 @@ export class InstructorMapper {
     const mongooseInstructor: Partial<MongooseInstructor> = {
       _id: domainInstructor.getId(),
       sessionsConducted: domainInstructor.getSessionsConducted(),
+      isSessionEnabled: domainInstructor.getIsSessionEnabled(),
       totalCourses: domainInstructor.getTotalCourses(),
       totalLearners: domainInstructor.getTotalLearners(),
       createdAt: domainInstructor.getCreatedAt(),

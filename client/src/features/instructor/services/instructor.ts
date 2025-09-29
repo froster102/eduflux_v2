@@ -3,8 +3,8 @@ import { buildQueryUrlParams } from "@/utils/helpers";
 
 export async function getInstructorProfile(
   userId: string,
-): Promise<InstructorProfile> {
-  const response = await api.get(`/users/${userId}`);
+): Promise<Instructor> {
+  const response = await api.get(`/query/instructors/${userId}`);
 
   return response.data;
 }
@@ -22,7 +22,7 @@ export async function getInstructors(
 ): Promise<GetInstructorsResult> {
   const queryString = buildQueryUrlParams(queryParameters);
 
-  const response = await api.get(`/users/instructors${queryString}`);
+  const response = await api.get(`/query/instructors${queryString}`);
 
   return response.data;
 }

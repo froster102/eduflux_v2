@@ -46,4 +46,33 @@ export class MongooseUserSessionRepositoryAdapter
       sessions: MongooseUserSessionMapper.toDomainEntities(sessions),
     };
   }
+
+  async updateUser(
+    userId: string,
+    payload: { name: string; image?: string },
+  ): Promise<void> {
+    const updateLearner: Record<string, any> = {
+      "learner.name": payload.name,
+    };
+    if (payload.image !== undefined) {
+      updateLearner["learner.image"] = payload.image;
+    }
+
+    const updateInstructor: Record<string, any> = {
+      "instructor.name": payload.name,
+    };
+    if (payload.image !== undefined) {
+      updateInstructor["instructor.image"] = payload.image;
+    }
+
+    await UserSessionModel.updateMany(
+      { "learner.id": userId },
+      { $set: updateLearner },
+    );
+
+    await UserSessionModel.updateMany(
+      { "instructor.id": userId },
+      { $set: updateInstructor },
+    );
+  }
 }

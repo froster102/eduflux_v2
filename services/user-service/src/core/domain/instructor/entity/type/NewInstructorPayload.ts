@@ -3,6 +3,7 @@ export type NewInstructorPayload = {
   sessionsConducted: number;
   totalCourses: number;
   totalLearners: number;
+  isSessionEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
 };

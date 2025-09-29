@@ -6,7 +6,7 @@ import type { GetInstructorsUseCase } from '@core/domain/instructor/usecase/GetI
 import { inject } from 'inversify';
 import type { InstructorRepositoryPort } from '@core/domain/instructor/port/persistence/InstructorRepositoryPort';
 import { Role } from '@core/common/enums/Role';
-import { InstructorDto } from '@core/domain/instructor/usecase/dto/InstructorDto';
+import { InstructorUserCaseDto } from '@core/domain/instructor/usecase/dto/InstructorUseCaseDto';
 import type { GetInstructorsUseCaseResult } from '@core/domain/instructor/usecase/types/GetInstructorsUseCaseResult';
 
 export class GetInstructorsService implements GetInstructorsUseCase {
@@ -33,7 +33,7 @@ export class GetInstructorsService implements GetInstructorsUseCase {
       await this.instructorRepository.findByIds(instructorIds);
 
     return {
-      instructors: InstructorDto.fromUsers(users, instructors),
+      instructors: InstructorUserCaseDto.fromUsers(users, instructors),
       totalCount,
     };
   }

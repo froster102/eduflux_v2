@@ -33,8 +33,14 @@ export class ConfirmSessionEventHandlerService
 
     const userSession = UserSession.new({
       ...event.data,
-      learner,
-      instructor,
+      learner: {
+        ...learner,
+        name: learner.firstName + " " + learner.lastName,
+      },
+      instructor: {
+        ...instructor,
+        name: instructor.firstName + " " + instructor.lastName,
+      },
       id: sessionId,
       status: status,
       createdAt: new Date(createdAt),

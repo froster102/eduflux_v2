@@ -36,6 +36,8 @@ export default function ProfileForm({
     defaultValues: initialValue,
     resolver: zodResolver(updateProfileSchema),
   });
+
+  console.log(errors);
   const [action, setAction] = React.useState<"edit" | "view">("view");
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const [profileImageUploadState, setProfileImageUploadState] =
@@ -221,6 +223,8 @@ export default function ProfileForm({
           <Textarea
             readOnly={action === "view"}
             {...field}
+            errorMessage={errors?.bio?.message}
+            isInvalid={!!errors.bio}
             label="Biography"
             labelPlacement="outside"
           />

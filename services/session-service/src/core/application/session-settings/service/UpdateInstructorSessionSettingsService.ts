@@ -7,8 +7,11 @@ import type { SlotRepositoryPort } from '@core/application/slot/port/persistence
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { EventBusPort } from '@core/common/port/message/EventBusPort';
 import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
 import { SlotGenerationService } from '@core/domain/service/SlotGenerationService';
+import { SessionSettingsEvents } from '@core/domain/session-settings/events/enum/SessionSettingsEvents';
+import { type SessionSettingsUpdateEvent } from '@core/domain/session-settings/events/SessionSettingsUpdateEvent';
 import { inject } from 'inversify';
 
 export class UpdateInstructorSessionSettingsService
@@ -22,6 +25,7 @@ export class UpdateInstructorSessionSettingsService
     @inject(SlotDITokens.SlotRepository)
     private readonly slotRepository: SlotRepositoryPort,
     @inject(CoreDITokens.UnitOfWork) private readonly uow: UnitOfWork,
+    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
   ) {
     this.logger = logger.fromContext(
       UpdateInstructorSessionSettingsService.name,
@@ -70,6 +74,18 @@ export class UpdateInstructorSessionSettingsService
       isSlotDurationUpdated ||
       isApplyForWeekendUpdated ||
       isTimeZoneUpdated;
+
+    const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
+      type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
+      data: {
+        currency: foundSessionSettings.currency,
+        duration: foundSessionSettings.duration,
+        instructorId: foundSessionSettings.instructorId,
+        isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
+        price: foundSessionSettings.price,
+        timeZone: foundSessionSettings.timeZone,
+      },
+    };
 
     if (shouldRegenrateSlots) {
       this.logger.info(
@@ -126,12 +142,31 @@ export class UpdateInstructorSessionSettingsService
         }
 
         await trx.sessionSettingsRepository.update(
-          executorId,
+          foundSessionSettings.id,
           foundSessionSettings,
         );
 
+        const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
+          type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
+          data: {
+            currency: foundSessionSettings.currency,
+            duration: foundSessionSettings.duration,
+            instructorId: foundSessionSettings.instructorId,
+            isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
+            price: foundSessionSettings.price,
+            timeZone: foundSessionSettings.timeZone,
+          },
+        };
+
+        await this.eventBus.sendEvent(sessionSettingsUpdateEvent);
         this.logger.info("Updated instructor's session settings.");
       });
+    } else {
+      await this.eventBus.sendEvent(sessionSettingsUpdateEvent);
+      await this.sessionSettingsRepository.update(
+        foundSessionSettings.id,
+        foundSessionSettings,
+      );
     }
   }
 }

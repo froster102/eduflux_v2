@@ -153,20 +153,6 @@ declare global {
     updatedAt: string;
   };
 
-  export type InstructorProfile = {
-    id: string;
-    bio: string;
-    image: string;
-    socialLinks: { platform: string; url: string }[];
-    defaultSessionPricing: SessionPricing;
-    sessionPricing: SessionPricing;
-    isProfileComplete: boolean;
-    isApproved: boolean;
-    canProvideSessions: boolean;
-    createdAt: string;
-    updatedAt: string;
-  } & UserProfile;
-
   export type SessionStatus =
     | "PENDING_PAYMENT"
     | "BOOKED"
