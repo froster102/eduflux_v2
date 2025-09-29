@@ -2,13 +2,12 @@ import React from "react";
 import { useDisclosure } from "@heroui/modal";
 
 import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import Navbar from "@/components/Navabar";
 
 export default function DefaultLayout({
   navItems,
   children,
-  topContent,
 }: {
   children: React.ReactNode;
   navItems: {
@@ -16,7 +15,6 @@ export default function DefaultLayout({
     icon: JSX.Element;
     label: string;
   }[];
-  topContent: React.ReactNode;
 }) {
   const [openConfirmationModal, setOpenConfirmationModal] =
     React.useState(false);
@@ -24,18 +22,15 @@ export default function DefaultLayout({
 
   return (
     <>
-      <div className="p-4 lg:p-6 h-dvh">
-        <div className="lg:flex gap-4 w-full h-full">
-          <Sidebar
-            isOpen={isOpen}
-            navItems={navItems}
-            topContent={topContent}
-            onOpenChange={onOpenChange}
-          />
+      <div className="pt-4 h-dvh flex flex-col items-center gap-4">
+        <div className="container flex flex-col gap-4 px-4">
+          <Header onOpenSidebar={onOpen} />
+          <Navbar navItems={navItems} />
+        </div>
+        <div className="flex flex-col gap-4 w-full h-full container">
           <div className="flex flex-col w-full h-full flex-1 overflow-hidden">
-            <Header onOpenSidebar={onOpen} />
             <div className="flex-1 overflow-y-auto min-h-0 scrollbar-hide">
-              <div className="h-full pt-4">{children}</div>
+              <div className="h-full px-4">{children}</div>
             </div>
           </div>
         </div>

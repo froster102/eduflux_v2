@@ -33,6 +33,19 @@ export function formatTo12HourWithDate(date: Date) {
   return formatter.format(date);
 }
 
+export function getGreeting() {
+  const now = new Date();
+  const hour = now.getHours();
+
+  if (hour >= 5 && hour < 12) {
+    return "Good Morning";
+  } else if (hour >= 12 && hour < 17) {
+    return "Good Afternoon";
+  } else {
+    return "Good Evening";
+  }
+}
+
 export function convertISTToUTC(dateStr: string, timeStr: string) {
   const istDate = new Date(`${dateStr}T${timeStr}+05:30`);
 

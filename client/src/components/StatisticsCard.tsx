@@ -12,11 +12,16 @@ export default function StatisticsCard({
   icon,
 }: StatisticsCardProps) {
   return (
-    <Card className="border border-transparent bg-background dark:border-default-100">
+    <Card
+      className="border border-default-200 bg-transparent w-full"
+      shadow="none"
+    >
       <div className="flex p-4">
         <div className="flex flex-col gap-y-2">
-          <dt className="text-small font-medium text-default-500">{title}</dt>
-          <dd className="text-2xl font-semibold text-default-700">{value}</dd>
+          <dt className="text-xs sm:text-sm font-medium text-default-500">
+            {title}
+          </dt>
+          <dd className="text-2xl font-semibold">{value}</dd>
         </div>
         <div className="absolute right-4 text-default-500">{icon}</div>
       </div>

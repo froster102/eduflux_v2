@@ -8,7 +8,10 @@ interface ChatHistoryProps {
 
 export default function ChatHistory({ chatHistory }: ChatHistoryProps) {
   return (
-    <Card className="w-full h-full bg-background border border-default-200">
+    <Card
+      className="w-full h-full bg-background border border-default-200"
+      shadow="none"
+    >
       <CardHeader className="text-xl font-semibold">My Chats</CardHeader>
       <CardBody className="pt-0">
         {chatHistory.map((chat, i) => (

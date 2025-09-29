@@ -1,12 +1,18 @@
 import { User } from "@heroui/user";
-import { useLocation } from "@tanstack/react-router";
 import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Avatar } from "@heroui/avatar";
+import React from "react";
 
 import { useAuthStore } from "@/store/auth-store";
 import { IMAGE_BASE_URL } from "@/config/image";
 import MenuIcon from "@/components/icons/MenuIcon";
 // eslint-disable-next-line boundaries/element-types
 import Notifications from "@/features/notification/components/Notifications";
+import { SearchIcon } from "@/components/Icons";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import { useLogout } from "@/hooks/useLogout";
 
 interface HeaderProps {
   onOpenSidebar: () => void;
@@ -14,76 +20,71 @@ interface HeaderProps {
 
 export default function Header({ onOpenSidebar }: HeaderProps) {
   const { user } = useAuthStore();
-  const location = useLocation();
 
-  const routeRoleSegment = location.pathname.split("/")[2];
+  const [openLogoutConfirmation, setOpenLogoutConfirmation] =
+    React.useState(false);
+  const logout = useLogout();
 
-  const header =
-    routeRoleSegment === "instructor" || routeRoleSegment === "admin"
-      ? location.pathname.split("/")[2]
-      : location.pathname.split("/")[1];
+  async function handleLogout() {
+    logout.mutate();
+    setOpenLogoutConfirmation(false);
+  }
 
   return (
-    <header className="sticky top-0 z-50 w-full">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <div className="lg:hidden">
-            <Button
-              isIconOnly
-              color="primary"
-              radius="full"
-              onPress={onOpenSidebar}
-            >
-              <MenuIcon />
-            </Button>
+    <>
+      <header className="sticky top-0 z-50 w-full">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="lg:hidden">
+              <Button
+                isIconOnly
+                className="p-0 bg-transparent text-white"
+                color="primary"
+                radius="full"
+                onPress={onOpenSidebar}
+              >
+                <MenuIcon />
+              </Button>
+            </div>
+            <p className="lg:p-0 text-2xl font-semibold capitalize">Eduflux</p>
           </div>
-          <p className="lg:p-0 text-2xl font-semibold capitalize">{header}</p>
-        </div>
-        {/* <div>
           <Input
-            classNames={{
-              label: "text-black/50 dark:text-white/90",
-              input: [
-                "bg-transparent",
-                "text-black/90 dark:text-white/90",
-                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
-              ],
-              innerWrapper: "bg-transparent",
-              inputWrapper: [
-                "!bg-primary-500/10",
-                "dark:bg-default/60",
-                "backdrop-blur-xl",
-                "backdrop-saturate-200",
-                "hover:bg-default-200/70",
-                "dark:hover:bg-default/70",
-                "group-data-[focus=true]:bg-default-200/50",
-                "dark:group-data-[focus=true]:bg-default/60",
-                "!cursor-text",
-              ],
-            }}
+            className="hidden max-w-md"
             placeholder="Search courses"
             size="md"
             startContent={<SearchIcon />}
+            variant="faded"
           />
-        </div> */}
-        <div className="flex gap-2 items-center pr-1">
-          <div className="hidden md:block">
+          <div className="flex gap-4 items-center justify-center">
+            <ThemeSwitcher className="hidden sm:block bg-transparent" />
+            <Notifications />
             <User
               avatarProps={{
+                size: "md",
                 src: `${IMAGE_BASE_URL}${user?.image ?? undefined}`,
               }}
-              className="text-default-500"
+              className="hidden sm:flex text-default-500 text-sm"
               classNames={{
-                name: "text-lg text-black dark:text-white font-medium",
+                name: "text-sm text-black dark:text-white font-medium",
                 description: "text-default-600",
               }}
               description={user && user.email}
               name={user && user.name}
             />
+            <Avatar
+              className="sm:hidden"
+              src={`${IMAGE_BASE_URL}${user?.image ?? undefined}`}
+            />
           </div>
-          <Notifications />
         </div>
-      </div>
-    </header>
+      </header>
+      <ConfirmationModal
+        confirmText="Logout"
+        isOpen={openLogoutConfirmation}
+        message="Are you sure that you want to logout"
+        onClose={() => setOpenLogoutConfirmation(false)}
+        onConfirm={handleLogout}
+      />
+    </>
   );
 }

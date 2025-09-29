@@ -4,6 +4,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
 import { Card } from "@heroui/card";
 import { Badge } from "@heroui/badge";
 import { Spinner } from "@heroui/spinner";
+import { Button } from "@heroui/button";
 
 import NotificationIcon from "@/components/icons/NotificationIcon";
 import { useGetNotifications } from "@/features/notification/useGetNotifications";
@@ -40,7 +41,6 @@ export default function Notifications({}: NotificationsProps) {
             }}
           >
             <NotificationIcon width={24} />
-            {/* </Badge> */}
           </Card>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0 border border-default-200 overflow-hidden">
@@ -66,9 +66,11 @@ export default function Notifications({}: NotificationsProps) {
     <>
       <Popover className="max-w-[424px] min-w-96" placement="bottom" size="lg">
         <PopoverTrigger>
-          <Card
-            isPressable
-            className="p-1 bg-primary text-black rounded-full relative overflow-visible"
+          <Button
+            isIconOnly
+            className="bg-transparent overflow-visible"
+            radius="full"
+            size="md"
             onPress={() => {
               setOpenNotifications(!openNotifications);
             }}
@@ -87,7 +89,7 @@ export default function Notifications({}: NotificationsProps) {
             >
               <NotificationIcon width={24} />
             </Badge>
-          </Card>
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0 border border-default-200 overflow-hidden">
           <div className="w-full">

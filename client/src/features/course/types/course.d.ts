@@ -9,6 +9,59 @@ declare global {
     isFree: boolean;
   }>;
 
+  export type Course = {
+    id: string;
+    title: string;
+    description: string;
+    thumbnail: string | null;
+    categoryId: string;
+    level: "beginner" | "intermediate" | "advanced";
+    price: number;
+    isFree: boolean;
+    status: CourseStatus;
+    feedback: string | null;
+    instructor: { id: string; name: string };
+    averageRating: number;
+    ratingCount: number;
+    enrollmentCount: number;
+    publishedAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+
+  export type Chapter = {
+    assetId: boolean;
+    _class: "chapter";
+    id: string;
+    courseId: string;
+    title: string;
+    description: string;
+    sortOrder: number;
+    objectIndex: number;
+  };
+
+  export type Lecture = {
+    _class: "lecture";
+    id: string;
+    courseId: string;
+    title: string;
+    description: string;
+    assetId: string | null;
+    preview: boolean;
+    sortOrder: number;
+    objectIndex: number;
+    asset?: Asset;
+  };
+
+  export type CourseStatus =
+    | "draft"
+    | "published"
+    | "unpublished"
+    | "archived"
+    | "in_review"
+    | "approved"
+    | "rejected";
+
   export type ChapterFormData = {
     title: string;
     description: string;
@@ -31,6 +84,10 @@ declare global {
     fileKey: string;
     expiresAt?: string;
   };
+
+  export type CurriculumItem = Chapter | Lecture;
+
+  export type CurriculumItems = (Chapter | Lecture)[];
 }
 
 export {};

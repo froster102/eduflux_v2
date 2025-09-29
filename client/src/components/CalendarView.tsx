@@ -24,7 +24,7 @@ export default function CalendarView() {
     <Calendar
       isReadOnly
       calendarWidth={372}
-      className="shrink-0 h-[358px] border border-transparent dark:border-default-100 overflow-hidden"
+      className="shrink-0 h-[358px] border-none dark:border-default-100 overflow-hidden"
       classNames={{
         cell: "px-2 w-full",
         gridBodyRow: "gap-x-1 px-3 mb-1 first:mt-4 last:mb-0",
@@ -32,6 +32,7 @@ export default function CalendarView() {
         gridHeaderCell: "px-2 md:w-full",
       }}
       focusedValue={value}
+      showShadow={false}
       topContent={
         <ButtonGroup
           fullWidth

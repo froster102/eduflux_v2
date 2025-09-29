@@ -5,101 +5,6 @@ declare global {
     size?: number;
   };
 
-  export type QuizQuestion = {
-    questionId: string;
-    questionText: string;
-    options: string[];
-    correctAnswer: string;
-  };
-
-  export type Quiz = {
-    quizId: string;
-    title: string;
-    duration: number;
-    questions: QuizQuestion[];
-  };
-
-  export type Resource = {
-    resourceId: string;
-    title: string;
-    type: "video" | "pdf" | "url";
-    url: string | File;
-  };
-
-  export type CourseStatus =
-    | "draft"
-    | "published"
-    | "unpublished"
-    | "archived"
-    | "in_review"
-    | "approved"
-    | "rejected";
-
-  export type Course = {
-    id: string;
-    title: string;
-    description: string;
-    thumbnail: string | null;
-    categoryId: string;
-    level: "beginner" | "intermediate" | "advanced";
-    price: number;
-    isFree: boolean;
-    status: CourseStatus;
-    feedback: string | null;
-    instructor: { id: string; name: string };
-    averageRating: number;
-    ratingCount: number;
-    enrollmentCount: number;
-    publishedAt: Date | null;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-
-  export type Chapter = {
-    assetId: boolean;
-    _class: "chapter";
-    id: string;
-    courseId: string;
-    title: string;
-    description: string;
-    sortOrder: number;
-    objectIndex: number;
-  };
-
-  export type Lecture = {
-    _class: "lecture";
-    id: string;
-    courseId: string;
-    title: string;
-    description: string;
-    assetId: string | null;
-    preview: boolean;
-    sortOrder: number;
-    objectIndex: number;
-    asset?: Asset;
-  };
-
-  export type Asset = {
-    id: string;
-    provider: string;
-    providerSpecificId: string;
-    resourceType: null;
-    accessType: string;
-    originalFileName: string | null;
-    duration: null;
-    status: "pending";
-    mediaSources: [
-      {
-        type: string;
-        src: string;
-      },
-    ];
-  };
-
-  export type CurriculumItem = Chapter | Lecture;
-
-  export type CurriculumItems = (Chapter | Lecture)[];
-
   export type EnrollmentStatus =
     | "PENDING"
     | "COMPLETED"
@@ -143,15 +48,6 @@ declare global {
   };
 
   export type Role = "ADMIN" | "LEARNER" | "INSTRUCTOR";
-
-  export type Note = {
-    id: string;
-    userId: string;
-    color: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-  };
 
   export type SessionStatus =
     | "PENDING_PAYMENT"
@@ -201,33 +97,11 @@ declare global {
     completedLectures: string[];
   };
 
-  export type GraphData = {
-    label: string;
-    value: string;
-  };
-
-  export type DashboardData = {
-    metrics: Record<string, any>;
-    graphs?: Record<string, GraphData[]>;
-  };
-
   export type BetterAuthError = {
     code?: string | undefined;
     message?: string | undefined;
     status: number;
     statusText: string;
-  };
-
-  export type PaginationQueryParams = {
-    page?: number;
-    limit?: number;
-    searchQuery?: string;
-    searchFields?: string[];
-    filters?: {
-      [key: string]: string | number | boolean | string[] | number[];
-    };
-    sortBy?: string;
-    sortOrder?: "asc" | "desc";
   };
 
   export type QueryParmeters = {

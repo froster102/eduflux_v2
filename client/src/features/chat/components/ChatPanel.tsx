@@ -142,9 +142,12 @@ export default function ChatPanel({
   };
 
   return (
-    <Card className="w-full bg-background p-0 border border-default-200">
+    <Card
+      className="w-full bg-background p-0 border border-default-200"
+      shadow="none"
+    >
       <CardHeader className="p-0">
-        <Card className="w-full">
+        <Card className="w-full" shadow="none">
           <CardBody className="p-4">
             <div className="flex items-center gap-2">
               <Avatar size="lg" src={`${IMAGE_BASE_URL}${recipient?.image}`} />

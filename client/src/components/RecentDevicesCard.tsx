@@ -34,7 +34,7 @@ export default function RecentDevicesCard({
       <Card
         className="bg-background border border-default-200"
         radius="sm"
-        shadow="sm"
+        shadow="none"
       >
         <CardHeader>
           <p className="font-medium">Recent Devices</p>

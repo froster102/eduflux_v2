@@ -21,7 +21,7 @@ export default function CourseCard({ course, isSubscribed }: CourseCardProps) {
       <Card
         isPressable
         className="bg-background w-full border-1.5 border-default-200"
-        shadow="sm"
+        shadow="none"
         onPress={() => {
           navigate({ to: `/courses/${course.id}` });
         }}

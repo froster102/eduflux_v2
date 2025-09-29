@@ -22,7 +22,7 @@ export default function ProfileCard({
     <Card
       className="bg-background border border-default-200 w-full"
       radius="sm"
-      shadow="sm"
+      shadow="none"
     >
       <CardHeader>
         <User

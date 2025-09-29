@@ -32,7 +32,7 @@ function RouteComponent() {
     useGetCourseInfo(courseId);
   const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetPublishedCourseCurriculum(courseId);
-  const { data: instructorProfile, isLoading: isInstructorProfileLoading } =
+  const { data: instructor, isLoading: isInstructorProfileLoading } =
     useGetInstructorProfile(courseInfo?.instructor.id!);
   const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
@@ -103,8 +103,11 @@ function RouteComponent() {
         <p className="text-2xl font-semibold pt-4">{courseInfo?.title}</p>
       )}
       <div className="flex flex-col lg:flex-row gap-4 w-full pt-4">
-        <div className="flex flex-col gap-2">
-          <Card className="w-full h-fit bg-background border border-default-200">
+        <div className="flex flex-col gap-2 max-w-4xl">
+          <Card
+            className="w-full h-fit bg-background border border-default-200"
+            shadow="none"
+          >
             <CardBody className="flex lg:flex-row w-full gap-4">
               <div>
                 {" "}
@@ -192,17 +195,16 @@ function RouteComponent() {
                         isBordered
                         radius="full"
                         size="md"
-                        src={`${IMAGE_BASE_URL}${instructorProfile?.image}`}
+                        src={`${IMAGE_BASE_URL}${instructor?.profile.image}`}
                       />
                       <p className="text-xl font-semibold">
-                        {instructorProfile?.firstName}{" "}
-                        {instructorProfile?.lastName}
+                        {instructor?.profile.name}
                       </p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardBody className="pt-0">
-                  <p className="text-sm">{instructorProfile?.bio}</p>
+                  <p className="text-sm">{instructor?.profile?.bio}</p>
                 </CardBody>
                 <CardFooter className="pt-0">
                   <Button color="primary">Learn more..</Button>
@@ -225,7 +227,7 @@ function RouteComponent() {
               <div className="pt-2">
                 <Card
                   className="bg-transparent border border-default-200"
-                  shadow="sm"
+                  shadow="none"
                 >
                   <CardBody>
                     {courseCurriculum &&

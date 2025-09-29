@@ -41,8 +41,11 @@ export default function ChatLayout({ role }: ChatLayoutProps) {
           </Suspense>
         </ErrorBoundary>
       ) : (
-        <Card className="hidden xl:flex justify-center items-center w-full h-full bg-background border border-default-200">
-          <Chip> Select a chat to start messaging</Chip>
+        <Card
+          className="hidden xl:flex justify-center items-center w-full h-full bg-background border border-default-200"
+          shadow="none"
+        >
+          <Chip>Select a chat to start messaging</Chip>
         </Card>
       )}
     </div>
