@@ -81,7 +81,10 @@ export class CreateChatService implements CreateChatUseCase {
       data: chatUseCaseDto,
     };
 
-    await this.eventBus.sendEvent(userChatCreatedEvent);
+    await this.eventBus.sendEvent({
+      ...userChatCreatedEvent,
+      entityId: userChatCreatedEvent.data.id,
+    });
 
     return chatUseCaseDto;
   }

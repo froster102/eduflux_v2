@@ -158,11 +158,17 @@ export class UpdateInstructorSessionSettingsService
           },
         };
 
-        await this.eventBus.sendEvent(sessionSettingsUpdateEvent);
+        await this.eventBus.sendEvent({
+          ...sessionSettingsUpdateEvent,
+          entityId: foundSessionSettings.id,
+        });
         this.logger.info("Updated instructor's session settings.");
       });
     } else {
-      await this.eventBus.sendEvent(sessionSettingsUpdateEvent);
+      await this.eventBus.sendEvent({
+        ...sessionSettingsUpdateEvent,
+        entityId: foundSessionSettings.id,
+      });
       await this.sessionSettingsRepository.update(
         foundSessionSettings.id,
         foundSessionSettings,

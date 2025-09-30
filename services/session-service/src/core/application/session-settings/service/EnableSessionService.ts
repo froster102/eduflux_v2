@@ -63,7 +63,10 @@ export class EnableSessionService implements EnableSessionsUseCase {
         },
       };
 
-      await this.eventBus.sendEvent(sessionSettingsUpdateEvent);
+      await this.eventBus.sendEvent({
+        ...sessionSettingsUpdateEvent,
+        entityId: sessionSettings.id,
+      });
     });
 
     return;

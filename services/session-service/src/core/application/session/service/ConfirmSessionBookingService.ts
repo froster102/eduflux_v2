@@ -34,6 +34,7 @@ export class ConfirmSessionBookingService
     await this.eventBus.sendEvent({
       type: SessionEvents.SESSION_CONFIRMED,
       correlationId: '',
+      entityId: session.id,
       data: {
         sessionId: session.id,
         learnerId: session.learnerId,

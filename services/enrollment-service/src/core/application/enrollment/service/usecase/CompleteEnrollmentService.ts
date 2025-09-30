@@ -32,6 +32,7 @@ export class CompleteEnrollmentService implements CompleteEnrollmentUseCase {
     await this.eventBus.sendEvent({
       type: EnrollmentEvents.ENROLLMENT_SUCESS,
       correlationId: '',
+      entityId: enrollment.id,
       data: {
         courseId: enrollment.courseId,
         enrollmentId: enrollment.id,

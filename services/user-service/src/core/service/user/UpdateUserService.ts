@@ -49,6 +49,7 @@ export class UpdateUserService implements UpdateUserUseCase {
       await this.instructorRepository.save(newInstructor);
       await this.eventBusPort.sendEvent({
         correlationId: '',
+        entityId: newInstructor.getId(),
         ...InstructorCreatedEvent.new({
           id: newInstructor.getId(),
           type: InstructorEvents.INSTRUCTOR_CREATED,
@@ -74,6 +75,7 @@ export class UpdateUserService implements UpdateUserUseCase {
     if (updatedUser) {
       await this.eventBusPort.sendEvent({
         correlationId: '',
+        entityId: user.getId(),
         ...UserUpdatedEvent.new({
           type: UserEvents.USER_UPDATED,
           id: user.getId(),
