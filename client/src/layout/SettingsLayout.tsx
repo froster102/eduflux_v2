@@ -11,7 +11,7 @@ interface SettingsLayoutProps {
   user: User;
   tabKeys: string[];
   selectedTab: string;
-  setSelectedTab: (tabKey: string) => void;
+  onTabChange: (tabKey: string) => void;
   getSelectedTab: (tabKey: string) => React.ReactNode;
   sessions?: Session[];
   isSessionsLoading: boolean;
@@ -21,7 +21,7 @@ export default function SettingsLayout({
   user,
   tabKeys,
   selectedTab,
-  setSelectedTab,
+  onTabChange,
   getSelectedTab,
   sessions,
   isSessionsLoading,
@@ -84,7 +84,7 @@ export default function SettingsLayout({
                 }}
                 selectedKey={selectedTab}
                 variant={"underlined"}
-                onSelectionChange={(key) => setSelectedTab(key.toString())}
+                onSelectionChange={(key) => onTabChange(key.toString())}
               >
                 {tabKeys.map((key) => (
                   <Tab key={key} title={key} />

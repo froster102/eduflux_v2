@@ -4,12 +4,13 @@ import { Selection } from "@heroui/table";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import { useAuthStore } from "@/store/auth-store";
+// eslint-disable-next-line boundaries/element-types
 import { useBecomeAInstructor } from "@/features/instructor/hooks/useBecomeAInstructor";
 import AcademicIcon from "@/components/icons/AcademicIcon";
 import LearnerIcon from "@/components/icons/LearnerIcon";
 import { useChatStore } from "@/store/useChatStore";
 
-import ConfirmationModal from "../../../components/ConfirmationModal";
+import ConfirmationModal from "./ConfirmationModal";
 
 export default function RoleSwitcher() {
   const location = useLocation();
@@ -58,8 +59,7 @@ export default function RoleSwitcher() {
   return (
     <>
       <Select
-        aria-label="Select view"
-        className="max-w-xs pt-4"
+        aria-label="Select role"
         items={roles}
         renderValue={(items) => {
           return items.map((item) => (

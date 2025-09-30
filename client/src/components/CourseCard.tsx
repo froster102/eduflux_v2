@@ -1,6 +1,5 @@
 import { Card, CardBody } from "@heroui/card";
 import { Image } from "@heroui/image";
-import { useNavigate } from "@tanstack/react-router";
 import { Chip } from "@heroui/chip";
 import { Button } from "@heroui/button";
 
@@ -11,11 +10,14 @@ import { courseLevelMap } from "@/config/course-level";
 interface CourseCardProps {
   course: Course;
   isSubscribed?: boolean;
+  onPress?: (course: Course) => void;
 }
 
-export default function CourseCard({ course, isSubscribed }: CourseCardProps) {
-  const navigate = useNavigate();
-
+export default function CourseCard({
+  course,
+  isSubscribed,
+  onPress,
+}: CourseCardProps) {
   return (
     <>
       <Card
@@ -23,7 +25,9 @@ export default function CourseCard({ course, isSubscribed }: CourseCardProps) {
         className="bg-background w-full border-1.5 border-default-200"
         shadow="none"
         onPress={() => {
-          navigate({ to: `/courses/${course.id}` });
+          if (onPress) {
+            onPress(course);
+          }
         }}
       >
         <CardBody className="p-2 grid grid-cols-3 sm:flex sm:flex-col gap-2 overflow-hidden">

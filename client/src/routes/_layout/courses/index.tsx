@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 import { Spinner } from "@heroui/spinner";
 import { Tab, Tabs } from "@heroui/tabs";
@@ -15,6 +15,7 @@ function RouteComponent() {
   const [searchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(8);
+  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = React.useState<
     "all-courses" | "my-courses"
   >("all-courses");
@@ -46,6 +47,10 @@ function RouteComponent() {
 
   const totalPages = currentTotal ? Math.ceil(currentTotal.total / limit) : 0;
 
+  const onPressHanlder = (course: Course) => {
+    navigate({ to: `/courses/${course.id}` });
+  };
+
   return (
     <div className="w-full">
       <div>
@@ -69,6 +74,7 @@ function RouteComponent() {
                   currentPage={page}
                   totalPages={totalPages}
                   type="all-course"
+                  onCoursePress={onPressHanlder}
                   onPageChange={(page) => setPage(page)}
                 />
               )}

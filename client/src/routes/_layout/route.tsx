@@ -5,7 +5,6 @@ import CourseIcon from "@/components/icons/CourseIcon";
 import SessionIcon from "@/components/icons/SessionIcon";
 import MessageIcon from "@/components/icons/MessageIcon";
 import InstructorIcon from "@/components/icons/InstructorIcon";
-import SettingsIcon from "@/components/icons/SettingsIcon";
 import DefaultLayout from "@/layout/DefaultLayout";
 
 export const Route = createFileRoute("/_layout")({
@@ -15,7 +14,7 @@ export const Route = createFileRoute("/_layout")({
 function Layout() {
   const navItems = [
     {
-      path: "/home",
+      path: `/home`,
       icon: <HomeIcon width={24} />,
       label: "Home",
     },
@@ -38,11 +37,6 @@ function Layout() {
       path: "/chats",
       icon: <MessageIcon width={24} />,
       label: "Chats",
-    },
-    {
-      path: "/settings",
-      icon: <SettingsIcon width={24} />,
-      label: "Settings",
     },
   ];
 

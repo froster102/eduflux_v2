@@ -1,18 +1,17 @@
 import { Button } from "@heroui/button";
-import { Divider } from "@heroui/divider";
 import { Input } from "@heroui/input";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import debounce from "lodash.debounce";
 import React from "react";
 import { Pagination } from "@heroui/pagination";
 import { Spinner } from "@heroui/spinner";
 
 import { SearchIcon } from "@/components/Icons";
-import CourseListCard from "@/features/course/components/CourseListCard";
 import FormModal from "@/components/FormModal";
 import { useCreateCourse } from "@/features/course/hooks/useCreateCourse";
 import { useGetInstructorCourses } from "@/features/course/hooks/useGetInstructorCourses";
 import CreateCourseForm from "@/features/course/components/forms/CreateCourseForm";
+import CoursesList from "@/features/course/components/CoursesList";
 
 export const Route = createFileRoute("/instructor/_layout/courses/")({
   component: RouteComponent,
@@ -22,6 +21,7 @@ function RouteComponent() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
   const createCourse = useCreateCourse();
+  const navigate = useNavigate();
 
   const { data, isLoading } = useGetInstructorCourses({
     page,
@@ -48,15 +48,12 @@ function RouteComponent() {
     setOpenCreateCourseModal(false);
   }
 
+  function onPressHanlder(course: Course) {
+    navigate({ to: `/instructor/courses/${course.id}/manage` });
+  }
+
   return (
     <>
-      <div>
-        <p className="text-3xl font-bold">Courses</p>
-        <small className="text-sm text-default-500">
-          Below are the list of your courses
-        </small>
-      </div>
-      <Divider className="mt-2" orientation="horizontal" />
       <div className="max-w-6xl w-full overflow-y-auto scrollbar-hide">
         <div className="flex pt-4 justify-between items-center">
           <Input
@@ -80,12 +77,16 @@ function RouteComponent() {
               <Spinner />
             </div>
           ) : (
-            data &&
-            data.courses.map((course, i) => (
-              <div key={course.id} className={`${i !== 0} pt-4`}>
-                <CourseListCard course={course} />
-              </div>
-            ))
+            data && (
+              <CoursesList
+                courses={data!.courses}
+                currentPage={page}
+                totalPages={totalPages}
+                type="all-course"
+                onCoursePress={onPressHanlder}
+                onPageChange={(page) => setPage(page)}
+              />
+            )
           )}
         </div>
         <div className="flex justify-center pt-4 items-center gap-2">

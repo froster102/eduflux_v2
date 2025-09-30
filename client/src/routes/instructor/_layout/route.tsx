@@ -1,8 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { User } from "@heroui/user";
 
-import { useAuthStore } from "@/store/auth-store";
-import RoleSwitcher from "@/features/instructor/components/RoleSwitcher";
 import HomeIcon from "@/components/icons/HomeIcon";
 import CourseIcon from "@/components/icons/CourseIcon";
 import SessionIcon from "@/components/icons/SessionIcon";
@@ -14,18 +11,6 @@ export const Route = createFileRoute("/instructor/_layout")({
 });
 
 function Layout() {
-  const { user } = useAuthStore();
-
-  const topContent = (
-    <>
-      <div className="flex justify-between w-full px-2">
-        <User className="text-default-500" name={user && user.name} />
-        {/* <Notifications /> */}
-      </div>
-      <RoleSwitcher />
-    </>
-  );
-
   const navItems = [
     {
       path: "/instructor",
@@ -51,7 +36,7 @@ function Layout() {
 
   return (
     <>
-      <DefaultLayout navItems={navItems} topContent={topContent}>
+      <DefaultLayout navItems={navItems}>
         <Outlet />
       </DefaultLayout>
     </>

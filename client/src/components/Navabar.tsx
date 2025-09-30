@@ -1,6 +1,5 @@
 import { Tab, Tabs } from "@heroui/tabs";
-import { useLocation } from "@tanstack/react-router";
-import { useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
 interface NavabarProps {
@@ -13,15 +12,26 @@ interface NavabarProps {
 
 export default function Navbar({ navItems }: NavabarProps) {
   const location = useLocation();
-
-  const routeRoleSegment = location.pathname.split("/")[2];
-
-  const header =
-    routeRoleSegment === "instructor" || routeRoleSegment === "admin"
-      ? location.pathname.split("/")[2]
-      : location.pathname.split("/")[1];
-
   const navigate = useNavigate();
+
+  const activeRouteKey = React.useMemo(() => {
+    return (
+      navItems.find((item) => item.path.startsWith(location.pathname))?.path ||
+      ""
+    );
+  }, [location.pathname, navItems]);
+
+  const handleSelectionChange = React.useCallback(
+    (key: React.Key) => {
+      const targetPath = key.toString();
+
+      navigate({
+        to: targetPath,
+        replace: true,
+      });
+    },
+    [navigate],
+  );
 
   return (
     <nav>
@@ -36,10 +46,9 @@ export default function Navbar({ navItems }: NavabarProps) {
           tabContent: "group-data-[selected=true]:text-default-500",
         }}
         color="primary"
+        selectedKey={activeRouteKey}
         variant="underlined"
-        onSelectionChange={(key) => {
-          navigate({ to: key.toString() });
-        }}
+        onSelectionChange={handleSelectionChange}
       >
         {navItems.map((navItem) => (
           <Tab

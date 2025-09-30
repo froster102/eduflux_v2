@@ -1,20 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
-import SettingsLayout from "@/layout/SetingsLayout";
+import SettingsLayout from "@/layout/SettingsLayout";
 import ProfileTab from "@/features/profile/components/ProfileTab";
 import AccountTab from "@/features/account/components/AccountTab";
 import { useAuthStore } from "@/store/auth-store";
 import { useGetUserSessions } from "@/features/account/hooks/useGetUserSessions";
 import SessionSettingsTab from "@/features/session/components/SessionSettingsTab";
+import { tabSchema } from "@/utils/schema/tabSchema";
 
 export const Route = createFileRoute("/_layout/settings/")({
   component: RouteComponent,
+  validateSearch: tabSchema,
 });
+
+type TabType = "profile" | "account" | "session";
 
 function RouteComponent() {
   const { user } = useAuthStore();
-  const [selectedTab, setSelectedTab] = React.useState("profile");
+  const { tab } = Route.useSearch();
+  const navigate = useNavigate();
+
   const { data: sessions, isLoading: isSessionsLoading } = useGetUserSessions();
 
   const tabKeys = [
@@ -23,7 +29,7 @@ function RouteComponent() {
     ...(user && user.roles.includes("INSTRUCTOR") ? ["session"] : []),
   ];
 
-  const tabs: Record<string, React.ReactNode> = React.useMemo(() => {
+  const tabs: Record<TabType, React.ReactNode> = React.useMemo(() => {
     return {
       profile: <ProfileTab />,
       account: <AccountTab />,
@@ -31,19 +37,23 @@ function RouteComponent() {
     };
   }, []);
 
-  const getSelectedTab = (key: string) => {
+  const getSelectedTab = (key: TabType) => {
     return tabs[key];
+  };
+
+  const updateTab = (key: TabType) => {
+    navigate({ to: `/settings?tab=${key}` });
   };
 
   return (
     <SettingsLayout
-      getSelectedTab={getSelectedTab}
+      getSelectedTab={(key) => getSelectedTab(key as TabType)}
       isSessionsLoading={isSessionsLoading}
-      selectedTab={selectedTab}
+      selectedTab={tab}
       sessions={sessions}
-      setSelectedTab={(key) => setSelectedTab(key)}
       tabKeys={tabKeys}
       user={user!}
+      onTabChange={(key) => updateTab(key as TabType)}
     />
   );
 }

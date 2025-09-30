@@ -30,7 +30,7 @@ export default function DefaultLayout({
         <div className="flex flex-col gap-4 w-full h-full container">
           <div className="flex flex-col w-full h-full flex-1 overflow-hidden">
             <div className="flex-1 overflow-y-auto min-h-0 scrollbar-hide">
-              <div className="h-full px-4">{children}</div>
+              <div className="h-full px-4 pb-4">{children}</div>
             </div>
           </div>
         </div>

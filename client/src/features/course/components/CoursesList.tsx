@@ -7,6 +7,7 @@ interface CoursesListProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   type: "all-course" | "my-courses";
+  onCoursePress: (course: Course) => void;
 }
 
 export default function CoursesList({
@@ -15,6 +16,7 @@ export default function CoursesList({
   onPageChange,
   totalPages,
   type,
+  onCoursePress,
 }: CoursesListProps) {
   return (
     <div>
@@ -24,6 +26,11 @@ export default function CoursesList({
             key={course.id}
             course={course}
             isSubscribed={type === "my-courses"}
+            onPress={() => {
+              if (onCoursePress) {
+                onCoursePress(course);
+              }
+            }}
           />
         ))}
       </div>
