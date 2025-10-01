@@ -6,7 +6,6 @@ import ProfileTab from "@/features/profile/components/ProfileTab";
 import AccountTab from "@/features/account/components/AccountTab";
 import { useAuthStore } from "@/store/auth-store";
 import { useGetUserSessions } from "@/features/account/hooks/useGetUserSessions";
-import SessionSettingsTab from "@/features/session/components/SessionSettingsTab";
 import { tabSchema } from "@/utils/schema/tabSchema";
 
 export const Route = createFileRoute("/_layout/settings/")({
@@ -14,7 +13,7 @@ export const Route = createFileRoute("/_layout/settings/")({
   validateSearch: tabSchema,
 });
 
-type TabType = "profile" | "account" | "session";
+type TabType = "profile" | "account";
 
 function RouteComponent() {
   const { user } = useAuthStore();
@@ -23,17 +22,12 @@ function RouteComponent() {
 
   const { data: sessions, isLoading: isSessionsLoading } = useGetUserSessions();
 
-  const tabKeys = [
-    "profile",
-    "account",
-    ...(user && user.roles.includes("INSTRUCTOR") ? ["session"] : []),
-  ];
+  const tabKeys = ["profile", "account"];
 
   const tabs: Record<TabType, React.ReactNode> = React.useMemo(() => {
     return {
       profile: <ProfileTab />,
       account: <AccountTab />,
-      session: <SessionSettingsTab />,
     };
   }, []);
 

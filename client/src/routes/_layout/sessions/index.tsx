@@ -14,6 +14,7 @@ import { useGetUserSessions } from "@/features/session/hooks/useGetUserSessions"
 import { formatSessionDataTime } from "@/utils/date";
 import { IMAGE_BASE_URL } from "@/config/image";
 import PaginationWithNextAndPrevious from "@/components/Pagination";
+import { Role } from "@/shared/enums/Role";
 
 export const Route = createFileRoute("/_layout/sessions/")({
   validateSearch: sessionSearchSchema,
@@ -29,7 +30,7 @@ function RouteComponent() {
   const [page, setPage] = React.useState(1);
   const { data: sessionsQueryResult } = useGetUserSessions({
     page,
-    type: "learner",
+    preferedRole: Role.LEARNER,
   });
 
   return (

@@ -47,8 +47,6 @@ declare global {
     updatedAt: string;
   };
 
-  export type Role = "ADMIN" | "LEARNER" | "INSTRUCTOR";
-
   export type SessionStatus =
     | "PENDING_PAYMENT"
     | "BOOKED"

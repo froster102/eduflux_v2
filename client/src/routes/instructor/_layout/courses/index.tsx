@@ -54,7 +54,7 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="max-w-6xl w-full overflow-y-auto scrollbar-hide">
+      <div className="w-full overflow-y-auto scrollbar-hide">
         <div className="flex pt-4 justify-between items-center">
           <Input
             isClearable

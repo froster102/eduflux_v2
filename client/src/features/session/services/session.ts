@@ -1,4 +1,6 @@
 import api from "@/lib/axios";
+import { buildQueryUrlParams } from "@/utils/helpers";
+import { Role } from "@/shared/enums/Role";
 
 import { SessionSettingsFormData } from "../validation/session-schema";
 
@@ -17,9 +19,16 @@ export async function bookSession(data: {
 }
 
 export async function getUserSessions(
-  queryParameters: QueryParmeters & { type: "learner" | "instructor" },
+  queryParameters?: QueryParmeters & {
+    preferedRole: Role.INSTRUCTOR | Role.LEARNER;
+  },
 ): Promise<GetUserSessionsResult> {
-  const response = await api.get("/query/sessions/");
+  let queryString = "";
+
+  if (queryParameters) {
+    queryString = buildQueryUrlParams(queryParameters);
+  }
+  const response = await api.get(`/query/sessions${queryString}`);
 
   return response.data;
 }
