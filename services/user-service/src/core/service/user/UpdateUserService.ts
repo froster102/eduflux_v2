@@ -8,9 +8,9 @@ import { Instructor } from '@core/domain/instructor/entity/Instructor';
 import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
 import type { InstructorRepositoryPort } from '@core/domain/instructor/port/persistence/InstructorRepositoryPort';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
-import { InstructorCreatedEvent } from '@core/domain/user/events/InstructorCreatedEvent';
+import type { InstructorCreatedEvent } from '@core/domain/user/events/InstructorCreatedEvent';
 import { UserEvents } from '@core/domain/user/events/UserEvents';
-import { UserUpdatedEvent } from '@core/domain/user/events/UserUpdatedEvent';
+import type { UserUpdatedEvent } from '@core/domain/user/events/UserUpdatedEvent';
 import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
 import type { UpdateUserPort } from '@core/domain/user/port/usecase/UpdateUserPort';
 import { UserDto } from '@core/domain/user/usecase/dto/UserDto';
@@ -47,23 +47,22 @@ export class UpdateUserService implements UpdateUserUseCase {
         totalLearners: 0,
       });
       await this.instructorRepository.save(newInstructor);
-      await this.eventBusPort.sendEvent({
-        correlationId: '',
-        entityId: newInstructor.getId(),
-        ...InstructorCreatedEvent.new({
-          id: newInstructor.getId(),
-          type: InstructorEvents.INSTRUCTOR_CREATED,
-          profile: {
-            name: user.getFullName(),
-            bio: user.getBio(),
-            image: user.getImage(),
-          },
-          sessionsConducted: 0,
-          totalCourses: 0,
-          totalLearners: 0,
-          occuredAt: new Date().toISOString(),
-        }),
-      });
+
+      const instructorCreatedEvent: InstructorCreatedEvent = {
+        id: newInstructor.getId(),
+        type: InstructorEvents.INSTRUCTOR_CREATED,
+        profile: {
+          name: user.getFullName(),
+          bio: user.getBio(),
+          image: user.getImage(),
+        },
+        sessionsConducted: 0,
+        totalCourses: 0,
+        totalLearners: 0,
+        occuredAt: new Date().toISOString(),
+      };
+
+      await this.eventBusPort.sendEvent(instructorCreatedEvent);
     }
 
     user.update(payload);
@@ -73,18 +72,15 @@ export class UpdateUserService implements UpdateUserUseCase {
     const updatedUser = await this.userRepository.update(payload.id, user);
 
     if (updatedUser) {
-      await this.eventBusPort.sendEvent({
-        correlationId: '',
-        entityId: user.getId(),
-        ...UserUpdatedEvent.new({
-          type: UserEvents.USER_UPDATED,
-          id: user.getId(),
-          image: user.getImage(),
-          name: user.getFullName(),
-          bio: user.getBio(),
-          occuredAt: new Date().toISOString(),
-        }),
-      });
+      const userUpdatedEvent: UserUpdatedEvent = {
+        id: user.getId(),
+        type: UserEvents.USER_UPDATED,
+        image: user.getImage(),
+        name: user.getFullName(),
+        bio: user.getBio(),
+        occuredAt: new Date().toISOString(),
+      };
+      await this.eventBusPort.sendEvent(userUpdatedEvent);
     }
 
     return UserDto.fromEntity(user);
