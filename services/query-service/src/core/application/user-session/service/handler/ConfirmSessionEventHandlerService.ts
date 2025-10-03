@@ -4,7 +4,7 @@ import type { UserSessionRepositoryPort } from "@core/application/user-session/p
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { UserServicePort } from "@core/common/port/gateway/UserServicePort";
 import { UserSession } from "@core/domain/user-session/entity/UserSession";
-import type { ConfirmSessionEvent } from "@shared/events/ConfirmSessionEvent";
+import type { SessionConfimedEvent } from "@core/domain/user-session/events/ConfirmSessionEvent";
 import { inject } from "inversify";
 
 export class ConfirmSessionEventHandlerService
@@ -17,22 +17,14 @@ export class ConfirmSessionEventHandlerService
     private readonly userService: UserServicePort,
   ) {}
 
-  async handle(event: ConfirmSessionEvent): Promise<void> {
-    const {
-      learnerId,
-      instructorId,
-      sessionId,
-      createdAt,
-      updatedAt,
-      status,
-      endTime,
-      startTime,
-    } = event.data;
+  async handle(event: SessionConfimedEvent): Promise<void> {
+    const { learnerId, instructorId, sessionId, status, endTime, startTime } =
+      event;
     const learner = await this.userService.getUser(learnerId);
     const instructor = await this.userService.getUser(instructorId);
 
     const userSession = UserSession.new({
-      ...event.data,
+      ...event,
       learner: {
         ...learner,
         name: learner.firstName + " " + learner.lastName,
@@ -43,8 +35,8 @@ export class ConfirmSessionEventHandlerService
       },
       id: sessionId,
       status: status,
-      createdAt: new Date(createdAt),
-      updatedAt: new Date(updatedAt),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       startTime: new Date(startTime),
       endTime: new Date(endTime),
     });

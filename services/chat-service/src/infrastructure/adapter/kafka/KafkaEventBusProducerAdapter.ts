@@ -38,7 +38,7 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
     }
   }
 
-  async sendEvent<TEvent extends { type: string; entityId: string }>(
+  async sendEvent<TEvent extends { type: string; id: string }>(
     event: TEvent,
   ): Promise<void> {
     const messageValue = JSON.stringify(event);
@@ -62,7 +62,7 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
         topic,
         messages: [
           {
-            key: event.entityId,
+            key: event.id,
             value: messageValue,
             headers: {
               //attach correlation id from async store

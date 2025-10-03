@@ -38,7 +38,7 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
     }
   }
 
-  async sendEvent<TEvent extends { type: string; entityId: string }>(
+  async sendEvent<TEvent extends { type: string; id: string }>(
     event: TEvent,
   ): Promise<void> {
     const messageValue = JSON.stringify(event);

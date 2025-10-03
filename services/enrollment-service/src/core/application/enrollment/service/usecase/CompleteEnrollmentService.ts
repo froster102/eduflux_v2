@@ -1,5 +1,5 @@
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
-import { EnrollmentEvents } from '@core/application/enrollment/events/EnrollmentEvents';
+import { EnrollmentEvents } from '@core/domain/enrollment/events/enum/EnrollmentEvents';
 import { EnrollmentNotFoundException } from '@core/application/enrollment/exception/EnrollmentNotFoundException';
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
 import type { CompleteEnrollmentPort } from '@core/application/enrollment/port/usecase/CompleteEnrollmentPort';
@@ -7,6 +7,7 @@ import type { CompleteEnrollmentUseCase } from '@core/application/enrollment/use
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { EventBusPort } from '@core/common/port/message/EventBusPort';
 import { inject } from 'inversify';
+import type { EnrollmentSuccessEvent } from '@core/domain/enrollment/events/EnrollmentSuccessEvent';
 
 export class CompleteEnrollmentService implements CompleteEnrollmentUseCase {
   constructor(
@@ -29,17 +30,15 @@ export class CompleteEnrollmentService implements CompleteEnrollmentUseCase {
     enrollment.markAsCompleted(paymentId);
 
     await this.enrollmentRepository.update(enrollment.id, enrollment);
-    await this.eventBus.sendEvent({
+    const enrollmentSuccessEvent: EnrollmentSuccessEvent = {
+      id: enrollment.id,
       type: EnrollmentEvents.ENROLLMENT_SUCESS,
-      correlationId: '',
-      entityId: enrollment.id,
-      data: {
-        courseId: enrollment.courseId,
-        enrollmentId: enrollment.id,
-        occuredAt: enrollment.updatedAt.toISOString(),
-        userId: enrollment.userId,
-        path: `/courses/${enrollment.courseId}`,
-      },
-    });
+      courseId: enrollment.courseId,
+      enrollmentId: enrollment.id,
+      occuredAt: enrollment.updatedAt.toISOString(),
+      userId: enrollment.userId,
+      path: `/courses/${enrollment.courseId}`,
+    };
+    await this.eventBus.sendEvent(enrollmentSuccessEvent);
   }
 }

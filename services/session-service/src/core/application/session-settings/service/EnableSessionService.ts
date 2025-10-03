@@ -53,19 +53,19 @@ export class EnableSessionService implements EnableSessionsUseCase {
 
       const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
         type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
-        data: {
-          currency: sessionSettings.currency,
-          duration: sessionSettings.duration,
-          instructorId: sessionSettings.instructorId,
-          isSchedulingEnabled: true,
-          price: sessionSettings.price,
-          timeZone: sessionSettings.timeZone,
-        },
+        currency: sessionSettings.currency,
+        duration: sessionSettings.duration,
+        instructorId: sessionSettings.instructorId,
+        isSchedulingEnabled: true,
+        price: sessionSettings.price,
+        timeZone: sessionSettings.timeZone,
+        id: sessionSettings.id,
+        occuredAt: new Date().toISOString(),
       };
 
       await this.eventBus.sendEvent({
         ...sessionSettingsUpdateEvent,
-        entityId: sessionSettings.id,
+        id: sessionSettings.id,
       });
     });
 

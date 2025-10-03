@@ -26,7 +26,7 @@ export class UserChatCreatedEventHandlerService
   }
 
   async handle(event: UserChatCreatedEvent): Promise<void> {
-    const { id, participants, lastMessageAt, createdAt } = event.data;
+    const { id, participants, lastMessageAt, createdAt } = event;
 
     try {
       const participantsData = await Promise.all(

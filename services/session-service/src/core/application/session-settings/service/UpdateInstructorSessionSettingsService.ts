@@ -77,14 +77,14 @@ export class UpdateInstructorSessionSettingsService
 
     const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
       type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
-      data: {
-        currency: foundSessionSettings.currency,
-        duration: foundSessionSettings.duration,
-        instructorId: foundSessionSettings.instructorId,
-        isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
-        price: foundSessionSettings.price,
-        timeZone: foundSessionSettings.timeZone,
-      },
+      currency: foundSessionSettings.currency,
+      duration: foundSessionSettings.duration,
+      instructorId: foundSessionSettings.instructorId,
+      isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
+      price: foundSessionSettings.price,
+      timeZone: foundSessionSettings.timeZone,
+      id: foundSessionSettings.id,
+      occuredAt: new Date().toISOString(),
     };
 
     if (shouldRegenrateSlots) {
@@ -148,26 +148,26 @@ export class UpdateInstructorSessionSettingsService
 
         const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
           type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
-          data: {
-            currency: foundSessionSettings.currency,
-            duration: foundSessionSettings.duration,
-            instructorId: foundSessionSettings.instructorId,
-            isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
-            price: foundSessionSettings.price,
-            timeZone: foundSessionSettings.timeZone,
-          },
+          currency: foundSessionSettings.currency,
+          duration: foundSessionSettings.duration,
+          instructorId: foundSessionSettings.instructorId,
+          isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
+          price: foundSessionSettings.price,
+          timeZone: foundSessionSettings.timeZone,
+          id: foundSessionSettings.id,
+          occuredAt: new Date().toISOString(),
         };
 
         await this.eventBus.sendEvent({
           ...sessionSettingsUpdateEvent,
-          entityId: foundSessionSettings.id,
+          id: foundSessionSettings.id,
         });
         this.logger.info("Updated instructor's session settings.");
       });
     } else {
       await this.eventBus.sendEvent({
         ...sessionSettingsUpdateEvent,
-        entityId: foundSessionSettings.id,
+        id: foundSessionSettings.id,
       });
       await this.sessionSettingsRepository.update(
         foundSessionSettings.id,

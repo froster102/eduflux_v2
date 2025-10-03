@@ -1,4 +1,5 @@
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
+import { ChatEvents } from "@core/application/chat/events/enum/ChatEvents";
 import type { UserChatCreatedEvent } from "@core/application/chat/events/UserChatCreatedEvent";
 import { ChatAlreadyExistsException } from "@core/application/chat/exceptions/ChatAlreadyExistsException";
 import { InstructorNotFoundException } from "@core/application/chat/exceptions/InstructorNotFoundException";
@@ -77,14 +78,15 @@ export class CreateChatService implements CreateChatUseCase {
     const chatUseCaseDto = ChatUseCaseDto.fromEntity(chat);
 
     const userChatCreatedEvent: UserChatCreatedEvent = {
-      type: "user.chat.created",
-      data: chatUseCaseDto,
+      type: ChatEvents.USER_CHAT_CREATED,
+      ...chatUseCaseDto,
+      createdAt: chatUseCaseDto.createdAt.toISOString(),
+      lastMessageAt: chatUseCaseDto.lastMessageAt.toISOString(),
+      updatedAt: chatUseCaseDto.updatedAt.toISOString(),
+      occuredAt: new Date().toISOString(),
     };
 
-    await this.eventBus.sendEvent({
-      ...userChatCreatedEvent,
-      entityId: userChatCreatedEvent.data.id,
-    });
+    await this.eventBus.sendEvent(userChatCreatedEvent);
 
     return chatUseCaseDto;
   }

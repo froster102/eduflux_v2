@@ -1,5 +1,5 @@
 import type { UserChatCreatedEvent } from "@core/application/user-chat/events/UserChatCreatedEvent";
-import type { EventHandler } from "@core/common/event/EventHandler";
+import type { EventHandler } from "@core/common/events/EventHandler";
 
 export interface UserChatCreatedEventHandler
   extends EventHandler<UserChatCreatedEvent, void> {}

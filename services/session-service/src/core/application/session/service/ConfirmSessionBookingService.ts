@@ -5,7 +5,8 @@ import type { ConfirmSessionBookingUseCase } from '@core/application/session/use
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
 import type { EventBusPort } from '@core/common/port/message/EventBusPort';
-import { SessionEvents } from '@core/domain/session/events/SessionEvents';
+import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
+import type { SessionConfimedEvent } from '@core/domain/session/events/SessionConfirmedEvent';
 import { inject } from 'inversify';
 
 export class ConfirmSessionBookingService
@@ -31,19 +32,18 @@ export class ConfirmSessionBookingService
     await this.sessionRepository.update(session.id, session);
 
     //Send event to SESSION_TOPIC to trigger notification
-    await this.eventBus.sendEvent({
+    const sessionConfirmedEvent: SessionConfimedEvent = {
       type: SessionEvents.SESSION_CONFIRMED,
-      correlationId: '',
-      entityId: session.id,
-      data: {
-        sessionId: session.id,
-        learnerId: session.learnerId,
-        instructorId: session.instructorId,
-        status: session.status,
-        startTime: session.startTime,
-        endTime: session.endTime,
-        path: `/sessions/${session.id}`,
-      },
-    });
+      id: session.id,
+      sessionId: session.id,
+      learnerId: session.learnerId,
+      instructorId: session.instructorId,
+      status: session.status,
+      startTime: session.startTime.toISOString(),
+      endTime: session.endTime.toISOString(),
+      path: `/sessions/${session.id}`,
+      occuredAt: new Date().toISOString(),
+    };
+    await this.eventBus.sendEvent(sessionConfirmedEvent);
   }
 }
