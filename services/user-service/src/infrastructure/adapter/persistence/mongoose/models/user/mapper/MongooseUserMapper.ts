@@ -1,8 +1,8 @@
 import { User } from '@core/domain/user/entity/User';
-import type { IMongooseUser } from '@infrastructure/adapter/persistence/mongoose/models/user/UserModel';
+import type { MongooseUser } from '@infrastructure/adapter/persistence/mongoose/models/user/MongooseUser';
 
 export class UserMapper {
-  static toDomain(mongooseUser: IMongooseUser): User {
+  static toDomain(mongooseUser: MongooseUser): User {
     const domainUser: User = new User({
       id: mongooseUser._id,
       firstName: mongooseUser.firstName,
@@ -16,8 +16,8 @@ export class UserMapper {
     return domainUser;
   }
 
-  static toPersistence(domainUser: User): Partial<IMongooseUser> {
-    const mongooseUser: Partial<IMongooseUser> = {
+  static toPersistence(domainUser: User): Partial<MongooseUser> {
+    const mongooseUser: Partial<MongooseUser> = {
       _id: domainUser.getId(),
       firstName: domainUser.getFirstName(),
       lastName: domainUser.getLastName(),
@@ -32,7 +32,7 @@ export class UserMapper {
     return mongooseUser;
   }
 
-  static toDomainEntities(raw: IMongooseUser[]): User[] {
+  static toDomainEntities(raw: MongooseUser[]): User[] {
     return raw.map((r) => this.toDomain(r));
   }
 }

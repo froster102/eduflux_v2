@@ -1,9 +1,9 @@
 import { Role } from '@core/common/enums/Role';
-import mongoose, { Model } from 'mongoose';
+import { Document, model, Model } from 'mongoose';
 
 import { Schema } from 'mongoose';
 
-export interface IMongooseUser extends Document {
+export interface MongooseUser extends Document {
   _id: string;
   firstName: string;
   lastName: string;
@@ -31,7 +31,7 @@ const SocialLinkSchema = new Schema(
   { _id: false },
 );
 
-const UserSchema = new Schema<IMongooseUser>(
+const UserSchema = new Schema<MongooseUser>(
   {
     _id: {
       type: String,
@@ -57,7 +57,7 @@ const UserSchema = new Schema<IMongooseUser>(
   { timestamps: true },
 );
 
-export const MongooseUser: Model<IMongooseUser> = mongoose.model<IMongooseUser>(
+export const MongooseUser: Model<MongooseUser> = model<MongooseUser>(
   'User',
   UserSchema,
 );

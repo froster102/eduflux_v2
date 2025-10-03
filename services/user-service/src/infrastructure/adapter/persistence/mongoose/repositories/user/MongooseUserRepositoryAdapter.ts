@@ -7,15 +7,12 @@ import type {
 } from '@core/domain/user/port/persistence/type/UserQueryParameter';
 import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
 import { UserMapper } from '@infrastructure/adapter/persistence/mongoose/models/user/mapper/MongooseUserMapper';
-import {
-  type IMongooseUser,
-  MongooseUser,
-} from '@infrastructure/adapter/persistence/mongoose/models/user/UserModel';
+import { MongooseUser } from '@infrastructure/adapter/persistence/mongoose/models/user/MongooseUser';
 import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
 import type { FilterQuery } from 'mongoose';
 
 export class MongooseUserRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<IMongooseUser, User>
+  extends MongooseBaseRepositoryAdpater<MongooseUser, User>
   implements UserRepositoryPort
 {
   constructor() {
@@ -26,7 +23,7 @@ export class MongooseUserRepositoryAdapter
     queryParameters: UserQueryParameters,
     excludeId?: string,
   ): Promise<UserQueryResults> {
-    const query: FilterQuery<IMongooseUser> = {};
+    const query: FilterQuery<MongooseUser> = {};
 
     if (excludeId) {
       query._id = { $ne: excludeId };
@@ -49,7 +46,7 @@ export class MongooseUserRepositoryAdapter
     currentUserId: string,
     queryParameters: QueryParameters,
   ): Promise<UserQueryResults> {
-    const query: FilterQuery<IMongooseUser> = {
+    const query: FilterQuery<MongooseUser> = {
       roles: { $in: [Role.INSTRUCTOR] },
       _id: { $ne: currentUserId },
     };
