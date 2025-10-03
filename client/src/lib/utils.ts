@@ -16,3 +16,26 @@ export function testLoadingWithPromise(duration: number) {
     }, duration),
   );
 }
+
+export function isLowPowerDevice() {
+  return navigator.hardwareConcurrency < 6;
+}
+
+export function roomOptionsStringifyReplacer(key: string, val: unknown) {
+  if (key === "processor" && val && typeof val === "object" && "name" in val) {
+    return val.name;
+  }
+  if (key === "e2ee" && val) {
+    return "e2ee-enabled";
+  }
+
+  return val;
+}
+
+export function encodePassphrase(passphrase: string) {
+  return encodeURIComponent(passphrase);
+}
+
+export function decodePassphrase(base64String: string) {
+  return decodeURIComponent(base64String);
+}

@@ -105,3 +105,7 @@ export const sessionQueryParametersSchema = z.object({
   filters: sessionFiltersSchema,
   type: z.enum(['learner', 'instructor']).default('learner'),
 });
+
+export const joinSessionSchema = z.object({
+  sessionId: z.string({ error: 'Session id is required' }),
+});

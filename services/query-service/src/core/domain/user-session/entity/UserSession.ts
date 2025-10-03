@@ -6,9 +6,9 @@ import type { SessionStatus } from "@core/domain/user-session/enum/SessionStatus
 export class UserSession extends Entity<string> {
   public readonly startTime: Date;
   public readonly endTime: Date;
-  public readonly status: SessionStatus;
+  public status: SessionStatus;
   public readonly createdAt: Date;
-  public readonly updatedAt: Date;
+  public updatedAt: Date;
 
   public readonly learner: SessionParticipant;
   public readonly instructor: SessionParticipant;
@@ -22,6 +22,10 @@ export class UserSession extends Entity<string> {
     this.updatedAt = payload.updatedAt;
     this.learner = payload.learner;
     this.instructor = payload.instructor;
+  }
+
+  updateStatus(status: SessionStatus): void {
+    this.status = status;
   }
 
   static new(payload: CreateUserSessionPayload): UserSession {

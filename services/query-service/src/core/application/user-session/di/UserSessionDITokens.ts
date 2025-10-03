@@ -8,6 +8,9 @@ export class UserSessionDITokens {
   static readonly ConfirmSessionEventHandler: unique symbol = Symbol(
     "ConfirmSessionEventHandler",
   );
+  static readonly UserSessionUpdatedEventHandler: unique symbol = Symbol(
+    "UserSessionUpdatedEventHandler",
+  );
 
   //Repository
   static readonly UserSessionRepository: unique symbol = Symbol(

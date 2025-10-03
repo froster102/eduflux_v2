@@ -4,6 +4,7 @@ import type { SessionSettingsEvent } from "@core/application/instructor-view/eve
 import type { UserChatCreatedEvent } from "@core/application/user-chat/events/UserChatCreatedEvent";
 import type { UserUpdatedEvent } from "@core/application/user-view/events/UserUpdatedEvent";
 import type { SessionConfimedEvent } from "@core/domain/user-session/events/ConfirmSessionEvent";
+import type { UserSessionUpdatedEvent } from "@core/domain/user-session/events/SessionUpdatedEvent";
 
 export type KafkaEvent =
   | SessionConfimedEvent
@@ -11,4 +12,5 @@ export type KafkaEvent =
   | SessionSettingsEvent
   | InstructorStatsEvent
   | InstructorCreatedEvent
-  | UserUpdatedEvent;
+  | UserUpdatedEvent
+  | UserSessionUpdatedEvent;

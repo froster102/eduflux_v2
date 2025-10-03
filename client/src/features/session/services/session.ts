@@ -48,3 +48,11 @@ export async function updateSessionSettings(
 
   return response.data;
 }
+
+export async function joinSession(
+  sessionId: string,
+): Promise<JoinSessionResponse> {
+  const response = await api.get(`/sessions/${sessionId}/tokens`);
+
+  return response.data;
+}

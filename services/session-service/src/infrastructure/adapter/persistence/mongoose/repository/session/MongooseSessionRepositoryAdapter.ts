@@ -64,4 +64,37 @@ export class MongooseSessionRepositoryAdapter
       sessions: MongooseSessionMapper.toDomainEntities(sessions),
     };
   }
+
+  async findAndUpdateOverdueSessions(
+    statusesToFind: SessionStatus[],
+    scheduledEndTimeBefore: Date,
+    statusToUpdate: SessionStatus,
+  ): Promise<Session[]> {
+    const filter: FilterQuery<MongooseSession> = {
+      status: { $in: statusesToFind },
+      endTime: { $lt: scheduledEndTimeBefore },
+    };
+    console.log(scheduledEndTimeBefore);
+
+    const matchingSessions = await SessionModel.find(filter);
+
+    console.log(matchingSessions);
+    if (matchingSessions.length === 0) {
+      return [];
+    }
+    await SessionModel.updateMany(
+      filter,
+      [
+        {
+          $set: {
+            status: statusToUpdate,
+            updatedAt: new Date(),
+          },
+        },
+      ],
+      { session: this.session },
+    );
+
+    return MongooseSessionMapper.toDomainEntities(matchingSessions);
+  }
 }

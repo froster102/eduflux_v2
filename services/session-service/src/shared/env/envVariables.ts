@@ -28,6 +28,10 @@ const envSchema = z.object({
   PAYMENT_SUCCESS_URL: z.string({ error: 'PAYMENT_SUCCESS_URL is required.' }),
   PAYMENT_CANCEL_URL: z.string({ error: 'PAYMENT_CANCEL_URL is required.' }),
 
+  LIVEKIT_API_KEY: z.string({ error: 'LIVEKIT_API_KEY is required' }),
+  LIVEKIT_API_SECRET: z.string({ error: 'LIVEKIT_API_SECRET is required' }),
+  LIVEKIT_HOST: z.string({ error: 'LIVEKIT_HOST is required' }),
+
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),
   JWKS_URL: z.string({ error: 'JWKS_URL must be a valid URL' }),

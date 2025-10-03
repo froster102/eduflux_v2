@@ -6,6 +6,11 @@ export class InfrastructureDITokens {
     'KafkaEventsConsumer',
   );
 
+  //Webhook handler
+  static readonly LiveKitWebhookHandler: unique symbol = Symbol(
+    'LiveKitWebhookHandler',
+  );
+
   //Cron services
   static readonly CronServices: unique symbol = Symbol('CronServices');
 }

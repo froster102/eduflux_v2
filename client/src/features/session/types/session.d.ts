@@ -39,6 +39,19 @@ declare global {
     sessions: UserSession[];
     pagination: Pagination;
   };
+
+  export type ConnectionDetails = {
+    serverUrl: string;
+    roomName: string;
+    participantName: string;
+    participantToken: string;
+  };
+
+  export type JoinSessionResponse = {
+    roomName: string;
+    participantName: string;
+    participantToken: string;
+  };
 }
 
 export {};

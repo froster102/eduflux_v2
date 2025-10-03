@@ -1,19 +1,12 @@
 import { Button } from "@heroui/button";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Card, CardBody, CardHeader } from "@heroui/card";
-import { User } from "@heroui/user";
-import { Chip } from "@heroui/chip";
 import React from "react";
 import { Tooltip } from "@heroui/tooltip";
 import { Skeleton } from "@heroui/skeleton";
 import { useDisclosure } from "@heroui/modal";
 
 import { useGetUserSessions } from "@/features/session/hooks/useGetUserSessions";
-import { formatSessionDataTime } from "@/utils/date";
-import { IMAGE_BASE_URL } from "@/config/image";
-import ClockIcon from "@/components/icons/ClockIcon";
-import VideoIcon from "@/components/icons/VideoIcon";
-import ReviewIcon from "@/components/icons/ReviewIcon";
 import PaginationWithNextAndPrevious from "@/components/Pagination";
 import { Role } from "@/shared/enums/Role";
 import SettingsIcon from "@/components/icons/SettingsIcon";
@@ -23,6 +16,7 @@ import { useUpdateSessionSettings } from "@/features/session/hooks/useUpdateSess
 import { useEnableSessions } from "@/features/session/hooks/useEnableSession";
 import { SessionSettingsFormData } from "@/features/session/validation/session-schema";
 import { useGetSessionSettings } from "@/features/session/hooks/useGetSessionSettings";
+import SessionCard from "@/features/session/components/SessionCard";
 
 export const Route = createFileRoute("/instructor/_layout/sessions/")({
   component: RouteComponent,
@@ -30,6 +24,7 @@ export const Route = createFileRoute("/instructor/_layout/sessions/")({
 
 function RouteComponent() {
   const [page, setPage] = React.useState(1);
+  const navigate = useNavigate();
   const { data: sessionsQueryResult } = useGetUserSessions({
     page,
     preferedRole: Role.INSTRUCTOR,
@@ -106,6 +101,13 @@ function RouteComponent() {
     );
   }
 
+  const handlerJoinSession = (session: UserSession) => {
+    navigate({
+      to: `/meetings/${session.id}?returnTo=/instructor/sessions`,
+      replace: true,
+    });
+  };
+
   return (
     <>
       <div className="relative h-full">
@@ -119,59 +121,14 @@ function RouteComponent() {
           />
         </Tooltip>
 
-        {sessionsQueryResult?.sessions.map((session) => {
-          const { date, duration, timeRange } = formatSessionDataTime(
-            session.startTime,
-            session.endTime,
-          );
-
-          return (
-            <div key={session.id} className={`pt-2`}>
-              <Card
-                className="border bg-background border-default-300 "
-                shadow="none"
-              >
-                <CardBody>
-                  <div className="flex justify-between items-center">
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <User
-                          avatarProps={{
-                            size: "sm",
-                            src: `${IMAGE_BASE_URL}${session.instructor.image}`,
-                          }}
-                          name={`${session.instructor.name}`}
-                        />
-                        <Chip color="success" variant="flat">
-                          {session.status}
-                        </Chip>
-                      </div>
-                      <p>{date}</p>
-                      <small>{timeRange}</small>
-                      <p className="inline-flex text-xs items-center text-default-700 gap-1">
-                        <ClockIcon width={16} />
-                        {duration}
-                      </p>
-                      <p className="inline-flex text-xs items-center text-default-700 gap-1">
-                        <VideoIcon width={16} />
-                        App
-                      </p>
-                    </div>
-                    <Button
-                      className="text-sm"
-                      color="primary"
-                      size="sm"
-                      startContent={<ReviewIcon width={16} />}
-                      variant="bordered"
-                    >
-                      <p className="text-sm">Write a review</p>
-                    </Button>
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          );
-        })}
+        {sessionsQueryResult &&
+          sessionsQueryResult.sessions.map((session) => (
+            <SessionCard
+              key={session.id}
+              session={session}
+              onJoin={handlerJoinSession}
+            />
+          ))}
         {sessionsQueryResult &&
           sessionsQueryResult.pagination.totalPages > 1 && (
             <div className="pt-4 flex w-full justify-center">

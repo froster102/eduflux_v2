@@ -14,6 +14,10 @@ import { MongooseUnitOfWork } from '@infrastructure/unit-of-work/MongooseUnitOfW
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
 import { CronServices } from '@infrastructure/cron/CronServices';
 import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducerAdapter';
+import type { MeetingServicePort } from '@core/application/session/port/gateway/MeetingServicePort';
+import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
+import { LiveKitMeetingServiceAdapter } from '@infrastructure/adapter/livekit/LiveKitMeeetingServiceAdapter';
+import { LiveKitWebhookHandler } from '@infrastructure/adapter/livekit/LiveKitWebhookHandler';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -47,6 +51,14 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       .bind<UserServicePort>(CoreDITokens.UserService)
       .to(GrpcUserServiceAdapter)
       .inSingletonScope();
+    options
+      .bind<MeetingServicePort>(SessionDITokens.MeetingService)
+      .to(LiveKitMeetingServiceAdapter);
+
+    //Webhook handler
+    options
+      .bind<LiveKitWebhookHandler>(InfrastructureDITokens.LiveKitWebhookHandler)
+      .to(LiveKitWebhookHandler);
 
     //Cron services
     options

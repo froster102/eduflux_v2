@@ -8,9 +8,17 @@ import type { ConfirmSessionBookingUseCase } from '@core/application/session/use
 import type { GetSessionsUseCase } from '@core/application/session/usecase/GetSessionUseCase';
 import { MongooseSessionRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/session/MongooseSessionRepositoryAdapter';
 import { ContainerModule } from 'inversify';
-import { ScheduleController } from '@api/http-rest/controller/SchedulerController';
+import { SessionController } from '@api/http-rest/controller/SessionController';
 import type { HandleExpiredPendingPaymentsUseCase } from '@core/application/session/usecase/HandleExpiredPendingPaymentsUseCase';
 import { HandleExpiredPendingPaymentsService } from '@core/application/session/service/HandleExpiredPendingPaymentsService';
+import type { JoinSessionUseCase } from '@core/application/session/usecase/JoinSessionUseCase';
+import { JoinSessionService } from '@core/application/session/service/JoinSessionService';
+import type { StartSessionOnJoinUseCase } from '@core/application/session/usecase/StartSessionOnJoinUseCase';
+import { StartSessionOnJoinService } from '@core/application/session/service/StartSessionOnJoinService';
+import type { CompleteSessionOnFinishUseCase } from '@core/application/session/usecase/CompleteSessionOnFinishUseCase';
+import { CompleteSessionOnFinishService } from '@core/application/session/service/CompleteSessionOnFinishService';
+import { AutoCompleteSessionsService } from '@core/application/session/service/AutoCompleteSessionsService';
+import type { AutoCompleteSessionsUseCase } from '@core/application/session/usecase/AutoCompleteSessionsUseCase';
 
 export const SessionModule: ContainerModule = new ContainerModule((options) => {
   //Use-case
@@ -30,6 +38,22 @@ export const SessionModule: ContainerModule = new ContainerModule((options) => {
       SessionDITokens.HandleExpiredPendingPaymentsUseCase,
     )
     .to(HandleExpiredPendingPaymentsService);
+  options
+    .bind<JoinSessionUseCase>(SessionDITokens.JoinSessionUseCase)
+    .to(JoinSessionService);
+  options
+    .bind<StartSessionOnJoinUseCase>(SessionDITokens.StartSessionOnJoinUseCase)
+    .to(StartSessionOnJoinService);
+  options
+    .bind<CompleteSessionOnFinishUseCase>(
+      SessionDITokens.CompleteSessionOnFinishUseCase,
+    )
+    .to(CompleteSessionOnFinishService);
+  options
+    .bind<AutoCompleteSessionsUseCase>(
+      SessionDITokens.AutoCompleteSessionsUseCase,
+    )
+    .to(AutoCompleteSessionsService);
 
   //Repository
   options
@@ -38,6 +62,6 @@ export const SessionModule: ContainerModule = new ContainerModule((options) => {
 
   //controller
   options
-    .bind<ScheduleController>(SessionDITokens.ScheduleController)
-    .to(ScheduleController);
+    .bind<SessionController>(SessionDITokens.SessionController)
+    .to(SessionController);
 });

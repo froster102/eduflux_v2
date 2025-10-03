@@ -10,12 +10,26 @@ export class SessionDITokens {
   static readonly HandleExpiredPendingPaymentsUseCase: unique symbol = Symbol(
     'HandleExpiredPendingPaymentsUseCase',
   );
+  static readonly JoinSessionUseCase: unique symbol =
+    Symbol('JoinSessionUseCase');
+  static readonly StartSessionOnJoinUseCase: unique symbol = Symbol(
+    'StartSessionOnJoinUseCase',
+  );
+  static readonly CompleteSessionOnFinishUseCase: unique symbol = Symbol(
+    'CompleteSessionOnFinishUseCase',
+  );
+  static readonly AutoCompleteSessionsUseCase: unique symbol = Symbol(
+    'AutoCompleteSessionsUseCase',
+  );
+
+  //External Service
+  static readonly MeetingService: unique symbol = Symbol('MeetingService');
 
   //Repostitory
   static readonly SessionRepository: unique symbol =
     Symbol('SessionRepository');
 
   //Controller
-  static readonly ScheduleController: unique symbol =
-    Symbol('ScheduleController');
+  static readonly SessionController: unique symbol =
+    Symbol('SessionController');
 }

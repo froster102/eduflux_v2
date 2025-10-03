@@ -87,6 +87,11 @@ export class Session extends Entity<string> {
     this._updatedAt = new Date();
   }
 
+  markAsCompleted(): void {
+    this._status = SessionStatus.COMPLETED;
+    this._updatedAt = new Date();
+  }
+
   markAsCancelled(): void {
     this._status = SessionStatus.CANCELLED;
     this._updatedAt = new Date();
@@ -106,6 +111,11 @@ export class Session extends Entity<string> {
 
   markAsNoShow(): void {
     this._status = SessionStatus.NO_SHOW;
+    this._updatedAt = new Date();
+  }
+
+  markAsProgress(): void {
+    this._status = SessionStatus.IN_PROGRESS;
     this._updatedAt = new Date();
   }
 

@@ -7,7 +7,7 @@ import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import { SESSION_SERVICE } from '@shared/constants/services';
 import Elysia from 'elysia';
-import type { ScheduleController } from '@api/http-rest/controller/SchedulerController';
+import type { SessionController } from '@api/http-rest/controller/SessionController';
 import { SessionSettingsController } from '@api/http-rest/controller/SessionSettingsController';
 import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { correlationIdSetupMiddleware } from '@api/http-rest/middlewares/correlationIdMiddleware';
@@ -16,7 +16,7 @@ export class HttpServer {
   private app: Elysia;
   private port: number;
   private logger: LoggerPort;
-  private readonly scheduleController: ScheduleController;
+  private readonly scheduleController: SessionController;
   private readonly sessionSettingsController: SessionSettingsController;
 
   constructor() {
@@ -25,8 +25,8 @@ export class HttpServer {
     this.logger = container
       .get<LoggerPort>(CoreDITokens.Logger)
       .fromContext('HTTP_SERVER');
-    this.scheduleController = container.get<ScheduleController>(
-      SessionDITokens.ScheduleController,
+    this.scheduleController = container.get<SessionController>(
+      SessionDITokens.SessionController,
     );
     this.sessionSettingsController = container.get<SessionSettingsController>(
       SessionSettingsDITokens.SessionSettingsController,
