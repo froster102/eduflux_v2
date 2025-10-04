@@ -10,6 +10,8 @@ import { updateUserSchema } from '@application/api/http-rest/schema/user';
 import { queryParametersSchema } from '@application/api/http-rest/schema/queryParametersSchema';
 import { InstructorDITokens } from '@core/domain/instructor/di/InstructorDITokens';
 import type { GetInstructorUseCase } from '@core/domain/instructor/usecase/GetInstructorUseCase';
+import { LearnerStatsDITokens } from '@core/domain/learner-stats/di/LearnerStatsDITokens';
+import type { GetLearnerStatsUseCase } from '@core/domain/learner-stats/usecase/GetLearnerStatsUseCase';
 
 export class UserController {
   constructor(
@@ -21,6 +23,8 @@ export class UserController {
     private readonly getInstructorsUseCase: GetInstructorsUseCase,
     @inject(InstructorDITokens.GetInstructorUseCase)
     private readonly getInstructorUseCase: GetInstructorUseCase,
+    @inject(LearnerStatsDITokens.GetLearnerStatsUseCase)
+    private readonly getLearnerStatsUseCase: GetLearnerStatsUseCase,
   ) {}
 
   register(): Elysia {
@@ -46,6 +50,12 @@ export class UserController {
             socialLinks,
           });
           return updatedUser;
+        })
+        .get('/learners/me', async ({ user }) => {
+          const response = await this.getLearnerStatsUseCase.execute({
+            learnerId: user.id,
+          });
+          return JSON.stringify(response);
         })
         .get('/instructors', async ({ query, user }) => {
           const parsedQuery = queryParametersSchema.parse(query);

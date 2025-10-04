@@ -1,8 +1,7 @@
 export class InfrastructureDITokens {
   //Kafka
-  public static readonly KafkaEventBusConnection: unique symbol = Symbol(
-    'KafkaEventBusConnection',
-  );
+  public static readonly KafkaConnection: unique symbol =
+    Symbol('KafkaConnection');
 
   //Grpc controllers
   public static readonly GrpcUserServiceController: unique symbol = Symbol(

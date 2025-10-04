@@ -2,7 +2,8 @@ import type { KafkaEventsConsumer } from '@application/api/consumers/KafkaEvents
 import { GrpcServer } from '@application/api/grpc/GrpcServer';
 import { HttpServer } from '@application/api/http-rest/HttpServer';
 import { container } from '@application/di/RootModule';
-import { KafkaEventBusConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/message/kafka/KafkaEventBusProducerAdapter';
 import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 
@@ -22,17 +23,17 @@ export class ServerApplication {
   }
 
   async connectKafkaProducer() {
-    const kafkaEventBusConnection = container.get<KafkaEventBusConnection>(
-      InfrastructureDITokens.KafkaEventBusConnection,
+    const kafkaProducer = container.get<KafkaEventBusProducerAdapter>(
+      CoreDITokens.EventBus,
     );
-    await kafkaEventBusConnection.connectProducer();
+    await kafkaProducer.connect();
   }
 
   async connectKafkaConsumers() {
     const kafkaEventsConsumer = container.get<KafkaEventsConsumer>(
       InfrastructureDITokens.KafkaEventsConsumer,
     );
-    await kafkaEventsConsumer.connect();
+    await kafkaEventsConsumer.run();
   }
 
   async run(): Promise<void> {

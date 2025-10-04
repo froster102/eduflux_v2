@@ -78,4 +78,16 @@ export class MongooseInstructorRepositoryViewAdapter
       { $set: update },
     ).exec();
   }
+
+  async incrementCompletedSessions(instructorId: string): Promise<void> {
+    await InstructorViewModel.updateOne(
+      { _id: instructorId },
+      {
+        $inc: {
+          sessionsConducted: 1,
+        },
+        $set: { updatedAt: new Date() },
+      },
+    );
+  }
 }

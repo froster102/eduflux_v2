@@ -24,7 +24,6 @@ export class UserSessionUpdatedEventHandlerService
 
   async handle(event: UserSessionUpdatedEvent): Promise<void> {
     const { sessionId, status, updatedAt } = event;
-
     const userSession = await this.userSessionRepository.findById(sessionId);
 
     if (!userSession) {

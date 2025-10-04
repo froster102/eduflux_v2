@@ -3,7 +3,7 @@ import { GrpcUserServiceController } from '@application/api/grpc/controller/Grpc
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { EventBusPort } from '@core/common/message/EventBustPort';
 import type { LoggerPort } from '@core/common/port/LoggerPort';
-import { KafkaEventBusConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
+import { KafkaConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
 import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/message/kafka/KafkaEventBusProducerAdapter';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { WinstonLogger } from '@infrastructure/logging/WinstonLoggerAdapter';
@@ -18,10 +18,8 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       )
       .to(GrpcUserServiceController);
     options
-      .bind<KafkaEventBusConnection>(
-        InfrastructureDITokens.KafkaEventBusConnection,
-      )
-      .to(KafkaEventBusConnection)
+      .bind<KafkaConnection>(InfrastructureDITokens.KafkaConnection)
+      .to(KafkaConnection)
       .inSingletonScope();
     options
       .bind<EventBusPort>(CoreDITokens.EventBus)

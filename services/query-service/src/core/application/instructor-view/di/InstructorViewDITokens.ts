@@ -6,6 +6,9 @@ export class InstructorViewDITokens {
   static readonly GetInstructorViewUseCase: unique symbol = Symbol(
     "GetInstructorViewUseCase",
   );
+  static readonly SessionUpdatedEventHandler: unique symbol = Symbol(
+    "SessionUpdatedEventHandler",
+  );
 
   //Hanlders
   static readonly InstructorStatsEventHandler: unique symbol = Symbol(

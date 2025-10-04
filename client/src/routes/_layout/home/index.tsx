@@ -1,33 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Skeleton } from "@heroui/skeleton";
 
 import { getGreeting } from "@/utils/date";
 import { useAuthStore } from "@/store/auth-store";
 import StatisticsCard from "@/components/StatisticsCard";
+import { useGetLearnerStats } from "@/features/learner/hooks/useGetLearnerStats";
 
 export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
 });
 
-const stats = [
-  {
-    title: "Enrollmented Courses",
-    icon: <></>,
-    value: "102",
-  },
-  {
-    title: "Completed Courses",
-    icon: <></>,
-    value: "32",
-  },
-  {
-    title: "Sessions Attempted",
-    icon: <></>,
-    value: "10",
-  },
-];
-
 function RouteComponent() {
   const { user } = useAuthStore();
+  const { data: learnerStats, isPending: isLearnerStatsPending } =
+    useGetLearnerStats();
 
   return (
     <div>
@@ -41,9 +27,26 @@ function RouteComponent() {
           </p>
         </div>
         <div className="flex w-full gap-4">
-          {stats.map((stat, i) => (
-            <StatisticsCard key={i} title={stat.title} value={stat.value} />
-          ))}
+          {isLearnerStatsPending ? (
+            <Skeleton />
+          ) : (
+            learnerStats && (
+              <>
+                <StatisticsCard
+                  title={"Completed course"}
+                  value={learnerStats.completedCourses + ""}
+                />
+                <StatisticsCard
+                  title={"Session completed"}
+                  value={learnerStats.completedSessions + ""}
+                />
+                <StatisticsCard
+                  title={"Enrolled courses"}
+                  value={learnerStats.enrolledCourses + ""}
+                />
+              </>
+            )
+          )}
         </div>
       </div>
     </div>

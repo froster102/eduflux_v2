@@ -1,60 +1,27 @@
 import { KafkaLoggerAdapter } from '@infrastructure/adapter/message/kafka/KafkaLoggerAdapter';
 import { KafkaConfig } from '@infrastructure/config/KafkaConfig';
-import { tryCatch } from '@shared/utils/try-catch';
-import { inject } from 'inversify';
-import { type Consumer, Kafka, type Producer } from 'kafkajs';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { Kafka, type Consumer, type Producer } from 'kafkajs';
 
-export class KafkaEventBusConnection {
+export class KafkaConnection {
   private kafka: Kafka;
-  clientId = KafkaConfig.CLIENT_ID;
-  brokers = KafkaConfig.BROKERS;
-  connectionTimeout = 3000;
-  requestTimeout = 25000;
-  private producer: Producer;
 
-  constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
-  ) {
-    this.logger = logger.fromContext('KAFKA_JS');
+  constructor() {
     this.kafka = new Kafka({
-      clientId: this.clientId,
-      brokers: this.brokers,
-      connectionTimeout: this.connectionTimeout,
-      requestTimeout: this.requestTimeout,
+      clientId: KafkaConfig.CLIENT_ID,
+      brokers: KafkaConfig.BROKERS,
+      connectionTimeout: 3000,
+      requestTimeout: 25000,
       logCreator: KafkaLoggerAdapter.new(),
     });
-    this.producer = this.kafka.producer();
   }
 
-  getProducer(): Producer {
-    return this.producer;
+  public getProducer(): Producer {
+    return this.kafka.producer();
   }
 
-  getConsumer(consumerGroupId: string): Consumer {
-    return this.kafka.consumer({ groupId: consumerGroupId });
-  }
-
-  async connectProducer(): Promise<void> {
-    const { error } = await tryCatch(this.producer.connect());
-    if (error) {
-      this.logger.error(
-        `Failed to connect to Kafka producer: ${error.message}`,
-      );
-      throw new Error(error.message);
-    }
-    this.logger.info(`Established connection to Kafka producer.`);
-  }
-
-  async disconnectProducer(): Promise<void> {
-    const { error } = await tryCatch(this.producer.disconnect());
-    if (error) {
-      this.logger.error(
-        `Failed to disconnect Kafka producer: ${error.message}`,
-      );
-    } else {
-      this.logger.info('Kafka producer disconnected gracefully.');
-    }
+  public getConsumer(consumerGroupId: string): Consumer {
+    return this.kafka.consumer({
+      groupId: consumerGroupId,
+    });
   }
 }

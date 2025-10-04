@@ -4,6 +4,9 @@ import { Exception } from '@core/common/errors/Exception';
 import { InstructorDITokens } from '@core/domain/instructor/di/InstructorDITokens';
 import { Instructor } from '@core/domain/instructor/entity/Instructor';
 import type { InstructorRepositoryPort } from '@core/domain/instructor/port/persistence/InstructorRepositoryPort';
+import { LearnerStatsDITokens } from '@core/domain/learner-stats/di/LearnerStatsDITokens';
+import { LearnerStats } from '@core/domain/learner-stats/entity/LearnerStats';
+import type { LearnerStatsRepositoryPort } from '@core/domain/learner-stats/port/persistence/LearnerStatsRepositoryPort';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
 import { User } from '@core/domain/user/entity/User';
 import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
@@ -18,6 +21,8 @@ export class CreateUserService implements CreateUserUseCase {
     private readonly userRepository: UserRepositoryPort,
     @inject(InstructorDITokens.InstructorRepository)
     private readonly instructorRepository: InstructorRepositoryPort,
+    @inject(LearnerStatsDITokens.LearnerStatsRepository)
+    private readonly learnerStatsRepository: LearnerStatsRepositoryPort,
   ) {}
 
   async execute(payload: CreateUserPort): Promise<UserDto> {
@@ -40,6 +45,7 @@ export class CreateUserService implements CreateUserUseCase {
       bio,
       socialLinks,
     });
+    const learnerStats = LearnerStats.new({ id: newUser.getId() });
 
     //perform transaction!!
     if (newUser.getRoles().includes(Role.INSTRUCTOR)) {
@@ -54,6 +60,7 @@ export class CreateUserService implements CreateUserUseCase {
     }
 
     await this.userRepository.save(newUser);
+    await this.learnerStatsRepository.save(learnerStats);
 
     return UserDto.fromEntity(newUser);
   }

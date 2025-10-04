@@ -16,4 +16,5 @@ export interface InstructorViewRepositoryPort
     queryParameters: InstructorViewQueryParameters,
     excludeId?: string,
   ): Promise<InstructorViewQueryResult>;
+  incrementCompletedSessions(instructorId: string): Promise<void>;
 }

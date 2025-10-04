@@ -28,6 +28,7 @@ import { UserViewEvents } from "@core/application/user-view/events/enum/UserView
 import { UserViewDITokens } from "@core/application/user-view/di/UserViewDITokens";
 import type { UserUpdatedEventHandler } from "@core/application/user-view/handler/UserUpdatedEventHandler";
 import type { UserSessionUpdatedEventHandler } from "@core/application/user-session/handler/UserSessionUpdatedEventHandler";
+import type { SessionUpdatedEventHandler } from "@core/application/instructor-view/handler/SessionUpdatedEventHandler";
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -40,6 +41,7 @@ export class KafkaEventsConsumer {
   private readonly instructorCreatedEventHandler: InstructorCreatedEventHandler;
   private readonly userUpdatedEventHandler: UserUpdatedEventHandler;
   private readonly userSessionUpdatedEventHandler: UserSessionUpdatedEventHandler;
+  private readonly sessionUpdatedEventHandler: SessionUpdatedEventHandler;
 
   constructor(
     @inject(InfrastructureDITokens.KafkaConnection)
@@ -59,6 +61,8 @@ export class KafkaEventsConsumer {
     userUpdatedEventHandler: UserUpdatedEventHandler,
     @inject(UserSessionDITokens.UserSessionUpdatedEventHandler)
     userSessionUpdatedEventHandler: UserSessionUpdatedEventHandler,
+    @inject(InstructorViewDITokens.SessionUpdatedEventHandler)
+    sessionUpdatedEventHandler: SessionUpdatedEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
     this.confirmSessionEventHandler = confirmSessionEventHandler;
@@ -68,6 +72,7 @@ export class KafkaEventsConsumer {
     this.instructorCreatedEventHandler = instructorCreatedEventHandler;
     this.userUpdatedEventHandler = userUpdatedEventHandler;
     this.userSessionUpdatedEventHandler = userSessionUpdatedEventHandler;
+    this.sessionUpdatedEventHandler = sessionUpdatedEventHandler;
     this.consumer = this.kafkaConnection.getConsumer(
       QUERY_SERVICE_CONSUMER_GROUP,
     );
@@ -134,6 +139,7 @@ export class KafkaEventsConsumer {
               }
               case UserSessionEvents.SESSION_UPDATED: {
                 await this.userSessionUpdatedEventHandler.handle(event);
+                await this.sessionUpdatedEventHandler.handle(event);
                 break;
               }
               default:
