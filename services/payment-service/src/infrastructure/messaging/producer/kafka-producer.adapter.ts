@@ -1,7 +1,7 @@
 import type { ILogger } from '@/shared/common/interface/logger.interface';
 import {
   IMessageBrokerGatway,
-  IPaymentEvent,
+  PaymentEvent,
 } from '@/application/ports/message-broker.gateway';
 import { Kafka, Producer } from 'kafkajs';
 import { kafka } from '../kafka/setup';
@@ -19,7 +19,7 @@ export class KafkaProducerAdapter implements IMessageBrokerGatway {
     this.producer = this.kafka.producer();
   }
 
-  async publish(topic: string, event: IPaymentEvent): Promise<void> {
+  async publish(topic: string, event: PaymentEvent): Promise<void> {
     const messageValue = JSON.stringify(event);
 
     await this.producer
@@ -27,7 +27,7 @@ export class KafkaProducerAdapter implements IMessageBrokerGatway {
         topic,
         messages: [
           {
-            key: event.type,
+            key: event.id,
             value: messageValue,
             headers: {
               'x-correlation-id': event.correlationId || '',

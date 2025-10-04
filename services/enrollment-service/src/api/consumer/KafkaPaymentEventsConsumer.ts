@@ -11,21 +11,25 @@ import { tryCatch } from '@shared/utils/try-catch';
 import { inject } from 'inversify';
 import type { Consumer, EachMessagePayload } from 'kafkajs';
 
-export interface IPaymentEvent {
-  type: 'payment.failed' | 'payment.success' | 'payment.cancelled';
+export enum PaymentEvents {
+  PAYMENT_FAILED = 'payment.failed',
+  PAYMENT_SUCCESS = 'payment.success',
+  PAYMENT_CANCELLED = 'payment.cancelled',
+}
+
+export interface PaymentEvent {
+  type: PaymentEvents;
   correlationId: string;
-  data: {
-    paymentId: string;
-    providerPaymentId: string | null;
-    paymentProvider: 'STRIPE';
-    payerId: string;
-    paymentPurpose: PaymentPurpose;
-    amount: number;
-    currency: string;
-    reason?: string;
-    metadata: Record<string, any>;
-    occurredAt: string;
-  };
+  paymentId: string;
+  providerPaymentId: string | null;
+  paymentProvider: PaymentProvider;
+  payerId: string;
+  paymentPurpose: PaymentPurpose;
+  amount: number;
+  currency: string;
+  reason?: string;
+  metadata: Record<string, any>;
+  occurredAt: string;
 }
 
 export class KafkaEventsConsumer {
@@ -66,7 +70,7 @@ export class KafkaEventsConsumer {
             return;
           }
           try {
-            const event = JSON.parse(message.value.toString()) as IPaymentEvent;
+            const event = JSON.parse(message.value.toString()) as PaymentEvent;
             this.logger.info(
               `Recieved message: ${JSON.stringify(event)} from ${topic}`,
             );
@@ -96,14 +100,14 @@ export class KafkaEventsConsumer {
     }
   }
 
-  private async handleEvent(event: IPaymentEvent) {
+  private async handleEvent(event: PaymentEvent) {
     try {
       switch (event.type) {
-        case 'payment.success':
-          if (event.data.paymentPurpose === 'COURSE_ENROLLMENT') {
+        case PaymentEvents.PAYMENT_SUCCESS:
+          if (event.paymentPurpose === 'COURSE_ENROLLMENT') {
             await this.completeEnrollmentUseCase.execute({
-              enrollmentId: event.data.metadata.enrollmentId as string,
-              paymentId: event.data.paymentId,
+              enrollmentId: event.metadata.enrollmentId as string,
+              paymentId: event.paymentId,
             });
           }
       }

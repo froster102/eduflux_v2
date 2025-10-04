@@ -4,9 +4,10 @@ import type {
   IStripeGateway,
   StripeWebhookEvent,
 } from '../ports/stripe.gateway';
-import type {
-  IMessageBrokerGatway,
-  IPaymentEvent,
+import {
+  PaymentEvents,
+  type IMessageBrokerGatway,
+  type PaymentEvent,
 } from '../ports/message-broker.gateway';
 import type {
   HandleStripeWebhookInput,
@@ -81,7 +82,7 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
       };
     }
 
-    let eventToPublish: IPaymentEvent | null = null;
+    let eventToPublish: PaymentEvent | null = null;
     let updatePayment: boolean = false;
 
     try {
@@ -93,19 +94,18 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
             payment.markAsSuccess(paymentIntentId);
             updatePayment = true;
             eventToPublish = {
-              type: 'payment.success',
+              id: payment.payerId,
+              type: PaymentEvents.PAYMENT_SUCCESS,
               correlationId: correlationId,
-              data: {
-                paymentId: payment.id,
-                amount: payment.amount,
-                currency: payment.currency,
-                metadata: payment.metadata,
-                occurredAt: new Date(event.created * 1000).toISOString(),
-                providerPaymentId: paymentIntentId,
-                paymentProvider: 'STRIPE',
-                payerId: payment.payerId,
-                paymentPurpose: payment.paymentPurpose,
-              },
+              paymentId: payment.id,
+              amount: payment.amount,
+              currency: payment.currency,
+              metadata: payment.metadata,
+              occurredAt: new Date(event.created * 1000).toISOString(),
+              providerPaymentId: paymentIntentId,
+              paymentProvider: 'STRIPE',
+              payerId: payment.payerId,
+              paymentPurpose: payment.paymentPurpose,
             };
           }
           break;
@@ -121,19 +121,18 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
             payment.markAsFailed(failureReason);
             updatePayment = true;
             eventToPublish = {
-              type: 'payment.failed',
+              id: payment.payerId,
+              type: PaymentEvents.PAYMENT_FAILED,
               correlationId,
-              data: {
-                paymentId: payment.id,
-                providerPaymentId: event.data.object.id,
-                paymentProvider: 'STRIPE',
-                payerId: payment.payerId,
-                paymentPurpose: payment.paymentPurpose,
-                amount: payment.amount,
-                currency: payment.currency,
-                metadata: payment.metadata,
-                occurredAt: new Date(Date.now() * 1000).toISOString(),
-              },
+              paymentId: payment.id,
+              providerPaymentId: event.data.object.id,
+              paymentProvider: 'STRIPE',
+              payerId: payment.payerId,
+              paymentPurpose: payment.paymentPurpose,
+              amount: payment.amount,
+              currency: payment.currency,
+              metadata: payment.metadata,
+              occurredAt: new Date(Date.now() * 1000).toISOString(),
             };
           }
           break;
@@ -144,20 +143,19 @@ export class HandleStripeWebhookUseCase implements IHandleStripeWebhookUseCase {
             payment.markAsCanceled();
             updatePayment = true;
             eventToPublish = {
-              type: 'payment.cancelled',
+              id: payment.payerId,
+              type: PaymentEvents.PAYMENT_CANCELLED,
               correlationId,
-              data: {
-                paymentId: payment.id,
-                providerPaymentId: event.data.object.id,
-                paymentProvider: 'STRIPE',
-                payerId: payment.payerId,
-                paymentPurpose: payment.paymentPurpose,
-                amount: payment.amount,
-                currency: payment.currency,
-                reason: `Stripe ${event.type} event`,
-                metadata: payment.metadata,
-                occurredAt: new Date(event.created * 1000).toISOString(),
-              },
+              paymentId: payment.id,
+              providerPaymentId: event.data.object.id,
+              paymentProvider: 'STRIPE',
+              payerId: payment.payerId,
+              paymentPurpose: payment.paymentPurpose,
+              amount: payment.amount,
+              currency: payment.currency,
+              reason: `Stripe ${event.type} event`,
+              metadata: payment.metadata,
+              occurredAt: new Date(event.created * 1000).toISOString(),
             };
           }
           break;
