@@ -74,11 +74,9 @@ export class MongooseSessionRepositoryAdapter
       status: { $in: statusesToFind },
       endTime: { $lt: scheduledEndTimeBefore },
     };
-    console.log(scheduledEndTimeBefore);
 
     const matchingSessions = await SessionModel.find(filter);
 
-    console.log(matchingSessions);
     if (matchingSessions.length === 0) {
       return [];
     }
