@@ -35,6 +35,7 @@ export class CompleteEnrollmentService implements CompleteEnrollmentUseCase {
       type: EnrollmentEvents.ENROLLMENT_SUCESS,
       courseId: enrollment.courseId,
       enrollmentId: enrollment.id,
+      instructorId: enrollment.instructorId,
       occuredAt: enrollment.updatedAt.toISOString(),
       userId: enrollment.userId,
       path: `/courses/${enrollment.courseId}`,

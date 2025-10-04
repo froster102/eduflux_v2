@@ -5,6 +5,7 @@ export interface EnrollmentSuccessEvent extends Event {
   readonly type: EnrollmentEvents.ENROLLMENT_SUCESS;
   readonly courseId: string;
   readonly enrollmentId: string;
+  readonly instructorId: string;
   readonly occuredAt: string;
   readonly userId: string;
   readonly path: string;
