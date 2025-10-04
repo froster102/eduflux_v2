@@ -23,9 +23,8 @@ export class MongooseUnitOfWork implements UnitOfWork {
 
   get slotRepository(): SlotRepositoryPort {
     if (!this.session) {
-      throw new DatabaseException(
-        'Unit of Work session not initialized. Call commit() first for transactional operations.',
-      );
+      throw new DatabaseException();
+      // 'Unit of Work session not initialized. Call commit() first for transactional operations.',
     }
     if (!this._slotRepository) {
       this._slotRepository = new MongooseSlotRepositoryAdapter(this.session);
@@ -35,9 +34,8 @@ export class MongooseUnitOfWork implements UnitOfWork {
 
   get sessionRepository(): SessionRepositoryPort {
     if (!this.session) {
-      throw new DatabaseException(
-        'Unit of Work session not initialized. Call commit() first for transactional operations.',
-      );
+      throw new DatabaseException();
+      // 'Unit of Work session not initialized. Call commit() first for transactional operations.',
     }
     if (!this._sessionRepository) {
       this._sessionRepository = new MongooseSessionRepositoryAdapter(
@@ -49,9 +47,8 @@ export class MongooseUnitOfWork implements UnitOfWork {
 
   get sessionSettingsRepository(): SessionSettingsRepositoryPort {
     if (!this.session) {
-      throw new DatabaseException(
-        'Unit of Work session not initialized. Call commit() first for transactional operations.',
-      );
+      throw new DatabaseException();
+      // 'Unit of Work session not initialized. Call commit() first for transactional operations.',
     }
     if (!this._sessionSettingsRepository) {
       this._sessionSettingsRepository =
@@ -76,11 +73,10 @@ export class MongooseUnitOfWork implements UnitOfWork {
       await session.commitTransaction();
 
       return result;
-    } catch (error) {
+    } catch {
       await session.abortTransaction();
-      throw new DatabaseException(
-        (error as Record<string, any>).message as string,
-      );
+      throw new DatabaseException();
+      // (error as Record<string, any>).message as string,
     } finally {
       await session.endSession();
     }

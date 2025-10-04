@@ -28,7 +28,7 @@ export async function getUserSessions(
   if (queryParameters) {
     queryString = buildQueryUrlParams(queryParameters);
   }
-  const response = await api.get(`/query/sessions${queryString}`);
+  const response = await api.get(`/sessions/users/me${queryString}`);
 
   return response.data;
 }

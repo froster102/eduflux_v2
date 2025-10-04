@@ -13,6 +13,10 @@ declare global {
     updatedAt: string;
   };
 
+  export type PaymentPurpose = 'COURSE_ENROLLMENT' | 'INSTRUCTOR_SESSION';
+
+  export type PaymentProvider = 'STRIPE';
+
   export type JwtPayload = {
     name: string;
     email: string;

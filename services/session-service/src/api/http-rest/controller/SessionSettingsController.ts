@@ -2,7 +2,7 @@ import { authenticaionMiddleware } from '@api/http-rest/middlewares/authenticati
 import {
   enableSessionsSchema,
   updateSessionSettingsSchema,
-} from '@api/http-rest/schema/session';
+} from '@api/http-rest/validation/session';
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
 import type { GetInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/GetInstructorSessionSettingsUseCase';

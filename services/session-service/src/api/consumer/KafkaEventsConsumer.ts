@@ -5,7 +5,11 @@ import type { ConfirmSessionBookingUseCase } from '@core/application/session/use
 import { PaymentPurpose } from '@core/application/session/port/gateway/PaymentServicePort';
 import type { Consumer, EachMessagePayload } from 'kafkajs';
 import { inject } from 'inversify';
-import { PAYMENTS_TOPIC, SESSION_TOPIC } from '@shared/constants/topics';
+import {
+  PAYMENTS_TOPIC,
+  SESSION_TOPIC,
+  USERS_TOPIC,
+} from '@shared/constants/topics';
 import { SESSION_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
 import { tryCatch } from '@shared/utils/try-catch';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
@@ -15,6 +19,9 @@ import type { ConfirmSessionEventHandler } from '@core/application/views/user-se
 import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
 import type { KafkaEvent } from '@infrastructure/adapter/messaging/kafka/types/KafkaEvent';
 import { PaymentEvents } from '@core/common/events/enum/PaymentEvents';
+import type { UserSessionUpdatedEventHandler } from '@core/application/views/user-session/handler/UserSessionUpdatedEventHandler';
+import { UserEvents } from '@core/application/views/user-session/events/enum/UserEvents';
+import type { UserUpdatedEventHandler } from '@core/application/views/user-session/handler/UserUpdatedEventHandler';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -28,9 +35,13 @@ export class KafkaEventsConsumer {
     private readonly confirmSessionBookingUseCase: ConfirmSessionBookingUseCase,
     @inject(UserSessionDITokens.ConfirmSessionEventHandler)
     private readonly confirmSessionEventHandler: ConfirmSessionEventHandler,
+    @inject(UserSessionDITokens.UserSessionUpdatedEventHandler)
+    private readonly userSessionUpdatedEventHandler: UserSessionUpdatedEventHandler,
+    @inject(UserSessionDITokens.UserUpdatedEventHandler)
+    private readonly userUpdatedEventHanlder: UserUpdatedEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
-    this.topics = [PAYMENTS_TOPIC, SESSION_TOPIC];
+    this.topics = [PAYMENTS_TOPIC, SESSION_TOPIC, USERS_TOPIC];
     this.consumer = this.kafkaConnection.getConsumer(
       SESSION_SERVICE_CONSUMER_GROUP,
     );
@@ -72,6 +83,14 @@ export class KafkaEventsConsumer {
             switch (event.type) {
               case SessionEvents.SESSION_CONFIRMED: {
                 await this.confirmSessionEventHandler.handle(event);
+                break;
+              }
+              case SessionEvents.SESSION_UPDATED: {
+                await this.userSessionUpdatedEventHandler.handle(event);
+                break;
+              }
+              case UserEvents.USER_UPDATED: {
+                await this.userUpdatedEventHanlder.handle(event);
                 break;
               }
               case PaymentEvents.PAYMENT_SUCCESS: {

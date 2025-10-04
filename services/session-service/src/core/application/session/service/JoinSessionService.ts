@@ -48,20 +48,20 @@ export class JoinSessionService implements JoinSessionUseCase {
       );
     }
 
-    // if (session.endTime <= now) {
-    //   throw new ForbiddenException('The session has already ended.');
-    // }
+    if (session.endTime <= now) {
+      throw new ForbiddenException('The session has already ended.');
+    }
 
-    // const joinBufferMinutes = 5;
-    // const earliestJoinTime = new Date(
-    //   session.startTime.getTime() - joinBufferMinutes * 60000,
-    // );
+    const joinBufferMinutes = 5;
+    const earliestJoinTime = new Date(
+      session.startTime.getTime() - joinBufferMinutes * 60000,
+    );
 
-    // if (now < earliestJoinTime) {
-    //   throw new ConflictException(
-    //     `Session is scheduled to start at ${session.startTime.toISOString()}. You can join at ${earliestJoinTime.toISOString()}.`,
-    //   );
-    // }
+    if (now < earliestJoinTime) {
+      throw new ConflictException(
+        `Session is scheduled to start at ${session.startTime.toISOString()}. You can join at ${earliestJoinTime.toISOString()}.`,
+      );
+    }
 
     const { token } = await this.meetingService.createParticipantToken({
       roomId: session.id,

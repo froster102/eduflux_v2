@@ -28,7 +28,7 @@ export class MongooseConnection {
         error as Record<string, any>,
       );
       if (error) {
-        throw new DatabaseException(error.message);
+        throw new DatabaseException();
       }
     }
 

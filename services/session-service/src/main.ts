@@ -22,7 +22,7 @@ async function bootstrap() {
   const kafkaConsumer = container.get<KafkaEventsConsumer>(
     InfrastructureDITokens.KafkaEventsConsumer,
   );
-  await kafkaConsumer.connect();
+  await kafkaConsumer.run();
 
   //Cron services
   const cronServices = container.get<ICronServices>(

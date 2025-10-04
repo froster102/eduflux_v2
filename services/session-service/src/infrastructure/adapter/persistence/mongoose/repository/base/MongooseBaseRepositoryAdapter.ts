@@ -34,8 +34,8 @@ export abstract class MongooseBaseRepositoryAdapter<TDomain, TPersistence>
     const persistence = this.mapper.toPersistence(entity);
     const [saved] = await this.model
       .create([persistence], { session: this.session })
-      .catch((error: Record<string, any>) => {
-        throw new DatabaseException(error?.message as string);
+      .catch(() => {
+        throw new DatabaseException();
       });
     return this.mapper.toDomain(saved);
   }
@@ -45,8 +45,8 @@ export abstract class MongooseBaseRepositoryAdapter<TDomain, TPersistence>
 
     const updated = await this.model
       .findOneAndUpdate({ _id: id }, persistence, { session: this.session })
-      .catch((error: Record<string, any>) => {
-        throw new DatabaseException(error.message as string);
+      .catch(() => {
+        throw new DatabaseException();
       });
 
     return updated ? this.mapper.toDomain(updated.toObject()) : null;
@@ -55,8 +55,8 @@ export abstract class MongooseBaseRepositoryAdapter<TDomain, TPersistence>
   async findById(id: string): Promise<TDomain | null> {
     const found = await this.model
       .findOne({ _id: id }, null, { session: this.session })
-      .catch((error: Record<string, any>) => {
-        throw new DatabaseException(error.message as string);
+      .catch(() => {
+        throw new DatabaseException();
       });
     return found ? this.mapper.toDomain(found.toObject()) : null;
   }
@@ -71,45 +71,6 @@ export abstract class MongooseBaseRepositoryAdapter<TDomain, TPersistence>
   async getTotalItems(): Promise<number> {
     const total = await this.model.countDocuments();
     return total;
-  }
-
-  async find(query?: {
-    filter?: { [P in keyof TDomain]?: TDomain[P] };
-    projection?: {
-      [P in keyof TDomain]?: boolean | number;
-    };
-    sort?: {
-      [P in keyof TDomain]?: 'asc' | 'desc' | 1 | -1;
-    };
-    skip?: number;
-    limit?: number;
-    populate?: string[] | { path: string; select?: string }[];
-    include?: Array<any>;
-  }): Promise<TDomain[]> {
-    let filter = {};
-    let projection = {};
-    let skip: number = 0;
-    let limit: number = 0;
-    if (query) {
-      if (query.filter) {
-        filter = query?.filter;
-      }
-      if (query.projection) {
-        projection = query.projection;
-      }
-      if (query.skip) {
-        skip = query.skip ?? 0;
-      }
-      if (query.limit) {
-        limit = query.limit ?? 0;
-      }
-    }
-    const enities = await this.model
-      .find(filter, projection)
-      .skip(skip)
-      .limit(limit);
-
-    return enities ? this.mapper.toDomainEntities(enities) : [];
   }
 
   async deleteById(id: string): Promise<boolean> {
