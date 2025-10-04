@@ -11,19 +11,29 @@ import { ContainerModule } from 'inversify';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
+    //Logger
     options.bind<LoggerPort>(CoreDITokens.Logger).to(WinstonLogger);
+
+    //Controller
     options
       .bind<GrpcUserServiceController>(
         InfrastructureDITokens.GrpcUserServiceController,
       )
       .to(GrpcUserServiceController);
+
+    //Kafka Connection
     options
       .bind<KafkaConnection>(InfrastructureDITokens.KafkaConnection)
       .to(KafkaConnection)
       .inSingletonScope();
+
+    //Kafka Producer
     options
       .bind<EventBusPort>(CoreDITokens.EventBus)
-      .to(KafkaEventBusProducerAdapter);
+      .to(KafkaEventBusProducerAdapter)
+      .inSingletonScope();
+
+    //Kafka Consumer
     options
       .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
       .to(KafkaEventsConsumer);
