@@ -1,10 +1,10 @@
 import { NotificationController } from "@api/http/controller/NotificationController";
 import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { EnrollmentEventHandler } from "@core/application/notification/handler/EnrollmentEventHandler";
-import type { SessionEventHandler } from "@core/application/notification/handler/SessionEventHandler";
+import type { EnrollmentSuccessEventHandler } from "@core/application/notification/handler/EnrollmentSuccessEventHandler";
+import type { SessionConfirmedEventHandler } from "@core/application/notification/handler/SessionConfirmedEventHandler";
 import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
-import { EnrollmentEventHandlerService } from "@core/application/notification/service/handler/EnrollmentEventHandlerService";
-import { SessionEventHandlerService } from "@core/application/notification/service/handler/SessionEventHandlerService";
+import { EnrollmentSuccessEventHandlerService } from "@core/application/notification/service/handler/EnrollmentSuccessEventHandlerService";
+import { SessionConfirmedEventHandlerService } from "@core/application/notification/service/handler/SessionConfirmedEventHandlerService";
 import { CreateNotificationService } from "@core/application/notification/service/usecase/CreateNotificationService";
 import { GetNotificationsService } from "@core/application/notification/service/usecase/GetNotificationsService";
 import { MarkNotificationAsSeenService } from "@core/application/notification/service/usecase/MarkNotificationAsSeenService";
@@ -35,11 +35,15 @@ export const NotificationModule: ContainerModule = new ContainerModule(
 
     //handlers
     options
-      .bind<EnrollmentEventHandler>(NotificationDITokens.EnrollmentEventHandler)
-      .to(EnrollmentEventHandlerService);
+      .bind<EnrollmentSuccessEventHandler>(
+        NotificationDITokens.EnrollmentSuccessEventHandler,
+      )
+      .to(EnrollmentSuccessEventHandlerService);
     options
-      .bind<SessionEventHandler>(NotificationDITokens.SessionEventHandler)
-      .to(SessionEventHandlerService);
+      .bind<SessionConfirmedEventHandler>(
+        NotificationDITokens.SessionConfirmedEventHandler,
+      )
+      .to(SessionConfirmedEventHandlerService);
 
     //Repositories
     options

@@ -1,5 +1,5 @@
 import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { EnrollmentEventHandler } from "@core/application/notification/handler/EnrollmentEventHandler";
+import type { EnrollmentSuccessEventHandler } from "@core/application/notification/handler/EnrollmentSuccessEventHandler";
 import type { CourseServicePort } from "@core/application/notification/port/gateway/CourseServicePort";
 import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
 import { NotificationUseCaseDto } from "@core/application/notification/usecase/dto/NotificationUseCaseDto";
@@ -8,12 +8,14 @@ import { eventEmitter } from "@core/common/util/event/eventEmitter";
 import { Notification } from "@core/domain/notification/entiy/Notification";
 import { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
 import { ServerEvents } from "@shared/enum/ServerEvents";
-import type { EnrollmentEvent } from "@shared/events/EnrollmentEvent";
+import type { EnrollmentSuccessEvent } from "@shared/events/EnrollmentEvent";
 import type { ServerEvent } from "@shared/types/ServerEvent";
 import { inject } from "inversify";
 import { v4 as uuidV4 } from "uuid";
 
-export class EnrollmentEventHandlerService implements EnrollmentEventHandler {
+export class EnrollmentSuccessEventHandlerService
+  implements EnrollmentSuccessEventHandler
+{
   constructor(
     @inject(NotificationDITokens.NotificationRepository)
     private readonly notificationRepository: NotificationRepositoryPort,
@@ -21,8 +23,8 @@ export class EnrollmentEventHandlerService implements EnrollmentEventHandler {
     private readonly courseService: CourseServicePort,
   ) {}
 
-  async handle(event: EnrollmentEvent): Promise<void> {
-    const { courseId, path, userId } = event.data;
+  async handle(event: EnrollmentSuccessEvent): Promise<void> {
+    const { courseId, path, userId } = event;
 
     //get course details course service
     const course = await this.courseService.getCourse(courseId);

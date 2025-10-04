@@ -1,7 +1,9 @@
 import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { EnrollmentEventHandler } from "@core/application/notification/handler/EnrollmentEventHandler";
-import type { SessionEventHandler } from "@core/application/notification/handler/SessionEventHandler";
+import type { EnrollmentSuccessEventHandler } from "@core/application/notification/handler/EnrollmentSuccessEventHandler";
+import type { SessionConfirmedEventHandler } from "@core/application/notification/handler/SessionConfirmedEventHandler";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
+import { EnrollmentEvents } from "@core/common/events/enum/EnrollmentEvents";
+import { SessionEvents } from "@core/common/events/enum/SessionEvents";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
 import type { KafkaConnection } from "@infrastructure/adapter/messaging/kafka/KafkaConnection";
 import { InfrastructureDITokens } from "@infrastructure/di/InfrastructureDITokens";
@@ -16,21 +18,21 @@ export class KafkaEventsConsumer {
   private consumer: Consumer;
   private topics: string[];
   private readonly logger: LoggerPort;
-  private readonly enrollmentEventHandler: EnrollmentEventHandler;
-  private readonly sessionEventHandler: SessionEventHandler;
+  private readonly enrollmentSuccessEventHandler: EnrollmentSuccessEventHandler;
+  private readonly sessionConfirmedEventHandler: SessionConfirmedEventHandler;
 
   constructor(
     @inject(InfrastructureDITokens.KafkaConnection)
     private readonly kafkaConnection: KafkaConnection,
     @inject(CoreDITokens.Logger) logger: LoggerPort,
-    @inject(NotificationDITokens.EnrollmentEventHandler)
-    enrollmentEventHandler: EnrollmentEventHandler,
-    @inject(NotificationDITokens.SessionEventHandler)
-    sessionEventHandler: SessionEventHandler,
+    @inject(NotificationDITokens.EnrollmentSuccessEventHandler)
+    enrollmentSuccessEventHandler: EnrollmentSuccessEventHandler,
+    @inject(NotificationDITokens.SessionConfirmedEventHandler)
+    sessionConfirmedEventHandler: SessionConfirmedEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
-    this.enrollmentEventHandler = enrollmentEventHandler;
-    this.sessionEventHandler = sessionEventHandler;
+    this.enrollmentSuccessEventHandler = enrollmentSuccessEventHandler;
+    this.sessionConfirmedEventHandler = sessionConfirmedEventHandler;
     this.consumer = this.kafkaConnection.getConsumer(
       NOTIFICATION_SERVICE_CONSUMER_GROUP,
     );
@@ -71,12 +73,12 @@ export class KafkaEventsConsumer {
             );
 
             switch (event.type) {
-              case "enrollment.success": {
-                await this.enrollmentEventHandler.handle(event);
+              case EnrollmentEvents.ENROLLMENT_SUCESS: {
+                await this.enrollmentSuccessEventHandler.handle(event);
                 break;
               }
-              case "session.confirmed": {
-                await this.sessionEventHandler.handle(event);
+              case SessionEvents.SESSION_CONFIRMED: {
+                await this.sessionConfirmedEventHandler.handle(event);
                 break;
               }
               default:

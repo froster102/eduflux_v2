@@ -1,5 +1,5 @@
 import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { SessionEventHandler } from "@core/application/notification/handler/SessionEventHandler";
+import type { SessionConfirmedEventHandler } from "@core/application/notification/handler/SessionConfirmedEventHandler";
 import type { UserServicePort } from "@core/application/notification/port/gateway/UserServicePort";
 import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
 import { NotificationUseCaseDto } from "@core/application/notification/usecase/dto/NotificationUseCaseDto";
@@ -8,12 +8,14 @@ import { eventEmitter } from "@core/common/util/event/eventEmitter";
 import { Notification } from "@core/domain/notification/entiy/Notification";
 import { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
 import { ServerEvents } from "@shared/enum/ServerEvents";
-import type { SessionEvent } from "@shared/events/SessionConfirmedEvent";
+import type { SessionConfimedEvent } from "@shared/events/SessionConfirmedEvent";
 import type { ServerEvent } from "@shared/types/ServerEvent";
 import { inject } from "inversify";
 import { v4 as uuidV4 } from "uuid";
 
-export class SessionEventHandlerService implements SessionEventHandler {
+export class SessionConfirmedEventHandlerService
+  implements SessionConfirmedEventHandler
+{
   constructor(
     @inject(NotificationDITokens.NotificationRepository)
     private readonly notificationRepository: NotificationRepositoryPort,
@@ -21,8 +23,8 @@ export class SessionEventHandlerService implements SessionEventHandler {
     private readonly userService: UserServicePort,
   ) {}
 
-  async handle(event: SessionEvent): Promise<void> {
-    const { instructorId, learnerId, path } = event.data;
+  async handle(event: SessionConfimedEvent): Promise<void> {
+    const { instructorId, learnerId, path } = event;
 
     const instructor = await this.userService.getUser(instructorId);
     const learner = await this.userService.getUser(learnerId);

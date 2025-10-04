@@ -1,6 +1,3 @@
-import type { EnrollmentEvent } from "@shared/events/EnrollmentEvent";
-import type { SessionEvent } from "@shared/events/SessionConfirmedEvent";
+import type { KafkaEvent } from "@core/common/events/KafkaEvent";
 
-export type NotificationEvent = (EnrollmentEvent | SessionEvent) & {
-  type: string;
-};
+export type NotificationEvent = KafkaEvent;

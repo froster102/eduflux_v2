@@ -11,11 +11,11 @@ export class NotificationDITokens {
   );
 
   //handler
-  static readonly EnrollmentEventHandler: unique symbol = Symbol(
-    "EnrollmentEventHandler",
+  static readonly EnrollmentSuccessEventHandler: unique symbol = Symbol(
+    "EnrollmentSuccessEventHandler",
   );
-  static readonly SessionEventHandler: unique symbol = Symbol(
-    "SessionEventHandler",
+  static readonly SessionConfirmedEventHandler: unique symbol = Symbol(
+    "SessionConfirmedEventHandler",
   );
 
   //respository
