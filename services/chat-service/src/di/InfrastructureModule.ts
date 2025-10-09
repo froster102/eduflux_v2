@@ -1,3 +1,4 @@
+import { KafkaEventsConsumer } from "@api/consumer/KafkaEventsConsumer";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import type { EnrollmentServicePort } from "@core/common/gateway/EnrollmentServicePort";
 import type { UserServicePort } from "@core/common/gateway/UserServicePort";
@@ -25,6 +26,12 @@ export const infrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<EventBusPort>(CoreDITokens.EventBus)
       .to(KafkaEventBusProducerAdapter)
+      .inSingletonScope();
+
+    //Kafka consumer
+    options
+      .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
+      .to(KafkaEventsConsumer)
       .inSingletonScope();
 
     //External services

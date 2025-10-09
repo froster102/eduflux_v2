@@ -15,6 +15,10 @@ import {
   getChatExistsSchema,
   getMessagesSchema,
 } from "@api/validation/schema";
+import { getUserChatsSchema } from "@api/validation/getUserChatsSchema";
+import { UserChatDITokens } from "@core/application/views/user-chat/di/UserChatDITokens";
+import type { GetUserChatsUseCase } from "@core/application/views/user-chat/usecase/GetUserChatsUseCase";
+import { calculateOffset } from "@shared/utils/helper";
 
 export class ChatController {
   constructor(
@@ -24,6 +28,8 @@ export class ChatController {
     private readonly getChatWithInstructorUseCase: GetChatWithInstructorUseCase,
     @inject(MessageDITokens.GetMessagesUseCase)
     private readonly getMessagesUseCase: GetMessagesUseCase,
+    @inject(UserChatDITokens.GetUserChatsUserCase)
+    private readonly getUserChatsUseCase: GetUserChatsUseCase,
   ) {}
 
   register() {
@@ -56,6 +62,25 @@ export class ChatController {
         });
         return c.json({
           messages: response.messages,
+        });
+      })
+      .get("/users/me", async (c) => {
+        const parsedQuery = getUserChatsSchema.parse(c.req.query());
+        const { totalCount, chats } = await this.getUserChatsUseCase.execute({
+          role: parsedQuery.role,
+          queryParameters: {
+            limit: parsedQuery.limit,
+            offset: calculateOffset(parsedQuery.page, parsedQuery.limit),
+          },
+          userId: c.get("user").id,
+        });
+
+        return c.json({
+          pagination: {
+            totalPages: Math.ceil(totalCount / parsedQuery.limit),
+            currentPage: parsedQuery.page,
+          },
+          chats,
         });
       });
   }

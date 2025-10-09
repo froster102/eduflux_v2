@@ -34,3 +34,8 @@ export function parseCookieHeader(header: string): Map<string, string> {
 
   return map;
 }
+
+export function calculateOffset(page: number, limit: number) {
+  const offset = (page - 1) * limit;
+  return offset;
+}

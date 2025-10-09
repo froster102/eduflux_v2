@@ -9,7 +9,7 @@ import { CreateChatService } from "@core/application/service/chat/CreateChatServ
 import { GetChatWithInstructorService } from "@core/application/service/chat/GetChatWithInstructorService";
 import { GetChatsService } from "@core/application/service/chat/GetChatsService";
 import { VerifyChatParticipantService } from "@core/application/service/chat/VerifyChatParticipantService";
-import { MongooseChatRepositoryAdapter } from "@infrastructure/adapter/persistence/mongoose/repository/MongooseChatRepositoryAdapter";
+import { MongooseChatRepositoryAdapter } from "@infrastructure/adapter/persistence/mongoose/repository/chat/MongooseChatRepositoryAdapter";
 import { ContainerModule } from "inversify";
 import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
 import { GetChatService } from "@core/application/service/chat/GetChatService";

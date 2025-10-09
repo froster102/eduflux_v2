@@ -12,7 +12,7 @@ export async function getUserChatChatHistory(
 ): Promise<GetUserChatsQueryResult> {
   const queryString = buildQueryUrlParams(queryParameters);
 
-  const response = await api.get(`/query/chats${queryString}`);
+  const response = await api.get(`/chats/users/me${queryString}`);
 
   return response.data;
 }

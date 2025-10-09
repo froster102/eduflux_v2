@@ -6,7 +6,7 @@ import type { UpdateMessageStatusUseCase } from "@core/application/message/useca
 import { CreateMessageService } from "@core/application/service/message/CreateMessageService";
 import { GetMessagesService } from "@core/application/service/message/GetMessagesService";
 import { UpdateMessageStatusService } from "@core/application/service/message/UpdateMessageStatusService";
-import { MongooseMessageRepositoryAdapter } from "@infrastructure/adapter/persistence/mongoose/repository/MongooseMessageRepositoryAdapter";
+import { MongooseMessageRepositoryAdapter } from "@infrastructure/adapter/persistence/mongoose/repository/message/MongooseMessageRepositoryAdapter";
 import { ContainerModule } from "inversify";
 
 export const messageModule: ContainerModule = new ContainerModule((options) => {
