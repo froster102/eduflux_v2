@@ -17,6 +17,7 @@ import type { UpdateMessageStatusUseCase } from "@core/application/message/useca
 import { MessageStatus } from "@core/common/enum/MessageStatus";
 import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
 import type { Socket } from "socket.io";
+import type { Role } from "@core/common/enum/Role";
 
 interface SocketData {
   user: AuthenticatedUserDto;

@@ -1,3 +1,5 @@
+import type { Role } from "@core/common/enum/Role";
+
 export class AuthenticatedUserDto {
   constructor(
     public readonly id: string,

@@ -1,5 +1,6 @@
 import type { ChatRepositoryPort } from "@core/application/chat/port/persistence/ChatRepositoryPort";
 import type { ChatQueryResult } from "@core/application/chat/port/persistence/type/ChatQueryResult";
+import type { Role } from "@core/common/enum/Role";
 import type { QueryParameters } from "@core/common/port/persistence/type/QueryParameters";
 import type { Chat } from "@core/domain/chat/entity/Chat";
 import { MongooseBaseRepositoryAdpater } from "@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter";
