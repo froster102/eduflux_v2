@@ -14,13 +14,11 @@ function RouteComponent() {
     {},
   );
 
-  console.log(result);
-
   return (
     <div className="">
       <SearchBox placeholder="Search by instructor name" />
       <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-2 pt-4">
-        {false ? (
+        {isInstructorsLoading ? (
           <div className="w-full h-full flex justify-center items-center">
             <Spinner />
           </div>

@@ -67,9 +67,8 @@ function RouteComponent() {
         lastMessagePreview: existingChat.chat.lastMessagePreview,
         participants: [
           {
-            id: instructor.profile.id,
-            name:
-              instructor.profile.firstName + " " + instructor.profile.lastName,
+            id: instructor.id,
+            name: instructor.profile.name,
             image: instructor.profile.image!,
           },
         ],
@@ -90,8 +89,8 @@ function RouteComponent() {
         lastMessagePreview: createdChat.lastMessagePreview,
         participants: [
           {
-            id: instructor.profile.id,
-            name: `${instructor.profile.firstName + " " + instructor.profile.lastName}`,
+            id: instructor.id,
+            name: `${instructor.profile.name}`,
             image: instructor.profile.image!,
           },
         ],
