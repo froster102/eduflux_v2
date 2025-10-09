@@ -1,5 +1,5 @@
 import { Progress } from '@core/domain/progress/entity/Progress';
-import type { ProgressRepositoryPort } from '@core/domain/progress/port/persistence/ProgressRepositoryPort';
+import type { ProgressRepositoryPort } from '@core/application/progress/port/persistence/ProgressRepositoryPort';
 import { MongooseProgressMapper } from '@infrastructure/adapter/persistence/mongoose/models/progress/mapper/MongooseProgressMapper';
 import {
   type IMongooseProgress,

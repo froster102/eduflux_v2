@@ -34,10 +34,12 @@
     "baseUrl": "./",
     "paths": {
       "@core/*": ["src/core/*"],
+      "@application/*": ["src/core/application/*"],
+      "@di/*": ["src/di/*"],
+      "@domain/*": ["src/core/domain/*"],
       "@infrastructure/*": ["src/infrastructure/*"],
-      "@application/*": ["src/application/*"],
-      "@shared/*": ["src/shared/*"],
-      "@test/*": ["test/*"]
+      "@api/*": ["src/api/*"],
+      "@shared/*": ["src/shared/*"]
     },
     // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */

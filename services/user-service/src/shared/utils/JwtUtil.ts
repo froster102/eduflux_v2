@@ -1,4 +1,4 @@
-import type { JwtPayload } from '@application/api/http-rest/interface/JwtPayload';
+import type { JwtPayload } from 'src/api/http-rest/interface/JwtPayload';
 import { JwtConfig } from '@infrastructure/config/JwtConfig';
 import { jwtVerify, createRemoteJWKSet } from 'jose';
 

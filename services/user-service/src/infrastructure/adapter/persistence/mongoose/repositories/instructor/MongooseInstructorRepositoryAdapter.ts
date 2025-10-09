@@ -1,5 +1,5 @@
 import type { Instructor } from '@core/domain/instructor/entity/Instructor';
-import type { InstructorRepositoryPort } from '@core/domain/instructor/port/persistence/InstructorRepositoryPort';
+import type { InstructorRepositoryPort } from '@core/application/instructor/port/persistence/InstructorRepositoryPort';
 import { InstructorMapper } from '@infrastructure/adapter/persistence/mongoose/models/instructor/mapper/MongooseInstructorMapper';
 import {
   InstructorModel,

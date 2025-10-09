@@ -1,5 +1,5 @@
 import type { LearnerStats } from '@core/domain/learner-stats/entity/LearnerStats';
-import type { LearnerStatsRepositoryPort } from '@core/domain/learner-stats/port/persistence/LearnerStatsRepositoryPort';
+import type { LearnerStatsRepositoryPort } from '@core/application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
 import { LearnerStatsMapper } from '@infrastructure/adapter/persistence/mongoose/models/learner-stats/mapper/MongooseLearnerStatsMapper';
 import {
   LearnerStatsModel,

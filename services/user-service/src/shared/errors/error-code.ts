@@ -1,9 +1,9 @@
-import { container } from '@application/di/RootModule';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { Code } from '@core/common/errors/Code';
 import type { LoggerPort } from '@core/common/port/LoggerPort';
 import httpStatus from 'http-status';
 import { status as grpcStatus } from '@grpc/grpc-js';
+import { container } from '@di/RootModule';
 
 function getLogger() {
   return container.get<LoggerPort>(CoreDITokens.Logger);

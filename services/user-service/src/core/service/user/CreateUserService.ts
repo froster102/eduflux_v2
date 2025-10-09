@@ -1,12 +1,12 @@
 import { Role } from '@core/common/enums/Role';
 import { Code } from '@core/common/errors/Code';
 import { Exception } from '@core/common/errors/Exception';
-import { InstructorDITokens } from '@core/domain/instructor/di/InstructorDITokens';
+import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
 import { Instructor } from '@core/domain/instructor/entity/Instructor';
-import type { InstructorRepositoryPort } from '@core/domain/instructor/port/persistence/InstructorRepositoryPort';
-import { LearnerStatsDITokens } from '@core/domain/learner-stats/di/LearnerStatsDITokens';
+import type { InstructorRepositoryPort } from '@core/application/instructor/port/persistence/InstructorRepositoryPort';
+import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
 import { LearnerStats } from '@core/domain/learner-stats/entity/LearnerStats';
-import type { LearnerStatsRepositoryPort } from '@core/domain/learner-stats/port/persistence/LearnerStatsRepositoryPort';
+import type { LearnerStatsRepositoryPort } from '@core/application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
 import { User } from '@core/domain/user/entity/User';
 import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';

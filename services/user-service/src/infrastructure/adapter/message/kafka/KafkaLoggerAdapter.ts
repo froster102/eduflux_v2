@@ -1,7 +1,7 @@
 import { type LogEntry, logLevel } from 'kafkajs';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { container } from '@application/di/RootModule';
 import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { container } from '@di/RootModule';
 
 function getLogger() {
   if (container) {

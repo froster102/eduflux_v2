@@ -1,8 +1,8 @@
-import { container } from '@application/di/RootModule';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { Code } from '@core/common/errors/Code';
 import { Exception } from '@core/common/errors/Exception';
 import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { container } from '@di/RootModule';
 import { DatabaseConfig } from '@infrastructure/config/DatabaseConfig';
 import { tryCatch } from '@shared/utils/try-catch';
 import mongoose from 'mongoose';
