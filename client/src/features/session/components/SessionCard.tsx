@@ -8,17 +8,23 @@ import { IMAGE_BASE_URL } from "@/config/image";
 import ClockIcon from "@/components/icons/ClockIcon";
 import { formatSessionDataTime } from "@/utils/date";
 import VideoIcon from "@/components/icons/VideoIcon";
+import { Role } from "@/shared/enums/Role";
 
 interface SessionCardProps {
   session: UserSession;
   onJoin: (session: UserSession) => void;
+  role: Role;
 }
 
 const sessionSuccessState = ["BOOKED", "CONFIRMED", "COMPLETED"];
 const sessionWarnStates = ["IN_PROGRESS", "PENDING_PAYMENT"];
 const sessionFailureStates = ["PAYMENT_EXPIRED"];
 
-export default function SessionCard({ session, onJoin }: SessionCardProps) {
+export default function SessionCard({
+  session,
+  onJoin,
+  role,
+}: SessionCardProps) {
   const { date, duration, timeRange } = formatSessionDataTime(
     session.startTime,
     session.endTime,
@@ -50,7 +56,7 @@ export default function SessionCard({ session, onJoin }: SessionCardProps) {
                     size: "sm",
                     src: `${IMAGE_BASE_URL}${session.instructor.image}`,
                   }}
-                  name={`${session.instructor.name}`}
+                  name={`${role === Role.LEARNER ? session.instructor.name : session.learner.name}`}
                 />
                 <Chip
                   className="text-xs capitalize"

@@ -125,6 +125,7 @@ function RouteComponent() {
           sessionsQueryResult.sessions.map((session) => (
             <SessionCard
               key={session.id}
+              role={Role.INSTRUCTOR}
               session={session}
               onJoin={handlerJoinSession}
             />
