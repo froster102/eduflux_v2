@@ -43,7 +43,7 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
   ): Promise<void> {
     const messageValue = JSON.stringify(event);
     let topic: string;
-    if (event.type.startsWith('user')) {
+    if (event.type.startsWith('user') || event.type.startsWith('instructor')) {
       topic = USERS_TOPIC;
     } else {
       this.logger.warn('Event no published as not topic was defined');

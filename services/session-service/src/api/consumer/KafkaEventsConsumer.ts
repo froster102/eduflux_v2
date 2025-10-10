@@ -89,6 +89,10 @@ export class KafkaEventsConsumer {
                 await this.userSessionUpdatedEventHandler.handle(event);
                 break;
               }
+              case SessionEvents.SESSION_COMPLETED: {
+                await this.userSessionUpdatedEventHandler.handle(event);
+                break;
+              }
               case UserEvents.USER_UPDATED: {
                 await this.userUpdatedEventHanlder.handle(event);
                 break;

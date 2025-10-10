@@ -18,32 +18,42 @@ import type { KafkaEvent } from '@core/common/events/KafkaEvent';
 import { EnrollmentEvents } from '@core/domain/learner-stats/events/enum/EnrollmentEvents';
 import { SessionEvents } from '@core/common/events/enum/SessionEvents';
 import type { EnrollmentSuccessEventHandler } from '@core/application/learner-stats/handler/EnrollmentSuccessEventHandler';
-import type { SessionUpdatedEventHandler } from '@core/application/learner-stats/handler/SessionUpdatedEventHandler';
 import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
+import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
+import type { InstructorCreatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorCreatedEventHandler';
+import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
+import { SessionSettingsEvents } from '@core/application/views/instructor-view/events/enum/SessionSettingsEvents';
+import type { SessionSettingsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/SessionSettingsUpdatedEventHandler';
+import type { InstructorStatsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorStatsUpdatedEventHandler';
+import type { SessionCompletedEventHandler } from '@core/application/learner-stats/handler/SessionCompletedEventHandler';
+import { UserEvents } from '@core/domain/user/events/UserEvents';
+import type { UserUpdatedEventHandler } from '@core/application/views/instructor-view/handler/UserUpdatedEventHandler';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
   private topics: string[];
   private readonly logger: LoggerPort;
-  private readonly createProgressUseCase: CreateProgressUseCase;
-  private readonly enrollmentSuccessEventHanlder: EnrollmentSuccessEventHandler;
-  private readonly sesssionUpdatedEventHandler: SessionUpdatedEventHandler;
 
   constructor(
     @inject(InfrastructureDITokens.KafkaConnection)
     private readonly kafkaConnection: KafkaConnection,
     @inject(CoreDITokens.Logger) logger: LoggerPort,
     @inject(ProgressDITokens.CreateProgressUseCase)
-    createProgressUseCase: CreateProgressUseCase,
-    @inject(LearnerStatsDITokens.SessionUpdatedEventHandler)
-    sessionUpdatedEventHandler: SessionUpdatedEventHandler,
+    private readonly createProgressUseCase: CreateProgressUseCase,
     @inject(LearnerStatsDITokens.EnrollmentSuccessEventHandler)
-    enrollmentSuccessEventHanlder: EnrollmentSuccessEventHandler,
+    private readonly enrollmentSuccessEventHanlder: EnrollmentSuccessEventHandler,
+    @inject(InstructorViewDITokens.InstructorCreatedEventHandler)
+    private readonly instructorCreatedEventHandler: InstructorCreatedEventHandler,
+    @inject(InstructorViewDITokens.SessionSettingsUpdatedEventHandler)
+    private readonly sessionSettingsUpdatedEventHandler: SessionSettingsUpdatedEventHandler,
+    @inject(InstructorViewDITokens.InstructorStatsUpdatedEventHandler)
+    private readonly instructorStatsUpdatedEventHandler: InstructorStatsUpdatedEventHandler,
+    @inject(LearnerStatsDITokens.SessionCompletedEventHandler)
+    private readonly sessionCompletedEventHandler: SessionCompletedEventHandler,
+    @inject(InstructorViewDITokens.UserUpdatedEventHandler)
+    private readonly userUpdatedEventHandler: UserUpdatedEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
-    this.createProgressUseCase = createProgressUseCase;
-    this.sesssionUpdatedEventHandler = sessionUpdatedEventHandler;
-    this.enrollmentSuccessEventHanlder = enrollmentSuccessEventHanlder;
     this.consumer = this.kafkaConnection.getConsumer(
       USER_SERVICE_CONSUMER_GROUP,
     );
@@ -97,14 +107,27 @@ export class KafkaEventsConsumer {
                 await this.enrollmentSuccessEventHanlder.handle(event);
                 break;
               }
-              case SessionEvents.SESSION_UPDATED: {
-                await this.sesssionUpdatedEventHandler.handle(event);
+              case SessionEvents.SESSION_COMPLETED: {
+                await this.sessionCompletedEventHandler.handle(event);
+                break;
+              }
+              case SessionSettingsEvents.SESSION_SETTINGS_UPDATED: {
+                await this.sessionSettingsUpdatedEventHandler.handle(event);
+                break;
+              }
+              case InstructorEvents.INSTRUCTOR_CREATED: {
+                await this.instructorCreatedEventHandler.handle(event);
+                break;
+              }
+              case InstructorEvents.INSTRUCTOR_STATS_UPDATED: {
+                await this.instructorStatsUpdatedEventHandler.handle(event);
+                break;
+              }
+              case UserEvents.USER_UPDATED: {
+                await this.userUpdatedEventHandler.handle(event);
                 break;
               }
               default:
-                this.logger.warn(
-                  `Unknown event type received: ${(event as Record<string, any>)?.type as string}`,
-                );
             }
           } catch (error) {
             this.logger.error(

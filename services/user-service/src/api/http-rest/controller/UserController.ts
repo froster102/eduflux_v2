@@ -7,11 +7,11 @@ import { inject } from 'inversify';
 import httpStatus from 'http-status';
 import { updateUserSchema } from 'src/api/http-rest/schema/user';
 import { queryParametersSchema } from 'src/api/http-rest/schema/queryParametersSchema';
-import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
 import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
-import type { GetInstructorsUseCase } from '@core/application/instructor/usecase/GetInstructorsUseCase';
-import type { GetInstructorUseCase } from '@core/application/instructor/usecase/GetInstructorUseCase';
 import type { GetLearnerStatsUseCase } from '@core/application/learner-stats/usecase/GetLearnerStatsUseCase';
+import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
+import type { GetInstructorViewsUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewsUseCase';
+import type { GetInstructorViewUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewUseCase';
 
 export class UserController {
   constructor(
@@ -19,12 +19,12 @@ export class UserController {
     private readonly getUserUseCase: GetUserUseCase,
     @inject(UserDITokens.UpdateUserUseCase)
     private readonly updateUserUseCase: UpdateUserUseCase,
-    @inject(InstructorDITokens.GetInstructorsUseCase)
-    private readonly getInstructorsUseCase: GetInstructorsUseCase,
-    @inject(InstructorDITokens.GetInstructorUseCase)
-    private readonly getInstructorUseCase: GetInstructorUseCase,
     @inject(LearnerStatsDITokens.GetLearnerStatsUseCase)
     private readonly getLearnerStatsUseCase: GetLearnerStatsUseCase,
+    @inject(InstructorViewDITokens.GetInstructorViewsUseCase)
+    private readonly getInstructorViewsUseCase: GetInstructorViewsUseCase,
+    @inject(InstructorViewDITokens.GetInstructorViewUseCase)
+    private readonly getInstructorViewUseCase: GetInstructorViewUseCase,
   ) {}
 
   register(): Elysia {
@@ -60,8 +60,8 @@ export class UserController {
         .get('/instructors', async ({ query, user }) => {
           const parsedQuery = queryParametersSchema.parse(query);
           const { totalCount, instructors } =
-            await this.getInstructorsUseCase.execute({
-              currentUserId: user.id,
+            await this.getInstructorViewsUseCase.execute({
+              executorId: user.id,
               queryParameters: {
                 limit: parsedQuery.limit,
                 offset: (parsedQuery.page - 1) * parsedQuery.limit,
@@ -75,8 +75,8 @@ export class UserController {
             instructors,
           };
         })
-        .get('/:id', async ({ params }) => {
-          const instructor = await this.getInstructorUseCase.execute({
+        .get('/instructors/:id', async ({ params }) => {
+          const instructor = await this.getInstructorViewUseCase.execute({
             instructorId: params.id,
           });
 

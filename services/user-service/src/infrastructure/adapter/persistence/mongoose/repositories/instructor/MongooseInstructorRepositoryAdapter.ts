@@ -15,27 +15,38 @@ export class MongooseInstructorRepositoryAdapter
     super(InstructorModel, InstructorMapper);
   }
 
-  async incrementTotalLearners(instructorId: string): Promise<void> {
-    await InstructorModel.updateOne(
-      { _id: instructorId },
+  async incrementTotalLearners(
+    instructorId: string,
+  ): Promise<Instructor | null> {
+    const instructor = await InstructorModel.findByIdAndUpdate(
+      instructorId,
       {
-        $inc: {
-          totalLearners: 1,
-        },
+        $inc: { totalLearners: 1 },
         $set: { updatedAt: new Date() },
       },
+      {
+        new: true,
+      },
     );
+    return instructor ? InstructorMapper.toDomain(instructor) : null;
   }
 
-  async incrementSessionsConducted(instructorId: string): Promise<void> {
-    await InstructorModel.updateOne(
-      { _id: instructorId },
+  async incrementSessionsConducted(
+    instructorId: string,
+  ): Promise<Instructor | null> {
+    const updatedInstructor = await InstructorModel.findByIdAndUpdate(
+      instructorId,
       {
-        $inc: {
-          sessionsConducted: 1,
-        },
+        $inc: { sessionsConducted: 1 },
         $set: { updatedAt: new Date() },
       },
+      {
+        new: true,
+      },
     );
+
+    return updatedInstructor
+      ? InstructorMapper.toDomain(updatedInstructor)
+      : null;
   }
 }

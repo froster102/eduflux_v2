@@ -1,9 +1,9 @@
-import type { SessionStatus } from '@core/common/enums/SessionStatus';
-import type { SessionEvents } from '@core/common/events/enum/SessionEvents';
 import type { Event } from '@core/common/events/Event';
+import type { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import type { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
 
-export interface SessionUpdatedEvent extends Event {
-  readonly type: SessionEvents.SESSION_UPDATED;
+export interface SessionCompletedEvent extends Event {
+  readonly type: SessionEvents.SESSION_COMPLETED;
   readonly sessionId: string;
   readonly learnerId: string;
   readonly instructorId: string;

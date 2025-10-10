@@ -8,7 +8,7 @@ export class LearnerStatsDITokens {
   static readonly EnrollmentSuccessEventHandler: unique symbol = Symbol(
     'EnrollmentSuccessEventHandler',
   );
-  static readonly SessionUpdatedEventHandler: unique symbol = Symbol(
-    'SessionUpdatedEventHandler',
+  static readonly SessionCompletedEventHandler: unique symbol = Symbol(
+    'SessionCompletedEventHandler',
   );
 }

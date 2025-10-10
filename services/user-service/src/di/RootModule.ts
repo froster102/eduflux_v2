@@ -1,5 +1,6 @@
 import { InfrastructureModule } from '@di/InfrastructureModule';
 import { InstructorModule } from '@di/InstructorModule';
+import { InstructorViewModule } from '@di/InstructorViewModule';
 import { LearnerStatsModule } from '@di/LearnerStatsModule';
 import { ProgressModule } from '@di/ProgressModule';
 import { UserModule } from '@di/UserModule';
@@ -14,6 +15,7 @@ void (async () => {
     InstructorModule,
     InfrastructureModule,
     LearnerStatsModule,
+    InstructorViewModule,
   );
 })();
 

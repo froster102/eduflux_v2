@@ -1,6 +1,6 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { SessionRepositoryPort } from '@core/application/session/port/persistence/SessionRepositoryPort';
-import type { MeetingServicePort } from '@core/application/session/port/gateway/MeetingServicePort'; // <-- New Port Import
+import type { MeetingServicePort } from '@core/application/session/port/gateway/MeetingServicePort';
 import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
 import { inject } from 'inversify';
 import type {
@@ -12,6 +12,9 @@ import { NotFoundException } from '@core/common/exception/NotFoundException';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { tryCatch } from '@shared/utils/try-catch';
+import type { SessionCompletedEvent } from '@core/domain/session/events/SessionCompletedEvent';
+import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
+import type { EventBusPort } from '@core/common/port/message/EventBusPort';
 
 export class CompleteSessionOnFinishService
   implements CompleteSessionOnFinishUseCase
@@ -23,6 +26,7 @@ export class CompleteSessionOnFinishService
     @inject(SessionDITokens.MeetingService)
     private readonly meetingService: MeetingServicePort,
     @inject(CoreDITokens.Logger) logger: LoggerPort,
+    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
   ) {
     this.logger = logger.fromContext(CompleteSessionOnFinishService.name);
   }
@@ -35,9 +39,27 @@ export class CompleteSessionOnFinishService
     );
 
     const isActiveStatus = session.status === SessionStatus.IN_PROGRESS;
-    if (session.endTime >= new Date() && isActiveStatus) {
+    const isPastEndTime = session.endTime <= new Date();
+
+    if (isPastEndTime && isActiveStatus) {
       session.markAsCompleted();
       await this.sessionRepository.update(session.id, session);
+
+      const sessionCompletedEvent: SessionCompletedEvent = {
+        id: session.id,
+        type: SessionEvents.SESSION_COMPLETED,
+        sessionId: session.id,
+        learnerId: session.learnerId,
+        instructorId: session.instructorId,
+        status: SessionStatus.COMPLETED,
+        startTime: session.startTime.toISOString(),
+        endTime: session.endTime.toISOString(),
+        createdAt: session.createdAt.toISOString(),
+        updatedAt: session.updatedAt.toISOString(),
+        occuredAt: new Date().toISOString(),
+      };
+
+      await this.eventBus.sendEvent(sessionCompletedEvent);
     } else {
       return;
     }
@@ -45,7 +67,7 @@ export class CompleteSessionOnFinishService
     const { error } = await tryCatch(this.meetingService.deleteRoom(sessionId));
     if (error) {
       this.logger.error(
-        `Failed to delete LiveKit room ${sessionId}:`,
+        `Failed to delete meeting room ${sessionId}:`,
         error as Record<string, any>,
       );
     }

@@ -7,9 +7,9 @@ import type { AutoCompleteSessionsUseCase } from '@core/application/session/usec
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { tryCatch } from '@shared/utils/try-catch';
-import type { SessionUpdatedEvent } from '@core/domain/session/events/SessionUpdatedEvent';
 import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
 import type { EventBusPort } from '@core/common/port/message/EventBusPort';
+import type { SessionCompletedEvent } from '@core/domain/session/events/SessionCompletedEvent';
 
 export class AutoCompleteSessionsService
   implements AutoCompleteSessionsUseCase
@@ -49,15 +49,15 @@ export class AutoCompleteSessionsService
 
     for (const session of updatedSessions) {
       this.logger.info(
-        `Forcefully deleting LiveKit room for session: ${session.id}`,
+        `Forcefully deleting meeting room for session: ${session.id}`,
       );
       const { error } = await tryCatch(
         this.meetingService.deleteRoom(session.id),
       );
 
-      const sessionUpdatedEvent: SessionUpdatedEvent = {
+      const sessionUpdatedEvent: SessionCompletedEvent = {
         id: session.id,
-        type: SessionEvents.SESSION_UPDATED,
+        type: SessionEvents.SESSION_COMPLETED,
         sessionId: session.id,
         learnerId: session.learnerId,
         instructorId: session.instructorId,
