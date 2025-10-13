@@ -1,70 +1,50 @@
-import type { ILogger } from '../common/interfaces/logger.interface';
 import { status as grpcStatus } from '@grpc/grpc-js';
 import httpStatus from 'http-status';
-import { container } from '../di/container';
-import { TYPES } from '../di/types';
+import { Code } from '@core/common/error/Code';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { container } from '@di/RootModule';
 
-export enum AppErrorCode {
-  INVALID_INPUT = 'INVALID_INPUT',
-  CONFLICT = 'CONFLICT',
-  FORBIDDEN = 'FORBIDDEN',
-  NOT_FOUND = 'NOT_FOUND',
-  UNAUTHORIZED = 'UNAUTHORIZED',
-  INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
-}
 function getLogger() {
-  if (container) {
-    return container.get<ILogger>(TYPES.Logger).fromContext('ERROR_CODE');
-  }
+  return container
+    .get<LoggerPort>(CoreDITokens.Logger)
+    .fromContext('ERROR_CODE');
 }
-export const PUBLIC_ERROR_MESSAGES: Record<AppErrorCode, string> = {
-  [AppErrorCode.NOT_FOUND]: 'The requested resource was not found.',
-  [AppErrorCode.FORBIDDEN]: 'You are not authorized to perform this action.',
-  [AppErrorCode.INVALID_INPUT]: 'One or more input fields are invalid.',
-  [AppErrorCode.INTERNAL_SERVER_ERROR]:
-    'An unexpected server error occurred. Please try again later.',
-  [AppErrorCode.CONFLICT]: 'The requested resource already exists',
-  [AppErrorCode.UNAUTHORIZED]: 'Unauthorized',
+
+//Http status code mapping
+export const errorCodeToHttpStatusCode: Record<string, number> = {
+  [Code.BAD_REQUEST_ERROR.code]: httpStatus.BAD_REQUEST,
+  [Code.UNAUTHORIZED_ERROR.code]: httpStatus.UNAUTHORIZED,
+  [Code.INTERNAL_ERROR.code]: httpStatus.INTERNAL_SERVER_ERROR,
+  [Code.CONFLICT_ERROR.code]: httpStatus.CONFLICT,
+  [Code.FORBIDDEN_ERROR.code]: httpStatus.FORBIDDEN,
+  [Code.VALIDATION_ERROR.code]: httpStatus.BAD_REQUEST,
 };
 
-export const errorCodeToHttpStatusCode: { [key in AppErrorCode]?: number } = {
-  [AppErrorCode.INVALID_INPUT]: httpStatus.BAD_REQUEST,
-  [AppErrorCode.CONFLICT]: httpStatus.CONFLICT,
-  [AppErrorCode.FORBIDDEN]: httpStatus.FORBIDDEN,
-  [AppErrorCode.NOT_FOUND]: httpStatus.NOT_FOUND,
-  [AppErrorCode.UNAUTHORIZED]: httpStatus.UNAUTHORIZED,
-};
-
-export const getHttpErrorCode = (code: AppErrorCode | string): number => {
-  if (Object.prototype.hasOwnProperty.call(errorCodeToHttpStatusCode, code)) {
-    const statusCode = errorCodeToHttpStatusCode[code as AppErrorCode];
-    if (statusCode !== undefined) {
-      return statusCode;
-    }
+export const getHttpErrorCode = (code: string): number => {
+  if (code in errorCodeToHttpStatusCode) {
+    return errorCodeToHttpStatusCode[code];
   }
 
-  getLogger()!.warn(
-    `Unknown application error code '${code}'. Defaulting to 500.`,
+  getLogger().warn(
+    `[ERROR_HANDLER] Unknown application error code '${code}'. Defaulting to 500.`,
   );
   return httpStatus.INTERNAL_SERVER_ERROR;
 };
 
-export const errorCodeToGrpcStatusCode: { [key in AppErrorCode]?: number } = {
-  [AppErrorCode.CONFLICT]: grpcStatus.ALREADY_EXISTS,
-  [AppErrorCode.FORBIDDEN]: grpcStatus.PERMISSION_DENIED,
-  [AppErrorCode.INVALID_INPUT]: grpcStatus.INVALID_ARGUMENT,
-  [AppErrorCode.UNAUTHORIZED]: grpcStatus.UNAUTHENTICATED,
-  [AppErrorCode.NOT_FOUND]: grpcStatus.NOT_FOUND,
+//Grpc status code mapping
+export const errorCodeToGrpcStatusCode: Record<string, number> = {
+  [Code.BAD_REQUEST_ERROR.code]: grpcStatus.INVALID_ARGUMENT,
+  [Code.UNAUTHORIZED_ERROR.code]: grpcStatus.UNAUTHENTICATED,
+  [Code.INTERNAL_ERROR.code]: grpcStatus.INTERNAL,
+  [Code.CONFLICT_ERROR.code]: grpcStatus.ALREADY_EXISTS,
 };
 
-export const getGrpcStatusCode = (code: AppErrorCode | string): number => {
-  if (Object.prototype.hasOwnProperty.call(errorCodeToGrpcStatusCode, code)) {
-    const statusCode = errorCodeToGrpcStatusCode[code as AppErrorCode];
-    if (statusCode !== undefined) {
-      return statusCode;
-    }
-
-    getLogger()!.warn(`Unknown application error code '${code}'`);
+export const getGrpcStatusCode = (code: string): number => {
+  if (code in errorCodeToGrpcStatusCode) {
+    return errorCodeToGrpcStatusCode[code];
   }
+
+  getLogger().warn(`[ERROR_HANDLER] Unknown application error code '${code}'`);
   return grpcStatus.INTERNAL;
 };
