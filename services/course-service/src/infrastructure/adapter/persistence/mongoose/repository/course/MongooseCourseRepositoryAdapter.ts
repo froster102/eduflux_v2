@@ -92,6 +92,17 @@ export class MongooseCourseRepositoryAdapter
     };
   }
 
+  async findBySlug(slug: string): Promise<Course | null> {
+    const doc = await CourseModel.findOne({ slug });
+    return doc ? MongooseCourseMapper.toDomainEntity(doc) : null;
+  }
+
+  async existsBySlug(slug: string): Promise<boolean> {
+    const doc = await CourseModel.findOne({ slug });
+    return !!doc;
+  }
+
+
   async incrementCourseEnrollmentCount(courseId: string): Promise<void> {
     await CourseModel.findByIdAndUpdate(
       courseId,

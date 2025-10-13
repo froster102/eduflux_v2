@@ -16,6 +16,7 @@ export class MongooseCourseMapper {
       isFree: doc.isFree,
       status: doc.status as CourseStatus,
       feedback: doc.feedback,
+      slug: doc.slug,
       instructor: {
         id: doc.instructor.id,
         name: doc.instructor.name,
@@ -43,6 +44,7 @@ export class MongooseCourseMapper {
       categoryId: domain.categoryId,
       price: domain.price,
       isFree: domain.isFree,
+      slug: domain.slug,
       status: domain.status,
       feedback: domain.feedback,
       instructor: {

@@ -10,6 +10,7 @@ import { ForbiddenException } from '@core/common/exception/ForbiddenException';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
 import { inject } from 'inversify';
 import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { slugify } from '@shared/utils/slugify';
 
 export class CreateCourseService implements CreateCourseUseCase {
   constructor(
@@ -41,6 +42,15 @@ export class CreateCourseService implements CreateCourseUseCase {
       new NotFoundException(`Category with ID:${categoryId} not found.`),
     );
 
+    const baseSlug = slugify(title);
+    let finalSlug = baseSlug;
+    let counter = 1;
+
+    while (await this.courseRepository.existsBySlug(finalSlug)) {
+      counter++;
+      finalSlug = `${baseSlug}-${counter}`;
+    }
+
     // currently not checking for duplicate title
 
     // const existingCourse = await this.courseRepository.findCourseByTitle(
@@ -55,6 +65,7 @@ export class CreateCourseService implements CreateCourseUseCase {
 
     const course = Course.create({
       title,
+      slug: finalSlug,
       instructor: {
         id: instructor.id,
         name: instructor.firstName + ' ' + instructor.lastName,
