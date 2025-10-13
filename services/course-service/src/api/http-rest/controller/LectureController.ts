@@ -10,6 +10,7 @@ import { createLectureSchema } from '@api/http-rest/validation/createLectureSche
 import type { CreateLectureUseCase } from '@core/application/lecture/usecase/CreateLectureUseCase';
 import { updateLessonSchema } from '@api/http-rest/validation/updateLessonSchema';
 import type { UpdateLectureUseCase } from '@core/application/lecture/usecase/UpdateLectureUseCase';
+import type { GetSubscriberLectureUseCase } from '@core/application/lecture/usecase/GetSubscriberLectureUseCase';
 
 export class LectureController {
   constructor(
@@ -21,12 +22,21 @@ export class LectureController {
     private readonly createLectureUseCase: CreateLectureUseCase,
     @inject(LectureDITokens.UpdateLectureUseCase)
     private readonly updateLectureUseCase: UpdateLectureUseCase,
+    @inject(LectureDITokens.GetSubscriberLectureUseCase)
+    private readonly getSubscriberLectureUseCase: GetSubscriberLectureUseCase,
   ) {}
 
   register(): Elysia {
     return new Elysia().group('/api/courses/:id/lectures', (group) =>
       group
         .use(authenticaionMiddleware)
+        .get('/:lectureId', async ({ params, user }) => {
+          const response = await this.getSubscriberLectureUseCase.execute({
+            lectureId: params.lectureId,
+            userId: user.id,
+          });
+          return response;
+        })
         .post('/', async ({ params, body, user }) => {
           const parsedBody = createLectureSchema.parse(body);
           const lecture = await this.createLectureUseCase.execute({

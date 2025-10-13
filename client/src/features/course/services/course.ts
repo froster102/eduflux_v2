@@ -181,7 +181,7 @@ export async function getLecture(data: {
   courseId: string;
 }): Promise<Lecture> {
   const response = await api.get(
-    `/courses/me/subscribed-courses/${data.courseId}/lectures/${data.lectureId}`,
+    `/courses/${data.courseId}/lectures/${data.lectureId}`,
   );
 
   return response.data;

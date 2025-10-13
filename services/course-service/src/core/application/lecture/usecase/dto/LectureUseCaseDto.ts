@@ -1,6 +1,7 @@
 import { Lecture } from '@core/domain/lecture/entity/Lecture';
 
 export class LectureUseCaseDto {
+  readonly _class: ClassType;
   readonly id: string;
   readonly courseId: string;
   readonly title: string;
@@ -11,6 +12,7 @@ export class LectureUseCaseDto {
   readonly objectIndex: number;
 
   private constructor(lecture: Lecture) {
+    this._class = lecture.class;
     this.id = lecture.id;
     this.courseId = lecture.courseId;
     this.title = lecture.title;

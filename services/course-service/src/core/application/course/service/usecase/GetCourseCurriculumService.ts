@@ -79,8 +79,8 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
     const lectures = await this.lectureRepository.findByCourseId(id);
 
     const assetIdsToFetch = lectures
-      .map((lecture) => lecture.assetId)
-      .filter((assetId): assetId is string => assetId !== null);
+      .filter((lecture) => lecture.preview && lecture.assetId)
+      .map((lecture) => lecture.assetId!);
 
     const assetMap = new Map<string, Asset>();
     if (assetIdsToFetch.length > 0) {
@@ -96,7 +96,7 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
         ...lecture.toJSON(),
       } as unknown as Lecture;
 
-      if (lecture.assetId && assetMap.has(lecture.assetId)) {
+      if (lecture.preview && lecture.assetId && assetMap.has(lecture.assetId)) {
         const asset = assetMap.get(lecture.assetId)!;
         lectureWithAsset.asset = {
           id: asset.id,
