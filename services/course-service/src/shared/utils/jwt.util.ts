@@ -1,6 +1,6 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
-import type { JwtPayload } from '@/infrastructure/http/interfaces/jwt-payload';
-import { jwtConfig } from '../config/jwt.config';
+import { jwtConfig } from '@shared/config/jwt.config';
+import type { JwtPayload } from '@shared/types/jwt-payload';
 
 export async function validateToken(token: string) {
   const JWKS = createRemoteJWKSet(new URL(jwtConfig.JWKS_URL));

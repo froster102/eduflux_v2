@@ -1,30 +1,28 @@
 import 'reflect-metadata';
-import { Server } from './infrastructure/http/server';
-import { serverConfig } from './shared/config/server.config';
-import { container } from './shared/di/container';
-import { DatabaseClient } from './infrastructure/database/setup';
-import { TYPES } from './shared/di/types';
-import { GrpcServer } from './infrastructure/grpc/grpc.server';
-import { EnrollmentEventsConsumer } from './interface/consumer/enrollment-events.consumer';
+import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
+import { container } from '@di/RootModule';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
+import { HttpServer } from '@api/http-rest/HttpServer';
+import { GrpcServer } from '@infrastructure/adapter/grpc/GrpcServer';
 
 async function bootstrap() {
+  //database
+  await MongooseConnection.connect();
+
+  //Consumers
+  // const kafkaConsumer = container.get<KafkaEventsConsumer>(
+  //   InfrastructureDITokens.KafkaEventsConsumer,
+  // );
+  // await kafkaConsumer.run();
+
   //http
-  const httpServer = new Server(serverConfig.PORT);
+  const httpServer = new HttpServer();
   httpServer.start();
 
   //gRPC
   const grpcServer = new GrpcServer();
   grpcServer.start();
-
-  //database
-  const databaseClient = container.get<DatabaseClient>(TYPES.DatabaseClient);
-  await databaseClient.connect();
-
-  //kafka consumer
-  const enrollmentEventsConsumer = container.get<EnrollmentEventsConsumer>(
-    TYPES.EnrollmentEventsConsumer,
-  );
-  await enrollmentEventsConsumer.connect();
 }
 
 void bootstrap();

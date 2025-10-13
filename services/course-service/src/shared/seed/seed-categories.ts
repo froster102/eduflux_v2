@@ -1,11 +1,11 @@
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { container } from '@di/RootModule';
+import { CategoryModel } from '@infrastructure/adapter/persistence/mongoose/model/category/MongooseCategory';
+import { DatabaseConfig } from '@shared/config/DatabaseConfig';
 import mongoose from 'mongoose';
-import { dbConfig } from '../config/db.config';
-import Category from '@/infrastructure/database/models/category.model';
-import { container } from '../di/container';
-import type { ILogger } from '../common/interfaces/logger.interface';
-import { TYPES } from '../di/types';
 
-const seedCategories = [
+const categories = [
   {
     _id: '288',
     title: 'Development',
@@ -73,21 +73,24 @@ const seedCategories = [
   },
 ];
 
-async function main() {
-  const logger = container.get<ILogger>(TYPES.Logger).fromContext('SEED');
+async function seedCategories() {
+  const logger = container
+    .get<LoggerPort>(CoreDITokens.Logger)
+    .fromContext(seedCategories.name);
   try {
-    await mongoose.connect(dbConfig.MONGO_URI);
+    await mongoose.connect(DatabaseConfig.MONGO_URI);
     logger.info('Connected to database for seeding');
-    await Category.insertMany(seedCategories);
+    await CategoryModel.insertMany(categories);
     logger.info('Categories seeded sucessfully.');
   } catch (error) {
-    logger.info(
+    logger.error(
       `Failed to connect to  database for seeding`,
       error as Record<string, any>,
     );
   } finally {
     await mongoose.disconnect();
+    process.exit();
   }
 }
 
-void main();
+void seedCategories();
