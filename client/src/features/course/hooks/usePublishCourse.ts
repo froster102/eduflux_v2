@@ -11,7 +11,10 @@ export function usePublishCourse(options?: {
     mutationFn: publishCourse,
 
     onError: (error: AxiosError<ApiErrorResponse>) => {
-      if (options?.onError && error.response?.data.code === "INVALID_INPUT") {
+      if (
+        options?.onError &&
+        error.response?.data.code === "BAD_REQUEST_ERROR"
+      ) {
         options.onError(error.response?.data.message);
 
         return;

@@ -36,7 +36,11 @@ export default function CourseCard({
               alt="Card background"
               className="object-cover aspect-[16/9] h-full w-full  rounded-lg"
               loading="lazy"
-              src={`${IMAGE_BASE_URL}${course.thumbnail}`}
+              src={
+                course.thumbnail
+                  ? `${IMAGE_BASE_URL}${course.thumbnail}`
+                  : "/placeholder.png"
+              }
             />
           </div>
 
@@ -69,7 +73,9 @@ export default function CourseCard({
                 </Button>
               </div>
             ) : (
-              <p className="text-sm sm:text-lg font-medium">${course.price}</p>
+              <p className="text-sm sm:text-lg font-medium">
+                {course.price ? `$ ${course.price}` : ""}
+              </p>
             )}
           </div>
         </CardBody>

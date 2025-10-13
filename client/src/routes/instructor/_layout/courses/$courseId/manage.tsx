@@ -1,5 +1,4 @@
 import React from "react";
-import { Divider } from "@heroui/divider";
 import { createFileRoute } from "@tanstack/react-router";
 import { Tabs, Tab } from "@heroui/tabs";
 
@@ -48,9 +47,6 @@ function Manage() {
 
   return (
     <div className="h-full">
-      <div className="py-4">
-        <Divider />
-      </div>
       <Tabs fullWidth aria-label="Options">
         <Tab key="course-info" title="Course Info">
           <div className="flex justify-between w-full h-full gap-4">
