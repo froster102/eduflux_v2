@@ -19,4 +19,6 @@ export interface CourseRepositoryPort extends BaseRepositoryPort<Course> {
   incrementCourseEnrollmentCount(courseId: string): Promise<void>;
   findBySlug(slug: string): Promise<Course | null>;
   existsBySlug(slug: string): Promise<boolean>;
+  deepClone(originalCourseId: string, newCourseId: string): Promise<Course>;
+  swapContent(originalCourse: Course, shadowCourse: Course): Promise<void>;
 }

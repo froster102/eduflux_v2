@@ -6,4 +6,5 @@ export enum CourseStatus {
   IN_REVIEW = 'in_review',
   APPROVED = 'approved',
   REJECTED = 'rejected',
+  DRAFT_UPDATE = 'draft_update',
 }

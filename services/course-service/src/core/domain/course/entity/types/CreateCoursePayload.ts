@@ -6,5 +6,6 @@ export interface Instructor {
 export interface CreateCoursePayload {
   title: string;
   categoryId: string;
+  slug: string;
   instructor: Instructor;
 }
