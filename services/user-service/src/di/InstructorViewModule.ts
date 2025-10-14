@@ -2,12 +2,12 @@ import { InstructorViewDITokens } from '@core/application/views/instructor-view/
 import type { InstructorCreatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorCreatedEventHandler';
 import type { InstructorStatsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorStatsUpdatedEventHandler';
 import type { SessionSettingsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/SessionSettingsUpdatedEventHandler';
-import type { UserUpdatedEventHandler } from '@core/application/views/instructor-view/handler/UserUpdatedEventHandler';
+import type { UserUpdatedEventHandler } from '@core/application/views/coordinator/handler/UserUpdatedEventHandler';
 import type { InstructorViewRepositoryPort } from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
 import { InstructorCreatedEventHandlerService } from '@core/application/views/instructor-view/service/handler/InstructorCreatedEventHandlerService';
 import { InstructorStatsUpdatedEventHandlerService } from '@core/application/views/instructor-view/service/handler/InstructorStatsUpdatedEventHandlerService';
 import { SessionSettingsUpdatedEventHandlerService } from '@core/application/views/instructor-view/service/handler/SessionSettingsUpdatedEventHandlerService';
-import { UserUpdatedEventHandlerService } from '@core/application/views/instructor-view/service/handler/UserUpdatedEventHandlerService';
+import { UserUpdatedEventHandlerService } from '@core/application/views/coordinator/service/UserUpdatedEventHandlerService';
 import { GetInstructorViewService } from '@core/application/views/instructor-view/service/usecase/GetInstructorViewService';
 import { GetInstructorViewsService } from '@core/application/views/instructor-view/service/usecase/GetInstructorViewsService';
 import type { GetInstructorViewsUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewsUseCase';

@@ -12,6 +12,7 @@ import type { AssetRepositoryPort } from '@core/application/asset/port/persisten
 import type { GetSubscriberLectureUseCaseResult } from '@core/application/lecture/usecase/types/GetSubscriberLectureUseCaseResult';
 import { LectureUseCaseDto } from '@core/application/lecture/usecase/dto/LectureUseCaseDto';
 import { AssetUseCaseDto } from '@core/application/asset/usecase/dto/AssetUseCaseDto';
+import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 
 export class GetSubscriberLectureService
   implements GetSubscriberLectureUseCase
@@ -19,7 +20,7 @@ export class GetSubscriberLectureService
   constructor(
     @inject(LectureDITokens.LectureRepository)
     private readonly lectureRepository: LectureRepositoryPort,
-    @inject(LectureDITokens.EnrollmentServiceGateway)
+    @inject(CourseDITokens.EnrollmentServiceGateway)
     private readonly enrollmentServiceGateway: EnrollmentServiceGatewayPort,
     @inject(AssetDITokens.AssetRepository)
     private readonly assetRepository: AssetRepositoryPort,
@@ -52,7 +53,7 @@ export class GetSubscriberLectureService
     );
 
     return {
-      lecture: LectureUseCaseDto.fromEntity(lecture),
+      ...LectureUseCaseDto.fromEntity(lecture),
       asset: AssetUseCaseDto.fromEntity(asset),
     };
   }

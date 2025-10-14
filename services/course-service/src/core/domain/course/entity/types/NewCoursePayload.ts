@@ -12,6 +12,7 @@ export interface NewCoursePayload {
   price: number | null;
   isFree: boolean;
   status: CourseStatus;
+  slug: string;
   feedback: string | null;
   instructor: Instructor;
   averageRating: number;

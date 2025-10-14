@@ -15,6 +15,8 @@ import { WinstonLoggerAdapter } from '@infrastructure/logger/WinstonLoggerAdapte
 import { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
+import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducer';
+import type { EventBusPort } from '@core/common/port/message/EventBustPort';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -54,5 +56,11 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<FileStorageGatewayPort>(AssetDITokens.FileStorageGateway)
       .to(CloudinaryFileStorageAdapter);
+
+    // Producer
+    options
+      .bind<EventBusPort>(CoreDITokens.EventBus)
+      .to(KafkaEventBusProducerAdapter)
+      .inSingletonScope();
   },
 );

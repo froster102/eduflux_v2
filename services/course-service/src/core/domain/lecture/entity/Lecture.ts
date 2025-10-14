@@ -39,6 +39,10 @@ export class Lecture extends Entity<string> {
     return this._assetId;
   }
 
+  get class(): ClassType {
+    return this._class;
+  }
+
   get preview(): boolean {
     return this._preview;
   }

@@ -6,6 +6,7 @@ import {
   type MongooseLecture,
 } from '@infrastructure/adapter/persistence/mongoose/model/lecture/MongooseLecture';
 import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { nanoid } from '@shared/utils/nanoid';
 import { unmanaged } from 'inversify';
 import type { ClientSession } from 'mongoose';
 
@@ -44,5 +45,27 @@ export class MongooseLectureRepositoryAdapter
       },
     }));
     await LectureModel.bulkWrite(bulkOps, { session: this.session });
+  }
+
+  async deepCloneByCourseId(
+    oldCourseId: string,
+    newCourseId: string,
+  ): Promise<Lecture[]> {
+    const originalDocs = await LectureModel.find(
+      { courseId: oldCourseId },
+      null,
+      { session: this.session },
+    );
+
+    const clonedDocs = originalDocs.map((doc) => {
+      const cloned = doc.toObject() as MongooseLecture;
+      cloned._id = nanoid();
+      cloned.courseId = newCourseId;
+      return cloned;
+    });
+
+    await LectureModel.insertMany(clonedDocs, { session: this.session });
+
+    return MongooseLectureMapper.toDomainEntities(clonedDocs);
   }
 }

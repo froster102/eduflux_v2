@@ -10,12 +10,14 @@ import { courseLevelMap } from "@/config/course-level";
 interface CourseCardProps {
   course: Course;
   isSubscribed?: boolean;
+  isInstructorCourse?: boolean;
   onPress?: (course: Course) => void;
 }
 
 export default function CourseCard({
   course,
   isSubscribed,
+  isInstructorCourse,
   onPress,
 }: CourseCardProps) {
   return (
@@ -64,7 +66,11 @@ export default function CourseCard({
             <h4 className="font-medium text-sm md:text-large truncate w-full max-w-full overflow-hidden">
               {course.title}
             </h4>
-            <small className="text-default-500">{course.instructor.name}</small>
+            {!isInstructorCourse && (
+              <small className="text-default-500">
+                {course.instructor.name}
+              </small>
+            )}
             {/* <p>4.7</p> */}
             {isSubscribed ? (
               <div className="pt-2">

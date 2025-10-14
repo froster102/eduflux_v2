@@ -9,6 +9,7 @@ import {
   type MongooseCourse,
 } from '@infrastructure/adapter/persistence/mongoose/model/course/MongooseCourse';
 import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { DatabaseException } from '@infrastructure/exceptions/DatabaseException';
 import { unmanaged } from 'inversify';
 import type { ClientSession, FilterQuery } from 'mongoose';
 
@@ -90,6 +91,97 @@ export class MongooseCourseRepositoryAdapter
       totalCount,
       courses: MongooseCourseMapper.toDomainEntities(courses),
     };
+  }
+
+  async findBySlug(slug: string): Promise<Course | null> {
+    const doc = await CourseModel.findOne({ slug });
+    return doc ? MongooseCourseMapper.toDomainEntity(doc) : null;
+  }
+
+  async existsBySlug(slug: string): Promise<boolean> {
+    const doc = await CourseModel.findOne({ slug });
+    return !!doc;
+  }
+
+  async deepClone(
+    originalCourseId: string,
+    newCourseId: string,
+  ): Promise<Course> {
+    const pipeline = [
+      { $match: { _id: originalCourseId } },
+      { $unset: ['_id', 'createdAt', 'updatedAt'] },
+      {
+        $addFields: {
+          _id: newCourseId,
+          originalCourseId: originalCourseId,
+          status: CourseStatus.DRAFT_UPDATE,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      },
+
+      { $merge: { into: CourseModel.collection.name } },
+    ];
+
+    await CourseModel.aggregate(pipeline, { session: this.session });
+
+    const newDoc = await CourseModel.findById(newCourseId);
+
+    if (!newDoc) {
+      throw new DatabaseException();
+    }
+
+    return MongooseCourseMapper.toDomainEntity(newDoc);
+  }
+
+  async swapContent(
+    originalCourse: Course,
+    shadowCourse: Course,
+  ): Promise<void> {
+    const originalCourseId = originalCourse.id;
+    const shadowCourseId = shadowCourse.id;
+
+    if (!this.session) {
+      throw new DatabaseException();
+    }
+
+    const shadowDoc = MongooseCourseMapper.toMongooseEntity(shadowCourse);
+
+    const updatePayload: Partial<MongooseCourse> = {
+      title: shadowDoc.title,
+      description: shadowDoc.description,
+      price: shadowDoc.price,
+      thumbnail: shadowDoc.thumbnail,
+      updatedAt: new Date(),
+      publishedAt: new Date(),
+    };
+
+    await CourseModel.updateOne(
+      { _id: originalCourseId },
+      { $set: updatePayload },
+      { session: this.session },
+    );
+
+    await this.model.db
+      .model('Chapter')
+      .updateMany(
+        { courseId: shadowCourseId },
+        { $set: { courseId: originalCourseId } },
+        { session: this.session },
+      );
+
+    await this.model.db
+      .model('Lecture')
+      .updateMany(
+        { courseId: shadowCourseId },
+        { $set: { courseId: originalCourseId } },
+        { session: this.session },
+      );
+
+    await CourseModel.deleteOne(
+      { _id: shadowCourseId },
+      { session: this.session },
+    );
   }
 
   async incrementCourseEnrollmentCount(courseId: string): Promise<void> {

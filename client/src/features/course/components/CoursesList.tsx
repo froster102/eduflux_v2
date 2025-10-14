@@ -7,6 +7,7 @@ interface CoursesListProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   type: "all-course" | "my-courses";
+  isInstructorListing?: boolean;
   onCoursePress: (course: Course) => void;
 }
 
@@ -16,6 +17,7 @@ export default function CoursesList({
   onPageChange,
   totalPages,
   type,
+  isInstructorListing,
   onCoursePress,
 }: CoursesListProps) {
   return (
@@ -25,6 +27,7 @@ export default function CoursesList({
           <CourseCard
             key={course.id}
             course={course}
+            isInstructorCourse={isInstructorListing}
             isSubscribed={type === "my-courses"}
             onPress={() => {
               if (onCoursePress) {
