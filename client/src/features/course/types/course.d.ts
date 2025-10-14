@@ -88,6 +88,8 @@ declare global {
   export type CurriculumItem = Chapter | Lecture;
 
   export type CurriculumItems = (Chapter | Lecture)[];
+
+  export type GetSubscribedCoursesQueryParams = QueryParmeters;
 }
 
 export {};

@@ -6,7 +6,7 @@ export async function getInstructorCourses(
 ): Promise<{ courses: Course[]; total: number }> {
   const params = buildQueryUrlParams(paginationQueryParams);
 
-  const response = await api.get(`/courses/me/taught-courses${params}`);
+  const response = await api.get(`/users/me/taught-courses${params}`);
 
   return response.data;
 }
@@ -166,12 +166,10 @@ export async function getCourseCurriculum(
 }
 
 export async function getSubscribedCourses(
-  paginationQueryParams: PaginationQueryParams,
+  paginationQueryParams: GetSubscribedCoursesQueryParams,
 ): Promise<{ total: number; courses: Course[] }> {
   const queryParams = buildQueryUrlParams(paginationQueryParams);
-  const response = await api.get(
-    `/courses/me/subscribed-courses${queryParams}`,
-  );
+  const response = await api.get(`/users/me/subscribed-courses${queryParams}`);
 
   return response.data;
 }
@@ -181,7 +179,7 @@ export async function getLecture(data: {
   courseId: string;
 }): Promise<Lecture> {
   const response = await api.get(
-    `/courses/me/subscribed-courses/${data.courseId}/lectures/${data.lectureId}`,
+    `/courses/${data.courseId}/lectures/${data.lectureId}`,
   );
 
   return response.data;

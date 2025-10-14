@@ -6,6 +6,7 @@ import {
   type MongooseChapter,
 } from '@infrastructure/adapter/persistence/mongoose/model/chapter/MongooseChapter';
 import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { nanoid } from '@shared/utils/nanoid';
 import { unmanaged } from 'inversify';
 import type { ClientSession } from 'mongoose';
 
@@ -34,6 +35,28 @@ export class MongooseChapterRepositoryAdapter
       .sort({ objectIndex: -1 })
       .select('objectIndex');
     return result ? result.objectIndex : 0;
+  }
+
+  async deepCloneByCourseId(
+    oldCourseId: string,
+    newCourseId: string,
+  ): Promise<Chapter[]> {
+    const originalDocs = await ChapterModel.find(
+      { courseId: oldCourseId },
+      null,
+      { session: this.session },
+    );
+
+    const clonedDocs = originalDocs.map((doc) => {
+      const cloned = doc.toObject();
+      cloned._id = nanoid();
+      cloned.courseId = newCourseId;
+      return cloned;
+    });
+
+    await ChapterModel.insertMany(clonedDocs, { session: this.session });
+
+    return MongooseChapterMapper.toDomainEntities(clonedDocs);
   }
 
   async updateAll(chapters: Chapter[]): Promise<void> {

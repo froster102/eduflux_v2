@@ -81,6 +81,7 @@ function RouteComponent() {
               <CoursesList
                 courses={data!.courses}
                 currentPage={page}
+                isInstructorListing={true}
                 totalPages={totalPages}
                 type="all-course"
                 onCoursePress={onPressHanlder}

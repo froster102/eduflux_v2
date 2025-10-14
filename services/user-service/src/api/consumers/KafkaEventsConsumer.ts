@@ -1,4 +1,5 @@
 import {
+  COURSES_TOPIC,
   ENROLLMENTS_TOPIC,
   INSTRUCTOR_TOPIC,
   SESSION_TOPIC,
@@ -27,7 +28,11 @@ import type { SessionSettingsUpdatedEventHandler } from '@core/application/views
 import type { InstructorStatsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorStatsUpdatedEventHandler';
 import type { SessionCompletedEventHandler } from '@core/application/learner-stats/handler/SessionCompletedEventHandler';
 import { UserEvents } from '@core/domain/user/events/UserEvents';
-import type { UserUpdatedEventHandler } from '@core/application/views/instructor-view/handler/UserUpdatedEventHandler';
+import type { UserUpdatedEventHandler } from '@core/application/views/coordinator/handler/UserUpdatedEventHandler';
+import { CourseEvents } from '@shared/constants/events';
+import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
+import type { CourseCreatedEventHandler } from '@core/application/views/coordinator/handler/CourseCreatedEventHandler';
+import type { CourseUpdatedEventHandler } from '@core/application/views/coordinator/handler/CourseUpdateEventHandler';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -52,6 +57,10 @@ export class KafkaEventsConsumer {
     private readonly sessionCompletedEventHandler: SessionCompletedEventHandler,
     @inject(InstructorViewDITokens.UserUpdatedEventHandler)
     private readonly userUpdatedEventHandler: UserUpdatedEventHandler,
+    @inject(TaughtCourseViewDITokens.CourseCreatedEventHandler)
+    private readonly courseCreatedEventHandler: CourseCreatedEventHandler,
+    @inject(TaughtCourseViewDITokens.CourseUpdatedEventHandler)
+    private readonly courseUpdatedEventHandler: CourseUpdatedEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
     this.consumer = this.kafkaConnection.getConsumer(
@@ -62,6 +71,7 @@ export class KafkaEventsConsumer {
       INSTRUCTOR_TOPIC,
       USERS_TOPIC,
       ENROLLMENTS_TOPIC,
+      COURSES_TOPIC,
     ];
   }
 
@@ -125,6 +135,14 @@ export class KafkaEventsConsumer {
               }
               case UserEvents.USER_UPDATED: {
                 await this.userUpdatedEventHandler.handle(event);
+                break;
+              }
+              case CourseEvents.COURSE_CREATED: {
+                await this.courseCreatedEventHandler.handle(event);
+                break;
+              }
+              case CourseEvents.COURSE_UPDATED: {
+                await this.courseUpdatedEventHandler.handle(event);
                 break;
               }
               default:

@@ -7,6 +7,7 @@ export interface MongooseCourse {
   thumbnail: string | null;
   level: string | null;
   categoryId: string;
+  slug: string;
   price: number | null;
   isFree: boolean;
   status: string;
@@ -29,6 +30,12 @@ const CourseSchema = new Schema<MongooseCourse>(
       type: String,
     },
     title: { type: String, required: true },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
     description: { type: String, default: '' },
     thumbnail: { type: String, default: null },
     level: {

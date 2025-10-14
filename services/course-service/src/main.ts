@@ -5,6 +5,9 @@ import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDIToken
 import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
 import { HttpServer } from '@api/http-rest/HttpServer';
 import { GrpcServer } from '@infrastructure/adapter/grpc/GrpcServer';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
+import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducer';
 
 async function bootstrap() {
   //database
@@ -15,6 +18,12 @@ async function bootstrap() {
   //   InfrastructureDITokens.KafkaEventsConsumer,
   // );
   // await kafkaConsumer.run();
+
+  //kafka produer
+  const kafkaProducer = container.get<KafkaEventBusProducerAdapter>(
+    CoreDITokens.EventBus,
+  );
+  await kafkaProducer.connect();
 
   //http
   const httpServer = new HttpServer();

@@ -11,6 +11,7 @@ export class Course extends Entity<string> {
   private _thumbnail: string | null;
   private _level: CourseLevel | null;
   private _categoryId: string;
+  private _slug: string;
   private _price: number | null;
   private _isFree: boolean;
   private _status: CourseStatus;
@@ -32,6 +33,7 @@ export class Course extends Entity<string> {
     this._categoryId = payload.categoryId;
     this._price = payload.price;
     this._isFree = payload.isFree;
+    this._slug = payload.slug;
     this._status = payload.status;
     this._feedback = payload.feedback;
     this._instructor = payload.instructor;
@@ -57,6 +59,10 @@ export class Course extends Entity<string> {
 
   get level(): CourseLevel | null {
     return this._level;
+  }
+
+  get slug(): string {
+    return this._slug;
   }
 
   get categoryId(): string {
@@ -152,14 +158,23 @@ export class Course extends Entity<string> {
     }
   }
 
+  markAsUpdateDraft(): void {
+    this._status = CourseStatus.DRAFT_UPDATE;
+    this._feedback = null;
+    this._updatedAt = new Date();
+  }
+
   submitForReview(): void {
     if (
       this._status === CourseStatus.DRAFT ||
-      this._status === CourseStatus.REJECTED
+      this._status === CourseStatus.REJECTED ||
+      this._status === CourseStatus.DRAFT_UPDATE
     ) {
       this._status = CourseStatus.IN_REVIEW;
       this._feedback = null;
       this._updatedAt = new Date();
+    } else {
+      throw new Error(`Cannot submit course from status: ${this._status}`);
     }
   }
 
@@ -230,6 +245,7 @@ export class Course extends Entity<string> {
       description: '',
       thumbnail: null,
       level: null,
+      slug: payload.slug,
       categoryId: payload.categoryId,
       price: null,
       isFree: false,
@@ -265,6 +281,7 @@ export class Course extends Entity<string> {
         id: this._instructor.id,
         name: this._instructor.name,
       },
+      slug: this._slug,
       averageRating: this._averageRating,
       ratingCount: this._ratingCount,
       enrollmentCount: this._enrollmentCount,
