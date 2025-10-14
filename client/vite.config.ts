@@ -7,9 +7,9 @@ import checker from "vite-plugin-checker";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    //  checker({
-    //   typescript: true,
-    // }),
+     checker({
+      typescript: true,
+    }),
     tanstackRouter({
       target: "react",
       autoCodeSplitting: true,

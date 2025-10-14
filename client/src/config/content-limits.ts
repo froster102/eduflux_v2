@@ -1,4 +1,17 @@
 export const contentLimits = {
+  FIRST_NAME: {
+    MIN_LENGTH: 2,
+    MAX_LENGTH: 12,
+  },
+  LAST_NAME: {
+    MIN_LENGTH: 2,
+    MAX_LENGTH: 12,
+  },
+  BIO: {
+    MIN_LENGTH: 100,
+    MAX_LENGTH: 500,
+  },
+
   COURSE_TITLE: {
     MIN_LENGTH: 5,
     MAX_LENGTH: 80,

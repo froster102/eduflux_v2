@@ -12,7 +12,8 @@ export const Route = createFileRoute("/_layout/courses/")({
 });
 
 function RouteComponent() {
-  const [searchQuery] = React.useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_searchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(8);
   const navigate = useNavigate();
@@ -25,8 +26,6 @@ function RouteComponent() {
       paginationQueryParams: {
         page,
         limit,
-        searchFields: ["title"],
-        searchQuery,
       },
       enabled: currentTab === "my-courses",
     });
@@ -34,8 +33,6 @@ function RouteComponent() {
   const { data: allCourses, isLoading: isAllCoursesLoading } = useGetCourses({
     page,
     limit,
-    searchFields: ["title"],
-    searchQuery,
   });
 
   const currentTotal =
@@ -92,6 +89,7 @@ function RouteComponent() {
                   currentPage={page}
                   totalPages={totalPages}
                   type="my-courses"
+                  onCoursePress={() => {}}
                   onPageChange={(page) => setPage(page)}
                 />
               )}

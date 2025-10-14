@@ -1,3 +1,5 @@
+import { Role } from "@/shared/enums/Role";
+
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {};
