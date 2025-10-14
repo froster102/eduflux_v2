@@ -21,7 +21,10 @@ export const updateCourseSchema = z
     categoryId: z.string({ error: 'A valid category ID is required' }),
     thumbnail: z.string({ error: 'Thumbnail is required' }),
     level: z.enum(Object.values(CourseLevel)),
-    price: z.number({ error: 'Course pricing is required' }),
+    price: z
+      .number({ error: 'Course pricing is required' })
+      .min(contentLimits.MIN_COURSE_PRICE)
+      .max(contentLimits.MAX_COURSE_PRICE),
     isFree: z.boolean(),
   })
   .partial();
