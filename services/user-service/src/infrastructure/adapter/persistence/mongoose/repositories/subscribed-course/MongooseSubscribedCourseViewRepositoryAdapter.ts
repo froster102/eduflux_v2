@@ -1,6 +1,7 @@
 import type { SubscribedCourseView } from '@core/application/views/subscribed-course/entity/SubscribedCourseView';
 import type { SubscribedCourseViewQueryParameters } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryParameters';
 import type { SubscribedCourseViewQueryResult } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryResult';
+import type { SubscribedCourseViewUpsertPayload } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUpsertPayload';
 import type { SubscribedCourseViewUserUpdatePayload } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUserUpdatePayload';
 import type { SubscribedCourseViewRepositoryPort } from '@core/application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
 import { MongooseSubscribedCourseViewMapper } from '@infrastructure/adapter/persistence/mongoose/models/subscribed-course/mapper/MongooseSubscribedCourseViewMapper';
@@ -22,15 +23,12 @@ export class MongooseSubscribedCourseViewRepositoryAdapter
     super(SubscribedCourseViewModel, MongooseSubscribedCourseViewMapper);
   }
 
-  async upsert(subscribedCourseView: SubscribedCourseView): Promise<void> {
-    const persistence =
-      MongooseSubscribedCourseViewMapper.toPersistence(subscribedCourseView);
-
+  async upsert(payload: SubscribedCourseViewUpsertPayload): Promise<void> {
     await SubscribedCourseViewModel.updateOne(
       {
-        _id: persistence._id,
+        _id: payload.id,
       },
-      { $set: persistence },
+      { $set: payload },
       { upsert: true },
     );
   }

@@ -4,6 +4,7 @@ import { InstructorViewModule } from '@di/InstructorViewModule';
 import { LearnerStatsModule } from '@di/LearnerStatsModule';
 import { ProgressModule } from '@di/ProgressModule';
 import { SubscribedCourseViewModule } from '@di/SubscribedCourseViewModule';
+import { TaughtCourseViewModule } from '@di/TaughtCourseViewModule';
 import { UserModule } from '@di/UserModule';
 import { Container } from 'inversify';
 
@@ -18,6 +19,7 @@ void (async () => {
     LearnerStatsModule,
     InstructorViewModule,
     SubscribedCourseViewModule,
+    TaughtCourseViewModule,
   );
 })();
 

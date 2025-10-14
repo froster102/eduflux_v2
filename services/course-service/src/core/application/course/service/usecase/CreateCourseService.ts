@@ -11,6 +11,10 @@ import { NotFoundException } from '@core/common/exception/NotFoundException';
 import { inject } from 'inversify';
 import { CoreAssert } from '@core/common/util/assert/CoreAssert';
 import { slugify } from '@shared/utils/slugify';
+import { CourseEvents } from '@core/common/events/enum/CourseEvents';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { EventBusPort } from '@core/common/port/message/EventBustPort';
+import type { CourseCreatedEvent } from '@core/domain/course/events/CourseCreatedEvent';
 
 export class CreateCourseService implements CreateCourseUseCase {
   constructor(
@@ -20,6 +24,8 @@ export class CreateCourseService implements CreateCourseUseCase {
     private readonly courseRepository: CourseRepositoryPort,
     @inject(CourseDITokens.CategoryRepository)
     private readonly categoryRepository: CategoryRepositoryPort,
+    @inject(CoreDITokens.EventBus)
+    private readonly eventBus: EventBusPort,
   ) {}
 
   async execute(payload: CreateCoursePort): Promise<Course> {
@@ -74,7 +80,21 @@ export class CreateCourseService implements CreateCourseUseCase {
     });
 
     const savedCourse = await this.courseRepository.save(course);
-
+    await this.eventBus.sendEvent<CourseCreatedEvent>({
+      type: CourseEvents.COURSE_CREATED,
+      instructorId: savedCourse.instructor.id,
+      courseMetadata: {
+        id: savedCourse.id,
+        title: savedCourse.title,
+        thumbnail: savedCourse.thumbnail,
+        level: savedCourse.level,
+        status: savedCourse.status,
+        enrollmentCount: savedCourse.enrollmentCount,
+        averageRating: savedCourse.averageRating,
+      },
+      occuredAt: new Date().toISOString(),
+      id: savedCourse.id,
+    });
     return savedCourse;
   }
 }

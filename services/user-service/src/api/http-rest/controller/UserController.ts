@@ -5,13 +5,19 @@ import type { UpdateUserUseCase } from '@core/domain/user/usecase/UpdateUserUseC
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 import httpStatus from 'http-status';
-import { updateUserSchema } from 'src/api/http-rest/schema/user';
-import { paginationSchema } from '@api/http-rest/schema/paginationSchema';
 import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
 import type { GetLearnerStatsUseCase } from '@core/application/learner-stats/usecase/GetLearnerStatsUseCase';
 import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
 import type { GetInstructorViewsUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewsUseCase';
 import type { GetInstructorViewUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewUseCase';
+import { SubscribedCourseViewDITokens } from '@core/application/views/subscribed-course/di/SubscribedCourseViewDITokens';
+import type { GetSubscribedCourseViewsUseCase } from '@core/application/views/subscribed-course/usecase/GetSubscribedCourseViewsUseCase';
+import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
+import type { GetTaughtCourseViewsUseCase } from '@core/application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
+import { getTaughtCourseSchema } from '@api/http-rest/validators/getTaughtCoursesSchema';
+import { updateUserSchema } from '@api/http-rest/validators/user';
+import { paginationSchema } from '@api/http-rest/validators/paginationSchema';
+import { getSubscribedCoursesSchema } from '@api/http-rest/validators/getSubscribedCoursesSchema';
 
 export class UserController {
   constructor(
@@ -27,12 +33,12 @@ export class UserController {
     private readonly getInstructorViewUseCase: GetInstructorViewUseCase,
     @inject(SubscribedCourseViewDITokens.GetSubscribedCourseViewsUseCase)
     private readonly getSubscribedCourseViewsUseCase: GetSubscribedCourseViewsUseCase,
+    @inject(TaughtCourseViewDITokens.GetTaughtCourseViewUseCase)
+    private readonly getTaughtCourseViewUseCase: GetTaughtCourseViewsUseCase,
   ) {}
 
   register(): Elysia {
-    return new Elysia().group(
-      '/api/users',
-      (group) =>
+    return new Elysia().group('/api/users', (group) =>
       group
         .use(authenticaionMiddleware)
         .get('/me', async ({ user, set }) => {
@@ -62,7 +68,7 @@ export class UserController {
           return JSON.stringify(response);
         })
         .get('/instructors', async ({ query, user }) => {
-            const parsedQuery = paginationSchema.parse(query);
+          const parsedQuery = paginationSchema.parse(query);
           const { totalCount, instructors } =
             await this.getInstructorViewsUseCase.execute({
               executorId: user.id,
@@ -85,25 +91,43 @@ export class UserController {
           });
 
           return JSON.stringify(instructor);
-          })
-          .get('/me/subscribed-courses', async ({ user, query }) => {
-            const parsedQuery = getSubscribedCoursesSchema.parse(query);
-            const { totalCount, courses } =
-              await this.getSubscribedCourseViewsUseCase.execute({
-                userId: user.id,
-                query: {
-                  limit: parsedQuery.limit,
-                  offset: (parsedQuery.page - 1) * parsedQuery.limit,
-                },
-              });
-            return {
-              pagination: {
-                totalPages: Math.ceil(totalCount / parsedQuery.limit),
-                currentPage: parsedQuery.page,
+        })
+        .get('/me/subscribed-courses', async ({ user, query }) => {
+          const parsedQuery = getSubscribedCoursesSchema.parse(query);
+          const { totalCount, courses } =
+            await this.getSubscribedCourseViewsUseCase.execute({
+              userId: user.id,
+              query: {
+                limit: parsedQuery.limit,
+                offset: (parsedQuery.page - 1) * parsedQuery.limit,
               },
-              courses,
-            };
-          }),
+            });
+          return {
+            pagination: {
+              totalPages: Math.ceil(totalCount / parsedQuery.limit),
+              currentPage: parsedQuery.page,
+            },
+            courses,
+          };
+        })
+        .get('/me/taught-courses', async ({ user, query }) => {
+          const parsedQuery = getTaughtCourseSchema.parse(query);
+          const { totalCount, courses } =
+            await this.getTaughtCourseViewUseCase.execute({
+              userId: user.id,
+              query: {
+                limit: parsedQuery.limit,
+                offset: (parsedQuery.page - 1) * parsedQuery.limit,
+              },
+            });
+          return {
+            pagination: {
+              totalPages: Math.ceil(totalCount / parsedQuery.limit),
+              currentPage: parsedQuery.page,
+            },
+            courses,
+          };
+        }),
     );
   }
 }

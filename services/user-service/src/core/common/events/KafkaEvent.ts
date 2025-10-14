@@ -1,3 +1,5 @@
+import type { CourseCreatedEvent } from '@core/application/views/coordinator/events/CourseCreatedEvent';
+import type { CourseUpdatedEvent } from '@core/application/views/coordinator/events/CourseUpdatedEvent';
 import type { InstructorCreatedEvent } from '@core/application/views/instructor-view/events/InstructorCreatedEvent';
 import type { InstructorStatsUpdatedEvent } from '@core/application/views/instructor-view/events/InstructorStatsUpdatedEvent';
 import type { SessionSettingsUpdateEvent } from '@core/application/views/instructor-view/events/SessionSettingsEvent';
@@ -11,4 +13,6 @@ export type KafkaEvent =
   | SessionSettingsUpdateEvent
   | InstructorStatsUpdatedEvent
   | SessionCompletedEvent
-  | UserUpdatedEvent;
+  | UserUpdatedEvent
+  | CourseCreatedEvent
+  | CourseUpdatedEvent;
