@@ -1,6 +1,7 @@
 import type { SubscribedCourseView } from '@core/application/views/subscribed-course/entity/SubscribedCourseView';
 import type { SubscribedCourseViewQueryParameters } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryParameters';
 import type { SubscribedCourseViewQueryResult } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryResult';
+import type { SubscribedCourseViewUserUpdatePayload } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUserUpdatePayload';
 import type { SubscribedCourseViewRepositoryPort } from '@core/application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
 import { MongooseSubscribedCourseViewMapper } from '@infrastructure/adapter/persistence/mongoose/models/subscribed-course/mapper/MongooseSubscribedCourseViewMapper';
 import {
@@ -31,6 +32,17 @@ export class MongooseSubscribedCourseViewRepositoryAdapter
       },
       { $set: persistence },
       { upsert: true },
+    );
+  }
+
+  async updateUser(
+    payload: SubscribedCourseViewUserUpdatePayload,
+  ): Promise<void> {
+    await SubscribedCourseViewModel.updateMany(
+      {
+        'instructor.id': payload.id,
+      },
+      { $set: { 'instructor.name': payload.name } },
     );
   }
 
