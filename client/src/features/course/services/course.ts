@@ -166,12 +166,10 @@ export async function getCourseCurriculum(
 }
 
 export async function getSubscribedCourses(
-  paginationQueryParams: PaginationQueryParams,
+  paginationQueryParams: GetSubscribedCoursesQueryParams,
 ): Promise<{ total: number; courses: Course[] }> {
   const queryParams = buildQueryUrlParams(paginationQueryParams);
-  const response = await api.get(
-    `/courses/me/subscribed-courses${queryParams}`,
-  );
+  const response = await api.get(`/users/me/subscribed-courses${queryParams}`);
 
   return response.data;
 }
