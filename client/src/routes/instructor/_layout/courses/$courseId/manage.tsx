@@ -9,6 +9,7 @@ import { useGetInstructorCourseCurriculum } from "@/features/course/hooks/useGet
 import { useUpdateInstructorCourse } from "@/features/course/hooks/useUpdateCourse";
 import { usePublishCourse } from "@/features/course/hooks/usePublishCourse";
 import CourseForm from "@/features/course/components/forms/CourseForm";
+import { CourseLevel } from "@/shared/enums/CourseLevel";
 
 export const Route = createFileRoute(
   "/instructor/_layout/courses/$courseId/manage",
@@ -61,7 +62,7 @@ function Manage() {
                         title: courseInfo.title,
                         description: courseInfo.description,
                         isFree: courseInfo.isFree,
-                        level: courseInfo.level,
+                        level: courseInfo.level || CourseLevel.BEGINNER,
                         price: courseInfo.price,
                         thumbnail: courseInfo.thumbnail,
                       }

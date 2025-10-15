@@ -46,6 +46,7 @@ export default function CalendarView() {
           <Button onPress={() => setValue(nextMonth)}>Next month</Button>
         </ButtonGroup>
       }
+      // @ts-ignore
       value={value}
       weekdayStyle="short"
       onChange={setValue}

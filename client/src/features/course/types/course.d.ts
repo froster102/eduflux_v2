@@ -1,21 +1,23 @@
+import { CourseLevel } from "@/shared/enums/CourseLevel";
+
 declare global {
   export type UpdateCourseFormData = Partial<{
-    title: string;
-    description: string;
-    categoryId: string;
-    level: "beginner" | "intermediate" | "advanced";
-    thumbnail: string | null;
-    price: unknown;
-    isFree: boolean;
+    title?: string;
+    description?: string;
+    categoryId?: string;
+    level?: CourseLevel;
+    thumbnail?: string;
+    price?: number;
+    isFree?: boolean;
   }>;
 
   export type Course = {
     id: string;
     title: string;
     description: string;
-    thumbnail: string | null;
+    thumbnail: string;
     categoryId: string;
-    level: "beginner" | "intermediate" | "advanced";
+    level: CourseLevel;
     price: number;
     isFree: boolean;
     status: CourseStatus;

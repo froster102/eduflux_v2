@@ -8,7 +8,7 @@ export function useGetSubsribedCourses({
   paginationQueryParams,
   enabled,
 }: {
-  paginationQueryParams: PaginationQueryParams;
+  paginationQueryParams: QueryParmeters;
   enabled: boolean;
 }) {
   const { user } = useAuthStore();

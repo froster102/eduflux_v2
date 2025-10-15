@@ -2,7 +2,7 @@ import api from "@/lib/axios";
 import { buildQueryUrlParams } from "@/utils/helpers";
 
 export async function getInstructorCourses(
-  paginationQueryParams: PaginationQueryParams,
+  paginationQueryParams: QueryParmeters,
 ): Promise<{ courses: Course[]; total: number }> {
   const params = buildQueryUrlParams(paginationQueryParams);
 
@@ -145,7 +145,7 @@ export async function publishCourse(courseId: string) {
 }
 
 export async function getCourses(
-  paginationQueryParams: PaginationQueryParams,
+  paginationQueryParams: QueryParmeters,
 ): Promise<{
   courses: Course[];
   total: number;

@@ -7,17 +7,8 @@ import { kafka } from '../kafka';
 import { AUTH_SERVICE_CONSUMER_GROUP } from '@/shared/constants/consumers';
 import { AppException } from '@/shared/exceptions/app.exception';
 import { userService } from '@/services';
-
-export interface IUserEvent {
-  type: 'user.update';
-  correlationId: string;
-  data: {
-    id: string;
-    name?: string;
-    image?: string;
-    occuredAt: string;
-  };
-}
+import type { UserUpdatedEvent } from '@/messaging/kafka/events/UserUpdatedEvent';
+import { UserEvents } from '@/messaging/kafka/events/enum/UserEvents';
 
 export class UserEventsConsumer {
   private consumer: Consumer;
@@ -51,7 +42,9 @@ export class UserEventsConsumer {
             return;
           }
           try {
-            const event = JSON.parse(message.value.toString()) as IUserEvent;
+            const event = JSON.parse(
+              message.value.toString(),
+            ) as UserUpdatedEvent;
             this.logger.info(
               `Recieved message: ${JSON.stringify(event)} from ${topic}`,
             );
@@ -81,19 +74,18 @@ export class UserEventsConsumer {
     }
   }
 
-  private async handleEvent(event: IUserEvent) {
+  private async handleEvent(event: UserUpdatedEvent) {
     try {
       switch (event.type) {
-        case 'user.update':
+        case UserEvents.USER_UPDATED:
           await userService.updateUser({
-            id: event.data.id,
-            name: event.data.name,
-            image: event.data.image,
+            id: event.id,
+            name: event.name,
+            image: event.image,
           });
       }
     } catch (error) {
       if (error instanceof AppException || error instanceof Error) {
-        console.log(error);
         this.logger.error(
           `Error handling the ${event.type} error:${error.message}`,
         );

@@ -18,7 +18,7 @@ export default function DefaultLayout({
 }) {
   const [openConfirmationModal, setOpenConfirmationModal] =
     React.useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { onOpen } = useDisclosure();
 
   return (
     <>

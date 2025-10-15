@@ -18,7 +18,8 @@ export const Route = createFileRoute("/instructor/_layout/courses/")({
 });
 
 function RouteComponent() {
-  const [searchQuery, setSearchQuery] = React.useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_searchQuery, setSearchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
   const createCourse = useCreateCourse();
   const navigate = useNavigate();
@@ -26,8 +27,6 @@ function RouteComponent() {
   const { data, isLoading } = useGetInstructorCourses({
     page,
     limit: 10,
-    searchFields: ["title"],
-    searchQuery,
   });
 
   const [openCreateCourseModal, setOpenCreateCourseModal] =

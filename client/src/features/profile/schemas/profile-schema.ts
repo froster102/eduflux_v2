@@ -1,6 +1,6 @@
 import { z } from "zod/v4";
 
-import { CONTENT_LIMITS } from "@/config/content-limits";
+import { contentLimits } from "@/config/content-limits";
 
 export const updateProfileSchema = z
   .object({
@@ -25,12 +25,12 @@ export const updateProfileSchema = z
         const words = val.split(" ");
 
         return (
-          words.length >= CONTENT_LIMITS.BIO.MIN_LENGTH &&
-          words.length <= CONTENT_LIMITS.BIO.MAX_LENGTH
+          words.length >= contentLimits.BIO.MIN_LENGTH &&
+          words.length <= contentLimits.BIO.MAX_LENGTH
         );
       },
       {
-        error: `Bio words should be between ${CONTENT_LIMITS.BIO.MIN_LENGTH} and ${CONTENT_LIMITS.BIO.MAX_LENGTH} words`,
+        error: `Bio words should be between ${contentLimits.BIO.MIN_LENGTH} and ${contentLimits.BIO.MAX_LENGTH} words`,
       },
     ),
     image: z.string(),
