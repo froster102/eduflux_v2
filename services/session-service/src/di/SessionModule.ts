@@ -5,7 +5,7 @@ import { ConfirmSessionBookingService } from '@core/application/session/service/
 import { GetSessionsService } from '@core/application/session/service/GetSessionsService';
 import type { BookSessionUseCase } from '@core/application/session/usecase/BookSessionUseCase';
 import type { ConfirmSessionBookingUseCase } from '@core/application/session/usecase/ConfirmSessionBookingUseCase';
-import type { GetSessionsUseCase } from '@core/application/session/usecase/GetSessionUseCase';
+import type { GetSessionsUseCase } from '@core/application/session/usecase/GetSessionsUseCase';
 import { MongooseSessionRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/session/MongooseSessionRepositoryAdapter';
 import { ContainerModule } from 'inversify';
 import { SessionController } from '@api/http-rest/controller/SessionController';
@@ -19,6 +19,8 @@ import type { CompleteSessionOnFinishUseCase } from '@core/application/session/u
 import { CompleteSessionOnFinishService } from '@core/application/session/service/CompleteSessionOnFinishService';
 import { AutoCompleteSessionsService } from '@core/application/session/service/AutoCompleteSessionsService';
 import type { AutoCompleteSessionsUseCase } from '@core/application/session/usecase/AutoCompleteSessionsUseCase';
+import { GrpcSessionServiceController } from '@api/grpc/controller/GrpcSessionServiceController';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 
 export const SessionModule: ContainerModule = new ContainerModule((options) => {
   //Use-case
@@ -60,8 +62,16 @@ export const SessionModule: ContainerModule = new ContainerModule((options) => {
     .bind<SessionRepositoryPort>(SessionDITokens.SessionRepository)
     .to(MongooseSessionRepositoryAdapter);
 
-  //controller
+  // http controller
   options
     .bind<SessionController>(SessionDITokens.SessionController)
     .to(SessionController);
+
+  //grpc controller
+  options
+    .bind<GrpcSessionServiceController>(
+      InfrastructureDITokens.GrpcSessionServiceController,
+    )
+    .to(GrpcSessionServiceController)
+    .inSingletonScope();
 });
