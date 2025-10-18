@@ -3,7 +3,6 @@ import { Entity } from '@core/common/entity/Entity';
 
 export class TaughtCourseView extends Entity<string> {
   public readonly instructorId: string;
-  public readonly courseId: string;
   public title: string;
   public thumbnail: string | null;
   public level: string | null;
@@ -16,7 +15,6 @@ export class TaughtCourseView extends Entity<string> {
     super();
     this.id = payload.id;
     this.instructorId = payload.instructorId;
-    this.courseId = payload.id;
     this.title = payload.title ?? null;
     this.thumbnail = payload.thumbnail ?? null;
     this.level = payload.level ?? null;

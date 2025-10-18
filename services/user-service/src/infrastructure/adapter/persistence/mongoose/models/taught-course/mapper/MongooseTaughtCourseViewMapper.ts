@@ -22,7 +22,6 @@ export class MongooseTaughtCourseViewMapper {
     return {
       _id: domainEntity.getId(),
       instructorId: domainEntity.instructorId,
-      courseId: domainEntity.courseId,
       title: domainEntity.title,
       thumbnail: domainEntity.thumbnail,
       level: domainEntity.level,
