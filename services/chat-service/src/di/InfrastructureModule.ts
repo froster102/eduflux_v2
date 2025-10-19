@@ -1,10 +1,10 @@
 import { KafkaEventsConsumer } from "@api/consumer/KafkaEventsConsumer";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { EnrollmentServicePort } from "@core/common/gateway/EnrollmentServicePort";
+import type { CourseServicePort } from "@core/common/gateway/EnrollmentServicePort";
 import type { UserServicePort } from "@core/common/gateway/UserServicePort";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
 import type { EventBusPort } from "@core/common/port/message/EventBusPort";
-import { GrpcEnrollmentServiceAdapter } from "@infrastructure/adapter/grpc/GrpcEnrollmentServiceAdapter";
+import { GrpcCourseServiceAdapter } from "@infrastructure/adapter/grpc/GrpcCourseServiceAdapter";
 import { GrpcUserServiceAdapter } from "@infrastructure/adapter/grpc/GrpcUserServiceAdapter";
 import { KafkaConnection } from "@infrastructure/adapter/kafka/KafkaConnection";
 import { KafkaEventBusProducerAdapter } from "@infrastructure/adapter/kafka/KafkaEventBusProducerAdapter";
@@ -36,8 +36,8 @@ export const infrastructureModule: ContainerModule = new ContainerModule(
 
     //External services
     options
-      .bind<EnrollmentServicePort>(CoreDITokens.EnrollmentService)
-      .to(GrpcEnrollmentServiceAdapter)
+      .bind<CourseServicePort>(CoreDITokens.CourseService)
+      .to(GrpcCourseServiceAdapter)
       .inSingletonScope();
     options
       .bind<UserServicePort>(CoreDITokens.UserService)

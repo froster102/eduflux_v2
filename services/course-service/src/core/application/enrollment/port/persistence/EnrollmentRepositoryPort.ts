@@ -19,8 +19,8 @@ export interface EnrollmentRepositoryPort
     userId: string,
     courseId: string,
   ): Promise<Enrollment | null>;
-  findEnrollmentWithUserAndInstructorId(
-    userId: string,
+  findEnrollmentWithLearnerAndInstructorId(
+    learnerId: string,
     instructorId: string,
   ): Promise<Enrollment | null>;
 }

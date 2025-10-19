@@ -1,4 +1,4 @@
-export interface EnrollmentServicePort {
+export interface CourseServicePort {
   verifyChatAccess(
     instructorId: string,
     learnerId: string,

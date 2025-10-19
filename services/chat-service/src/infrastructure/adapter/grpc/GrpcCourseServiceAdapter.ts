@@ -1,26 +1,26 @@
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { EnrollmentServicePort } from "@core/common/gateway/EnrollmentServicePort";
+import type { CourseServicePort } from "@core/common/gateway/EnrollmentServicePort";
 import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
 import { credentials, type ServiceError } from "@grpc/grpc-js";
 import {
-  EnrollmentServiceClient,
+  CourseServiceClient,
   VerifyChatAccessRequest,
   VerifyChatAccessResponse,
-} from "@infrastructure/adapter/grpc/generated/enrollment";
+} from "@infrastructure/adapter/grpc/generated/course";
 import { createClientLoggingInterceptor } from "@infrastructure/adapter/grpc/interceptors/client-logging.interceptor";
-import { GrpcEnrollmentServiceConfig } from "@shared/config/GrpcEnrollmentServiceConfig";
+import { GrpcCourseServiceConfig } from "@shared/config/GrpcCourseServiceConfig";
 import { inject } from "inversify";
 
-export class GrpcEnrollmentServiceAdapter implements EnrollmentServicePort {
-  private client: EnrollmentServiceClient;
+export class GrpcCourseServiceAdapter implements CourseServicePort {
+  private client: CourseServiceClient;
   private address: string;
 
   constructor(
     @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
   ) {
-    this.logger = logger.fromContext(GrpcEnrollmentServiceAdapter.name);
-    this.address = GrpcEnrollmentServiceConfig.GRPC_ENROLLMENT_SERVICE_URL;
-    this.client = new EnrollmentServiceClient(
+    this.logger = logger.fromContext(GrpcCourseServiceAdapter.name);
+    this.address = GrpcCourseServiceConfig.GRPC_COURSE_SERVICE_URL;
+    this.client = new CourseServiceClient(
       this.address,
       credentials.createInsecure(),
       {

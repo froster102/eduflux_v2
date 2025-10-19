@@ -15,8 +15,8 @@ const envSchema = z.object({
     error: "DATABASE_URL must be a valid URL",
   }),
 
-  GRPC_ENROLLMENT_SERVICE_URL: z.string({
-    error: "GRPC_ENROLLMENT_SERVICE_URL is required",
+  GRPC_COURSE_SERVICE_URL: z.string({
+    error: "GRPC_COURSE_SERVICE_URL is required",
   }),
   GRPC_USER_SERVICE_URL: z.string({
     error: "GRPC_USER_SERVICE_URL is required",

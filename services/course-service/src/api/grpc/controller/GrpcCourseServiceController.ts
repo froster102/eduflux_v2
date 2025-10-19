@@ -2,6 +2,7 @@ import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { GetCourseUseCase } from '@core/application/course/usecase/GetCourseUseCase';
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { GetEnrollmentUseCase } from '@core/application/enrollment/usecase/GetEnrollmentUseCase';
+import type { VerifyChatAccessUseCase } from '@core/application/enrollment/usecase/VerifyChatAccessUseCase';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { Exception } from '@core/common/exception/Exception';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
@@ -16,6 +17,8 @@ import type {
   Enrollment,
   GetCourseDetailsRequest,
   GetEnrollmentRequest,
+  VerifyChatAccessRequest,
+  VerifyChatAccessResponse,
 } from '@infrastructure/adapter/grpc/generated/course';
 import { getGrpcStatusCode } from '@shared/errors/error-code';
 import { inject } from 'inversify';
@@ -32,6 +35,8 @@ export class GrpcCourseServiceController implements CourseServiceServer {
     private readonly getCourseUseCase: GetCourseUseCase,
     @inject(EnrollmentDITokens.GetEnrollmentUseCase)
     private readonly getEnrollmentUseCase: GetEnrollmentUseCase,
+    @inject(EnrollmentDITokens.VerifyChatAccessUseCase)
+    private readonly verifyChatAccessUseCase: VerifyChatAccessUseCase,
   ) {
     this.logger = logger.fromContext(GrpcCourseServiceController.name);
   }
@@ -90,6 +95,25 @@ export class GrpcCourseServiceController implements CourseServiceServer {
       })
       .catch((error: Error) => {
         this.logger.error(`Error processing request: ${error.message}`);
+        this.handleError(error, callback);
+      });
+  }
+
+  verifyChatAccess(
+    call: ServerUnaryCall<VerifyChatAccessRequest, VerifyChatAccessResponse>,
+    callback: sendUnaryData<VerifyChatAccessResponse>,
+  ) {
+    this.verifyChatAccessUseCase
+      .execute({
+        learnerId: call.request.learnerId,
+        instructorId: call.request.instructorId,
+      })
+      .then((result) => {
+        callback(null, {
+          hasAccess: result.hasAccess,
+        });
+      })
+      .catch((error: Error) => {
         this.handleError(error, callback);
       });
   }

@@ -5,6 +5,7 @@ package course;
 service CourseService {
     rpc GetCourseDetails(GetCourseDetailsRequest) returns (Course);
     rpc GetEnrollment(GetEnrollmentRequest) returns (Enrollment);
+    rpc VerifyChatAccess(VerifyChatAccessRequest) returns (VerifyChatAccessResponse);
 }
 
 message GetEnrollmentRequest {
@@ -48,4 +49,14 @@ message Course {
 message Instructor {
     string id =  1;
     string name = 2;
+}
+
+
+message VerifyChatAccessRequest {
+    string learner_id = 1;
+    string instructor_id = 2;
+}
+
+message VerifyChatAccessResponse {
+    bool has_access = 1;
 }
