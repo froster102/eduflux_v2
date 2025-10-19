@@ -122,7 +122,10 @@ function RouteComponent() {
     <>
       <div className="flex flex-col md:flex-row gap-4 w-full">
         <div className="flex flex-col gap-4 w-full">
-          <Card className="w-full h-fit bg-background border border-default-200">
+          <Card
+            className="w-full h-fit bg-background border border-default-200"
+            shadow={"none"}
+          >
             <CardHeader className="text-lg font-medium flex pb-0">
               <p>About Me</p>
             </CardHeader>
@@ -133,7 +136,10 @@ function RouteComponent() {
         </div>
 
         <div className="w-fit order-1">
-          <Card className="md:max-w-lg w-full bg-background border border-default-200">
+          <Card
+            className="md:max-w-lg w-full bg-background border border-default-200"
+            shadow="none"
+          >
             <CardHeader>
               <Image
                 className="max-h-"
@@ -143,14 +149,6 @@ function RouteComponent() {
               />
             </CardHeader>
             <CardBody className="flex flex-col gap-2">
-              {/* <Skeleton isLoaded={!isSessionSettingsLoading}>
-                <div className="flex items-center justify-between">
-                  <p className="font-medium">Price</p>
-                  <p className="text-2xl font-semibold">
-                    ${sessionSettings?.settings.price}/hr
-                  </p>
-                </div>
-              </Skeleton> */}
               <Button
                 color="primary"
                 startContent={<BoltIcon />}
