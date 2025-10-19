@@ -31,7 +31,7 @@ export class GrpcUserServiceAdapter implements UserServiceGatewayPort {
       `gRPC user service client created, target:${this.address}`,
     );
   }
-  async getUserDetails(userId: string): Promise<UserProfile> {
+  async getUser(userId: string): Promise<UserProfile> {
     const request: GetUserRequest = { userId };
     return new Promise((resolve, reject) => {
       this.client.getUser(

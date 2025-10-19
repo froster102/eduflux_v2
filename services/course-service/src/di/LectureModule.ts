@@ -1,4 +1,4 @@
-import { LectureController } from '@api/http-rest/controller/LectureController';
+import { LectureController } from '@api/http/controller/LectureController';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
 import { CreateLectureService } from '@core/application/lecture/service/CreateLectureService';

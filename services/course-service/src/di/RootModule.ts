@@ -4,6 +4,7 @@ import { ChapterModule } from '@di/ChapterModule';
 import { LectureModule } from '@di/LectureModule';
 import { AssetModule } from '@di/AssetModule';
 import { Container } from 'inversify';
+import { EnrollmentModule } from '@di/EnrollmentModule';
 
 const container = new Container();
 void (async () => {
@@ -12,6 +13,7 @@ void (async () => {
     ChapterModule,
     LectureModule,
     AssetModule,
+    EnrollmentModule,
     InfrastructureModule,
   );
 })();

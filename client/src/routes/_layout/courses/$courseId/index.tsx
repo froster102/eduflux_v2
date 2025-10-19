@@ -18,8 +18,8 @@ import MessageIcon from "@/components/icons/MessageIcon";
 import { useGetCourseInfo } from "@/features/course/hooks/useGetCourseInfo";
 import { useGetPublishedCourseCurriculum } from "@/features/course/hooks/useGetPublishedCourseCurriculum";
 import { useEnrollForCourse } from "@/features/enrollment/hooks/useEnrollForCourse";
-import { useCheckUserEnrollment } from "@/features/enrollment/hooks/useCheckUserEnrollment";
 import { useGetInstructorProfile } from "@/features/instructor/hooks/useGetInstructorProfile";
+import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
 
 export const Route = createFileRoute("/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -38,10 +38,7 @@ function RouteComponent() {
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
   const enrollForCourse = useEnrollForCourse();
-  const {
-    data: userEnrollmentStatus,
-    isLoading: isUserEnrollmentStatusLoading,
-  } = useCheckUserEnrollment(courseId);
+  const createStripeCheckout = useCreateStripeCheckoutSession();
 
   const descriptionHtml = {
     __html: Dompurify.sanitize(
@@ -91,7 +88,16 @@ function RouteComponent() {
     const { data } = await tryCatch(enrollForCourse.mutateAsync(courseId));
 
     if (data) {
-      window.location.assign(data.checkoutUrl);
+      const { data: checkoutReponse } = await tryCatch(
+        createStripeCheckout.mutateAsync({
+          type: data.itemType,
+          referenceId: data.referenceId,
+        }),
+      );
+
+      if (checkoutReponse) {
+        window.location.assign(checkoutReponse.checkoutUrl);
+      }
     }
   }
 
@@ -137,7 +143,7 @@ function RouteComponent() {
                   </ul>
                 </div>
                 <div className="mt-auto w-fit">
-                  {userEnrollmentStatus && !userEnrollmentStatus.isEnrolled ? (
+                  {courseInfo && !courseInfo.isEnrolled ? (
                     <p className="text-2xl font-semibold py-4">
                       ${courseInfo?.price}
                     </p>
@@ -146,10 +152,12 @@ function RouteComponent() {
                     className="mt-2"
                     color="primary"
                     isLoading={
-                      isUserEnrollmentStatusLoading || enrollForCourse.isPending
+                      isCourseInfoLoading ||
+                      enrollForCourse.isPending ||
+                      createStripeCheckout.isPending
                     }
                     onPress={
-                      userEnrollmentStatus && userEnrollmentStatus.isEnrolled
+                      courseInfo && courseInfo.isEnrolled
                         ? () =>
                             navigate({
                               to: `/courses/${courseId}/learn`,
@@ -157,7 +165,7 @@ function RouteComponent() {
                         : handleEnrollForCourse
                     }
                   >
-                    {userEnrollmentStatus && userEnrollmentStatus.isEnrolled
+                    {courseInfo && courseInfo.isEnrolled
                       ? "Go to course"
                       : "Buy course now"}
                   </Button>
@@ -207,10 +215,11 @@ function RouteComponent() {
                   <p className="text-sm">{instructor?.profile?.bio}</p>
                 </CardBody>
                 <CardFooter className="pt-0">
-                  <Button color="primary">Learn more..</Button>
-                  <Button startContent={<MessageIcon />} variant="bordered">
-                    Send a message to instructor
-                  </Button>
+                  {courseInfo && courseInfo.isEnrolled && (
+                    <Button startContent={<MessageIcon />} variant="bordered">
+                      Send a message to instructor
+                    </Button>
+                  )}
                 </CardFooter>
               </Card>
             )}
@@ -286,6 +295,19 @@ function RouteComponent() {
           }}
         />
       )}
+
+      {/* <PaymentModal
+        checkoutItem={enrollmentResponse!}
+        isCheckoutItemLoading={enrollForCourse.isPending}
+        isOpen={openPaymentModal}
+        paymentType={PaymentType.COURSE_PURCHASE}
+        onClose={() => {
+          setOpenPaymentModal(false);
+        }}
+        onPayment={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      /> */}
     </>
   );
 }

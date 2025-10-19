@@ -1,6 +1,6 @@
 import {
-  COURSES_TOPIC,
-  ENROLLMENTS_TOPIC,
+  COURSE_TOPIC,
+  ENROLLMENT_TOPIC,
   INSTRUCTOR_TOPIC,
   SESSION_TOPIC,
   USERS_TOPIC,
@@ -18,7 +18,6 @@ import { USER_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
 import type { KafkaEvent } from '@core/common/events/KafkaEvent';
 import { EnrollmentEvents } from '@core/domain/learner-stats/events/enum/EnrollmentEvents';
 import { SessionEvents } from '@core/common/events/enum/SessionEvents';
-import type { EnrollmentSuccessEventHandler } from '@core/application/learner-stats/handler/EnrollmentSuccessEventHandler';
 import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
 import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
 import type { InstructorCreatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorCreatedEventHandler';
@@ -33,6 +32,7 @@ import { CourseEvents } from '@shared/constants/events';
 import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
 import type { CourseCreatedEventHandler } from '@core/application/views/coordinator/handler/CourseCreatedEventHandler';
 import type { CourseUpdatedEventHandler } from '@core/application/views/coordinator/handler/CourseUpdateEventHandler';
+import type { EnrollmentCompletedEventHandler } from '@core/application/learner-stats/handler/EnrollmentCompletedEventHandler';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -45,8 +45,8 @@ export class KafkaEventsConsumer {
     @inject(CoreDITokens.Logger) logger: LoggerPort,
     @inject(ProgressDITokens.CreateProgressUseCase)
     private readonly createProgressUseCase: CreateProgressUseCase,
-    @inject(LearnerStatsDITokens.EnrollmentSuccessEventHandler)
-    private readonly enrollmentSuccessEventHanlder: EnrollmentSuccessEventHandler,
+    @inject(LearnerStatsDITokens.EnrollmentCompletedEventHandler)
+    private readonly enrollmentCompletedEventHanlder: EnrollmentCompletedEventHandler,
     @inject(InstructorViewDITokens.InstructorCreatedEventHandler)
     private readonly instructorCreatedEventHandler: InstructorCreatedEventHandler,
     @inject(InstructorViewDITokens.SessionSettingsUpdatedEventHandler)
@@ -70,8 +70,8 @@ export class KafkaEventsConsumer {
       SESSION_TOPIC,
       INSTRUCTOR_TOPIC,
       USERS_TOPIC,
-      ENROLLMENTS_TOPIC,
-      COURSES_TOPIC,
+      ENROLLMENT_TOPIC,
+      COURSE_TOPIC,
     ];
   }
 
@@ -109,12 +109,12 @@ export class KafkaEventsConsumer {
             );
 
             switch (event.type) {
-              case EnrollmentEvents.ENROLLMENT_SUCESS: {
+              case EnrollmentEvents.ENROLLMENT_COMPLETED: {
                 await this.createProgressUseCase.execute({
                   courseId: event.courseId,
                   userId: event.userId,
                 });
-                await this.enrollmentSuccessEventHanlder.handle(event);
+                await this.enrollmentCompletedEventHanlder.handle(event);
                 break;
               }
               case SessionEvents.SESSION_COMPLETED: {

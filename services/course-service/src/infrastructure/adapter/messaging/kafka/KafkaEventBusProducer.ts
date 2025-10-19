@@ -3,7 +3,7 @@ import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
 import type { EventBusPort } from '@core/common/port/message/EventBustPort';
 import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
-import { COURSES_TOPIC } from '@shared/constants/topics';
+import { COURSE_TOPIC } from '@shared/constants/topics';
 import { tryCatch } from '@shared/utils/try-catch';
 import { inject } from 'inversify';
 import type { Producer } from 'kafkajs';
@@ -43,8 +43,11 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
   ): Promise<void> {
     const messageValue = JSON.stringify(event);
     let topic: string;
-    if (event.type.startsWith('course')) {
-      topic = COURSES_TOPIC;
+    if (
+      event.type.startsWith('course') ||
+      event.type.startsWith('enrollment')
+    ) {
+      topic = COURSE_TOPIC;
     } else {
       this.logger.warn('Event no published as not topic was defined');
       return;

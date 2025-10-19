@@ -19,6 +19,7 @@ import { useCreateChat } from "@/features/chat/hooks/useCreateChat";
 import StartChatButton from "@/features/chat/components/StartChatButton";
 import { useChatStore } from "@/store/useChatStore";
 import { useGetChatWithInstructor } from "@/features/chat/hooks/useGetChatWithInstructor";
+import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
 
 export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -58,6 +59,7 @@ function RouteComponent() {
 
   const bookSession = useBookSession();
   const createChat = useCreateChat();
+  const createStripeCheckout = useCreateStripeCheckoutSession();
 
   async function chatWithInstructorHandler() {
     if (existingChat && existingChat.chat) {
@@ -103,7 +105,16 @@ function RouteComponent() {
     const { data: response } = await tryCatch(bookSession.mutateAsync(data));
 
     if (response) {
-      window.location.assign(response.checkoutUrl);
+      const { data: checkoutReponse } = await tryCatch(
+        createStripeCheckout.mutateAsync({
+          type: response.itemType,
+          referenceId: response.referenceId,
+        }),
+      );
+
+      if (checkoutReponse) {
+        window.location.assign(checkoutReponse.checkoutUrl);
+      }
     }
   }
 
@@ -162,7 +173,9 @@ function RouteComponent() {
       <SessionScheduler
         availableSlots={availableSlots!}
         instructor={instructor}
-        isConfirmBookingPending={bookSession.isPending}
+        isConfirmBookingPending={
+          bookSession.isPending || createStripeCheckout.isPending
+        }
         isOpen={openScheduler}
         isSlotsLoading={isAvailableSlotsLoading}
         selectedDate={selectedDate}

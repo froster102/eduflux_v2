@@ -73,13 +73,6 @@ declare global {
     updatedAt: Date;
   };
 
-  export type AvailableSlots = {
-    id: slot.id;
-    instructorId: slot.instructorId;
-    startTime: slot.startTime;
-    endTime: slot.endTime;
-  };
-
   export type AppNotification = {
     id: string;
     userId: string;

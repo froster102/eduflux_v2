@@ -25,7 +25,7 @@ export class GrpcSessionServiceController implements SessionServiceServer {
 
   constructor(
     @inject(CoreDITokens.Logger) logger: LoggerPort,
-    @inject(SessionDITokens.BookSessionUseCase)
+    @inject(SessionDITokens.GetSessionUseCase)
     private readonly getSessionUseCase: GetSessionUseCase,
   ) {
     this.logger = logger.fromContext(GrpcSessionServiceController.name);
@@ -46,7 +46,7 @@ export class GrpcSessionServiceController implements SessionServiceServer {
           endTime: result.endTime.toISOString(),
           paymentId: result.paymentId ?? '',
           pendingPaymentExpiryTime:
-            result.pendingPaymentExpiryTime!.toISOString(),
+            result.pendingPaymentExpiryTime?.toISOString() ?? '',
         };
         callback(null, response);
       })

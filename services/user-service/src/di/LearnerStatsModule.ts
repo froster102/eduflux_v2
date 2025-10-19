@@ -1,8 +1,8 @@
 import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
-import type { EnrollmentSuccessEventHandler } from '@core/application/learner-stats/handler/EnrollmentSuccessEventHandler';
+import type { EnrollmentCompletedEventHandler } from '@core/application/learner-stats/handler/EnrollmentCompletedEventHandler';
 import type { SessionCompletedEventHandler } from '@core/application/learner-stats/handler/SessionCompletedEventHandler';
 import type { LearnerStatsRepositoryPort } from '@core/application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
-import { EnrollmentSuccessEventHandlerService } from '@core/application/learner-stats/service/handler/EnrollmentSuccessEventHandlerService';
+import { EnrollmentCompletedEventHandlerService } from '@core/application/learner-stats/service/handler/EnrollmentCompletedEventHandlerService';
 import { SessionCompletedEventHandlerService } from '@core/application/learner-stats/service/handler/SessionCompletedEventHandlerService';
 import { GetLearnerStatsUseCaseService } from '@core/application/learner-stats/service/usecase/GetLearnerStatsService';
 import type { GetLearnerStatsUseCase } from '@core/application/learner-stats/usecase/GetLearnerStatsUseCase';
@@ -23,10 +23,10 @@ export const LearnerStatsModule: ContainerModule = new ContainerModule(
       )
       .to(SessionCompletedEventHandlerService);
     options
-      .bind<EnrollmentSuccessEventHandler>(
-        LearnerStatsDITokens.EnrollmentSuccessEventHandler,
+      .bind<EnrollmentCompletedEventHandler>(
+        LearnerStatsDITokens.EnrollmentCompletedEventHandler,
       )
-      .to(EnrollmentSuccessEventHandlerService);
+      .to(EnrollmentCompletedEventHandlerService);
 
     //Repository
     options

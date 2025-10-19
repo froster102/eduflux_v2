@@ -147,25 +147,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
 
-  enrollment-service:
-    container_name: enrollment-service
-    build:
-      context: ./services/enrollment-service
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    networks:
-      - eduflux-network
-    env_file:
-      - ./services/enrollment-service/.env
-    volumes:
-      - ./services/enrollment-service:/app
-      - enrollment_service_modules:/app/node_modules
-    depends_on:
-      enrollment-db:
-        condition: service_started
-      kafka:
-        condition: service_healthy
-
   payment-service:
     container_name: payment-service
     build:
@@ -298,19 +279,6 @@ services:
     volumes:
       - coursedb_data:/data/db
 
-  enrollment-db:
-    container_name: enrollment-db
-    image: mongo:8.0
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root_user
-      - MONGO_INITDB_ROOT_PASSWORD=super_root
-    ports:
-      - 27019:27017
-    networks:
-      - eduflux-network
-    volumes:
-      - enrollmentdb_data:/data/db
-
   payment-db:
     container_name: payment-db
     image: mongo:8.0
@@ -396,18 +364,6 @@ services:
     networks:
       - eduflux-network
 
-  # meeting-db:
-  #   container_name: meeting-db
-  #   image: redis:8.0-M04-alpine
-  #   ports:
-  #     - 6380:6379
-  #   volumes:
-  #     - meeting_data:/data
-  #   environment:
-  #     - REDIS_ARGS="--requirepass root_password"
-  #   networks:
-  #     - eduflux-network
-
   # loki:
   #   container_name: loki
   #   image: grafana/loki:latest
@@ -484,7 +440,6 @@ volumes:
   user_service_modules:
   course_service_modules:
   upload_service_modules:
-  enrollment_service_modules:
   payment_service_modules:
   session_service_modules:
   chat_service_modules:
@@ -492,7 +447,6 @@ volumes:
   authdb_data:
   userdb_data:
   coursedb_data:
-  enrollmentdb_data:
   paymentdb_data:
   sessiondb_data:
   notificationdb_data:

@@ -9,7 +9,7 @@ import type { UpdateCourseUseCase } from '@core/application/course/usecase/Updat
 import type { GetAllInstructorCoursesUseCase } from '@core/application/course/usecase/GetAllInstructorCoursesUseCase';
 import type { GetPublishedCoursesUseCase } from '@core/application/course/usecase/GetPublishedCoursesUseCase';
 import type { GetCourseCategoriesUseCase } from '@core/application/course/usecase/GetCourseCategoriesUseCase';
-import { CourseController } from '@api/http-rest/controller/CourseController';
+import { CourseController } from '@api/http/controller/CourseController';
 import { ContainerModule } from 'inversify';
 import type { GetCourseUseCase } from '@core/application/course/usecase/GetCourseUseCase';
 import { GetCourseService } from '@core/application/course/service/usecase/GetCourseService';
@@ -27,8 +27,6 @@ import type { ReorderCurriculumUseCase } from '@core/application/course/usecase/
 import { ReorderCurriculumService } from '@core/application/course/service/usecase/ReorderCurriculumService';
 import type { SubmitCourseForReviewUseCase } from '@core/application/course/usecase/SubmitCourseForReviewUseCase';
 import { SubmitCourseForReviewService } from '@core/application/course/service/usecase/SubmitForReviewService';
-import type { EnrollmentSuccessEventHandler } from '@core/application/course/handler/EnrollmentSuccessEventHandler';
-import { EnrollmentSuccessEventHandlerService } from '@core/application/course/service/handler/EnrollmentSuccessEventHandlerService';
 import { GrpcCourseServiceController } from '@api/grpc/controller/GrpcCourseServiceController';
 
 export const CourseModule: ContainerModule = new ContainerModule((options) => {
@@ -78,13 +76,6 @@ export const CourseModule: ContainerModule = new ContainerModule((options) => {
   // options
   //   .bind<SetCoursePricingUseCase>(CourseDITokens.SetCoursePricingUseCase)
   //   .to({});
-
-  // Hanlders
-  options
-    .bind<EnrollmentSuccessEventHandler>(
-      CourseDITokens.EnrollmentSuccessEventHandler,
-    )
-    .to(EnrollmentSuccessEventHandlerService);
 
   // Controller
   options

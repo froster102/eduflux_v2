@@ -1,13 +1,13 @@
-import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
-import type { EnrollmentSuccessEventHandler } from '@core/application/course/handler/EnrollmentSuccessEventHandler';
+import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
+import type { EnrollmentPaymentSuccessfullEventHandler } from '@core/application/enrollment/handler/EnrollmentPaymentSuccessfullEventHandler';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { EnrollmentEvents } from '@core/domain/course/events/enum/EnrollmentEvents';
+import { EnrollmentEvents } from '@core/domain/enrollment/events/enum/EnrollmentEvents';
 import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
 import type { KafkaEvent } from '@infrastructure/adapter/messaging/kafka/types/KafkaEvent';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { COURSE_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
-import { ENROLLMENTS_TOPIC } from '@shared/constants/topics';
+import { ENROLLMENT_TOPIC } from '@shared/constants/topics';
 import { tryCatch } from '@shared/utils/try-catch';
 import { inject } from 'inversify';
 import type { Consumer, EachMessagePayload } from 'kafkajs';
@@ -17,14 +17,14 @@ export class KafkaEventsConsumer {
   private topics: string[];
 
   constructor(
-    @inject(CourseDITokens.EnrollmentSuccessEventHandler)
-    private readonly enrollmentSuccessEventHandler: EnrollmentSuccessEventHandler,
+    @inject(EnrollmentDITokens.EnrollmentPaymentSuccessfullEventHandler)
+    private readonly enrollmentPaymentSuccessfullEventHandler: EnrollmentPaymentSuccessfullEventHandler,
     @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
     @inject(InfrastructureDITokens.KafkaConnection)
     private readonly kafkaConnection: KafkaConnection,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
-    this.topics = [ENROLLMENTS_TOPIC];
+    this.topics = [ENROLLMENT_TOPIC];
     this.consumer = this.kafkaConnection.getConsumer(
       COURSE_SERVICE_CONSUMER_GROUP,
     );
@@ -64,8 +64,10 @@ export class KafkaEventsConsumer {
             );
 
             switch (event.type) {
-              case EnrollmentEvents.ENROLLMENT_SUCESS: {
-                await this.enrollmentSuccessEventHandler.handle(event);
+              case EnrollmentEvents.ENROLLMENT_PAYMENT_SUCCESS: {
+                await this.enrollmentPaymentSuccessfullEventHandler.handle(
+                  event,
+                );
                 break;
               }
               default:

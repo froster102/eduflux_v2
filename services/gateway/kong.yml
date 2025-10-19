@@ -18,14 +18,6 @@ plugins:
       credentials: true
 
 services:
-  - name: query-service
-    url: http://query-service:3009
-    routes:
-      - name: quey-service-routes
-        paths:
-          - /api/query
-        strip_path: false
-
   - name: auth-service
     url: http://auth-service:3001
     routes:
@@ -49,6 +41,10 @@ services:
         paths:
           - /api/courses
         strip_path: false
+      - name: enrollment-route
+        paths:
+          - /api/enrollments
+        strip_path: false
 
   - name: upload-service
     url: http://upload-service:3004
@@ -56,14 +52,6 @@ services:
       - name: upload-route
         paths:
           - /api/uploads
-        strip_path: false
-
-  - name: enrollment-service
-    url: http://enrollment-service:3005
-    routes:
-      - name: enrollment-route
-        paths:
-          - /api/enrollments
         strip_path: false
 
   - name: payment-service

@@ -11,8 +11,8 @@ export abstract class MongooseBaseRepositoryAdapter<TDomain, TMongoose>
     protected readonly model: Model<TMongoose>,
     protected readonly mapper: {
       toDomainEntity(doc: TMongoose): TDomain;
-      toDomainEntities(docs: TMongoose[]): TDomain[];
       toMongooseEntity(domain: TDomain): Partial<TMongoose>;
+      toDomainEntities(docs: TMongoose[]): TDomain[];
     },
     protected readonly session?: ClientSession,
   ) {}
@@ -36,9 +36,13 @@ export abstract class MongooseBaseRepositoryAdapter<TDomain, TMongoose>
   }
 
   async update(id: string, data: Partial<TDomain>): Promise<TDomain | null> {
+    const mongooseEnity = this.mapper.toMongooseEntity(data as TDomain);
     const doc = await this.model.findByIdAndUpdate(
       id,
-      { ...data, updatedAt: new Date() },
+      {
+        ...mongooseEnity,
+        updatedAt: new Date(),
+      },
       { new: true, session: this.session },
     );
     return doc ? this.mapper.toDomainEntity(doc) : null;

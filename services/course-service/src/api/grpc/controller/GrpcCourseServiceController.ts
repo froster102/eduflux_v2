@@ -1,5 +1,7 @@
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { GetCourseUseCase } from '@core/application/course/usecase/GetCourseUseCase';
+import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
+import type { GetEnrollmentUseCase } from '@core/application/enrollment/usecase/GetEnrollmentUseCase';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { Exception } from '@core/common/exception/Exception';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
@@ -11,7 +13,9 @@ import {
 import type {
   Course,
   CourseServiceServer,
+  Enrollment,
   GetCourseDetailsRequest,
+  GetEnrollmentRequest,
 } from '@infrastructure/adapter/grpc/generated/course';
 import { getGrpcStatusCode } from '@shared/errors/error-code';
 import { inject } from 'inversify';
@@ -26,6 +30,8 @@ export class GrpcCourseServiceController implements CourseServiceServer {
     @inject(CoreDITokens.Logger) logger: LoggerPort,
     @inject(CourseDITokens.GetCourseUseCase)
     private readonly getCourseUseCase: GetCourseUseCase,
+    @inject(EnrollmentDITokens.GetEnrollmentUseCase)
+    private readonly getEnrollmentUseCase: GetEnrollmentUseCase,
   ) {
     this.logger = logger.fromContext(GrpcCourseServiceController.name);
   }
@@ -54,6 +60,31 @@ export class GrpcCourseServiceController implements CourseServiceServer {
           createdAt: course.createdAt.toISOString(),
           updatedAt: course.updatedAt.toISOString(),
           publishedAt: course.updatedAt.toISOString(),
+        };
+        callback(null, response);
+      })
+      .catch((error: Error) => {
+        this.logger.error(`Error processing request: ${error.message}`);
+        this.handleError(error, callback);
+      });
+  }
+
+  getEnrollment(
+    call: ServerUnaryCall<GetEnrollmentRequest, Enrollment>,
+    callback: sendUnaryData<Enrollment>,
+  ): void {
+    this.getEnrollmentUseCase
+      .execute({ enrollmentId: call.request.enrollmentId })
+      .then((enrollment) => {
+        const response: Enrollment = {
+          id: enrollment.id,
+          learnerId: enrollment.learnerId,
+          courseId: enrollment.courseId,
+          status: enrollment.status,
+          instructorId: enrollment.instructorId,
+          paymentId: enrollment.paymentId ?? '',
+          createdAt: enrollment.createdAt.toISOString(),
+          updatedAt: enrollment.updatedAt.toISOString(),
         };
         callback(null, response);
       })

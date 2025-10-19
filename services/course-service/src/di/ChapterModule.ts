@@ -1,4 +1,4 @@
-import { ChapterController } from '@api/http-rest/controller/ChapterController';
+import { ChapterController } from '@api/http/controller/ChapterController';
 import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import type { ChapterRepositoryPort } from '@core/application/chapter/port/persistence/ChapterRepositoryPort';
 import { CreateChapterService } from '@core/application/chapter/service/CreateChapterService';

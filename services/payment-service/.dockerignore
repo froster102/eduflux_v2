@@ -1,2 +1,10 @@
 /node_modules
 /dist
+
+.env
+Dockerfile
+.env.example
+.gitignore
+.prettierrc
+eslint.config.mjs
+README.md

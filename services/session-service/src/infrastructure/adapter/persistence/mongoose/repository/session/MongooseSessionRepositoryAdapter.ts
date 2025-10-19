@@ -82,14 +82,7 @@ export class MongooseSessionRepositoryAdapter
     }
     await SessionModel.updateMany(
       filter,
-      [
-        {
-          $set: {
-            status: statusToUpdate,
-            updatedAt: new Date(),
-          },
-        },
-      ],
+      { $set: { status: statusToUpdate } },
       { session: this.session },
     );
 

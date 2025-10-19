@@ -12,7 +12,7 @@ export async function enableSessions(data: SessionSettingsFormData) {
 
 export async function bookSession(data: {
   slotId: string;
-}): Promise<{ id: string; checkoutUrl: string }> {
+}): Promise<BookSessionResponse> {
   const response = await api.post("/sessions/bookings", data);
 
   return response.data;

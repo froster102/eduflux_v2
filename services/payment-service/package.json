@@ -3,7 +3,8 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "type:check": "bun run tsc --noEmit --watch",
+    "typecheck": "bun run tsc --noEmit --watch",
+    "lint": "eslint ./src --ext .ts --fix",
     "dev": "bun --watch src/main.ts",
     "proto:gen": "grpc_tools_node_protoc  --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto  --ts_proto_out=./src/infrastructure/grpc/generated  --ts_proto_opt=outputServices=grpc-js  --proto_path=./src/proto  ./src/proto/payment.proto"
   },
@@ -13,6 +14,7 @@
     "elysia": "latest",
     "http-status": "^2.1.0",
     "inversify": "^7.0.0-alpha.5",
+    "jose": "^6.1.0",
     "kafkajs": "^2.2.4",
     "mongoose": "^8.15.1",
     "reflect-metadata": "^0.2.2",
