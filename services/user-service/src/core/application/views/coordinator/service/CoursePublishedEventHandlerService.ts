@@ -1,17 +1,17 @@
 import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
 import type { InstructorRepositoryPort } from '@core/application/instructor/port/persistence/InstructorRepositoryPort';
-import type { CourseCreatedEvent } from '@core/application/views/coordinator/events/CourseCreatedEvent';
+import type { CoursePublishedEvent } from '@core/application/views/coordinator/events/CoursePublishedEvent';
+import type { CoursePublishedEventHandler } from '@core/application/views/coordinator/handler/CoursePublishedEventHandler';
 import type { InstructorStatsUpdatedEvent } from '@core/application/views/instructor-view/events/InstructorStatsUpdatedEvent';
 import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
 import type { TaughtCourseViewRepositoryPort } from '@core/application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { EventHandler } from '@core/common/events/EventHandler';
 import type { EventBusPort } from '@core/common/message/EventBustPort';
 import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
 import { inject } from 'inversify';
 
-export class CourseCreatedEventHandlerService
-  implements EventHandler<CourseCreatedEvent, void>
+export class CoursePublishedEventHandlerService
+  implements CoursePublishedEventHandler
 {
   constructor(
     @inject(TaughtCourseViewDITokens.TaughtCourseViewRepository)
@@ -21,14 +21,9 @@ export class CourseCreatedEventHandlerService
     @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
   ) {}
 
-  async handle(event: CourseCreatedEvent): Promise<void> {
-    await this.taughtCourseViewRepository.upsert({
-      ...event.courseMetadata,
-      instructorId: event.instructorId,
-    });
-
+  async handle(event: CoursePublishedEvent): Promise<void> {
     const updatedInstructor =
-      await this.instructorRepository.incrementTotalLearners(
+      await this.instructorRepository.incrementCourseCreated(
         event.instructorId,
       );
 

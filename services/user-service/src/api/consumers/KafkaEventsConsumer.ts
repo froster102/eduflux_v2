@@ -15,7 +15,7 @@ import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
 import type { CreateProgressUseCase } from '@core/application/progress/usecase/CreateProgressUseCase';
 import { USER_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
-import type { KafkaEvent } from '@core/common/events/KafkaEvent';
+import type { KafkaEvent } from '@infrastructure/adapter/message/kafka/types/KafkaEvent';
 import { EnrollmentEvents } from '@core/domain/learner-stats/events/enum/EnrollmentEvents';
 import { SessionEvents } from '@core/common/events/enum/SessionEvents';
 import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
@@ -33,6 +33,7 @@ import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/
 import type { CourseCreatedEventHandler } from '@core/application/views/coordinator/handler/CourseCreatedEventHandler';
 import type { CourseUpdatedEventHandler } from '@core/application/views/coordinator/handler/CourseUpdateEventHandler';
 import type { EnrollmentCompletedEventHandler } from '@core/application/learner-stats/handler/EnrollmentCompletedEventHandler';
+import type { CoursePublishedEventHandler } from '@core/application/views/coordinator/handler/CoursePublishedEventHandler';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -61,6 +62,8 @@ export class KafkaEventsConsumer {
     private readonly courseCreatedEventHandler: CourseCreatedEventHandler,
     @inject(TaughtCourseViewDITokens.CourseUpdatedEventHandler)
     private readonly courseUpdatedEventHandler: CourseUpdatedEventHandler,
+    @inject(TaughtCourseViewDITokens.CoursePublishedEventHandler)
+    private readonly coursePublishedEventHandler: CoursePublishedEventHandler,
   ) {
     this.logger = logger.fromContext(KafkaEventsConsumer.name);
     this.consumer = this.kafkaConnection.getConsumer(
@@ -143,6 +146,10 @@ export class KafkaEventsConsumer {
               }
               case CourseEvents.COURSE_UPDATED: {
                 await this.courseUpdatedEventHandler.handle(event);
+                break;
+              }
+              case CourseEvents.COURSE_PUBLISHED: {
+                await this.coursePublishedEventHandler.handle(event);
                 break;
               }
               default:

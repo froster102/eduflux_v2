@@ -34,6 +34,7 @@ export class SessionCompletedEventHandlerService
     const instructor =
       await this.instructorRepository.incrementSessionsConducted(instructorId);
 
+    //send event to update the instructor views
     if (instructor) {
       const instructorStatsUpdatedEvent: InstructorStatsUpdatedEvent = {
         id: instructorId,
