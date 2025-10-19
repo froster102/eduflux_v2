@@ -1,4 +1,4 @@
-import { paginationSchema } from '@api/http-rest/validation/paginationSchema';
+import { paginationSchema } from '@api/http/validation/paginationSchema';
 import { Role } from '@core/common/enums/Role';
 import { z } from 'zod/v4';
 

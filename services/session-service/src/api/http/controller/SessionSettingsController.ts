@@ -1,8 +1,8 @@
-import { authenticaionMiddleware } from '@api/http-rest/middlewares/authenticationMiddleware';
+import { authenticaionMiddleware } from '@api/http/middlewares/authenticationMiddleware';
 import {
   enableSessionsSchema,
   updateSessionSettingsSchema,
-} from '@api/http-rest/validation/session';
+} from '@api/http/validation/session';
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
 import type { GetInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/GetInstructorSessionSettingsUseCase';

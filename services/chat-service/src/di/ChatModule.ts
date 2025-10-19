@@ -1,4 +1,4 @@
-import { ChatController } from "@api/http-rest/controller/ChatController";
+import { ChatController } from "@api/http/controller/ChatController";
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import type { ChatRepositoryPort } from "@core/application/chat/port/persistence/ChatRepositoryPort";
 import type { CreateChatUseCase } from "@core/application/chat/usecase/CreateChatUseCase";

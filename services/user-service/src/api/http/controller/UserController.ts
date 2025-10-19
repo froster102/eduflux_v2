@@ -1,4 +1,4 @@
-import { authenticaionMiddleware } from 'src/api/http-rest/middleware/authenticationMiddleware';
+import { authenticaionMiddleware } from 'src/api/http/middleware/authenticationMiddleware';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
 import type { GetUserUseCase } from '@core/domain/user/usecase/GetUserUseCase';
 import type { UpdateUserUseCase } from '@core/domain/user/usecase/UpdateUserUseCase';
@@ -14,10 +14,10 @@ import { SubscribedCourseViewDITokens } from '@core/application/views/subscribed
 import type { GetSubscribedCourseViewsUseCase } from '@core/application/views/subscribed-course/usecase/GetSubscribedCourseViewsUseCase';
 import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
 import type { GetTaughtCourseViewsUseCase } from '@core/application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
-import { getTaughtCourseSchema } from '@api/http-rest/validators/getTaughtCoursesSchema';
-import { updateUserSchema } from '@api/http-rest/validators/user';
-import { paginationSchema } from '@api/http-rest/validators/paginationSchema';
-import { getSubscribedCoursesSchema } from '@api/http-rest/validators/getSubscribedCoursesSchema';
+import { getTaughtCourseSchema } from '@api/http/validators/getTaughtCoursesSchema';
+import { updateUserSchema } from '@api/http/validators/user';
+import { paginationSchema } from '@api/http/validators/paginationSchema';
+import { getSubscribedCoursesSchema } from '@api/http/validators/getSubscribedCoursesSchema';
 
 export class UserController {
   constructor(

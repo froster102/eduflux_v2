@@ -1,5 +1,5 @@
-import { authenticaionMiddleware } from '@api/http-rest/middlewares/authenticationMiddleware';
-import { bookingSchema, dateSchema } from '@api/http-rest/validation/session';
+import { authenticaionMiddleware } from '@api/http/middlewares/authenticationMiddleware';
+import { bookingSchema, dateSchema } from '@api/http/validation/session';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { BookSessionUseCase } from '@core/application/session/usecase/BookSessionUseCase';
 import type { JoinSessionUseCase } from '@core/application/session/usecase/JoinSessionUseCase';
@@ -14,7 +14,7 @@ import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDIToken
 import type { LiveKitWebhookHandler } from '@infrastructure/adapter/livekit/LiveKitWebhookHandler';
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
 import type { GetUserSessionsUseCase } from '@core/application/views/user-session/usecase/GetUserSessionsUseCase';
-import { getUserSessionSchema } from '@api/http-rest/validation/getUserSessionSchema';
+import { getUserSessionSchema } from '@api/http/validation/getUserSessionSchema';
 
 export class SessionController {
   constructor(

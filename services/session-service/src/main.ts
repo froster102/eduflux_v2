@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
-import { HttpServer } from '@api/http-rest/HttpServer';
+import { HttpServer } from '@api/http/HttpServer';
 import { container } from '@di/RootModule';
 import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';

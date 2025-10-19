@@ -1,4 +1,4 @@
-import type { ChatController } from "@api/http-rest/controller/ChatController";
+import type { ChatController } from "@api/http/controller/ChatController";
 import { SocketIOServer } from "@api/websocket/io";
 import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
@@ -8,12 +8,12 @@ import { HttpServerConfig } from "@shared/HttpServerConfig";
 import { Hono } from "hono";
 import type { Server as HTTPServer } from "node:http";
 import { serve } from "@hono/node-server";
-import { correlationIdSetupMiddleware } from "@api/http-rest/middlewares/correlationIdSetup.middleware";
-import { httpLoggerMiddleware } from "@api/http-rest/middlewares/httpLoggerMiddleware";
+import { correlationIdSetupMiddleware } from "@api/http/middlewares/correlationIdSetup.middleware";
+import { httpLoggerMiddleware } from "@api/http/middlewares/httpLoggerMiddleware";
 import {
   errorHandler,
   notFoundHandler,
-} from "@api/http-rest/middlewares/errorHandlerMiddleware";
+} from "@api/http/middlewares/errorHandlerMiddleware";
 
 export class HttpServer {
   private app: Hono;

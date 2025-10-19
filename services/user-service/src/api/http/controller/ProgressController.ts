@@ -1,4 +1,4 @@
-import { authenticaionMiddleware } from 'src/api/http-rest/middleware/authenticationMiddleware';
+import { authenticaionMiddleware } from 'src/api/http/middleware/authenticationMiddleware';
 import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
 import type { AddToProgressUseCase } from '@core/application/progress/usecase/AddToProgressUseCase';
 import type { GetProgressUseCase } from '@core/application/progress/usecase/GetProgressUseCase';
