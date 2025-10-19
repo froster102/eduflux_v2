@@ -1,5 +1,6 @@
 import type { BaseRepositoryPort } from '@core/common/port/persistence/BaseRepositoryPort';
 import type { Slot } from '@core/domain/slot/entity/Slot';
+import type { SlotStatus } from '@core/domain/slot/enum/SlotStatus';
 
 export interface SlotRepositoryPort extends BaseRepositoryPort<Slot> {
   deleteAvailableOrBlockedByInstructorAndRange(
@@ -17,4 +18,10 @@ export interface SlotRepositoryPort extends BaseRepositoryPort<Slot> {
     startOfDayUTC: Date,
     endOfDayUTC: Date,
   ): Promise<Slot[]>;
+  updateAllSlotStatus(
+    filter: {
+      ids: string[];
+    },
+    newStatus: SlotStatus,
+  ): Promise<void>;
 }

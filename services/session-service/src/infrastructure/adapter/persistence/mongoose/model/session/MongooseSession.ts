@@ -62,9 +62,7 @@ export const SessionSchema = new Schema<MongooseSession>(
       required: true,
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
 export const SessionModel: Model<MongooseSession> =

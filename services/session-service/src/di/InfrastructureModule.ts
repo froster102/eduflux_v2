@@ -1,8 +1,6 @@
-import type { PaymentServicePort } from '@core/application/session/port/gateway/PaymentServicePort';
 import type { UserServicePort } from '@core/application/session/port/gateway/UserServicePort';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { GrpcPaymentServiceAdapter } from '@infrastructure/adapter/grpc/client/GrpcPaymentServiceAdapter';
 import { GrpcUserServiceAdapter } from '@infrastructure/adapter/grpc/client/GrpcUserServiceAdapter';
 import { WinstonLoggerAdapter } from '@infrastructure/adapter/logger/WinstonLoggerAdapter';
 import { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
@@ -43,10 +41,6 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       .inSingletonScope();
 
     //external services
-    options
-      .bind<PaymentServicePort>(CoreDITokens.PaymentService)
-      .to(GrpcPaymentServiceAdapter)
-      .inSingletonScope();
     options
       .bind<UserServicePort>(CoreDITokens.UserService)
       .to(GrpcUserServiceAdapter)

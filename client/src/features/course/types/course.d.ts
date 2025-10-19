@@ -29,6 +29,7 @@ declare global {
     publishedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
+    isEnrolled?: boolean;
   };
 
   export type Chapter = {

@@ -7,6 +7,7 @@ import type { ICronServices } from '@infrastructure/cron/interface/cron-services
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducerAdapter';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { GrpcServer } from '@api/grpc/GrpcServer';
 
 async function bootstrap() {
   //database
@@ -30,6 +31,10 @@ async function bootstrap() {
   );
 
   cronServices.register();
+
+  //gRPC server
+  const grpcServer = new GrpcServer();
+  grpcServer.start();
 
   //http
   const httpServer = new HttpServer();

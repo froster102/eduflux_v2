@@ -3,11 +3,12 @@ import type { AssetRepositoryPort } from '@core/application/asset/port/persisten
 import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import type { ChapterRepositoryPort } from '@core/application/chapter/port/persistence/ChapterRepositoryPort';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
-import type { EnrollmentServiceGatewayPort } from '@core/application/course/port/gateway/EnrollmentServiceGatewayPort';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { GetCourseCurriculumPort } from '@core/application/course/port/usecase/GetCourseCurriculumPort';
 import type { CurriculumItemWithAsset } from '@core/application/course/usecase/dto/CurriculumItemWithAsset';
 import type { GetCourseCurriculumUseCase } from '@core/application/course/usecase/GetCourseCurriculumUseCase';
+import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
+import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
 import { Role } from '@core/common/enums/Role';
@@ -16,6 +17,7 @@ import { NotFoundException } from '@core/common/exception/NotFoundException';
 import { CoreAssert } from '@core/common/util/assert/CoreAssert';
 import type { Asset } from '@core/domain/asset/entity/Asset';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
+import { EnrollmentStatus } from '@core/domain/enrollment/enum/EnrollmentStatus';
 import type { Lecture } from '@core/domain/lecture/entity/Lecture';
 import { inject } from 'inversify';
 
@@ -29,8 +31,8 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
     private readonly lectureRepository: LectureRepositoryPort,
     @inject(AssetDITokens.AssetRepository)
     private readonly assetRepository: AssetRepositoryPort,
-    @inject(CourseDITokens.EnrollmentServiceGateway)
-    private readonly enrollmentServiceGateway: EnrollmentServiceGatewayPort,
+    @inject(EnrollmentDITokens.EnrollmentRepository)
+    private readonly enrollmentRepository: EnrollmentRepositoryPort,
   ) {}
 
   async execute(
@@ -43,6 +45,19 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
     );
 
     let includeMediaSources = true;
+
+    let enrollmentStatus = false;
+
+    if (executor) {
+      const enrollment = await this.enrollmentRepository.findByUserAndCourseId(
+        executor.id,
+        course.id,
+      );
+      if (enrollment) {
+        enrollmentStatus =
+          enrollment.status === EnrollmentStatus.COMPLETED ? true : false;
+      }
+    }
 
     if (executor) {
       const isInstructor = executor.id === course.instructor.id;
@@ -59,10 +74,7 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
       );
     }
 
-    if (
-      executor &&
-      (await this.enrollmentServiceGateway.checkUserEnrollment(executor.id, id))
-    ) {
+    if (executor && enrollmentStatus) {
       includeMediaSources = true;
       return this.buildCourseCurriculum(id, includeMediaSources);
     }

@@ -7,5 +7,5 @@ export interface UserDetails {
 }
 
 export interface UserServiceGatewayPort {
-  getUserDetails(userId: string): Promise<UserProfile>;
+  getUser(userId: string): Promise<UserProfile>;
 }

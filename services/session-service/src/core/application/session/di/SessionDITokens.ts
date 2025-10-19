@@ -22,6 +22,11 @@ export class SessionDITokens {
     'AutoCompleteSessionsUseCase',
   );
 
+  //Handler
+  static readonly SessionPaymentSuccessfullEventHandler: unique symbol = Symbol(
+    'SessionPaymentSuccessfullEventHandler',
+  );
+
   //External Service
   static readonly MeetingService: unique symbol = Symbol('MeetingService');
 

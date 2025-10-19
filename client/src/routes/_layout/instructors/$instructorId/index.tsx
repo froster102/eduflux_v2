@@ -19,6 +19,7 @@ import { useCreateChat } from "@/features/chat/hooks/useCreateChat";
 import StartChatButton from "@/features/chat/components/StartChatButton";
 import { useChatStore } from "@/store/useChatStore";
 import { useGetChatWithInstructor } from "@/features/chat/hooks/useGetChatWithInstructor";
+import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
 
 export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -58,6 +59,7 @@ function RouteComponent() {
 
   const bookSession = useBookSession();
   const createChat = useCreateChat();
+  const createStripeCheckout = useCreateStripeCheckoutSession();
 
   async function chatWithInstructorHandler() {
     if (existingChat && existingChat.chat) {
@@ -103,7 +105,16 @@ function RouteComponent() {
     const { data: response } = await tryCatch(bookSession.mutateAsync(data));
 
     if (response) {
-      window.location.assign(response.checkoutUrl);
+      const { data: checkoutReponse } = await tryCatch(
+        createStripeCheckout.mutateAsync({
+          type: response.itemType,
+          referenceId: response.referenceId,
+        }),
+      );
+
+      if (checkoutReponse) {
+        window.location.assign(checkoutReponse.checkoutUrl);
+      }
     }
   }
 
@@ -111,7 +122,10 @@ function RouteComponent() {
     <>
       <div className="flex flex-col md:flex-row gap-4 w-full">
         <div className="flex flex-col gap-4 w-full">
-          <Card className="w-full h-fit bg-background border border-default-200">
+          <Card
+            className="w-full h-fit bg-background border border-default-200"
+            shadow={"none"}
+          >
             <CardHeader className="text-lg font-medium flex pb-0">
               <p>About Me</p>
             </CardHeader>
@@ -122,7 +136,10 @@ function RouteComponent() {
         </div>
 
         <div className="w-fit order-1">
-          <Card className="md:max-w-lg w-full bg-background border border-default-200">
+          <Card
+            className="md:max-w-lg w-full bg-background border border-default-200"
+            shadow="none"
+          >
             <CardHeader>
               <Image
                 className="max-h-"
@@ -132,14 +149,6 @@ function RouteComponent() {
               />
             </CardHeader>
             <CardBody className="flex flex-col gap-2">
-              {/* <Skeleton isLoaded={!isSessionSettingsLoading}>
-                <div className="flex items-center justify-between">
-                  <p className="font-medium">Price</p>
-                  <p className="text-2xl font-semibold">
-                    ${sessionSettings?.settings.price}/hr
-                  </p>
-                </div>
-              </Skeleton> */}
               <Button
                 color="primary"
                 startContent={<BoltIcon />}
@@ -162,7 +171,9 @@ function RouteComponent() {
       <SessionScheduler
         availableSlots={availableSlots!}
         instructor={instructor}
-        isConfirmBookingPending={bookSession.isPending}
+        isConfirmBookingPending={
+          bookSession.isPending || createStripeCheckout.isPending
+        }
         isOpen={openScheduler}
         isSlotsLoading={isAvailableSlotsLoading}
         selectedDate={selectedDate}

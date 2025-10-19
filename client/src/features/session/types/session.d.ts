@@ -40,6 +40,14 @@ declare global {
     pagination: Pagination;
   };
 
+  export type AvailableSlots = {
+    id: string;
+    instructorId: string;
+    startTime: string;
+    endTime: string;
+    status: "BOOKED" | "AVAILABLE";
+  };
+
   export type ConnectionDetails = {
     serverUrl: string;
     roomName: string;
@@ -51,6 +59,16 @@ declare global {
     roomName: string;
     participantName: string;
     participantToken: string;
+  };
+
+  export type BookSessionResponse = {
+    referenceId: string;
+    item: {
+      title: string;
+      image?: string;
+      amount: number;
+    };
+    itemType: "session";
   };
 }
 

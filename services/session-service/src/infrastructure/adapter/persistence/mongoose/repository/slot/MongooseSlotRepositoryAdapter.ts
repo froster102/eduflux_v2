@@ -1,5 +1,5 @@
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import type { Slot } from '@core/domain/slot/entity/Slot';
+import { Slot } from '@core/domain/slot/entity/Slot';
 import { SlotStatus } from '@core/domain/slot/enum/SlotStatus';
 import { MongooseSlotMapper } from '@infrastructure/adapter/persistence/mongoose/model/slot/mapper/MongooseSlotMapper';
 import {
@@ -62,5 +62,17 @@ export class MongooseSlotRepositoryAdapter
     });
 
     return docs ? MongooseSlotMapper.toDomainEntities(docs) : [];
+  }
+
+  async updateAllSlotStatus(
+    filter: { ids: string[] },
+    newStatus: SlotStatus,
+  ): Promise<void> {
+    await SlotModel.updateMany(
+      {
+        _id: { $in: filter.ids },
+      },
+      { status: newStatus },
+    );
   }
 }

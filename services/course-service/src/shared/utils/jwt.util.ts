@@ -1,12 +1,12 @@
 import { jwtVerify, createRemoteJWKSet } from 'jose';
-import { jwtConfig } from '@shared/config/jwt.config';
 import type { JwtPayload } from '@shared/types/jwt-payload';
+import { JwtConfig } from '@shared/config/JwtConfig';
 
 export async function validateToken(token: string) {
-  const JWKS = createRemoteJWKSet(new URL(jwtConfig.JWKS_URL));
+  const JWKS = createRemoteJWKSet(new URL(JwtConfig.JWKS_URL));
   const { payload } = await jwtVerify<JwtPayload>(token, JWKS, {
-    issuer: jwtConfig.JWT_ISS,
-    audience: jwtConfig.JWT_AUD,
+    issuer: JwtConfig.JWT_ISS,
+    audience: JwtConfig.JWT_AUD,
   });
   return payload;
 }

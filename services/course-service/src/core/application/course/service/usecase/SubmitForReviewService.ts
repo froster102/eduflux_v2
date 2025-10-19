@@ -49,7 +49,7 @@ export class SubmitCourseForReviewService
       );
     }
 
-    const instructorInfo = await this.userServiceGateway.getUserDetails(
+    const instructorInfo = await this.userServiceGateway.getUser(
       course.instructor.id,
     );
 

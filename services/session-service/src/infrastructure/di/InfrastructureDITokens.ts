@@ -13,4 +13,9 @@ export class InfrastructureDITokens {
 
   //Cron services
   static readonly CronServices: unique symbol = Symbol('CronServices');
+
+  //Grpc
+  static readonly GrpcSessionServiceController: unique symbol = Symbol(
+    'GrpcSessionServiceController',
+  );
 }

@@ -1,2 +1,2 @@
-export const ENROLLMENTS_TOPIC = 'ENROLLMENTS_TOPIC';
-export const COURSES_TOPIC = 'COURSES_TOPIC';
+export const ENROLLMENT_TOPIC = 'enrollment_topic';
+export const COURSE_TOPIC = 'course_topic';
