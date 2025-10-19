@@ -20,7 +20,7 @@ export default function ChatPanelLoader() {
     fetchNextPage,
   } = useGetChatMessages(selectedChat!.id);
 
-  const messages = messagesQueryResult.pages.flatMap((page) => page.messages);
+  const messages = messagesQueryResult.pages.flatMap((page) => page.data);
 
   const handleMessageRead = React.useCallback(
     (messageId: string) => {

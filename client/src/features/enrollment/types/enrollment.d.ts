@@ -1,5 +1,5 @@
 declare global {
-  export type EnrollForCourseResponse = {
+  export type EnrollForCourseResponse = JsonApiErrorResponse<{
     referenceId: string;
     item: {
       title: string;
@@ -7,7 +7,7 @@ declare global {
       amount: number;
     };
     itemType: "course";
-  };
+  }>;
 }
 
 export {};

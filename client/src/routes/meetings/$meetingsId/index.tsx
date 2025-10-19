@@ -33,20 +33,26 @@ function RouteComponent() {
     async (values: LocalUserChoices) => {
       setPreJoinChoices(values);
 
-      const { data, error } = await tryCatch<
-        JoinSessionResponse,
-        AxiosError<ApiErrorResponse>
+      const { data: response, error } = await tryCatch<
+        JsonApiResponse<JoinSessionResponse>,
+        AxiosError<JsonApiErrorResponse>
       >(joinSession(sessionId));
 
       if (error) {
-        addToast({
-          description: error.response?.data.message || DEFAULT_ERROR_MESSAGE,
-        });
+        const errorData = error.response?.data as
+          | JsonApiErrorResponse
+          | undefined;
+
+        const errorMessage =
+          errorData?.errors?.map((e) => e.title).join(", ") ||
+          DEFAULT_ERROR_MESSAGE;
+
+        addToast({ description: errorMessage });
 
         return;
       }
 
-      setConnectionDetails({ ...data, serverUrl: LIVEKIT_SERVER_URL });
+      setConnectionDetails({ ...response.data, serverUrl: LIVEKIT_SERVER_URL });
     },
     [],
   );

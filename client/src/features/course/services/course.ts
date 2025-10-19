@@ -1,20 +1,24 @@
 import api from "@/lib/axios";
-import { buildQueryUrlParams } from "@/utils/helpers";
+import { buildJsonApiQueryString } from "@/utils/helpers";
 
 export async function getInstructorCourses(
-  paginationQueryParams: QueryParmeters,
-): Promise<{ courses: Course[]; total: number }> {
-  const params = buildQueryUrlParams(paginationQueryParams);
+  paginationQueryParams: PaginationQueryParameters,
+): Promise<GetInstructorCoursesResponse> {
+  const params = buildJsonApiQueryString(paginationQueryParams);
 
-  const response = await api.get(`/users/me/taught-courses${params}`);
+  const response = await api.get<GetInstructorCoursesResponse>(
+    `/users/me/taught-courses${params}`,
+  );
 
   return response.data;
 }
 
 export async function getInstructorCourseCurriculum(
   courseId: string,
-): Promise<{ data: CurriculumItems }> {
-  const response = await api.get(`courses/${courseId}/instructor-curriculum`);
+): Promise<GetInstructorCourseCurriculumReponse> {
+  const response = await api.get<GetInstructorCourseCurriculumReponse>(
+    `courses/${courseId}/instructor-curriculum`,
+  );
 
   return response.data;
 }
@@ -33,9 +37,7 @@ export async function updateCurriculumItems({
   return response.data;
 }
 
-export async function getCourseCategories(): Promise<{
-  categories: { id: string; title: string }[];
-}> {
+export async function getCourseCategories(): Promise<GetCourseCategories> {
   const response = await api.get(`/courses/course-categories`);
 
   return response.data;
@@ -79,8 +81,11 @@ export async function deleteChapter(data: {
 
 export async function createLecture(
   data: LectureFormData & { courseId: string },
-): Promise<Lecture> {
-  const response = await api.post(`/courses/${data.courseId}/lectures`, data);
+): Promise<JsonApiResponse<Lecture>> {
+  const response = await api.post<JsonApiResponse<Lecture>>(
+    `/courses/${data.courseId}/lectures`,
+    data,
+  );
 
   return response.data;
 }
@@ -107,7 +112,9 @@ export async function deleteLecture(data: {
   return response.data;
 }
 
-export async function getCourseInfo(courseId: string): Promise<Course> {
+export async function getCourseInfo(
+  courseId: string,
+): Promise<JsonApiResponse<Course>> {
   const response = await api.get(`/courses/${courseId}`);
 
   return response.data;
@@ -145,12 +152,9 @@ export async function publishCourse(courseId: string) {
 }
 
 export async function getCourses(
-  paginationQueryParams: QueryParmeters,
-): Promise<{
-  courses: Course[];
-  total: number;
-}> {
-  const params = buildQueryUrlParams(paginationQueryParams);
+  paginationQueryParams: PaginationQueryParameters,
+): Promise<GetCoursesResponse> {
+  const params = buildJsonApiQueryString(paginationQueryParams);
 
   const response = await api.get(`/courses${params}`);
 
@@ -159,17 +163,21 @@ export async function getCourses(
 
 export async function getCourseCurriculum(
   courseId: string,
-): Promise<CurriculumItems> {
-  const response = await api.get(`/courses/${courseId}/curriculum`);
+): Promise<JsonApiResponse<CurriculumItems>> {
+  const response = await api.get<JsonApiResponse<CurriculumItems>>(
+    `/courses/${courseId}/curriculum`,
+  );
 
   return response.data;
 }
 
 export async function getSubscribedCourses(
   paginationQueryParams: GetSubscribedCoursesQueryParams,
-): Promise<{ total: number; courses: Course[] }> {
-  const queryParams = buildQueryUrlParams(paginationQueryParams);
-  const response = await api.get(`/users/me/subscribed-courses${queryParams}`);
+): Promise<GetSubscribedCourses> {
+  const queryParams = buildJsonApiQueryString(paginationQueryParams);
+  const response = await api.get<GetSubscribedCourses>(
+    `/users/me/subscribed-courses${queryParams}`,
+  );
 
   return response.data;
 }
@@ -177,8 +185,8 @@ export async function getSubscribedCourses(
 export async function getLecture(data: {
   lectureId: string;
   courseId: string;
-}): Promise<Lecture> {
-  const response = await api.get(
+}): Promise<JsonApiResponse<Lecture>> {
+  const response = await api.get<JsonApiResponse<Lecture>>(
     `/courses/${data.courseId}/lectures/${data.lectureId}`,
   );
 

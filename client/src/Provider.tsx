@@ -12,7 +12,7 @@ import { DEFAULT_ERROR_MESSAGE } from "./config/error-messages.ts";
 const queryClient = new QueryClient({
   defaultOptions: {
     mutations: {
-      onError: (error: AxiosError<ApiErrorResponse> | Error) => {
+      onError: (error: AxiosError<JsonApiErrorResponse> | Error) => {
         if (error instanceof AxiosError) {
           addToast({
             description: error.response?.data.message || DEFAULT_ERROR_MESSAGE,

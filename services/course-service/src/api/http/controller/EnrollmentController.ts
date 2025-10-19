@@ -2,6 +2,7 @@ import { authenticaionMiddleware } from '@api/http/middlewares/authenticationMid
 import { createEnrollmentSchema } from '@api/http/validators/createEnrollmentSchema';
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { CreateEnrollmentUseCase } from '@core/application/enrollment/usecase/CreateEnrollmentUseCase';
+import { jsonApiResponse } from '@shared/utils/jsonApi';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 
@@ -19,7 +20,7 @@ export class EnrollmentController {
           userId: user.id,
           courseId: parsedBody.courseId,
         });
-        return response;
+        return jsonApiResponse({ data: response });
       }),
     );
   }

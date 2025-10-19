@@ -35,13 +35,13 @@ function RouteComponent() {
 
   React.useEffect(() => {
     if (courseCurriculum) {
-      setSelectedCurriculumItem(courseCurriculum[1]);
+      setSelectedCurriculumItem(courseCurriculum.data[1]);
     }
   }, [courseCurriculum]);
 
   const totalModulesWithoutChapter = React.useMemo(() => {
     if (courseCurriculum) {
-      return courseCurriculum.reduce((acc, el) => {
+      return courseCurriculum.data.reduce((acc, el) => {
         if (el._class !== "chapter") {
           acc++;
         }
@@ -55,7 +55,7 @@ function RouteComponent() {
 
   const completedItems: Set<string> = React.useMemo(() => {
     if (courseProgress) {
-      return new Set<string>(courseProgress.completedLectures);
+      return new Set<string>(courseProgress.data.completedLectures);
     }
 
     return new Set();
@@ -64,7 +64,7 @@ function RouteComponent() {
   const progressPercentage = React.useMemo(() => {
     if (courseProgress && totalModulesWithoutChapter > 0) {
       const percentage =
-        (courseProgress.completedLectures.length * 100) /
+        (courseProgress.data.completedLectures.length * 100) /
         totalModulesWithoutChapter;
 
       return percentage;
@@ -115,12 +115,12 @@ function RouteComponent() {
         <CardBody className="p-0 border border-default-200">
           {isItemContentLoading ? (
             <Spinner />
-          ) : itemContent && itemContent!._class === "lecture" ? (
+          ) : itemContent && itemContent!.data._class === "lecture" ? (
             <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
               <div className="absolute top-0 left-0 w-full h-full">
                 <HLSPlayer
                   options={{
-                    sources: itemContent!.asset?.mediaSources!,
+                    sources: itemContent!.data.asset?.mediaSources!,
                     autoplay: true,
                     controls: true,
                     responsive: true,
@@ -139,7 +139,7 @@ function RouteComponent() {
               Course Title
             </Skeleton>
           ) : (
-            <p className="font-semibold text-xl">{courseInfo!.title}</p>
+            <p className="font-semibold text-xl">{courseInfo?.data!.title}</p>
           )}
           <div className="pt-2 w-full flex items-center gap-2">
             <Progress
@@ -156,9 +156,12 @@ function RouteComponent() {
             <Skeleton>Modules</Skeleton>
           ) : (
             <Accordion>
-              {courseCurriculum!.map((item, i) => {
+              {courseCurriculum!.data.map((item, i) => {
                 if (item._class === "chapter") {
-                  const chapterItems = findChapterItems(courseCurriculum!, i);
+                  const chapterItems = findChapterItems(
+                    courseCurriculum!.data,
+                    i,
+                  );
 
                   return (
                     <AccordionItem

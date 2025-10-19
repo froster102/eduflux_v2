@@ -51,27 +51,26 @@ export function getDeviceName(userAgent: string) {
   };
 }
 
-export function buildQueryUrlParams(params: Record<string, any>): string {
+export function buildJsonApiQueryString(params: Record<string, any>): string {
   const urlSearchParams = new URLSearchParams();
 
-  for (const key in params) {
-    if (Object.prototype.hasOwnProperty.call(params, key)) {
-      const value = params[key];
+  if (params.page) {
+    if (params.page.number !== undefined)
+      urlSearchParams.append("page[number]", String(params.page.number));
+    if (params.page.size !== undefined)
+      urlSearchParams.append("page[size]", String(params.page.size));
+  }
 
+  if (params.sort) {
+    urlSearchParams.append("sort", String(params.sort));
+  }
+
+  if (params.filter && typeof params.filter === "object") {
+    Object.entries(params.filter).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        if (Array.isArray(value)) {
-          urlSearchParams.append(key, value.join(","));
-        } else if (typeof value === "object") {
-          try {
-            urlSearchParams.append(key, JSON.stringify(value));
-          } catch {
-            console.error(`Could not stringify value for key: ${key}`);
-          }
-        } else {
-          urlSearchParams.append(key, String(value));
-        }
+        urlSearchParams.append(`filter[${key}]`, String(value));
       }
-    }
+    });
   }
 
   const queryString = urlSearchParams.toString();

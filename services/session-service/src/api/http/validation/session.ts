@@ -84,13 +84,15 @@ export const bookingSchema = z.object({
 });
 
 export const dateSchema = z.object({
-  date: z.iso.datetime({ error: 'Invalid date.', local: true }),
-  timeZone: z.string().refine(
-    (val) => {
-      return isValidTimeZone(val);
-    },
-    { error: 'Invalid timezone.' },
-  ),
+  filter: z.object({
+    date: z.iso.datetime({ error: 'Invalid date.', local: true }),
+    timeZone: z.string().refine(
+      (val) => {
+        return isValidTimeZone(val);
+      },
+      { error: 'Invalid timezone.' },
+    ),
+  }),
 });
 
 export const sessionFiltersSchema = z

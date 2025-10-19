@@ -1,8 +1,9 @@
-import { authenticaionMiddleware } from 'src/api/http/middleware/authenticationMiddleware';
+import { authenticaionMiddleware } from '@api/http/middleware/authenticationMiddleware';
 import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
 import type { AddToProgressUseCase } from '@core/application/progress/usecase/AddToProgressUseCase';
 import type { GetProgressUseCase } from '@core/application/progress/usecase/GetProgressUseCase';
 import type { RemoveFromProgressUseCase } from '@core/application/progress/usecase/RemoveFromProgressUseCase';
+import { jsonApiResponse } from '@shared/utils/jsonApi';
 import Elysia, { t } from 'elysia';
 import { inject } from 'inversify';
 
@@ -25,7 +26,7 @@ export class ProgressController {
             courseId: params.courseId,
             userId: user.id,
           });
-          return response;
+          return jsonApiResponse({ data: response });
         })
         .post(
           '/:courseId/completed-lectures',

@@ -3,10 +3,12 @@ import { Role } from "@core/common/enum/Role";
 import { z } from "zod/v4";
 
 const getUserChatsFilter = z.object({
-  role: z
-    .enum([Role.INSTRUCTOR, Role.LEARNER])
-    .optional()
-    .default(Role.LEARNER),
+  filter: z.object({
+    role: z
+      .enum([Role.INSTRUCTOR, Role.LEARNER])
+      .optional()
+      .default(Role.LEARNER),
+  }),
 });
 
 export const getUserChatsSchema = z.object({

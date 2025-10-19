@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
 
-export async function getUserProfile(): Promise<UserProfile> {
+export async function getUserProfile(): Promise<JsonApiResponse<UserProfile>> {
   const response = await api.get("/users/me");
 
   return response.data;
@@ -8,7 +8,7 @@ export async function getUserProfile(): Promise<UserProfile> {
 
 export async function updateProfile(
   data: Partial<UserProfile>,
-): Promise<UserProfile> {
+): Promise<JsonApiResponse<UserProfile>> {
   const response = await api.put(`/users/me`, data);
 
   return response.data;

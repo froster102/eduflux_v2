@@ -7,6 +7,7 @@ import { SessionSettingsDITokens } from '@core/application/session-settings/di/S
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
 import type { GetInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/GetInstructorSessionSettingsUseCase';
 import type { UpdateInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/UpdateInstructorSessionSettingsUseCase';
+import { jsonApiResponse } from '@shared/utils/jsonApi';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 
@@ -28,7 +29,7 @@ export class SessionSettingsController {
           const response = await this.getInstructorSessionSettings.execute({
             instructorId: user.id,
           });
-          return response;
+          return jsonApiResponse({ data: response });
         })
         .post('/', async ({ body, user }) => {
           const parsedBody = enableSessionsSchema.parse(body);

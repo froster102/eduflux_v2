@@ -20,6 +20,9 @@ import { rejectCourseSchema } from '@api/http/validators/rejectCourseSchema';
 import { reorderCurriculumSchema } from '@api/http/validators/reorderCurriculumSchema';
 import type { ReorderCurriculumUseCase } from '@core/application/course/usecase/ReorderCurriculumUseCase';
 import type { GetCourseCurriculumUseCase } from '@core/application/course/usecase/GetCourseCurriculumUseCase';
+import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
+import { calculateOffset } from '@shared/utils/helper';
+import httpStatus from 'http-status';
 
 export class CourseController {
   constructor(
@@ -57,63 +60,70 @@ export class CourseController {
           .use(authenticaionMiddleware)
           .get('/course-categories', async () => {
             const categories = await this.getCourseCategoriesUseCase.execute();
-            return { categories };
+            return jsonApiResponse({ data: categories });
           })
           .get('/', async ({ query }) => {
-            const parsedQuery = getCoursesSchema.parse(query);
+            const jsonApiQuery = parseJsonApiQuery(query);
+            const parsedQuery = getCoursesSchema.parse(jsonApiQuery);
             const { totalCount, courses } =
               await this.getPublishedCoursesUseCase.execute({
                 query: {
-                  offset: (parsedQuery.page - 1) * parsedQuery.limit,
-                  limit: parsedQuery.limit,
-                  filters: parsedQuery.filters,
+                  offset: calculateOffset({
+                    number: parsedQuery.page.number,
+                    size: parsedQuery.page.size,
+                  }),
+                  limit: parsedQuery.page.size,
+                  filters: parsedQuery.filter,
                   sort: parsedQuery.sort,
                 },
               });
-            return {
-              pagination: {
-                totalPages: Math.ceil(totalCount / parsedQuery.limit),
-                currentPage: parsedQuery.page,
-              },
-              courses,
-            };
+            return jsonApiResponse({
+              data: courses,
+              pageNumber: parsedQuery.page.number,
+              pageSize: parsedQuery.page.size,
+              totalCount,
+            });
           })
           .get('/:id', async ({ params, user }) => {
             const course = await this.getCourseUseCase.execute({
               courseId: params.id,
               actor: user,
             });
-            return course;
+            return jsonApiResponse({ data: course });
           })
           .get('/:id/curriculum', async ({ params, user }) => {
             const response = await this.getCourseCurriculumUseCase.execute({
               id: params.id,
               executor: user,
             });
-            return response;
+            return jsonApiResponse({ data: response });
           })
           .get('/:id/instructor-curriculum', async ({ params, user }) => {
             const response = await this.getCourseCurriculumUseCase.execute({
               id: params.id,
               executor: user,
             });
-            return { data: response };
+            return jsonApiResponse({ data: response });
           })
-          .put('/:id/instructor-curriculum', async ({ params, user, body }) => {
-            const parsedBody = reorderCurriculumSchema.parse(body);
-            const response = await this.reorderCurriculumUseCase.execute({
-              courseId: params.id,
-              items: parsedBody.items,
-              executor: user,
-            });
-            return response;
-          })
+          .put(
+            '/:id/instructor-curriculum',
+            async ({ params, user, status, body }) => {
+              const parsedBody = reorderCurriculumSchema.parse(body);
+              await this.reorderCurriculumUseCase.execute({
+                courseId: params.id,
+                items: parsedBody.items,
+                executor: user,
+              });
+              status(httpStatus.NO_CONTENT);
+              return;
+            },
+          )
           .post(`/:id/publish`, async ({ params, user }) => {
             await this.publishCourseUseCase.execute({
               actor: user,
               courseId: params.id,
             });
-            return { published: true };
+            return jsonApiResponse({ data: { published: true } });
           })
 
           // Instructor routes (authentication required)
@@ -124,7 +134,7 @@ export class CourseController {
               categoryId: parsedBody.categoryId,
               actor: user,
             });
-            return course;
+            return jsonApiResponse({ data: course });
           })
           .get('/me/taught-courses', async ({ query, user }) => {
             const parsedQuery = paginationSchema.parse(query);
@@ -132,18 +142,19 @@ export class CourseController {
               await this.getAllInstructorCoursesUseCase.execute({
                 actor: user,
                 query: {
-                  limit: parsedQuery.limit,
-                  offset: (parsedQuery.page - 1) * parsedQuery.limit,
-                  // filters: parsedQuery.filters,
+                  limit: parsedQuery.page.size,
+                  offset: calculateOffset({
+                    number: parsedQuery.page.number,
+                    size: parsedQuery.page.size,
+                  }),
                 },
               });
-            return {
-              pagination: {
-                totalPages: Math.ceil(totalCount / parsedQuery.limit),
-                currentPage: parsedQuery.page,
-              },
-              courses,
-            };
+            return jsonApiResponse({
+              totalCount,
+              pageNumber: parsedQuery.page.number,
+              pageSize: parsedQuery.page.size,
+              data: courses,
+            });
           })
           .put('/:id', async ({ params, user, body }) => {
             const parsedBody = updateCourseSchema.parse(body);
@@ -152,14 +163,14 @@ export class CourseController {
               updates: parsedBody,
               actor: user,
             });
-            return course;
+            return jsonApiResponse({ data: course });
           })
           .post('/:id/submit-for-review', async ({ params, user }) => {
             const course = await this.submitCourseForReviewUseCase.execute({
               courseId: params.id,
               actor: user,
             });
-            return course;
+            return jsonApiResponse({ data: course });
           })
           // .post('/:id/pricing', async ({ params, user, body }) => {
           //   const parsedBody = setPricingSchema.parse(body);
@@ -177,7 +188,7 @@ export class CourseController {
               courseId: params.id,
               actor: user,
             });
-            return course;
+            return jsonApiResponse({ data: course });
           })
           .post('/:id/reject', async ({ params, user, body }) => {
             const parsedBody = rejectCourseSchema.parse(body);
@@ -186,7 +197,7 @@ export class CourseController {
               feedback: parsedBody.feedback,
               actor: user,
             });
-            return course;
+            return jsonApiResponse({ data: course });
           }),
       // .post('/admin/:id/publish', async ({ params, user }) => {
       //   const parsedParams = getCourseParamsSchema.parse(params);

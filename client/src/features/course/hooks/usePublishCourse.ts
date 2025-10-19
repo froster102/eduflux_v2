@@ -10,12 +10,12 @@ export function usePublishCourse(options?: {
   return useMutation({
     mutationFn: publishCourse,
 
-    onError: (error: AxiosError<ApiErrorResponse>) => {
+    onError: (error: AxiosError<JsonApiErrorResponse>) => {
       if (
         options?.onError &&
-        error.response?.data.code === "BAD_REQUEST_ERROR"
+        error.response?.data.errors[0].code === "BAD_REQUEST_ERROR"
       ) {
-        options.onError(error.response?.data.message);
+        options.onError(error.response?.data.errors[0].title);
 
         return;
       }

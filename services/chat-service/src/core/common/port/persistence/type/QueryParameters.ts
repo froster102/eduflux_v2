@@ -1,4 +1,4 @@
-export interface QueryParameters {
+export interface PaginationQueryParams {
   offset?: number;
   limit?: number;
 }

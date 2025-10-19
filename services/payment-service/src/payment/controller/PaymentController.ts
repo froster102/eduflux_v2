@@ -2,6 +2,7 @@ import { authenticaionMiddleware } from '@application/api/http/middleware/authen
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
 import type { PaymentService } from '@payment/service/PaymentService';
 import type { StripeService } from '@payment/service/StripeService';
+import { jsonApiResponse } from '@shared/utils/jsonApi';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 
@@ -36,7 +37,7 @@ export class PaymentController {
             params.referenceId,
             user.id,
           );
-          return response;
+          return jsonApiResponse({ data: response });
         }),
     );
   }

@@ -19,6 +19,8 @@ import { getUserChatsSchema } from "@api/validation/getUserChatsSchema";
 import { UserChatDITokens } from "@core/application/views/user-chat/di/UserChatDITokens";
 import type { GetUserChatsUseCase } from "@core/application/views/user-chat/usecase/GetUserChatsUseCase";
 import { calculateOffset } from "@shared/utils/helper";
+import { jsonApiResponse, parseJsonApiQuery } from "@shared/utils/jsonApi";
+import httpStatus from "http-status";
 
 export class ChatController {
   constructor(
@@ -37,51 +39,59 @@ export class ChatController {
       .use(authenticaionMiddleware)
       .post("/", async (c) => {
         const parsedBody = createChatSchema.parse(await c.req.json());
-        const response = await this.createChatUseCase.execute({
+        const result = await this.createChatUseCase.execute({
           instructorId: parsedBody.instructorId,
           userId: c.get("user").id,
         });
-        return c.json(response);
+        const response = jsonApiResponse({
+          data: result,
+        });
+
+        return c.json(response, httpStatus.CREATED);
       })
       .get("/exists", async (c) => {
-        const parsedQuery = getChatExistsSchema.parse(c.req.query());
+        const jsonApiQuery = parseJsonApiQuery(c.req.query());
+        const parsedQuery = getChatExistsSchema.parse(jsonApiQuery);
         const response = await this.getChatWithInstructorUseCase.execute({
-          instructorId: parsedQuery.instructorId,
+          instructorId: parsedQuery.filter.instructorId,
           learnerId: c.get("user").id,
         });
-        return c.json(response);
+        return c.json(jsonApiResponse({ data: response }));
       })
       .get("/:id", async (c) => {
-        const parsedQuery = getMessagesSchema.parse(c.req.query());
+        const jsonApiQuery = parseJsonApiQuery(c.req.query());
+        const parsedQuery = getMessagesSchema.parse(jsonApiQuery);
         const response = await this.getMessagesUseCase.execute({
           chatId: c.req.param("id"),
           userId: c.get("user").id,
           queryParameters: {
-            before: parsedQuery.before,
+            before: parsedQuery.page.cursor,
           },
         });
-        return c.json({
-          messages: response.messages,
-        });
+        return c.json(
+          jsonApiResponse({
+            data: response.messages,
+          }),
+        );
       })
       .get("/users/me", async (c) => {
-        const parsedQuery = getUserChatsSchema.parse(c.req.query());
+        const jsonApiQuery = parseJsonApiQuery(c.req.query());
+        const parsedQuery = getUserChatsSchema.parse(jsonApiQuery);
         const { totalCount, chats } = await this.getUserChatsUseCase.execute({
-          role: parsedQuery.role,
-          queryParameters: {
-            limit: parsedQuery.limit,
-            offset: calculateOffset(parsedQuery.page, parsedQuery.limit),
+          role: parsedQuery.filter.role,
+          paginationQueryParams: {
+            limit: parsedQuery.page.size,
+            offset: calculateOffset(parsedQuery.page),
           },
           userId: c.get("user").id,
         });
-
-        return c.json({
-          pagination: {
-            totalPages: Math.ceil(totalCount / parsedQuery.limit),
-            currentPage: parsedQuery.page,
-          },
-          chats,
+        const response = jsonApiResponse({
+          data: chats,
+          pageNumber: parsedQuery.page.number,
+          pageSize: parsedQuery.page.size,
+          totalCount,
         });
+        return c.json(response);
       });
   }
 }

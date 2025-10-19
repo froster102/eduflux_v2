@@ -15,6 +15,8 @@ import type { LiveKitWebhookHandler } from '@infrastructure/adapter/livekit/Live
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
 import type { GetUserSessionsUseCase } from '@core/application/views/user-session/usecase/GetUserSessionsUseCase';
 import { getUserSessionSchema } from '@api/http/validation/getUserSessionSchema';
+import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
+import { calculateOffset } from '@shared/utils/helper';
 
 export class SessionController {
   constructor(
@@ -57,17 +59,18 @@ export class SessionController {
             userId: user.id,
           });
 
-          return response;
+          return jsonApiResponse({ data: response });
         })
         .get('/instructors/:instructorId/slots', async ({ params, query }) => {
-          const parsedQuery = dateSchema.parse(query);
+          const jsonApiQuery = parseJsonApiQuery(query);
+          const parsedQuery = dateSchema.parse(jsonApiQuery);
           const response =
             await this.getInstructorAvailableSlotsUseCase.execute({
               instructorId: params.instructorId,
-              date: parsedQuery.date,
-              timeZone: parsedQuery.timeZone,
+              date: parsedQuery.filter.date,
+              timeZone: parsedQuery.filter.timeZone,
             });
-          return response;
+          return jsonApiResponse({ data: response });
         })
         .get('/:sessionId/tokens', async ({ params, user }) => {
           const response = await this.joinSessionUseCase.execute({
@@ -75,26 +78,29 @@ export class SessionController {
             userId: user.id,
           });
 
-          return response;
+          return jsonApiResponse({ data: response });
         })
-        .get('/users/me', async ({ query, user }) => {
-          const parsedQuery = getUserSessionSchema.parse(query);
+        .get('/me', async ({ query, user }) => {
+          const jsonApiQuery = parseJsonApiQuery(query);
+          const parsedQuery = getUserSessionSchema.parse(jsonApiQuery);
           const { totalCount, sessions } =
             await this.getUserSessionsUseCase.execute({
               userId: user.id,
-              preferedRole: parsedQuery.preferedRole,
+              preferedRole: parsedQuery.filter.preferedRole,
               queryParameters: {
-                limit: parsedQuery.limit,
-                offset: (parsedQuery.page - 1) * parsedQuery.limit,
+                limit: parsedQuery.page.size,
+                offset: calculateOffset({
+                  number: parsedQuery.page.number,
+                  size: parsedQuery.page.size,
+                }),
               },
             });
-          return {
-            pagination: {
-              totalPages: Math.ceil(totalCount / parsedQuery.limit),
-              currentPage: parsedQuery.page,
-            },
-            sessions,
-          };
+          return jsonApiResponse({
+            data: sessions,
+            totalCount,
+            pageNumber: parsedQuery.page.number,
+            pageSize: parsedQuery.page.size,
+          });
         }),
     );
   }

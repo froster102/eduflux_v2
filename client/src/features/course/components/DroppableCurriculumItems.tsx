@@ -133,7 +133,7 @@ export default function DroppableCurriculumItems({
       );
 
       if (newLecture && selectedIndex) {
-        insertCurriculumItem(newLecture, selectedIndex);
+        insertCurriculumItem(newLecture.data, selectedIndex);
         reOrderCurriculumItems();
         syncCurriculumOrder();
       }

@@ -11,6 +11,7 @@ import type { CreateLectureUseCase } from '@core/application/lecture/usecase/Cre
 import { updateLessonSchema } from '@api/http/validators/updateLessonSchema';
 import type { UpdateLectureUseCase } from '@core/application/lecture/usecase/UpdateLectureUseCase';
 import type { GetSubscriberLectureUseCase } from '@core/application/lecture/usecase/GetSubscriberLectureUseCase';
+import { jsonApiResponse } from '@shared/utils/jsonApi';
 
 export class LectureController {
   constructor(
@@ -35,7 +36,7 @@ export class LectureController {
             lectureId: params.lectureId,
             userId: user.id,
           });
-          return response;
+          return jsonApiResponse({ data: response });
         })
         .post('/', async ({ params, body, user }) => {
           const parsedBody = createLectureSchema.parse(body);
@@ -46,11 +47,11 @@ export class LectureController {
             title: parsedBody.title,
             actor: user,
           });
-          return lecture.toJSON();
+          return jsonApiResponse({ data: lecture.toJSON() });
         })
         .put('/:lectureId', async ({ params, body, user }) => {
           const parsedBody = updateLessonSchema.parse(body);
-          const lecture = await this.updateLectureUseCase.execute({
+          await this.updateLectureUseCase.execute({
             courseId: params.id,
             lectureId: params.lectureId,
             description: parsedBody.description,
@@ -58,7 +59,7 @@ export class LectureController {
             title: parsedBody.title,
             actor: user,
           });
-          return lecture;
+          return;
         })
         .delete('/:lectureId', async ({ params, user }) => {
           await this.deleteLectureUseCase.execute({
@@ -78,7 +79,7 @@ export class LectureController {
             lectureId: params.lectureId,
             actor: user,
           });
-          return {};
+          return;
         }),
     );
   }

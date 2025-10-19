@@ -18,6 +18,8 @@ import { getTaughtCourseSchema } from '@api/http/validators/getTaughtCoursesSche
 import { updateUserSchema } from '@api/http/validators/user';
 import { paginationSchema } from '@api/http/validators/paginationSchema';
 import { getSubscribedCoursesSchema } from '@api/http/validators/getSubscribedCoursesSchema';
+import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
+import { calculateOffset } from '@shared/utils/helper';
 
 export class UserController {
   constructor(
@@ -46,7 +48,7 @@ export class UserController {
             userId: user.id,
           });
           set.status = httpStatus.OK;
-          return JSON.stringify(foundUser);
+          return jsonApiResponse({ data: foundUser });
         })
         .put('/me', async ({ body, user }) => {
           const { firstName, lastName, bio, image, socialLinks } =
@@ -59,74 +61,83 @@ export class UserController {
             image,
             socialLinks,
           });
-          return updatedUser;
+          return jsonApiResponse({ data: updatedUser });
         })
         .get('/learners/me', async ({ user }) => {
           const response = await this.getLearnerStatsUseCase.execute({
             learnerId: user.id,
           });
-          return JSON.stringify(response);
+          return jsonApiResponse({ data: response });
         })
         .get('/instructors', async ({ query, user }) => {
-          const parsedQuery = paginationSchema.parse(query);
+          const jsonApiQuery = parseJsonApiQuery(query);
+          const parsedQuery = paginationSchema.parse(jsonApiQuery);
           const { totalCount, instructors } =
             await this.getInstructorViewsUseCase.execute({
               executorId: user.id,
               queryParameters: {
-                limit: parsedQuery.limit,
-                offset: (parsedQuery.page - 1) * parsedQuery.limit,
+                limit: parsedQuery.page.size,
+                offset: calculateOffset({
+                  number: parsedQuery.page.number,
+                  size: parsedQuery.page.size,
+                }),
               },
             });
-          return {
-            pagination: {
-              totalPages: Math.ceil(totalCount / parsedQuery.limit),
-              currentPage: parsedQuery.page,
-            },
-            instructors,
-          };
+          return jsonApiResponse({
+            data: instructors,
+            pageNumber: parsedQuery.page.number,
+            pageSize: parsedQuery.page.size,
+            totalCount,
+          });
         })
         .get('/instructors/:id', async ({ params }) => {
           const instructor = await this.getInstructorViewUseCase.execute({
             instructorId: params.id,
           });
 
-          return JSON.stringify(instructor);
+          return jsonApiResponse({ data: instructor });
         })
         .get('/me/subscribed-courses', async ({ user, query }) => {
-          const parsedQuery = getSubscribedCoursesSchema.parse(query);
+          const jsonApiQuery = parseJsonApiQuery(query);
+          const parsedQuery = getSubscribedCoursesSchema.parse(jsonApiQuery);
           const { totalCount, courses } =
             await this.getSubscribedCourseViewsUseCase.execute({
               userId: user.id,
               query: {
-                limit: parsedQuery.limit,
-                offset: (parsedQuery.page - 1) * parsedQuery.limit,
+                limit: parsedQuery.page.size,
+                offset: calculateOffset({
+                  number: parsedQuery.page.number,
+                  size: parsedQuery.page.size,
+                }),
               },
             });
-          return {
-            pagination: {
-              totalPages: Math.ceil(totalCount / parsedQuery.limit),
-              currentPage: parsedQuery.page,
-            },
-            courses,
-          };
+          return jsonApiResponse({
+            data: courses,
+            pageNumber: parsedQuery.page.number,
+            pageSize: parsedQuery.page.size,
+            totalCount,
+          });
         })
         .get('/me/taught-courses', async ({ user, query }) => {
-          const parsedQuery = getTaughtCourseSchema.parse(query);
+          const jsonApiQuery = parseJsonApiQuery(query);
+          const parsedQuery = getTaughtCourseSchema.parse(jsonApiQuery);
           const { totalCount, courses } =
             await this.getTaughtCourseViewUseCase.execute({
               userId: user.id,
               query: {
-                limit: parsedQuery.limit,
-                offset: (parsedQuery.page - 1) * parsedQuery.limit,
+                limit: parsedQuery.page.size,
+                offset: calculateOffset({
+                  number: parsedQuery.page.number,
+                  size: parsedQuery.page.size,
+                }),
               },
             });
-          return {
-            pagination: {
-              totalPages: Math.ceil(totalCount / parsedQuery.limit),
-              currentPage: parsedQuery.page,
-            },
-            courses,
-          };
+          return jsonApiResponse({
+            data: courses,
+            pageNumber: parsedQuery.page.number,
+            pageSize: parsedQuery.page.size,
+            totalCount,
+          });
         }),
     );
   }

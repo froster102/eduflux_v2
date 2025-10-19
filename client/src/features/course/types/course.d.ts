@@ -81,6 +81,11 @@ declare global {
     preview: boolean;
   };
 
+  export type Category = {
+    id: string;
+    title: string;
+  };
+
   export type UploadCredentials = {
     uploadUrl: string;
     formFields: { [key: string]: string };
@@ -92,7 +97,24 @@ declare global {
 
   export type CurriculumItems = (Chapter | Lecture)[];
 
-  export type GetSubscribedCoursesQueryParams = QueryParmeters;
+  export type GetSubscribedCoursesQueryParams = PaginationQueryParameters;
+
+  export type GetInstructorCoursesResponse = JsonApiResponse<Course[]> & {
+    meta: Pagination;
+  };
+
+  export type GetInstructorCourseCurriculumReponse =
+    JsonApiResponse<CurriculumItems>;
+
+  export type GetCourseCategories = JsonApiResponse<Category[]>;
+
+  export type GetCoursesResponse = JsonApiResponse<Course[]> & {
+    meta: Pagination;
+  };
+
+  export type GetSubscribedCourses = JsonApiResponse<Course[]> & {
+    meta: Pagination;
+  };
 }
 
 export {};

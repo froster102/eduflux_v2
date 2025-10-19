@@ -1,8 +1,8 @@
 import { ProgressController } from 'src/api/http/controller/ProgressController';
 import { UserController } from 'src/api/http/controller/UserController';
-import { correlationIdSetupMiddleware } from 'src/api/http/middleware/correlation-id-setup.middleware';
-import { errorHandler } from 'src/api/http/middleware/error-handler.middleware';
-import { httpLoggerMiddleware } from 'src/api/http/middleware/http-logger.middleware';
+import { correlationIdSetupMiddleware } from '@api/http/middleware/correlationIdSetupMiddleware';
+import { errorHandler } from '@api/http/middleware/errorHandlerMiddleware';
+import { httpLoggerMiddleware } from '@api/http/middleware/httpLoggerMiddleware';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import type { LoggerPort } from '@core/common/port/LoggerPort';
 import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';

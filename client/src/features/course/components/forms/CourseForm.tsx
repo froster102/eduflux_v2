@@ -149,8 +149,8 @@ export default function CourseForm({
                 field.onChange(value.anchorKey);
               }}
             >
-              {courseCategories && courseCategories.categories
-                ? courseCategories.categories.map((category) => (
+              {courseCategories && courseCategories.data
+                ? courseCategories.data.map((category) => (
                     <SelectItem key={category.id}>{category.title}</SelectItem>
                   ))
                 : []}
