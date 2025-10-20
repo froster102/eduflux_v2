@@ -37,7 +37,7 @@ export class SessionPaymentSuccessfullEventHandlerService
     );
 
     if (session.status === SessionStatus.CONFIRMED) {
-      this.logger.warn(`Session has already completed ${session.id}`);
+      this.logger.warn(`Session has already confirmed ${session.id}`);
       return;
     }
 

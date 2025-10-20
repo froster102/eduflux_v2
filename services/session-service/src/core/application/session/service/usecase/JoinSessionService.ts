@@ -41,7 +41,10 @@ export class JoinSessionService implements JoinSessionUseCase {
       throw new ForbiddenException('Unauthorized to join this session.');
     }
 
-    const joinableStatuses = [SessionStatus.BOOKED, SessionStatus.IN_PROGRESS];
+    const joinableStatuses = [
+      SessionStatus.CONFIRMED,
+      SessionStatus.IN_PROGRESS,
+    ];
     if (!joinableStatuses.includes(session.status)) {
       throw new ForbiddenException(
         `Session status is '${session.status}', cannot be joined.`,
