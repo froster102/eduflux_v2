@@ -21,10 +21,8 @@ export class GetChatWithInstructorService
       instructorId,
     ]);
     if (chat) {
-      return { chat: ChatUseCaseDto.fromEntity(chat) };
+      return ChatUseCaseDto.fromEntity(chat);
     }
-    return {
-      chat: null,
-    };
+    return null;
   }
 }

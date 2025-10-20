@@ -1,4 +1,4 @@
-import { SessionSettingsController } from '@api/http-rest/controller/SessionSettingsController';
+import { SessionSettingsController } from '@api/http/controller/SessionSettingsController';
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
 import type { SessionSettingsRepositoryPort } from '@core/application/session-settings/port/persistence/SessionSettingsPort';
 import { EnableSessionService } from '@core/application/session-settings/service/EnableSessionService';
@@ -6,7 +6,7 @@ import { UpdateInstructorSessionSettingsService } from '@core/application/sessio
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
 import type { GetInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/GetInstructorSessionSettingsUseCase';
 import type { UpdateInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/UpdateInstructorSessionSettingsUseCase';
-import { GetInstructorSessionSettingsService } from '@core/application/session/service/GetInstructorSessionSettingsService';
+import { GetInstructorSessionSettingsService } from '@core/application/session/service/usecase/GetInstructorSessionSettingsService';
 import { MongooseSessionSettingsRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/session-settings/MongooseSessionSettingsRepositoryAdapter';
 import { ContainerModule } from 'inversify';
 

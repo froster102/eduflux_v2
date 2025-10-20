@@ -18,8 +18,8 @@ import MessageIcon from "@/components/icons/MessageIcon";
 import { useGetCourseInfo } from "@/features/course/hooks/useGetCourseInfo";
 import { useGetPublishedCourseCurriculum } from "@/features/course/hooks/useGetPublishedCourseCurriculum";
 import { useEnrollForCourse } from "@/features/enrollment/hooks/useEnrollForCourse";
-import { useCheckUserEnrollment } from "@/features/enrollment/hooks/useCheckUserEnrollment";
 import { useGetInstructorProfile } from "@/features/instructor/hooks/useGetInstructorProfile";
+import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
 
 export const Route = createFileRoute("/_layout/courses/$courseId/")({
   component: RouteComponent,
@@ -33,19 +33,16 @@ function RouteComponent() {
   const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
     useGetPublishedCourseCurriculum(courseId);
   const { data: instructor, isLoading: isInstructorProfileLoading } =
-    useGetInstructorProfile(courseInfo?.instructor.id!);
+    useGetInstructorProfile(courseInfo?.data?.instructor.id!);
   const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
   const enrollForCourse = useEnrollForCourse();
-  const {
-    data: userEnrollmentStatus,
-    isLoading: isUserEnrollmentStatusLoading,
-  } = useCheckUserEnrollment(courseId);
+  const createStripeCheckout = useCreateStripeCheckoutSession();
 
   const descriptionHtml = {
     __html: Dompurify.sanitize(
-      (courseInfo && courseInfo.description) as string,
+      (courseInfo?.data && courseInfo.data.description) as string,
     ),
   };
 
@@ -57,7 +54,7 @@ function RouteComponent() {
       return { totalChapters: 0, totalLectures: 0 };
     }
 
-    return courseCurriculum.reduce(
+    return courseCurriculum.data.reduce(
       (acc, el) => {
         if (el._class === "chapter") {
           acc.totalChapters++;
@@ -76,7 +73,7 @@ function RouteComponent() {
       return [];
     }
 
-    return courseCurriculum.filter(
+    return courseCurriculum.data.filter(
       (curriculum): curriculum is Lecture =>
         curriculum._class === "lecture" && !!curriculum.asset,
     );
@@ -91,7 +88,16 @@ function RouteComponent() {
     const { data } = await tryCatch(enrollForCourse.mutateAsync(courseId));
 
     if (data) {
-      window.location.assign(data.checkoutUrl);
+      const { data: checkoutReponse } = await tryCatch(
+        createStripeCheckout.mutateAsync({
+          type: data.itemType,
+          referenceId: data.referenceId,
+        }),
+      );
+
+      if (checkoutReponse) {
+        window.location.assign(checkoutReponse.data.checkoutUrl);
+      }
     }
   }
 
@@ -100,7 +106,7 @@ function RouteComponent() {
       {isCourseInfoLoading ? (
         <Skeleton className="h-[5vh] rounded-lg w-full">course info</Skeleton>
       ) : (
-        <p className="text-2xl font-semibold pt-4">{courseInfo?.title}</p>
+        <p className="text-2xl font-semibold pt-4">{courseInfo?.data?.title}</p>
       )}
       <div className="flex flex-col lg:flex-row gap-4 w-full pt-4">
         <div className="flex flex-col gap-2 max-w-4xl">
@@ -116,7 +122,7 @@ function RouteComponent() {
                   isLoading={isCourseInfoLoading}
                   src={
                     !isCourseInfoLoading
-                      ? `${IMAGE_BASE_URL}${courseInfo?.thumbnail}`
+                      ? `${IMAGE_BASE_URL}${courseInfo?.data?.thumbnail}`
                       : ""
                   }
                   width="100%"
@@ -128,7 +134,7 @@ function RouteComponent() {
                   <ul className="flex flex-col gap-2 text-default-600">
                     <li className="flex gap-2 items-center">
                       <NoteIcon width={18} />
-                      {courseCurriculum?.length} Modules
+                      {courseCurriculum?.data.length} Modules
                     </li>
                     <li className="flex gap-2 items-center">
                       <VideoIcon width={18} />
@@ -137,19 +143,21 @@ function RouteComponent() {
                   </ul>
                 </div>
                 <div className="mt-auto w-fit">
-                  {userEnrollmentStatus && !userEnrollmentStatus.isEnrolled ? (
+                  {courseInfo?.data && !courseInfo.data.isEnrolled ? (
                     <p className="text-2xl font-semibold py-4">
-                      ${courseInfo?.price}
+                      ${courseInfo.data?.price}
                     </p>
                   ) : null}
                   <Button
                     className="mt-2"
                     color="primary"
                     isLoading={
-                      isUserEnrollmentStatusLoading || enrollForCourse.isPending
+                      isCourseInfoLoading ||
+                      enrollForCourse.isPending ||
+                      createStripeCheckout.isPending
                     }
                     onPress={
-                      userEnrollmentStatus && userEnrollmentStatus.isEnrolled
+                      courseInfo?.data && courseInfo.data.isEnrolled
                         ? () =>
                             navigate({
                               to: `/courses/${courseId}/learn`,
@@ -157,7 +165,7 @@ function RouteComponent() {
                         : handleEnrollForCourse
                     }
                   >
-                    {userEnrollmentStatus && userEnrollmentStatus.isEnrolled
+                    {courseInfo?.data && courseInfo.data.isEnrolled
                       ? "Go to course"
                       : "Buy course now"}
                   </Button>
@@ -195,22 +203,23 @@ function RouteComponent() {
                         isBordered
                         radius="full"
                         size="md"
-                        src={`${IMAGE_BASE_URL}${instructor?.profile.image}`}
+                        src={`${IMAGE_BASE_URL}${instructor?.data?.profile.image}`}
                       />
                       <p className="text-xl font-semibold">
-                        {instructor?.profile.name}
+                        {instructor?.data?.profile.name}
                       </p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardBody className="pt-0">
-                  <p className="text-sm">{instructor?.profile?.bio}</p>
+                  <p className="text-sm">{instructor?.data?.profile?.bio}</p>
                 </CardBody>
                 <CardFooter className="pt-0">
-                  <Button color="primary">Learn more..</Button>
-                  <Button startContent={<MessageIcon />} variant="bordered">
-                    Send a message to instructor
-                  </Button>
+                  {courseInfo?.data && courseInfo.data.isEnrolled && (
+                    <Button startContent={<MessageIcon />} variant="bordered">
+                      Send a message to instructor
+                    </Button>
+                  )}
                 </CardFooter>
               </Card>
             )}
@@ -231,7 +240,7 @@ function RouteComponent() {
                 >
                   <CardBody>
                     {courseCurriculum &&
-                      courseCurriculum.map((curriculum, index) => (
+                      courseCurriculum.data.map((curriculum, index) => (
                         <div
                           key={curriculum.id}
                           className={`capitalize py-2  ${curriculum._class === "lecture" ? "pl-8" : "pl-4"}  ${curriculum._class === "chapter" && index !== 0 ? "border-t border-secondary-100 pt-4 mt-4" : ""} `}
@@ -286,6 +295,19 @@ function RouteComponent() {
           }}
         />
       )}
+
+      {/* <PaymentModal
+        checkoutItem={enrollmentResponse!}
+        isCheckoutItemLoading={enrollForCourse.isPending}
+        isOpen={openPaymentModal}
+        paymentType={PaymentType.COURSE_PURCHASE}
+        onClose={() => {
+          setOpenPaymentModal(false);
+        }}
+        onPayment={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      /> */}
     </>
   );
 }

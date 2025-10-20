@@ -3,10 +3,9 @@ import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose
 import { container } from '@di/RootModule';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
-import { HttpServer } from '@api/http-rest/HttpServer';
+import { HttpServer } from '@api/http/HttpServer';
 import { GrpcServer } from '@infrastructure/adapter/grpc/GrpcServer';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducer';
 
 async function bootstrap() {
@@ -14,10 +13,10 @@ async function bootstrap() {
   await MongooseConnection.connect();
 
   //Consumers
-  // const kafkaConsumer = container.get<KafkaEventsConsumer>(
-  //   InfrastructureDITokens.KafkaEventsConsumer,
-  // );
-  // await kafkaConsumer.run();
+  const kafkaConsumer = container.get<KafkaEventsConsumer>(
+    InfrastructureDITokens.KafkaEventsConsumer,
+  );
+  await kafkaConsumer.run();
 
   //kafka produer
   const kafkaProducer = container.get<KafkaEventBusProducerAdapter>(

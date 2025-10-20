@@ -1,3 +1,4 @@
+import { ConflictException } from '@core/common/exception/ConflictException';
 import { InvalidInputException } from '@core/common/exception/InvalidInputException';
 import { UnauthorizedException } from '@core/common/exception/UnauthorizedException';
 import { Session } from '@core/domain/session/entity/Session';
@@ -13,9 +14,7 @@ export class SessionBookingService {
     currency: string,
   ): { updatedSlot: Slot; newSession: Session } {
     if (slot.status !== SlotStatus.AVAILABLE) {
-      throw new InvalidInputException(
-        'Selected slot is not available for booking.',
-      );
+      throw new ConflictException('Selected slot has already being booked.');
     }
 
     const sessionId = `sess-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;

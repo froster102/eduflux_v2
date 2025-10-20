@@ -1,5 +1,6 @@
 import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import type { ChapterRepositoryPort } from '@core/application/chapter/port/persistence/ChapterRepositoryPort';
+import { ChapterUseCaseDto } from '@core/application/chapter/usecase/dto/ChapterUseCaseDto';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { ReorderCurriculumPort } from '@core/application/course/port/usecase/ReorderCurriculumPort';
@@ -69,7 +70,7 @@ export class ReorderCurriculumService implements ReorderCurriculumUseCase {
           chapter.setSortOrder(newSortOrder);
           chapter.setObjectIndex(currentChapterObjectIndex++);
           updatedChapters.push(chapter);
-          chapter.toJSON();
+          ChapterUseCaseDto.fromEntity(chapter);
         } else {
           throw new InvalidInputException(
             `Invalid curriculum items structure.`,

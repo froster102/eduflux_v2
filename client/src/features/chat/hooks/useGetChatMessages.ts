@@ -17,14 +17,16 @@ export function useGetChatMessages(chatId: string) {
 
   const queryResult = useSuspenseInfiniteQuery({
     queryFn: async ({ pageParam }) => {
-      return await getMessages(chatId, { before: pageParam });
+      return await getMessages(chatId, {
+        page: { cursor: pageParam, size: 20 },
+      });
     },
     initialPageParam: undefined as unknown as string,
     getNextPageParam: (lastPage) => {
-      if (lastPage.messages.length === 0) {
+      if (lastPage.data.length === 0) {
         return undefined;
       }
-      const oldMessage = lastPage.messages[lastPage.messages.length - 1];
+      const oldMessage = lastPage.data[lastPage.data.length - 1];
 
       return oldMessage.createdAt;
     },
@@ -45,7 +47,7 @@ export function useGetChatMessages(chatId: string) {
 
           newPages[0] = {
             ...newPages[0],
-            messages: [data.message, ...newPages[0].messages],
+            data: [data.message, ...newPages[0].data],
           };
 
           return {
@@ -66,7 +68,7 @@ export function useGetChatMessages(chatId: string) {
           if (!oldData) return undefined;
           const newPages = oldData.pages.map((page) => ({
             ...page,
-            messages: page.messages.map((msg) =>
+            messages: page.data.map((msg) =>
               msg.id === data.messageId ? { ...msg, status: data.status } : msg,
             ),
           }));

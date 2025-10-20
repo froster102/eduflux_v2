@@ -19,6 +19,7 @@ import { useCreateChat } from "@/features/chat/hooks/useCreateChat";
 import StartChatButton from "@/features/chat/components/StartChatButton";
 import { useChatStore } from "@/store/useChatStore";
 import { useGetChatWithInstructor } from "@/features/chat/hooks/useGetChatWithInstructor";
+import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
 
 export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -58,18 +59,19 @@ function RouteComponent() {
 
   const bookSession = useBookSession();
   const createChat = useCreateChat();
+  const createStripeCheckout = useCreateStripeCheckoutSession();
 
   async function chatWithInstructorHandler() {
-    if (existingChat && existingChat.chat) {
+    if (existingChat && existingChat.data) {
       setSelectedChat({
-        id: existingChat.chat.id,
-        lastMessageAt: existingChat.chat.lastMessageAt,
-        lastMessagePreview: existingChat.chat.lastMessagePreview,
+        id: existingChat.data.id,
+        lastMessageAt: existingChat.data.lastMessageAt,
+        lastMessagePreview: existingChat.data.lastMessagePreview,
         participants: [
           {
-            id: instructor.id,
-            name: instructor.profile.name,
-            image: instructor.profile.image!,
+            id: instructor.data.id,
+            name: instructor.data.profile.name,
+            image: instructor.data.profile.image!,
           },
         ],
       });
@@ -84,14 +86,14 @@ function RouteComponent() {
 
     if (createdChat) {
       setSelectedChat({
-        id: createdChat.id,
-        lastMessageAt: createdChat.lastMessageAt,
-        lastMessagePreview: createdChat.lastMessagePreview,
+        id: createdChat.data.id,
+        lastMessageAt: createdChat.data.lastMessageAt,
+        lastMessagePreview: createdChat.data.lastMessagePreview,
         participants: [
           {
-            id: instructor.id,
-            name: `${instructor.profile.name}`,
-            image: instructor.profile.image!,
+            id: instructor.data.id,
+            name: `${instructor.data.profile.name}`,
+            image: instructor.data.profile.image!,
           },
         ],
       });
@@ -103,7 +105,16 @@ function RouteComponent() {
     const { data: response } = await tryCatch(bookSession.mutateAsync(data));
 
     if (response) {
-      window.location.assign(response.checkoutUrl);
+      const { data: checkoutReponse } = await tryCatch(
+        createStripeCheckout.mutateAsync({
+          type: response.data.itemType,
+          referenceId: response.data.referenceId,
+        }),
+      );
+
+      if (checkoutReponse) {
+        window.location.assign(checkoutReponse.data.checkoutUrl);
+      }
     }
   }
 
@@ -111,35 +122,33 @@ function RouteComponent() {
     <>
       <div className="flex flex-col md:flex-row gap-4 w-full">
         <div className="flex flex-col gap-4 w-full">
-          <Card className="w-full h-fit bg-background border border-default-200">
+          <Card
+            className="w-full h-fit bg-background border border-default-200"
+            shadow={"none"}
+          >
             <CardHeader className="text-lg font-medium flex pb-0">
               <p>About Me</p>
             </CardHeader>
             <CardBody className="pt-0">
-              <p>{instructor.profile.bio}</p>
+              <p>{instructor.data.profile.bio}</p>
             </CardBody>
           </Card>
         </div>
 
         <div className="w-fit order-1">
-          <Card className="md:max-w-lg w-full bg-background border border-default-200">
+          <Card
+            className="md:max-w-lg w-full bg-background border border-default-200"
+            shadow="none"
+          >
             <CardHeader>
               <Image
                 className="max-h-"
                 height={400}
-                src={`${IMAGE_BASE_URL}${instructor.profile.image}`}
+                src={`${IMAGE_BASE_URL}${instructor.data.profile.image}`}
                 width={500}
               />
             </CardHeader>
             <CardBody className="flex flex-col gap-2">
-              {/* <Skeleton isLoaded={!isSessionSettingsLoading}>
-                <div className="flex items-center justify-between">
-                  <p className="font-medium">Price</p>
-                  <p className="text-2xl font-semibold">
-                    ${sessionSettings?.settings.price}/hr
-                  </p>
-                </div>
-              </Skeleton> */}
               <Button
                 color="primary"
                 startContent={<BoltIcon />}
@@ -150,7 +159,7 @@ function RouteComponent() {
               <StartChatButton
                 errorLoading={isChatError}
                 existingChat={
-                  !isExistingChat && existingChat ? existingChat.chat : null
+                  !isExistingChat && existingChat ? existingChat.data : null
                 }
                 isLoading={isExistingChat}
                 onClickHandler={chatWithInstructorHandler}
@@ -160,9 +169,11 @@ function RouteComponent() {
         </div>
       </div>
       <SessionScheduler
-        availableSlots={availableSlots!}
-        instructor={instructor}
-        isConfirmBookingPending={bookSession.isPending}
+        availableSlots={availableSlots?.data!}
+        instructor={instructor.data}
+        isConfirmBookingPending={
+          bookSession.isPending || createStripeCheckout.isPending
+        }
         isOpen={openScheduler}
         isSlotsLoading={isAvailableSlotsLoading}
         selectedDate={selectedDate}

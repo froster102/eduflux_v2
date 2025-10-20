@@ -3,4 +3,5 @@ export enum SessionEvents {
   SESSION_UPDATED = 'session.updated',
   SESSION_PAYMENT_SUCCESS = 'session.payment.success',
   SESSION_COMPLETED = 'session.completed',
+  SESSION_PAYMENT_SUCCESSFULL = 'session.payment.successfull',
 }

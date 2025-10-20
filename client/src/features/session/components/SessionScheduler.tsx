@@ -146,6 +146,7 @@ export default function SessionScheduler({
                                   <Button
                                     fullWidth
                                     className="font-medium bg-background border border-default-200"
+                                    isDisabled={slot.status === "BOOKED"}
                                     onPress={() => onSlotSelectionChange(slot)}
                                   >
                                     {startTime} - {endTime}
@@ -161,7 +162,10 @@ export default function SessionScheduler({
                                   <Button
                                     fullWidth
                                     color="primary"
-                                    isDisabled={isConfirmBookingPending}
+                                    isDisabled={
+                                      isConfirmBookingPending ||
+                                      slot.status === "BOOKED"
+                                    }
                                     isLoading={isConfirmBookingPending}
                                     onPress={() =>
                                       onConfirmBooking({ slotId: slot.id })

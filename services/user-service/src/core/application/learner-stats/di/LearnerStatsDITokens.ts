@@ -5,7 +5,7 @@ export class LearnerStatsDITokens {
   static readonly LearnerStatsRepository: unique symbol = Symbol(
     'LearnerStatsRepository',
   );
-  static readonly EnrollmentSuccessEventHandler: unique symbol = Symbol(
+  static readonly EnrollmentCompletedEventHandler: unique symbol = Symbol(
     'EnrollmentSuccessEventHandler',
   );
   static readonly SessionCompletedEventHandler: unique symbol = Symbol(

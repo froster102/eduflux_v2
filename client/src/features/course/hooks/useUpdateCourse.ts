@@ -28,6 +28,7 @@ export function useUpdateInstructorCourse() {
       addToast({
         title: "Course updation",
         description: "Course info updated sucessfully.",
+        color: "success",
       });
     },
 
@@ -39,6 +40,7 @@ export function useUpdateInstructorCourse() {
       addToast({
         title: "Course updation",
         description: "Failed to update course.",
+        color: "danger",
       });
     },
   });

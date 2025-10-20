@@ -1,6 +1,5 @@
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import type { EnrollmentServiceGatewayPort } from '@core/application/course/port/gateway/EnrollmentServiceGatewayPort';
 import type { GetSubscriberLecturePort } from '@core/application/lecture/port/usecase/GetSubscriberLecturePort';
 import type { GetSubscriberLectureUseCase } from '@core/application/lecture/usecase/GetSubscriberLectureUseCase';
 import { ForbiddenException } from '@core/common/exception/ForbiddenException';
@@ -12,7 +11,9 @@ import type { AssetRepositoryPort } from '@core/application/asset/port/persisten
 import type { GetSubscriberLectureUseCaseResult } from '@core/application/lecture/usecase/types/GetSubscriberLectureUseCaseResult';
 import { LectureUseCaseDto } from '@core/application/lecture/usecase/dto/LectureUseCaseDto';
 import { AssetUseCaseDto } from '@core/application/asset/usecase/dto/AssetUseCaseDto';
-import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
+import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
+import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
+import { EnrollmentStatus } from '@core/domain/enrollment/enum/EnrollmentStatus';
 
 export class GetSubscriberLectureService
   implements GetSubscriberLectureUseCase
@@ -20,8 +21,8 @@ export class GetSubscriberLectureService
   constructor(
     @inject(LectureDITokens.LectureRepository)
     private readonly lectureRepository: LectureRepositoryPort,
-    @inject(CourseDITokens.EnrollmentServiceGateway)
-    private readonly enrollmentServiceGateway: EnrollmentServiceGatewayPort,
+    @inject(EnrollmentDITokens.EnrollmentRepository)
+    private readonly enrollmentRepository: EnrollmentRepositoryPort,
     @inject(AssetDITokens.AssetRepository)
     private readonly assetRepository: AssetRepositoryPort,
   ) {}
@@ -37,11 +38,15 @@ export class GetSubscriberLectureService
       throw new NotFoundException(`Lecture with ID:${lectureId} not found.`);
     }
 
-    const isSubscribed =
-      await this.enrollmentServiceGateway.checkUserEnrollment(
-        userId,
-        lecture.courseId,
-      );
+    let isSubscribed = false;
+    const enrollment = await this.enrollmentRepository.findByUserAndCourseId(
+      userId,
+      lecture.courseId,
+    );
+    if (enrollment) {
+      isSubscribed =
+        enrollment.status === EnrollmentStatus.COMPLETED ? true : false;
+    }
 
     if (!isSubscribed && !lecture.preview) {
       throw new ForbiddenException('You are not authorized for this action.');

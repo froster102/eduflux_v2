@@ -1,9 +1,9 @@
 import api from "@/lib/axios";
-import { buildQueryUrlParams } from "@/utils/helpers";
+import { buildJsonApiQueryString } from "@/utils/helpers";
 
 export async function getInstructorProfile(
   userId: string,
-): Promise<Instructor> {
+): Promise<JsonApiResponse<Instructor>> {
   const response = await api.get(`/users/instructors/${userId}/`);
 
   return response.data;
@@ -20,7 +20,7 @@ export async function becomeAInstructor() {
 export async function getInstructors(
   queryParameters: GetInstructorsQueryParameters,
 ): Promise<GetInstructorsResult> {
-  const queryString = buildQueryUrlParams(queryParameters);
+  const queryString = buildJsonApiQueryString(queryParameters);
 
   const response = await api.get(`/users/instructors${queryString}`);
 
@@ -31,7 +31,7 @@ export async function getInstructorAvailableSlots(data: {
   instructorId: string;
   date: string;
   timeZone: string;
-}): Promise<AvailableSlots[]> {
+}): Promise<JsonApiResponse<AvailableSlots[]>> {
   const response = await api.get(
     `/sessions/instructors/${data.instructorId}/slots?date=${data.date}&timeZone=${data.timeZone}`,
   );

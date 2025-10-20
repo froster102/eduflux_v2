@@ -26,7 +26,7 @@ export default function CreateCourseForm({
     defaultValues: mode === "edit" ? initialValue : {},
   });
 
-  const { data, isLoading } = useGetCourseCategories();
+  const { data: categories, isLoading } = useGetCourseCategories();
 
   return (
     <Form
@@ -63,8 +63,8 @@ export default function CreateCourseForm({
               field.onChange(value.anchorKey);
             }}
           >
-            {data
-              ? data.categories.map((category) => (
+            {categories?.data
+              ? categories.data.map((category) => (
                   <SelectItem key={category.id}>{category.title}</SelectItem>
                 ))
               : []}

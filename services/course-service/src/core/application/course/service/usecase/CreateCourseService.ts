@@ -37,7 +37,7 @@ export class CreateCourseService implements CreateCourseUseCase {
       );
     }
 
-    const instructor = await this.userServiceGateway.getUserDetails(actor.id);
+    const instructor = await this.userServiceGateway.getUser(actor.id);
 
     if (!instructor) {
       throw new NotFoundException(`Instructor with ID:${actor.id} not found`);
@@ -92,7 +92,7 @@ export class CreateCourseService implements CreateCourseUseCase {
         enrollmentCount: savedCourse.enrollmentCount,
         averageRating: savedCourse.averageRating,
       },
-      occuredAt: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
       id: savedCourse.id,
     });
     return savedCourse;

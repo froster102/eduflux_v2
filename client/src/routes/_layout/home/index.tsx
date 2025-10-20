@@ -30,19 +30,19 @@ function RouteComponent() {
           {isLearnerStatsPending ? (
             <Skeleton />
           ) : (
-            learnerStats && (
+            learnerStats?.data && (
               <>
                 <StatisticsCard
                   title={"Completed course"}
-                  value={learnerStats.completedCourses + ""}
+                  value={learnerStats.data.completedCourses + ""}
                 />
                 <StatisticsCard
                   title={"Session completed"}
-                  value={learnerStats.completedSessions + ""}
+                  value={learnerStats.data.completedSessions + ""}
                 />
                 <StatisticsCard
                   title={"Enrolled courses"}
-                  value={learnerStats.enrolledCourses + ""}
+                  value={learnerStats.data.enrolledCourses + ""}
                 />
               </>
             )

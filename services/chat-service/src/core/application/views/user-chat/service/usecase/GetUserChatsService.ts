@@ -15,7 +15,7 @@ export class GetUserChatsService implements GetUserChatsUseCase {
     const result = await this.userChatRepository.findByUserIdAndRole(
       payload.userId,
       payload.role,
-      payload.queryParameters,
+      payload.paginationQueryParams,
     );
     return {
       chats: result.chats,

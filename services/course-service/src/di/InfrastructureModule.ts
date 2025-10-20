@@ -2,11 +2,9 @@ import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import { AssetDITokens } from '@core/application/asset/di/AssetDITokens';
 import type { CategoryRepositoryPort } from '@core/application/course/port/persistence/CategoryRepositoryPort';
 import type { UserServiceGatewayPort } from '@core/application/course/port/gateway/UserServiceGatewayPort';
-import type { EnrollmentServiceGatewayPort } from '@core/application/course/port/gateway/EnrollmentServiceGatewayPort';
 import type { FileStorageGatewayPort } from '@core/application/course/port/gateway/FileStorageGatewayPort';
 import { MongooseCategoryRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/category/MongooseCategoryRepositoryAdapter';
 import { GrpcUserServiceAdapter } from '@infrastructure/adapter/grpc/client/GrpcUserServiceAdapter';
-import { GrpcEnrollmentServiceAdapter } from '@infrastructure/adapter/grpc/client/GrpcEnrollmentServiceAdapter';
 import { CloudinaryFileStorageAdapter } from '@infrastructure/adapter/storage/CloudinaryFileStorageAdapter';
 import { ContainerModule } from 'inversify';
 import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
@@ -42,12 +40,6 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<UserServiceGatewayPort>(CourseDITokens.UserServiceGateway)
       .to(GrpcUserServiceAdapter)
-      .inSingletonScope();
-    options
-      .bind<EnrollmentServiceGatewayPort>(
-        CourseDITokens.EnrollmentServiceGateway,
-      )
-      .to(GrpcEnrollmentServiceAdapter)
       .inSingletonScope();
 
     options

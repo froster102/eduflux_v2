@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   CreateLocalTracksOptions,
   LocalAudioTrack,
@@ -285,7 +286,7 @@ export function PreJoin({
   const [videoDeviceId, setVideoDeviceId] = React.useState<string>(
     userChoices.videoDeviceId,
   );
-  const [username, setUsername] = React.useState(userChoices.username);
+  const [username] = React.useState(userChoices.username);
 
   // Save user choices to persistent storage.
   React.useEffect(() => {
@@ -358,7 +359,7 @@ export function PreJoin({
     };
   }, [videoTrack]);
 
-  const [isValid, setIsValid] = React.useState<boolean>();
+  const [_isValid, setIsValid] = React.useState<boolean>();
 
   const handleValidation = React.useCallback(
     (values: LocalUserChoices) => {
@@ -391,7 +392,7 @@ export function PreJoin({
     videoDeviceId,
   ]);
 
-  function handleSubmit(event: React.FormEvent) {
+  function handleSubmit() {
     onJoin(userChoices);
   }
 

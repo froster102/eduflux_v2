@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { getInstructors } from "../services/instructor";
 
 export function useGetInstructors(
-  paginationQueryParams: PaginationQueryParams,
+  paginationQueryParams: PaginationQueryParameters,
 ) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["instructors", paginationQueryParams],
     queryFn: () => getInstructors(paginationQueryParams),
   });

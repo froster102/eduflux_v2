@@ -1,4 +1,4 @@
-import { ProgressController } from 'src/api/http-rest/controller/ProgressController';
+import { ProgressController } from 'src/api/http/controller/ProgressController';
 import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
 import type { ProgressRepositoryPort } from '@core/application/progress/port/persistence/ProgressRepositoryPort';
 import type { AddToProgressUseCase } from '@core/application/progress/usecase/AddToProgressUseCase';

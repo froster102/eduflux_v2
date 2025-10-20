@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { addToast } from "@heroui/toast";
 
 import { useAuthStore } from "@/store/auth-store";
+import { Role } from "@/shared/enums/Role";
 
 import { becomeAInstructor } from "../services/instructor";
 
@@ -14,7 +15,7 @@ export function useBecomeAInstructor() {
     mutationFn: becomeAInstructor,
 
     onSuccess: () => {
-      addUserRole("INSTRUCTOR");
+      addUserRole(Role.INSTRUCTOR);
       addToast({
         color: "success",
         title: "Instructor",

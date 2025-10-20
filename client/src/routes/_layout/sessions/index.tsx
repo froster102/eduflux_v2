@@ -21,8 +21,12 @@ function RouteComponent() {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(1);
   const { data: sessionsQueryResult } = useGetUserSessions({
-    page,
-    preferedRole: Role.LEARNER,
+    page: {
+      number: page,
+    },
+    filter: {
+      preferedRole: Role.LEARNER,
+    },
   });
 
   const handlerJoinSession = (session: UserSession) => {
@@ -36,7 +40,7 @@ function RouteComponent() {
     <>
       <div>
         {sessionsQueryResult &&
-          sessionsQueryResult.sessions.map((session) => (
+          sessionsQueryResult.data.map((session) => (
             <SessionCard
               key={session.id}
               role={Role.LEARNER}
@@ -44,16 +48,15 @@ function RouteComponent() {
               onJoin={handlerJoinSession}
             />
           ))}
-        {sessionsQueryResult &&
-          sessionsQueryResult.pagination.totalPages > 1 && (
-            <div className="pt-4 flex w-full justify-center">
-              <PaginationWithNextAndPrevious
-                currentPage={sessionsQueryResult.pagination.currentPage}
-                totalPages={sessionsQueryResult.pagination.totalPages}
-                onPageChange={(page) => setPage(page)}
-              />
-            </div>
-          )}
+        {sessionsQueryResult && sessionsQueryResult.meta.totalPages > 1 && (
+          <div className="pt-4 flex w-full justify-center">
+            <PaginationWithNextAndPrevious
+              currentPage={sessionsQueryResult.meta.pageNumber}
+              totalPages={sessionsQueryResult.meta.totalPages}
+              onPageChange={(page) => setPage(page)}
+            />
+          </div>
+        )}
       </div>
       <BookingStatusModal
         bookingStatus={searchParams}

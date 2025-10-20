@@ -81,8 +81,13 @@ export class Session extends Entity<string> {
     return this._updatedAt;
   }
 
-  markAsBooked(paymentId: string): void {
+  markAsBooked(): void {
     this._status = SessionStatus.BOOKED;
+    this._updatedAt = new Date();
+  }
+
+  markAsConfirmed(paymentId: string): void {
+    this._status = SessionStatus.CONFIRMED;
     this._paymentId = paymentId;
     this._updatedAt = new Date();
   }

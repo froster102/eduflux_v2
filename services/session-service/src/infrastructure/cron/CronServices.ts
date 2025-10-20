@@ -18,9 +18,9 @@ export class CronServices implements ICronServices {
   ) {
     this.logger = logger.fromContext(CronServices.name);
   }
-
+  //*/5 * * * * *
   register(): void {
-    nodeCron.schedule('*/5 * * * *', async () => {
+    nodeCron.schedule('0 */5 * * * *', async () => {
       const { error } = await tryCatch(
         this.handleExpiredPendingPaymentsUseCase.execute(),
       );

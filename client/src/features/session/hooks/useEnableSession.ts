@@ -31,7 +31,7 @@ export function useEnableSessions() {
       return { previousSettings };
     },
 
-    onError: (error: AxiosError<ApiErrorResponse> | Error, _, context) => {
+    onError: (error: AxiosError<JsonApiErrorResponse> | Error, _, context) => {
       queryClient.setQueriesData({ queryKey }, context?.previousSettings);
       if (error instanceof AxiosError) {
         addToast({

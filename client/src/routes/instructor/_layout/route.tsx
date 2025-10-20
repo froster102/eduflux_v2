@@ -5,6 +5,7 @@ import CourseIcon from "@/components/icons/CourseIcon";
 import SessionIcon from "@/components/icons/SessionIcon";
 import MessageIcon from "@/components/icons/MessageIcon";
 import DefaultLayout from "@/layout/DefaultLayout";
+import CashoutIcon from "@/components/icons/CashoutIcon";
 
 export const Route = createFileRoute("/instructor/_layout")({
   component: Layout,
@@ -31,6 +32,11 @@ function Layout() {
       path: "/instructor/chats",
       icon: <MessageIcon width={24} />,
       label: "Chats",
+    },
+    {
+      path: "/instructor/payments",
+      icon: <CashoutIcon width={24} />,
+      label: "Payments",
     },
   ];
 

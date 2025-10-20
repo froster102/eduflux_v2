@@ -99,6 +99,11 @@ export default function CourseForm({
                 value={field.value ?? ""}
                 onValueChange={field.onChange}
               />
+              {errors.description && (
+                <small className="text-danger-300">
+                  {errors.description.message}
+                </small>
+              )}
             </>
           )}
         />
@@ -144,8 +149,8 @@ export default function CourseForm({
                 field.onChange(value.anchorKey);
               }}
             >
-              {courseCategories && courseCategories.categories
-                ? courseCategories.categories.map((category) => (
+              {courseCategories && courseCategories.data
+                ? courseCategories.data.map((category) => (
                     <SelectItem key={category.id}>{category.title}</SelectItem>
                   ))
                 : []}
@@ -160,13 +165,20 @@ export default function CourseForm({
           control={control}
           name={"thumbnail"}
           render={({ field }) => (
-            <FileUploader
-              acceptedFileType="image"
-              maxFiles={1}
-              maxSize={5 * 1024 * 1024}
-              value={field.value ? `${IMAGE_BASE_URL}/${field.value}` : null}
-              onSuccess={field.onChange}
-            />
+            <>
+              <FileUploader
+                acceptedFileType="image"
+                maxFiles={1}
+                maxSize={5 * 1024 * 1024}
+                value={field.value ? `${IMAGE_BASE_URL}/${field.value}` : null}
+                onSuccess={field.onChange}
+              />
+              {errors.thumbnail && (
+                <small className="text-danger-300">
+                  {errors.thumbnail.message}
+                </small>
+              )}
+            </>
           )}
         />
       </div>

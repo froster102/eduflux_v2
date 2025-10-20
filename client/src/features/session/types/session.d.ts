@@ -1,3 +1,5 @@
+import { Role } from "@/shared/enums/Role";
+
 declare global {
   export type SessionSettings = {
     price: number;
@@ -35,9 +37,22 @@ declare global {
     updatedAt: Date;
   };
 
-  export type GetUserSessionsResult = {
-    sessions: UserSession[];
-    pagination: Pagination;
+  export type GetUserSessionQueryParams = PaginationQueryParameters & {
+    filter: {
+      preferedRole: Role.INSTRUCTOR | Role.LEARNER;
+    };
+  };
+
+  export type GetUserSessionsResult = JsonApiResponse<UserSession[]> & {
+    meta: Pagination;
+  };
+
+  export type AvailableSlots = {
+    id: string;
+    instructorId: string;
+    startTime: string;
+    endTime: string;
+    status: "BOOKED" | "AVAILABLE";
   };
 
   export type ConnectionDetails = {
@@ -52,6 +67,16 @@ declare global {
     participantName: string;
     participantToken: string;
   };
+
+  export type BookSessionResponse = JsonApiResponse<{
+    referenceId: string;
+    item: {
+      title: string;
+      image?: string;
+      amount: number;
+    };
+    itemType: "session";
+  }>;
 }
 
 export {};

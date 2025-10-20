@@ -21,9 +21,8 @@ declare global {
     };
   };
 
-  export type GetInstructorsResult = {
-    instructors: Instructor[];
-    pagination: Pagination;
+  export type GetInstructorsResult = JsonApiResponse<Instructor[]> & {
+    meta: Pagination;
   };
 
   export type GetInstructorsQueryParameters = {} & QueryParmeters;

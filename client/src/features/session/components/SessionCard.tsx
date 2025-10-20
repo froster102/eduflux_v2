@@ -9,6 +9,7 @@ import ClockIcon from "@/components/icons/ClockIcon";
 import { formatSessionDataTime } from "@/utils/date";
 import VideoIcon from "@/components/icons/VideoIcon";
 import { Role } from "@/shared/enums/Role";
+import { SessionStatus } from "@/shared/enums/SessionStatus";
 
 interface SessionCardProps {
   session: UserSession;

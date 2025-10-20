@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { Role } from "@/shared/enums/Role";
+
 export interface Auth {
   user: User | null;
   setUser: (user: User) => void;

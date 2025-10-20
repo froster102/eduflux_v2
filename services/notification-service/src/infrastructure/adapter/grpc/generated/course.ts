@@ -21,6 +21,21 @@ import {
 
 export const protobufPackage = "course";
 
+export interface GetEnrollmentRequest {
+  enrollmentId: string;
+}
+
+export interface Enrollment {
+  id: string;
+  learnerId: string;
+  courseId: string;
+  status: string;
+  paymentId: string;
+  instructorId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface GetCourseDetailsRequest {
   courseId: string;
 }
@@ -48,6 +63,254 @@ export interface Instructor {
   id: string;
   name: string;
 }
+
+export interface VerifyChatAccessRequest {
+  learnerId: string;
+  instructorId: string;
+}
+
+export interface VerifyChatAccessResponse {
+  hasAccess: boolean;
+}
+
+function createBaseGetEnrollmentRequest(): GetEnrollmentRequest {
+  return { enrollmentId: "" };
+}
+
+export const GetEnrollmentRequest: MessageFns<GetEnrollmentRequest> = {
+  encode(message: GetEnrollmentRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.enrollmentId !== "") {
+      writer.uint32(10).string(message.enrollmentId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetEnrollmentRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetEnrollmentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.enrollmentId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetEnrollmentRequest {
+    return { enrollmentId: isSet(object.enrollmentId) ? globalThis.String(object.enrollmentId) : "" };
+  },
+
+  toJSON(message: GetEnrollmentRequest): unknown {
+    const obj: any = {};
+    if (message.enrollmentId !== "") {
+      obj.enrollmentId = message.enrollmentId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetEnrollmentRequest>, I>>(base?: I): GetEnrollmentRequest {
+    return GetEnrollmentRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetEnrollmentRequest>, I>>(object: I): GetEnrollmentRequest {
+    const message = createBaseGetEnrollmentRequest();
+    message.enrollmentId = object.enrollmentId ?? "";
+    return message;
+  },
+};
+
+function createBaseEnrollment(): Enrollment {
+  return {
+    id: "",
+    learnerId: "",
+    courseId: "",
+    status: "",
+    paymentId: "",
+    instructorId: "",
+    createdAt: "",
+    updatedAt: "",
+  };
+}
+
+export const Enrollment: MessageFns<Enrollment> = {
+  encode(message: Enrollment, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.learnerId !== "") {
+      writer.uint32(18).string(message.learnerId);
+    }
+    if (message.courseId !== "") {
+      writer.uint32(26).string(message.courseId);
+    }
+    if (message.status !== "") {
+      writer.uint32(34).string(message.status);
+    }
+    if (message.paymentId !== "") {
+      writer.uint32(42).string(message.paymentId);
+    }
+    if (message.instructorId !== "") {
+      writer.uint32(50).string(message.instructorId);
+    }
+    if (message.createdAt !== "") {
+      writer.uint32(58).string(message.createdAt);
+    }
+    if (message.updatedAt !== "") {
+      writer.uint32(66).string(message.updatedAt);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Enrollment {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseEnrollment();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.learnerId = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.courseId = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.status = reader.string();
+          continue;
+        }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.paymentId = reader.string();
+          continue;
+        }
+        case 6: {
+          if (tag !== 50) {
+            break;
+          }
+
+          message.instructorId = reader.string();
+          continue;
+        }
+        case 7: {
+          if (tag !== 58) {
+            break;
+          }
+
+          message.createdAt = reader.string();
+          continue;
+        }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.updatedAt = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Enrollment {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      learnerId: isSet(object.learnerId) ? globalThis.String(object.learnerId) : "",
+      courseId: isSet(object.courseId) ? globalThis.String(object.courseId) : "",
+      status: isSet(object.status) ? globalThis.String(object.status) : "",
+      paymentId: isSet(object.paymentId) ? globalThis.String(object.paymentId) : "",
+      instructorId: isSet(object.instructorId) ? globalThis.String(object.instructorId) : "",
+      createdAt: isSet(object.createdAt) ? globalThis.String(object.createdAt) : "",
+      updatedAt: isSet(object.updatedAt) ? globalThis.String(object.updatedAt) : "",
+    };
+  },
+
+  toJSON(message: Enrollment): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.learnerId !== "") {
+      obj.learnerId = message.learnerId;
+    }
+    if (message.courseId !== "") {
+      obj.courseId = message.courseId;
+    }
+    if (message.status !== "") {
+      obj.status = message.status;
+    }
+    if (message.paymentId !== "") {
+      obj.paymentId = message.paymentId;
+    }
+    if (message.instructorId !== "") {
+      obj.instructorId = message.instructorId;
+    }
+    if (message.createdAt !== "") {
+      obj.createdAt = message.createdAt;
+    }
+    if (message.updatedAt !== "") {
+      obj.updatedAt = message.updatedAt;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Enrollment>, I>>(base?: I): Enrollment {
+    return Enrollment.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Enrollment>, I>>(object: I): Enrollment {
+    const message = createBaseEnrollment();
+    message.id = object.id ?? "";
+    message.learnerId = object.learnerId ?? "";
+    message.courseId = object.courseId ?? "";
+    message.status = object.status ?? "";
+    message.paymentId = object.paymentId ?? "";
+    message.instructorId = object.instructorId ?? "";
+    message.createdAt = object.createdAt ?? "";
+    message.updatedAt = object.updatedAt ?? "";
+    return message;
+  },
+};
 
 function createBaseGetCourseDetailsRequest(): GetCourseDetailsRequest {
   return { courseId: "" };
@@ -502,6 +765,140 @@ export const Instructor: MessageFns<Instructor> = {
   },
 };
 
+function createBaseVerifyChatAccessRequest(): VerifyChatAccessRequest {
+  return { learnerId: "", instructorId: "" };
+}
+
+export const VerifyChatAccessRequest: MessageFns<VerifyChatAccessRequest> = {
+  encode(message: VerifyChatAccessRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.learnerId !== "") {
+      writer.uint32(10).string(message.learnerId);
+    }
+    if (message.instructorId !== "") {
+      writer.uint32(18).string(message.instructorId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyChatAccessRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyChatAccessRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.learnerId = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.instructorId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VerifyChatAccessRequest {
+    return {
+      learnerId: isSet(object.learnerId) ? globalThis.String(object.learnerId) : "",
+      instructorId: isSet(object.instructorId) ? globalThis.String(object.instructorId) : "",
+    };
+  },
+
+  toJSON(message: VerifyChatAccessRequest): unknown {
+    const obj: any = {};
+    if (message.learnerId !== "") {
+      obj.learnerId = message.learnerId;
+    }
+    if (message.instructorId !== "") {
+      obj.instructorId = message.instructorId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<VerifyChatAccessRequest>, I>>(base?: I): VerifyChatAccessRequest {
+    return VerifyChatAccessRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VerifyChatAccessRequest>, I>>(object: I): VerifyChatAccessRequest {
+    const message = createBaseVerifyChatAccessRequest();
+    message.learnerId = object.learnerId ?? "";
+    message.instructorId = object.instructorId ?? "";
+    return message;
+  },
+};
+
+function createBaseVerifyChatAccessResponse(): VerifyChatAccessResponse {
+  return { hasAccess: false };
+}
+
+export const VerifyChatAccessResponse: MessageFns<VerifyChatAccessResponse> = {
+  encode(message: VerifyChatAccessResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.hasAccess !== false) {
+      writer.uint32(8).bool(message.hasAccess);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyChatAccessResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVerifyChatAccessResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.hasAccess = reader.bool();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VerifyChatAccessResponse {
+    return { hasAccess: isSet(object.hasAccess) ? globalThis.Boolean(object.hasAccess) : false };
+  },
+
+  toJSON(message: VerifyChatAccessResponse): unknown {
+    const obj: any = {};
+    if (message.hasAccess !== false) {
+      obj.hasAccess = message.hasAccess;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<VerifyChatAccessResponse>, I>>(base?: I): VerifyChatAccessResponse {
+    return VerifyChatAccessResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VerifyChatAccessResponse>, I>>(object: I): VerifyChatAccessResponse {
+    const message = createBaseVerifyChatAccessResponse();
+    message.hasAccess = object.hasAccess ?? false;
+    return message;
+  },
+};
+
 export type CourseServiceService = typeof CourseServiceService;
 export const CourseServiceService = {
   getCourseDetails: {
@@ -514,10 +911,32 @@ export const CourseServiceService = {
     responseSerialize: (value: Course): Buffer => Buffer.from(Course.encode(value).finish()),
     responseDeserialize: (value: Buffer): Course => Course.decode(value),
   },
+  getEnrollment: {
+    path: "/course.CourseService/GetEnrollment",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetEnrollmentRequest): Buffer => Buffer.from(GetEnrollmentRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetEnrollmentRequest => GetEnrollmentRequest.decode(value),
+    responseSerialize: (value: Enrollment): Buffer => Buffer.from(Enrollment.encode(value).finish()),
+    responseDeserialize: (value: Buffer): Enrollment => Enrollment.decode(value),
+  },
+  verifyChatAccess: {
+    path: "/course.CourseService/VerifyChatAccess",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: VerifyChatAccessRequest): Buffer =>
+      Buffer.from(VerifyChatAccessRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): VerifyChatAccessRequest => VerifyChatAccessRequest.decode(value),
+    responseSerialize: (value: VerifyChatAccessResponse): Buffer =>
+      Buffer.from(VerifyChatAccessResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): VerifyChatAccessResponse => VerifyChatAccessResponse.decode(value),
+  },
 } as const;
 
 export interface CourseServiceServer extends UntypedServiceImplementation {
   getCourseDetails: handleUnaryCall<GetCourseDetailsRequest, Course>;
+  getEnrollment: handleUnaryCall<GetEnrollmentRequest, Enrollment>;
+  verifyChatAccess: handleUnaryCall<VerifyChatAccessRequest, VerifyChatAccessResponse>;
 }
 
 export interface CourseServiceClient extends Client {
@@ -535,6 +954,36 @@ export interface CourseServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: Course) => void,
+  ): ClientUnaryCall;
+  getEnrollment(
+    request: GetEnrollmentRequest,
+    callback: (error: ServiceError | null, response: Enrollment) => void,
+  ): ClientUnaryCall;
+  getEnrollment(
+    request: GetEnrollmentRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: Enrollment) => void,
+  ): ClientUnaryCall;
+  getEnrollment(
+    request: GetEnrollmentRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: Enrollment) => void,
+  ): ClientUnaryCall;
+  verifyChatAccess(
+    request: VerifyChatAccessRequest,
+    callback: (error: ServiceError | null, response: VerifyChatAccessResponse) => void,
+  ): ClientUnaryCall;
+  verifyChatAccess(
+    request: VerifyChatAccessRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: VerifyChatAccessResponse) => void,
+  ): ClientUnaryCall;
+  verifyChatAccess(
+    request: VerifyChatAccessRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: VerifyChatAccessResponse) => void,
   ): ClientUnaryCall;
 }
 

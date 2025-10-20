@@ -12,7 +12,8 @@ export const Route = createFileRoute("/_layout/courses/")({
 });
 
 function RouteComponent() {
-  const [searchQuery] = React.useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_searchQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(8);
   const navigate = useNavigate();
@@ -23,29 +24,29 @@ function RouteComponent() {
   const { data: subscribedCourses, isLoading: isSubscribedCoursesLoading } =
     useGetSubsribedCourses({
       paginationQueryParams: {
-        page,
-        limit,
-        searchFields: ["title"],
-        searchQuery,
+        page: {
+          number: page,
+          size: limit,
+        },
       },
       enabled: currentTab === "my-courses",
     });
 
   const { data: allCourses, isLoading: isAllCoursesLoading } = useGetCourses({
-    page,
-    limit,
-    searchFields: ["title"],
-    searchQuery,
+    page: {
+      number: page,
+      size: limit,
+    },
   });
 
-  const currentTotal =
+  const courses =
     currentTab === "all-courses" && !isAllCoursesLoading
       ? allCourses
       : currentTab === "my-courses" && !isSubscribedCoursesLoading
         ? subscribedCourses
         : 0;
 
-  const totalPages = currentTotal ? Math.ceil(currentTotal.total / limit) : 0;
+  const totalPages = courses ? courses.meta.totalPages : 0;
 
   const onPressHanlder = (course: Course) => {
     navigate({ to: `/courses/${course.id}` });
@@ -70,7 +71,7 @@ function RouteComponent() {
                 </div>
               ) : (
                 <CoursesList
-                  courses={allCourses!.courses}
+                  courses={allCourses!.data}
                   currentPage={page}
                   totalPages={totalPages}
                   type="all-course"
@@ -88,10 +89,11 @@ function RouteComponent() {
                 </div>
               ) : (
                 <CoursesList
-                  courses={subscribedCourses?.courses ?? []}
+                  courses={subscribedCourses?.data ?? []}
                   currentPage={page}
                   totalPages={totalPages}
                   type="my-courses"
+                  onCoursePress={() => {}}
                   onPageChange={(page) => setPage(page)}
                 />
               )}

@@ -3,7 +3,7 @@ import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messa
 import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { container } from '@di/RootModule';
-import { HttpServer } from '@api/http-rest/HttpServer';
+import { HttpServer } from '@api/http/HttpServer';
 import { GrpcServer } from '@api/grpc/GrpcServer';
 import type { KafkaEventsConsumer } from '@api/consumers/KafkaEventsConsumer';
 

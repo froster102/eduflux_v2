@@ -1,6 +1,5 @@
 import api from "@/lib/axios";
-import { buildQueryUrlParams } from "@/utils/helpers";
-import { Role } from "@/shared/enums/Role";
+import { buildJsonApiQueryString } from "@/utils/helpers";
 
 import { SessionSettingsFormData } from "../validation/session-schema";
 
@@ -12,30 +11,30 @@ export async function enableSessions(data: SessionSettingsFormData) {
 
 export async function bookSession(data: {
   slotId: string;
-}): Promise<{ id: string; checkoutUrl: string }> {
+}): Promise<BookSessionResponse> {
   const response = await api.post("/sessions/bookings", data);
 
   return response.data;
 }
 
 export async function getUserSessions(
-  queryParameters?: QueryParmeters & {
-    preferedRole: Role.INSTRUCTOR | Role.LEARNER;
-  },
+  queryParameters: GetUserSessionQueryParams,
 ): Promise<GetUserSessionsResult> {
   let queryString = "";
 
   if (queryParameters) {
-    queryString = buildQueryUrlParams(queryParameters);
+    queryString = buildJsonApiQueryString(queryParameters);
   }
-  const response = await api.get(`/sessions/users/me${queryString}`);
+  const response = await api.get(`/sessions/me${queryString}`);
 
   return response.data;
 }
 
-export async function getSessionSettings(): Promise<{
-  settings: SessionSettings;
-}> {
+export async function getSessionSettings(): Promise<
+  JsonApiResponse<{
+    settings: SessionSettings;
+  }>
+> {
   const response = await api.get("/sessions/settings");
 
   return response.data;
@@ -51,7 +50,7 @@ export async function updateSessionSettings(
 
 export async function joinSession(
   sessionId: string,
-): Promise<JoinSessionResponse> {
+): Promise<JsonApiResponse<JoinSessionResponse>> {
   const response = await api.get(`/sessions/${sessionId}/tokens`);
 
   return response.data;

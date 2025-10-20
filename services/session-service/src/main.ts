@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
-import { HttpServer } from '@api/http-rest/HttpServer';
+import { HttpServer } from '@api/http/HttpServer';
 import { container } from '@di/RootModule';
 import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducerAdapter';
 import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { GrpcServer } from '@api/grpc/GrpcServer';
 
 async function bootstrap() {
   //database
@@ -30,6 +31,10 @@ async function bootstrap() {
   );
 
   cronServices.register();
+
+  //gRPC server
+  const grpcServer = new GrpcServer();
+  grpcServer.start();
 
   //http
   const httpServer = new HttpServer();

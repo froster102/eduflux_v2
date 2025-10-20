@@ -1,21 +1,23 @@
+import { CourseLevel } from "@/shared/enums/CourseLevel";
+
 declare global {
   export type UpdateCourseFormData = Partial<{
-    title: string;
-    description: string;
-    categoryId: string;
-    level: "beginner" | "intermediate" | "advanced";
-    thumbnail: string | null;
-    price: unknown;
-    isFree: boolean;
+    title?: string;
+    description?: string;
+    categoryId?: string;
+    level?: CourseLevel;
+    thumbnail?: string;
+    price?: number;
+    isFree?: boolean;
   }>;
 
   export type Course = {
     id: string;
     title: string;
     description: string;
-    thumbnail: string | null;
+    thumbnail: string;
     categoryId: string;
-    level: "beginner" | "intermediate" | "advanced";
+    level: CourseLevel;
     price: number;
     isFree: boolean;
     status: CourseStatus;
@@ -27,6 +29,7 @@ declare global {
     publishedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
+    isEnrolled?: boolean;
   };
 
   export type Chapter = {
@@ -78,6 +81,11 @@ declare global {
     preview: boolean;
   };
 
+  export type Category = {
+    id: string;
+    title: string;
+  };
+
   export type UploadCredentials = {
     uploadUrl: string;
     formFields: { [key: string]: string };
@@ -89,7 +97,24 @@ declare global {
 
   export type CurriculumItems = (Chapter | Lecture)[];
 
-  export type GetSubscribedCoursesQueryParams = QueryParmeters;
+  export type GetSubscribedCoursesQueryParams = PaginationQueryParameters;
+
+  export type GetInstructorCoursesResponse = JsonApiResponse<Course[]> & {
+    meta: Pagination;
+  };
+
+  export type GetInstructorCourseCurriculumReponse =
+    JsonApiResponse<CurriculumItems>;
+
+  export type GetCourseCategories = JsonApiResponse<Category[]>;
+
+  export type GetCoursesResponse = JsonApiResponse<Course[]> & {
+    meta: Pagination;
+  };
+
+  export type GetSubscribedCourses = JsonApiResponse<Course[]> & {
+    meta: Pagination;
+  };
 }
 
 export {};

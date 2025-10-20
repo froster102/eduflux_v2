@@ -39,7 +39,7 @@ export function useLowCPUOptimizer(
   React.useEffect(() => {
     const handleCpuConstrained = async (track: LocalVideoTrack) => {
       setLowPowerMode(true);
-      console.warn("Local track CPU constrained", track);
+      // console.warn("Local track CPU constrained", track);
       if (opts.reducePublisherVideoQuality) {
         track.prioritizePerformance();
       }

@@ -9,7 +9,7 @@ import { MongooseUserChatMapper } from "@infrastructure/adapter/persistence/mong
 import type { UserChatRepositoryPort } from "@core/application/views/user-chat/port/persistence/UserChatRepositoryPort";
 import type { UserChat } from "@core/application/views/user-chat/entity/UserChat";
 import type { Role } from "@core/common/enum/Role";
-import type { QueryParameters } from "@core/common/port/persistence/type/QueryParameters";
+import type { PaginationQueryParams } from "@core/common/port/persistence/type/QueryParameters";
 import type { UserChatQueryResult } from "@core/application/views/user-chat/port/persistence/types/UserChatQueryResult";
 
 export class MongooseUserChatRepositoryAdapter
@@ -23,7 +23,7 @@ export class MongooseUserChatRepositoryAdapter
   async findByUserIdAndRole(
     userId: string,
     role: Role,
-    queryParameters?: QueryParameters,
+    queryParameters?: PaginationQueryParams,
   ): Promise<UserChatQueryResult> {
     const query: FilterQuery<MongooseUserChat> = {
       participants: {

@@ -49,4 +49,23 @@ export class MongooseInstructorRepositoryAdapter
       ? InstructorMapper.toDomain(updatedInstructor)
       : null;
   }
+
+  async incrementCourseCreated(
+    instructorId: string,
+  ): Promise<Instructor | null> {
+    const updatedInstructor = await InstructorModel.findByIdAndUpdate(
+      instructorId,
+      {
+        $inc: { totalCourses: 1 },
+        $set: { updatedAt: new Date() },
+      },
+      {
+        new: true,
+      },
+    );
+
+    return updatedInstructor
+      ? InstructorMapper.toDomain(updatedInstructor)
+      : null;
+  }
 }

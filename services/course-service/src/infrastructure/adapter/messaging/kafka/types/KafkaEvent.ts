@@ -1,3 +1,3 @@
-import type { EnrollmentSuccessEvent } from '@core/domain/course/events/EnrollmentSuccessEvent';
+import type { EnrollmentPaymentSuccessfullEvent } from '@core/domain/enrollment/events/EnrollmentPaymentSuccessfullEvent';
 
-export type KafkaEvent = EnrollmentSuccessEvent;
+export type KafkaEvent = EnrollmentPaymentSuccessfullEvent;
