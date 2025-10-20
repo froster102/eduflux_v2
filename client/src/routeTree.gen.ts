@@ -30,7 +30,7 @@ import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index
 import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
 import { Route as LayoutChatsIndexRouteImport } from './routes/_layout/chats/index'
 import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
-import { Route as InstructorLayoutPayoutsIndexRouteImport } from './routes/instructor/_layout/payouts/index'
+import { Route as InstructorLayoutPaymentsIndexRouteImport } from './routes/instructor/_layout/payments/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
 import { Route as InstructorLayoutChatsIndexRouteImport } from './routes/instructor/_layout/chats/index'
 import { Route as LayoutInstructorsInstructorIdIndexRouteImport } from './routes/_layout/instructors/$instructorId/index'
@@ -139,10 +139,10 @@ const InstructorLayoutSessionsIndexRoute =
     path: '/sessions/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
-const InstructorLayoutPayoutsIndexRoute =
-  InstructorLayoutPayoutsIndexRouteImport.update({
-    id: '/payouts/',
-    path: '/payouts/',
+const InstructorLayoutPaymentsIndexRoute =
+  InstructorLayoutPaymentsIndexRouteImport.update({
+    id: '/payments/',
+    path: '/payments/',
     getParentRoute: () => InstructorLayoutRouteRoute,
   } as any)
 const InstructorLayoutCoursesIndexRoute =
@@ -204,7 +204,7 @@ export interface FileRoutesByFullPath {
   '/instructors/$instructorId': typeof LayoutInstructorsInstructorIdIndexRoute
   '/instructor/chats': typeof InstructorLayoutChatsIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
-  '/instructor/payouts': typeof InstructorLayoutPayoutsIndexRoute
+  '/instructor/payments': typeof InstructorLayoutPaymentsIndexRoute
   '/instructor/sessions': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/courses/$courseId/learn': typeof LayoutCoursesCourseIdLearnIndexRoute
@@ -229,7 +229,7 @@ export interface FileRoutesByTo {
   '/instructors/$instructorId': typeof LayoutInstructorsInstructorIdIndexRoute
   '/instructor/chats': typeof InstructorLayoutChatsIndexRoute
   '/instructor/courses': typeof InstructorLayoutCoursesIndexRoute
-  '/instructor/payouts': typeof InstructorLayoutPayoutsIndexRoute
+  '/instructor/payments': typeof InstructorLayoutPaymentsIndexRoute
   '/instructor/sessions': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/courses/$courseId/learn': typeof LayoutCoursesCourseIdLearnIndexRoute
@@ -259,7 +259,7 @@ export interface FileRoutesById {
   '/_layout/instructors/$instructorId/': typeof LayoutInstructorsInstructorIdIndexRoute
   '/instructor/_layout/chats/': typeof InstructorLayoutChatsIndexRoute
   '/instructor/_layout/courses/': typeof InstructorLayoutCoursesIndexRoute
-  '/instructor/_layout/payouts/': typeof InstructorLayoutPayoutsIndexRoute
+  '/instructor/_layout/payments/': typeof InstructorLayoutPaymentsIndexRoute
   '/instructor/_layout/sessions/': typeof InstructorLayoutSessionsIndexRoute
   '/instructor/_layout/courses/$courseId/manage': typeof InstructorLayoutCoursesCourseIdManageRoute
   '/_layout/courses/$courseId/learn/': typeof LayoutCoursesCourseIdLearnIndexRoute
@@ -288,7 +288,7 @@ export interface FileRouteTypes {
     | '/instructors/$instructorId'
     | '/instructor/chats'
     | '/instructor/courses'
-    | '/instructor/payouts'
+    | '/instructor/payments'
     | '/instructor/sessions'
     | '/instructor/courses/$courseId/manage'
     | '/courses/$courseId/learn'
@@ -313,7 +313,7 @@ export interface FileRouteTypes {
     | '/instructors/$instructorId'
     | '/instructor/chats'
     | '/instructor/courses'
-    | '/instructor/payouts'
+    | '/instructor/payments'
     | '/instructor/sessions'
     | '/instructor/courses/$courseId/manage'
     | '/courses/$courseId/learn'
@@ -342,7 +342,7 @@ export interface FileRouteTypes {
     | '/_layout/instructors/$instructorId/'
     | '/instructor/_layout/chats/'
     | '/instructor/_layout/courses/'
-    | '/instructor/_layout/payouts/'
+    | '/instructor/_layout/payments/'
     | '/instructor/_layout/sessions/'
     | '/instructor/_layout/courses/$courseId/manage'
     | '/_layout/courses/$courseId/learn/'
@@ -498,11 +498,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutSessionsIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
-    '/instructor/_layout/payouts/': {
-      id: '/instructor/_layout/payouts/'
-      path: '/payouts'
-      fullPath: '/instructor/payouts'
-      preLoaderRoute: typeof InstructorLayoutPayoutsIndexRouteImport
+    '/instructor/_layout/payments/': {
+      id: '/instructor/_layout/payments/'
+      path: '/payments'
+      fullPath: '/instructor/payments'
+      preLoaderRoute: typeof InstructorLayoutPaymentsIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
     }
     '/instructor/_layout/courses/': {
@@ -605,7 +605,7 @@ interface InstructorLayoutRouteRouteChildren {
   InstructorLayoutIndexRoute: typeof InstructorLayoutIndexRoute
   InstructorLayoutChatsIndexRoute: typeof InstructorLayoutChatsIndexRoute
   InstructorLayoutCoursesIndexRoute: typeof InstructorLayoutCoursesIndexRoute
-  InstructorLayoutPayoutsIndexRoute: typeof InstructorLayoutPayoutsIndexRoute
+  InstructorLayoutPaymentsIndexRoute: typeof InstructorLayoutPaymentsIndexRoute
   InstructorLayoutSessionsIndexRoute: typeof InstructorLayoutSessionsIndexRoute
   InstructorLayoutCoursesCourseIdManageRoute: typeof InstructorLayoutCoursesCourseIdManageRoute
 }
@@ -614,7 +614,7 @@ const InstructorLayoutRouteRouteChildren: InstructorLayoutRouteRouteChildren = {
   InstructorLayoutIndexRoute: InstructorLayoutIndexRoute,
   InstructorLayoutChatsIndexRoute: InstructorLayoutChatsIndexRoute,
   InstructorLayoutCoursesIndexRoute: InstructorLayoutCoursesIndexRoute,
-  InstructorLayoutPayoutsIndexRoute: InstructorLayoutPayoutsIndexRoute,
+  InstructorLayoutPaymentsIndexRoute: InstructorLayoutPaymentsIndexRoute,
   InstructorLayoutSessionsIndexRoute: InstructorLayoutSessionsIndexRoute,
   InstructorLayoutCoursesCourseIdManageRoute:
     InstructorLayoutCoursesCourseIdManageRoute,

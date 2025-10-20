@@ -11,7 +11,7 @@ import TotalEarningCard from "@/features/payment/components/TotalEarningCard";
 import PaymentsGraph from "@/features/payment/components/PaymentsGraph";
 import PaymentsTable from "@/features/payment/components/PaymentsTable";
 
-export const Route = createFileRoute("/instructor/_layout/payouts/")({
+export const Route = createFileRoute("/instructor/_layout/payments/")({
   component: RouteComponent,
 });
 

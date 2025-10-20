@@ -34,9 +34,9 @@ function Layout() {
       label: "Chats",
     },
     {
-      path: "/instructor/payouts",
+      path: "/instructor/payments",
       icon: <CashoutIcon width={24} />,
-      label: "Payouts",
+      label: "Payments",
     },
   ];
 

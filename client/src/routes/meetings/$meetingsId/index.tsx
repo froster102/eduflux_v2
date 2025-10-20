@@ -47,7 +47,7 @@ function RouteComponent() {
           errorData?.errors?.map((e) => e.title).join(", ") ||
           DEFAULT_ERROR_MESSAGE;
 
-        addToast({ description: errorMessage });
+        addToast({ description: errorMessage, color: "danger" });
 
         return;
       }
