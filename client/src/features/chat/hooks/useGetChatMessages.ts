@@ -68,9 +68,10 @@ export function useGetChatMessages(chatId: string) {
         queryKey,
         (oldData): InfiniteData<GetMessagesResponse> | undefined => {
           if (!oldData) return undefined;
+
           const newPages = oldData.pages.map((page) => ({
             ...page,
-            messages: page.data.map((msg) =>
+            data: page.data.map((msg) =>
               msg.id === data.messageId ? { ...msg, status: data.status } : msg,
             ),
           }));
