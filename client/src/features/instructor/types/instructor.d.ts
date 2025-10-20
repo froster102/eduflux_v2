@@ -21,6 +21,14 @@ declare global {
     };
   };
 
+  export type InstructorStats = {
+    id: string;
+    sessionsConducted: number;
+    totalCourses: number;
+    totalLearners: number;
+    isSessionEnabled: boolean;
+  };
+
   export type GetInstructorsResult = JsonApiResponse<Instructor[]> & {
     meta: Pagination;
   };

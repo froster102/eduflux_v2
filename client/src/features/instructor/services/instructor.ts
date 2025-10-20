@@ -27,6 +27,14 @@ export async function getInstructors(
   return response.data;
 }
 
+export async function getInstructorStats(): Promise<
+  JsonApiResponse<InstructorStats>
+> {
+  const response = await api.get("/users/instructors/me/stats");
+
+  return response.data;
+}
+
 export async function getInstructorAvailableSlots(data: {
   instructorId: string;
   date: string;
