@@ -85,13 +85,15 @@ function RouteComponent() {
   }
 
   async function handleEnrollForCourse() {
-    const { data } = await tryCatch(enrollForCourse.mutateAsync(courseId));
+    const { data: enrollmentReponse } = await tryCatch(
+      enrollForCourse.mutateAsync(courseId),
+    );
 
-    if (data) {
+    if (enrollmentReponse) {
       const { data: checkoutReponse } = await tryCatch(
         createStripeCheckout.mutateAsync({
-          type: data.itemType,
-          referenceId: data.referenceId,
+          type: enrollmentReponse.data.itemType,
+          referenceId: enrollmentReponse.data.referenceId,
         }),
       );
 

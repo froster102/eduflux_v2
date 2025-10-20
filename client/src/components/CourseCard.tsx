@@ -64,7 +64,7 @@ export default function CourseCard({
           </p>
         )}
 
-        <div className="flex items-center gap-1 text-sm text-default-400">
+        <div className="flex items-center gap-1 text-sm text-default-500">
           <UsersIcon width={14} />
           <span>{course.enrollmentCount ?? 0} students enrolled</span>
         </div>
@@ -78,6 +78,11 @@ export default function CourseCard({
               color="primary"
               size="sm"
               variant="solid"
+              onPress={() => {
+                if (onPress) {
+                  onPress(course);
+                }
+              }}
             >
               Go to course
             </Button>
