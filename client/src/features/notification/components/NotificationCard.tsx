@@ -23,7 +23,6 @@ export default function NotificationCard({
       <motion.div exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
         <Card
           disableRipple
-          isPressable
           className="border-0 border-t border-t-default-500"
           radius="none"
           shadow="none"

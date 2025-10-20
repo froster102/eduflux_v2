@@ -20,10 +20,18 @@ export function useAddCourseProgress() {
 
       const prev = queryClient.getQueryData([key]);
 
-      queryClient.setQueryData([key], (old: CourseProgress) => ({
-        ...old,
-        completedLectures: [...old.completedLectures, lectureId],
-      }));
+      queryClient.setQueryData(
+        [key],
+        (
+          old: JsonApiResponse<CourseProgress>,
+        ): JsonApiResponse<CourseProgress> => ({
+          ...old,
+          data: {
+            ...old.data,
+            completedLectures: [...old.data.completedLectures, lectureId],
+          },
+        }),
+      );
 
       return { prev };
     },

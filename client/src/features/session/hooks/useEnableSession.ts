@@ -22,9 +22,21 @@ export function useEnableSessions() {
 
       queryClient.setQueryData(
         queryKey,
-        (old: { settings: SessionSettings }) => ({
+        (
+          old: JsonApiResponse<{
+            settings: SessionSettings;
+          }>,
+        ): JsonApiResponse<{
+          settings: SessionSettings;
+        }> => ({
           ...old,
-          settings: variables,
+          data: {
+            ...old.data,
+            settings: {
+              ...old.data.settings,
+              ...variables,
+            },
+          },
         }),
       );
 
