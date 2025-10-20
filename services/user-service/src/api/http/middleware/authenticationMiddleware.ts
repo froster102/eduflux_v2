@@ -1,7 +1,7 @@
 import { AuthenticatedUserDto } from '@core/common/dto/AuthenticatedDto';
 import { Code } from '@core/common/errors/Code';
 import { Exception } from '@core/common/errors/Exception';
-import { JwtUtil } from '@shared/utils/JwtUtil';
+import { validateToken } from '@shared/utils/JwtUtil';
 import Elysia from 'elysia';
 
 export const authenticaionMiddleware = new Elysia().derive(
@@ -14,7 +14,7 @@ export const authenticaionMiddleware = new Elysia().derive(
         overrideMessage: 'Authentication Token Not Found',
       });
     }
-    const payload = await JwtUtil.validateToken(token).catch(() => {
+    const payload = await validateToken(token).catch(() => {
       throw Exception.new({
         code: Code.UNAUTHORIZED_ERROR,
         overrideMessage: 'Invalid token or token has been expired',
