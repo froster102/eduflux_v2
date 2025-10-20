@@ -12,4 +12,5 @@ export interface SessionConfimedEvent extends Event {
   readonly startTime: string;
   readonly endTime: string;
   readonly path: string;
+  readonly joinLink: string;
 }
