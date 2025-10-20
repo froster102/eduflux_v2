@@ -1,6 +1,6 @@
 import { addToast } from "@heroui/toast";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import { useAuthStore } from "@/store/auth-store";
 import { auth } from "@/lib/better-auth/auth";
@@ -10,6 +10,9 @@ import { signIn } from "../services/auth";
 export function useSignIn() {
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
+  const { search } = useLocation();
+
+  const redirectTo = (search as Record<string, any>)?.redirect;
 
   return useMutation({
     mutationFn: signIn,
@@ -17,7 +20,7 @@ export function useSignIn() {
       setUser(data.user as unknown as User);
 
       navigate({
-        to: "/home",
+        to: redirectTo ?? "/home",
       });
     },
 
