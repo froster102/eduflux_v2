@@ -21,6 +21,7 @@ interface Column {
 }
 
 interface DataTableProps<T> {
+  tableName?: string;
   columns: Column[];
   data: T[];
   keyProp: string;
@@ -55,6 +56,7 @@ export default function DataTable<T>({
   onSearchChange,
   onPaginationChange,
   onRowsPerPageChange,
+  tableName,
   isAbleToAddRecord,
   addButtonText,
   onRecordAdd,
@@ -92,12 +94,11 @@ export default function DataTable<T>({
               color="default"
               placeholder={`Search by ${searchKey}`}
               startContent={<SearchIcon />}
-              // value={searchFilter}
               onClear={() => onClear()}
               onValueChange={() => {
                 debounce(
                   () => onSearchChange(searchInputRef.current?.value!),
-                  1000,
+                  2000,
                 )();
               }}
             />
@@ -111,13 +112,13 @@ export default function DataTable<T>({
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-default-400 text-small">
-              Total {totalCount} users
+            <span className="text-default-500 text-small">
+              Total {totalCount} {tableName ?? "Items"}
             </span>
-            <label className="flex items-center text-default-400 text-small">
+            <label className="flex items-center text-default-500 text-small">
               Rows per page:
               <select
-                className="bg-transparent outline-none text-default-400 text-small"
+                className="bg-transparent outline-none text-default-500 text-small"
                 onChange={(e) => {
                   onRowsPerPageChange(Number(e.target.value));
                 }}
@@ -143,14 +144,16 @@ export default function DataTable<T>({
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400" />
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          page={page}
-          total={pages}
-          onChange={onPaginationChange}
-        />
+        {data.length > 0 && (
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            page={page}
+            total={pages}
+            onChange={onPaginationChange}
+          />
+        )}
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
             isDisabled={pages === 1}
@@ -176,16 +179,17 @@ export default function DataTable<T>({
   return (
     <Table
       isHeaderSticky
-      aria-label="Example table with custom cells, pagination and sorting"
+      aria-label={`Table for ${tableName}`}
       bottomContent={!isLoading && bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px] bg-background",
+        wrapper: "max-h-[382px] bg-background border border-default-300",
       }}
+      shadow="none"
       topContent={topContent}
       topContentPlacement="outside"
     >
-      <TableHeader className="bg-secondary-100" columns={columns}>
+      <TableHeader className="bg-secondary-100 " columns={columns}>
         {(column) => (
           <TableColumn
             key={column.uid}

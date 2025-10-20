@@ -80,3 +80,86 @@ export function buildJsonApiQueryString(params: Record<string, any>): string {
 
 export const timeToString = (time: Time) =>
   `${time.hour.toString().padStart(2, "0")}:${time.minute.toString().padStart(2, "0")}`;
+
+import { PaymentSummaryGroup } from "@/shared/enums/PaymentSummaryGroup";
+
+export interface PaymentSummaryItem {
+  period: string;
+  instructorRevenue: number;
+  platformFee: number;
+  totalAmount: number;
+  completedPayments: number;
+}
+
+export interface ChartDataItem {
+  label: string;
+  instructorRevenue: number;
+  platformFee: number;
+  totalAmount: number;
+  completedPayments: number;
+}
+
+export function mapPaymentSummaryToChartData(
+  summary: PaymentSummaryItem[],
+  groupBy: PaymentSummaryGroup,
+): ChartDataItem[] {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  if (groupBy === PaymentSummaryGroup.MONTH) {
+    // create a map for faster lookup
+    const summaryMap = new Map(
+      summary.map((item) => {
+        const monthIndex = parseInt(item.period.split("-")[1], 10) - 1;
+
+        return [monthIndex, item];
+      }),
+    );
+
+    return monthNames.map((month, index) => {
+      const item = summaryMap.get(index);
+
+      return {
+        label: month,
+        instructorRevenue: item?.instructorRevenue ?? 0,
+        platformFee: item?.platformFee ?? 0,
+        totalAmount: item?.totalAmount ?? 0,
+        completedPayments: item?.completedPayments ?? 0,
+      };
+    });
+  }
+
+  // For YEAR or CUSTOM, keep original mapping
+  return summary.map((item) => {
+    let label = item.period;
+
+    if (groupBy === PaymentSummaryGroup.CUSTOM) {
+      const date = new Date(item.period);
+
+      label = date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+    }
+
+    return {
+      label,
+      instructorRevenue: item.instructorRevenue,
+      platformFee: item.platformFee,
+      totalAmount: item.totalAmount,
+      completedPayments: item.completedPayments,
+    };
+  });
+}

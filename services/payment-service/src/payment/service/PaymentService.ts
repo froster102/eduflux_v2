@@ -12,6 +12,11 @@ import { PaymentFactory } from '@payment/factory/PaymentFactory';
 import { PrepareCheckout } from '@payment/service/PrepareCheckout';
 import type { Course } from '@shared/types/Course';
 import type { Session } from '@shared/types/Session';
+import type { GetPaymentsPayload } from '@payment/service/types/GetPaymentsPayload';
+import { Role } from '@shared/common/enums/Role';
+import { ForbiddenException } from '@shared/common/exception/ForbiddenException';
+import type { GetPaymentSummaryPayload } from '@payment/service/types/GetPaymentSummaryParams';
+import { PaymentSummaryGroup } from '@payment/repository/types/PaymentSummaryGroup';
 
 export class PaymentService {
   private readonly platformFeeRate = 0.3;
@@ -49,6 +54,62 @@ export class PaymentService {
     }
 
     return this.createNew(paymentType, referenceId, userId, idempotencyKey);
+  }
+
+  async getPayments(payload: GetPaymentsPayload) {
+    const { executor, query } = payload;
+
+    if (executor.hasRole(Role.ADMIN)) {
+      return this.paymentRepository.findMany(query);
+    }
+
+    if (executor.hasRole(Role.INSTRUCTOR)) {
+      if (!query?.filter?.instructorId) {
+        throw new ForbiddenException('You are not authorized for this action');
+      }
+
+      if (query.filter.instructorId !== executor.id) {
+        throw new ForbiddenException('You are not authorized for this action');
+      }
+
+      return this.paymentRepository.findMany(query);
+    }
+
+    throw new ForbiddenException('You are not authorized for this action');
+  }
+
+  async getPaymentsWithSummary(payload: GetPaymentSummaryPayload) {
+    const { user, filter } = payload;
+
+    const queryFilter: Record<string, any> = {};
+
+    if (user.hasRole(Role.INSTRUCTOR)) {
+      queryFilter.instructorId = user.id;
+    } else if (filter?.instructorId) {
+      queryFilter.instructorId = filter.instructorId;
+    }
+
+    const summary = await this.paymentRepository.aggregatePaymentSummary(
+      filter?.groupBy ?? PaymentSummaryGroup.MONTH,
+      queryFilter,
+      filter?.startDate,
+      filter?.endDate,
+    );
+
+    const totalInstructorRevenue = summary.reduce(
+      (sum, s) => sum + s.instructorRevenue,
+      0,
+    );
+    const totalPlatformRevenue = summary.reduce(
+      (sum, s) => sum + s.platformFee,
+      0,
+    );
+
+    return {
+      totalInstructorRevenue,
+      totalPlatformRevenue,
+      summary,
+    };
   }
 
   private async handleExisting(
