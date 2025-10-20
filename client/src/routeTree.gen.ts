@@ -29,6 +29,7 @@ import { Route as LayoutInstructorsIndexRouteImport } from './routes/_layout/ins
 import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index'
 import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
 import { Route as LayoutChatsIndexRouteImport } from './routes/_layout/chats/index'
+import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
 import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
 import { Route as InstructorLayoutPaymentsIndexRouteImport } from './routes/instructor/_layout/payments/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
@@ -133,6 +134,11 @@ const LayoutChatsIndexRoute = LayoutChatsIndexRouteImport.update({
   path: '/chats/',
   getParentRoute: () => LayoutRouteRoute,
 } as any)
+const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
+  id: '/google/callback',
+  path: '/google/callback',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const InstructorLayoutSessionsIndexRoute =
   InstructorLayoutSessionsIndexRouteImport.update({
     id: '/sessions/',
@@ -192,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/chats': typeof LayoutChatsIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
   '/home': typeof LayoutHomeIndexRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/chats': typeof LayoutChatsIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
   '/home': typeof LayoutHomeIndexRoute
@@ -247,6 +255,7 @@ export interface FileRoutesById {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/_layout/chats/': typeof LayoutChatsIndexRoute
   '/_layout/courses/': typeof LayoutCoursesIndexRoute
   '/_layout/home/': typeof LayoutHomeIndexRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/auth/google/callback'
     | '/chats'
     | '/courses'
     | '/home'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth'
+    | '/auth/google/callback'
     | '/chats'
     | '/courses'
     | '/home'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/auth/google/callback'
     | '/_layout/chats/'
     | '/_layout/courses/'
     | '/_layout/home/'
@@ -491,6 +503,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutChatsIndexRouteImport
       parentRoute: typeof LayoutRouteRoute
     }
+    '/auth/google/callback': {
+      id: '/auth/google/callback'
+      path: '/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/instructor/_layout/sessions/': {
       id: '/instructor/_layout/sessions/'
       path: '/sessions'
@@ -586,6 +605,7 @@ interface AuthRouteRouteChildren {
   AuthSignUpRoute: typeof AuthSignUpRoute
   AuthVerifyRoute: typeof AuthVerifyRoute
   AuthIndexRoute: typeof AuthIndexRoute
+  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -595,6 +615,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthSignUpRoute: AuthSignUpRoute,
   AuthVerifyRoute: AuthVerifyRoute,
   AuthIndexRoute: AuthIndexRoute,
+  AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
