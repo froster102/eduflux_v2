@@ -35,7 +35,8 @@ export default function BookingStatusModal({
               Your session has been scheduled
             </p>
             <p className="text-center text-small font-medium text-default-500">
-              We have sent an email with the details to the both participants.
+              We have sent an email with the details to your registered email
+              address with the joining link.
             </p>
           </ModalHeader>
           <Divider />
