@@ -4,11 +4,10 @@ import { getInstructorAvailableSlots } from "../services/instructor";
 
 export function useGetInstructorAvailableSlots(data: {
   instructorId: string;
-  date: string;
-  timeZone: string;
+  queryParams: AvailabilitySlotQueryParameters;
 }) {
   return useQuery({
-    queryKey: [`instructor-${data.instructorId}-date-${data.date}-slots`],
+    queryKey: [`instructor-slots`, data.queryParams],
     queryFn: () => getInstructorAvailableSlots(data),
   });
 }

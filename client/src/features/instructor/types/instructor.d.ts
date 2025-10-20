@@ -33,7 +33,14 @@ declare global {
     meta: Pagination;
   };
 
-  export type GetInstructorsQueryParameters = {} & QueryParmeters;
+  export type GetInstructorsQueryParameters = {} & PaginationQueryParameters;
+
+  export type AvailabilitySlotQueryParameters = {
+    filter: {
+      date: string;
+      timeZone: string;
+    };
+  };
 }
 
 export {};
