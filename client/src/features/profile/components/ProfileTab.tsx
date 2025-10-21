@@ -16,7 +16,7 @@ export default function ProfileTab() {
     <Skeleton className="rounded-lg bg-background" isLoaded={!isProfileLoading}>
       {!isProfileLoading && (
         <ProfileForm
-          initialValue={profile!}
+          initialValue={profile?.data!}
           onSubmitHandler={onProfileUpdateHandler}
         />
       )}

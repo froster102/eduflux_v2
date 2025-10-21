@@ -1,4 +1,4 @@
-import { UserController } from 'src/api/http-rest/controller/UserController';
+import { UserController } from 'src/api/http/controller/UserController';
 import { UserDITokens } from '@core/domain/user/di/UserDITokens';
 import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
 import type { CreateUserUseCase } from '@core/domain/user/usecase/CreateUserUseCase';

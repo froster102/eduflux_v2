@@ -1,13 +1,13 @@
 import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import type { ChapterRepositoryPort } from '@core/application/chapter/port/persistence/ChapterRepositoryPort';
 import type { UpdateChapterPort } from '@core/application/chapter/port/usecase/UpdateChapterPort';
+import { ChapterUseCaseDto } from '@core/application/chapter/usecase/dto/ChapterUseCaseDto';
 import type { UpdateChapterUseCase } from '@core/application/chapter/usecase/UpdateChapterUseCase';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import { ForbiddenException } from '@core/common/exception/ForbiddenException';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
 import { CoreAssert } from '@core/common/util/assert/CoreAssert';
-import type { Chapter } from '@core/domain/chapter/entity/Chapter';
 import { inject } from 'inversify';
 
 export class UpdateChapterService implements UpdateChapterUseCase {
@@ -18,7 +18,7 @@ export class UpdateChapterService implements UpdateChapterUseCase {
     private readonly chapterRepository: ChapterRepositoryPort,
   ) {}
 
-  async execute(payload: UpdateChapterPort): Promise<Chapter> {
+  async execute(payload: UpdateChapterPort): Promise<ChapterUseCaseDto> {
     const { chapterId, title, description, actor, courseId } = payload;
 
     const foundCourse = CoreAssert.notEmpty(
@@ -44,6 +44,6 @@ export class UpdateChapterService implements UpdateChapterUseCase {
 
     await this.chapterRepository.update(chapterId, chapter);
 
-    return chapter;
+    return ChapterUseCaseDto.fromEntity(chapter);
   }
 }

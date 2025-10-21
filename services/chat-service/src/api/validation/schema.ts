@@ -11,11 +11,14 @@ export const createChatSchema = z.object({
 });
 
 export const getChatExistsSchema = z.object({
-  instructorId: z.string(),
+  filter: z.object({
+    instructorId: z.string(),
+  }),
 });
 
 export const getMessagesSchema = z.object({
-  before: z.iso.datetime({ offset: true }).optional(),
-
-  limit: z.number().int().positive().default(20),
+  page: z.object({
+    cursor: z.iso.datetime({ offset: true }).optional(),
+    size: z.coerce.number().int().positive().default(20),
+  }),
 });

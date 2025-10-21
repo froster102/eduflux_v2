@@ -27,6 +27,11 @@ const envSchema = z.object({
   JWKS_URL: z.string({ error: "JWKS_URL must be a valid URL" }),
 
   KAKFA_BROKER_URL: z.string({ error: "KAKFA_BROKER_URL is required" }),
+
+  SMTP_USER: z.string({ error: "SMTP_USER is required" }),
+  SMTP_PASS: z.string({ error: "SMTP_PASS is required" }),
+  SMTP_HOST: z.string({ error: "SMTP_HOST is required" }),
+  SMTP_PORT: z.coerce.number({ error: "SMTP_PORT is required" }),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;

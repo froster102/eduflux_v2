@@ -46,8 +46,12 @@ function RouteComponent() {
   const { data: availableSlots, isPending: isAvailableSlotsLoading } =
     useGetInstructorAvailableSlots({
       instructorId,
-      date: selectedDate,
-      timeZone: getLocalTimeZone(),
+      queryParams: {
+        filter: {
+          date: selectedDate,
+          timeZone: getLocalTimeZone(),
+        },
+      },
     });
   const {
     data: existingChat,
@@ -62,16 +66,16 @@ function RouteComponent() {
   const createStripeCheckout = useCreateStripeCheckoutSession();
 
   async function chatWithInstructorHandler() {
-    if (existingChat && existingChat.chat) {
+    if (existingChat && existingChat.data) {
       setSelectedChat({
-        id: existingChat.chat.id,
-        lastMessageAt: existingChat.chat.lastMessageAt,
-        lastMessagePreview: existingChat.chat.lastMessagePreview,
+        id: existingChat.data.id,
+        lastMessageAt: existingChat.data.lastMessageAt,
+        lastMessagePreview: existingChat.data.lastMessagePreview,
         participants: [
           {
-            id: instructor.id,
-            name: instructor.profile.name,
-            image: instructor.profile.image!,
+            id: instructor.data.id,
+            name: instructor.data.profile.name,
+            image: instructor.data.profile.image!,
           },
         ],
       });
@@ -86,14 +90,14 @@ function RouteComponent() {
 
     if (createdChat) {
       setSelectedChat({
-        id: createdChat.id,
-        lastMessageAt: createdChat.lastMessageAt,
-        lastMessagePreview: createdChat.lastMessagePreview,
+        id: createdChat.data.id,
+        lastMessageAt: createdChat.data.lastMessageAt,
+        lastMessagePreview: createdChat.data.lastMessagePreview,
         participants: [
           {
-            id: instructor.id,
-            name: `${instructor.profile.name}`,
-            image: instructor.profile.image!,
+            id: instructor.data.id,
+            name: `${instructor.data.profile.name}`,
+            image: instructor.data.profile.image!,
           },
         ],
       });
@@ -107,13 +111,13 @@ function RouteComponent() {
     if (response) {
       const { data: checkoutReponse } = await tryCatch(
         createStripeCheckout.mutateAsync({
-          type: response.itemType,
-          referenceId: response.referenceId,
+          type: response.data.itemType,
+          referenceId: response.data.referenceId,
         }),
       );
 
       if (checkoutReponse) {
-        window.location.assign(checkoutReponse.checkoutUrl);
+        window.location.assign(checkoutReponse.data.checkoutUrl);
       }
     }
   }
@@ -130,7 +134,7 @@ function RouteComponent() {
               <p>About Me</p>
             </CardHeader>
             <CardBody className="pt-0">
-              <p>{instructor.profile.bio}</p>
+              <p>{instructor.data.profile.bio}</p>
             </CardBody>
           </Card>
         </div>
@@ -144,7 +148,7 @@ function RouteComponent() {
               <Image
                 className="max-h-"
                 height={400}
-                src={`${IMAGE_BASE_URL}${instructor.profile.image}`}
+                src={`${IMAGE_BASE_URL}${instructor.data.profile.image}`}
                 width={500}
               />
             </CardHeader>
@@ -159,7 +163,7 @@ function RouteComponent() {
               <StartChatButton
                 errorLoading={isChatError}
                 existingChat={
-                  !isExistingChat && existingChat ? existingChat.chat : null
+                  !isExistingChat && existingChat ? existingChat.data : null
                 }
                 isLoading={isExistingChat}
                 onClickHandler={chatWithInstructorHandler}
@@ -169,8 +173,8 @@ function RouteComponent() {
         </div>
       </div>
       <SessionScheduler
-        availableSlots={availableSlots!}
-        instructor={instructor}
+        availableSlots={availableSlots?.data!}
+        instructor={instructor.data}
         isConfirmBookingPending={
           bookSession.isPending || createStripeCheckout.isPending
         }

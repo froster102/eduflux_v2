@@ -19,12 +19,20 @@ export function useDeleteCourseProgress() {
 
       const prev = queryClient.getQueryData([key]);
 
-      queryClient.setQueryData([key], (old: CourseProgress) => ({
-        ...old,
-        completedLectures: old.completedLectures.filter(
-          (id) => id !== lectureId,
-        ),
-      }));
+      queryClient.setQueryData(
+        [key],
+        (
+          old: JsonApiResponse<CourseProgress>,
+        ): JsonApiResponse<CourseProgress> => ({
+          ...old,
+          data: {
+            ...old.data,
+            completedLectures: old.data.completedLectures.filter(
+              (id) => id !== lectureId,
+            ),
+          },
+        }),
+      );
 
       return { prev };
     },

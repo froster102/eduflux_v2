@@ -2,7 +2,7 @@ import api from "@/lib/axios";
 
 export async function getCourseProgress(
   courseId: string,
-): Promise<CourseProgress> {
+): Promise<JsonApiResponse<CourseProgress>> {
   const response = await api.get(
     `/users/me/subscribed-courses/${courseId}/progress`,
   );

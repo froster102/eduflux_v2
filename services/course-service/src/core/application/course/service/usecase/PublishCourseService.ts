@@ -9,11 +9,15 @@ import type { PublishCoursePort } from '@core/application/course/port/usecase/Pu
 import type { PublishCourseUseCase } from '@core/application/course/usecase/PublishCourseUseCase';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CourseEvents } from '@core/common/events/enum/CourseEvents';
 import { ForbiddenException } from '@core/common/exception/ForbiddenException';
 import { InvalidInputException } from '@core/common/exception/InvalidInputException';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
+import type { EventBusPort } from '@core/common/port/message/EventBustPort';
 import { MediaStatus } from '@core/domain/asset/enum/MediaStatus';
 import type { Course } from '@core/domain/course/entity/Course';
+import type { CoursePublishedEvent } from '@core/domain/course/events/CoursePublishedEvent';
 import { contentLimits } from '@shared/config/content-limits.config';
 import { inject } from 'inversify';
 
@@ -31,6 +35,7 @@ export class PublishCourseService implements PublishCourseUseCase {
     private readonly assetRepository: AssetRepositoryPort,
     @inject(CourseDITokens.UserServiceGateway)
     private readonly userServiceGateway: UserServiceGatewayPort,
+    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
   ) {}
 
   async execute(payload: PublishCoursePort): Promise<Course> {
@@ -131,6 +136,16 @@ export class PublishCourseService implements PublishCourseUseCase {
 
     course.publish();
     await this.courseRepository.update(courseId, course);
+
+    //send event to update the instructor views
+    const coursePublishedEvent: CoursePublishedEvent = {
+      id: course.id,
+      type: CourseEvents.COURSE_PUBLISHED,
+      instructorId: course.instructor.id,
+      occurredAt: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
+    };
+    await this.eventBus.sendEvent(coursePublishedEvent);
 
     return course;
   }

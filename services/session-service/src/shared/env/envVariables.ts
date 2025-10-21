@@ -32,6 +32,14 @@ const envSchema = z.object({
   LIVEKIT_API_SECRET: z.string({ error: 'LIVEKIT_API_SECRET is required' }),
   LIVEKIT_HOST: z.string({ error: 'LIVEKIT_HOST is required' }),
 
+  JOIN_SESSION_PAGE_URL: z.string({
+    error: 'JOIN_SESSION_BASE_URL_PATH is required',
+  }),
+
+  SESSION_PAGE_PATH: z.string({
+    error: 'SESSION_PAGE_PATH is required',
+  }),
+
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),
   JWKS_URL: z.string({ error: 'JWKS_URL must be a valid URL' }),

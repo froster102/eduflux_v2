@@ -16,10 +16,13 @@ export function useUpdateInstructorCourse() {
         `course-${prev.id}`,
       ]);
 
-      queryClient.setQueryData([`course-${prev.id}`], (old: Course) => ({
-        ...old,
-        ...prev.updateData,
-      }));
+      queryClient.setQueryData(
+        [`course-${prev.id}`],
+        (old: JsonApiResponse<Course>): JsonApiResponse<Course> => ({
+          ...old,
+          ...prev.updateData,
+        }),
+      );
 
       return { previousCourseInfo };
     },

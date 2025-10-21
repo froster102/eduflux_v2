@@ -1,5 +1,5 @@
-import type { QueryParameters } from "@core/common/port/persistence/type/QueryParameters";
+import type { PaginationQueryParams } from "@core/common/port/persistence/type/QueryParameters";
 
-export interface MessageQueryParameters extends QueryParameters {
+export interface MessageQueryParameters extends PaginationQueryParams {
   before?: string;
 }

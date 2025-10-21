@@ -80,8 +80,8 @@ export default function Notifications({}: NotificationsProps) {
               className="border-0 absolute"
               color="danger"
               content={
-                notifications && notifications.length > 0
-                  ? notifications.length
+                notifications && notifications.data.length > 0
+                  ? notifications.data.length
                   : null
               }
               shape="circle"
@@ -111,8 +111,8 @@ export default function Notifications({}: NotificationsProps) {
               )} */}
             </div>
             <div className="max-h-96 overflow-x-auto scrollbar-hide flex flex-col gap-2">
-              {notifications && notifications.length > 0 ? (
-                notifications.map((notification) => (
+              {notifications && notifications.data.length > 0 ? (
+                notifications.data.map((notification) => (
                   <NotificationCard
                     key={notification.id}
                     notification={notification}

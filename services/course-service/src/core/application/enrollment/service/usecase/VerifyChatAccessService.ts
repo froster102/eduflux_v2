@@ -16,7 +16,7 @@ export class VerifyChatAccessService implements VerifyChatAccessUseCase {
   ): Promise<VerifyChatAccessUseCaseResult> {
     const { learnerId, instructorId } = payload;
     const learnerEnrollments =
-      await this.enrollmentRepository.findEnrollmentWithUserAndInstructorId(
+      await this.enrollmentRepository.findEnrollmentWithLearnerAndInstructorId(
         learnerId,
         instructorId,
       );

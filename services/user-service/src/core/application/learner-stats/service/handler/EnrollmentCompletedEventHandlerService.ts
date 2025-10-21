@@ -8,11 +8,16 @@ import type { SubscribedCourseViewRepositoryPort } from '@core/application/views
 import { SubscribedCourseView } from '@core/application/views/subscribed-course/entity/SubscribedCourseView';
 import type { EnrollmentCompletedEventHandler } from '@core/application/learner-stats/handler/EnrollmentCompletedEventHandler';
 import type { EnrollmentCompletedEvent } from '@core/domain/learner-stats/events/EnrollmentCompletedEvent';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { EventBusPort } from '@core/common/message/EventBustPort';
+import type { InstructorStatsUpdatedEvent } from '@core/application/views/instructor-view/events/InstructorStatsUpdatedEvent';
+import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
 
 export class EnrollmentCompletedEventHandlerService
   implements EnrollmentCompletedEventHandler
 {
   constructor(
+    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
     @inject(LearnerStatsDITokens.LearnerStatsRepository)
     private readonly learnerStatsRepository: LearnerStatsRepositoryPort,
     @inject(InstructorDITokens.InstructorRepository)
@@ -27,13 +32,29 @@ export class EnrollmentCompletedEventHandlerService
     //perform transaction
     await this.learnerStatsRepository.adjustEnrolledCourses(userId, 1);
 
-    await this.instructorRepository.incrementTotalLearners(instructorId);
+    const updatedInstructor =
+      await this.instructorRepository.incrementTotalLearners(instructorId);
 
     const subscribeCourseView = SubscribedCourseView.new({
       ...courseMetadata,
       id: courseId,
       userId,
     });
+
+    //send event to update the instructor views
+    if (updatedInstructor) {
+      const instructorStatsUpdatedEvent: InstructorStatsUpdatedEvent = {
+        id: updatedInstructor.getId(),
+        type: InstructorEvents.INSTRUCTOR_STATS_UPDATED,
+        instructorId: updatedInstructor.getId(),
+        sessionsConducted: updatedInstructor.getSessionsConducted(),
+        totalCourses: updatedInstructor.getTotalCourses(),
+        totalLearners: updatedInstructor.getTotalLearners(),
+        occuredAt: new Date().toISOString(),
+      };
+      await this.eventBus.sendEvent(instructorStatsUpdatedEvent);
+    }
+
     await this.subscribedCourseViewRepository.save(subscribeCourseView);
   }
 }

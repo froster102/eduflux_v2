@@ -11,7 +11,7 @@ import type { CreateChatUseCase } from "@core/application/chat/usecase/CreateCha
 import { ChatUseCaseDto } from "@core/application/chat/usecase/dto/ChatUseCaseDto";
 import { CoreDITokens } from "@core/common/di/CoreDITokens";
 import { Role } from "@core/common/enum/Role";
-import type { EnrollmentServicePort } from "@core/common/gateway/EnrollmentServicePort";
+import type { CourseServicePort } from "@core/common/gateway/EnrollmentServicePort";
 import type { UserServicePort } from "@core/common/gateway/UserServicePort";
 import type { EventBusPort } from "@core/common/port/message/EventBusPort";
 import { CoreAssert } from "@core/common/util/assert/CoreAssert";
@@ -21,8 +21,8 @@ import { v4 as uuidV4 } from "uuid";
 
 export class CreateChatService implements CreateChatUseCase {
   constructor(
-    @inject(CoreDITokens.EnrollmentService)
-    private readonly enrollmentService: EnrollmentServicePort,
+    @inject(CoreDITokens.CourseService)
+    private readonly courseService: CourseServicePort,
     @inject(CoreDITokens.UserService)
     private readonly userService: UserServicePort,
     @inject(ChatDITokens.ChatRepository)
@@ -33,7 +33,7 @@ export class CreateChatService implements CreateChatUseCase {
   async execute(payload: CreateChatPort): Promise<ChatUseCaseDto> {
     const { userId, instructorId } = payload;
 
-    const { hasAccess } = await this.enrollmentService.verifyChatAccess(
+    const { hasAccess } = await this.courseService.verifyChatAccess(
       instructorId,
       userId,
     );

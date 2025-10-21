@@ -1,24 +1,11 @@
 import { SVGProps } from "react";
+import { UserWithRole } from "better-auth/plugins/admin";
+
+import { Role } from "@/shared/enums/Role";
 
 declare global {
   export type IconSvgProps = SVGProps<SVGSVGElement> & {
     size?: number;
-  };
-
-  export type EnrollmentStatus =
-    | "PENDING"
-    | "COMPLETED"
-    | "FAILED"
-    | "REFUNDED";
-
-  export type Enrollment = {
-    id: string;
-    userId: string;
-    courseId: string;
-    status: EnrollmentStatus;
-    paymentId: string | null;
-    createdAt: Date;
-    updatedAt: Date;
   };
 
   export type User = {
@@ -32,11 +19,6 @@ declare global {
     id: string;
   };
 
-  export type Pagination = {
-    totalPages: number;
-    currentPage: number;
-  };
-
   export type UserProfile = {
     id: string;
     firstName: string;
@@ -47,47 +29,6 @@ declare global {
     updatedAt: string;
   };
 
-  export type SessionStatus =
-    | "PENDING_PAYMENT"
-    | "BOOKED"
-    | "CONFIRMED"
-    | "IN_PROGRESS"
-    | "COMPLETED"
-    | "CANCELLED"
-    | "RESCHEDULED"
-    | "NO_SHOW"
-    | "INSTRUCTOR_NO_SHOW"
-    | "PAYMENT_EXPIRED";
-
-  export type InstructorSession = {
-    id: string;
-    instructor: User;
-    availabilitySlotId: string;
-    startTime: Date;
-    endTime: Date;
-    status: SessionStatus;
-    paymentId: string | null;
-    price: number;
-    currency: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-
-  export type AppNotification = {
-    id: string;
-    userId: string;
-    title: string;
-    status: "read" | "unread";
-    type: string;
-    message: string;
-    createdAt: Date;
-  };
-
-  export type CourseProgress = {
-    id: string;
-    completedLectures: string[];
-  };
-
   export type BetterAuthError = {
     code?: string | undefined;
     message?: string | undefined;
@@ -95,10 +36,18 @@ declare global {
     statusText: string;
   };
 
-  export type QueryParmeters = {
-    page?: number;
-    limit?: number;
-    search?: string;
+  export type PaginationQueryParameters = {
+    page?: {
+      number?: number;
+      size?: number;
+    };
+  };
+
+  export type CursorPaginationQueryParameters = {
+    page?: {
+      cursor: string | undefined;
+      size?: number;
+    };
   };
 
   export type DefaultFormProps<TFormData> = {
@@ -111,16 +60,52 @@ declare global {
     cancelText?: string;
   };
 
-  export type ApiErrorResponse = {
-    message: string;
+  export interface JsonApiError {
+    id?: string;
+    status: string;
     code?: string;
-    details?: string | Record<string, any>;
-    errors?: Array<{
-      field?: string;
-      message: string;
-      [key: string]: any;
-    }>;
+    title: string;
+    detail?: string;
+    source?: {
+      pointer?: string;
+      parameter?: string;
+    };
+    meta?: Record<string, any>;
+  }
+
+  export interface JsonApiErrorResponse {
+    errors: JsonApiError[];
+  }
+
+  export type Pagination = {
+    totalCount: number;
+    totalPages: number;
+    pageNumber: number;
+    pageSize: number;
   };
+
+  export interface JsonApiResponse<T> {
+    data: T;
+    meta?: {
+      totalCount?: number;
+      totalPages?: number;
+      pageNumber?: number;
+      pageSize?: number;
+    };
+    links?: {
+      self: string;
+      first: string;
+      last?: string;
+      next?: string;
+      prev?: string | null;
+    };
+  }
+
+  export type UserTableAction = "view" | "ban" | "unban";
+
+  export interface ExtendedUser extends UserWithRole {
+    roles: Role[];
+  }
 }
 
 export {};

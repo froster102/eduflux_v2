@@ -5,14 +5,25 @@ import z from 'zod/v4';
 
 const courseFilterSchema = z
   .object({
-    filters: z.object({
+    filter: z.object({
       status: z.enum(Object.values(CourseStatus)),
       catergory: z.string(),
       instructor: z.string(),
     }),
-    sort: z.object({
-      price: z.enum(Object.values(SortOrder)),
-    }),
+    sort: z
+      .string()
+      .optional()
+      .transform((sortStr) => {
+        if (!sortStr) return {};
+        const fields = sortStr.split(',');
+        const sortObj: Record<string, SortOrder> = {};
+        fields.forEach((field) => {
+          const key = field.replace(/^-/, '');
+          const order = field.startsWith('-') ? SortOrder.DSC : SortOrder.ASC;
+          sortObj[key] = order;
+        });
+        return sortObj;
+      }),
   })
   .partial();
 

@@ -5,4 +5,5 @@ export interface InstructorRepositoryPort
   extends BaseRepositoryPort<Instructor> {
   incrementTotalLearners(instructorId: string): Promise<Instructor | null>;
   incrementSessionsConducted(instructorId: string): Promise<Instructor | null>;
+  incrementCourseCreated(instructorId: string): Promise<Instructor | null>;
 }

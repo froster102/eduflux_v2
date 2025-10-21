@@ -4,11 +4,12 @@ import { Input } from "@heroui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
 import { auth } from "@/lib/better-auth/auth";
 import GoogleIcon from "@/components/icons/GoogleIcon";
+import { GOOGLE_REDIRECT_URL } from "@/lib/constants";
 
 import { signInSchema } from "../../validations/auth";
 
@@ -17,6 +18,7 @@ export default function SignInForm({
   isPending,
 }: DefaultFormProps<SignInFormData>) {
   const [isVisible, setIsVisible] = React.useState(false);
+  const redirectTo = useLocation() as Record<string, string>;
 
   const {
     handleSubmit,
@@ -30,7 +32,9 @@ export default function SignInForm({
   const googleLogin = async () => {
     await auth.signIn.social({
       provider: "google",
-      callbackURL: import.meta.env.VITE_GOOGLE_AUTH_CALLBACK_URL,
+      callbackURL: redirectTo?.redirect
+        ? GOOGLE_REDIRECT_URL + `${redirectTo?.redirect}`
+        : GOOGLE_REDIRECT_URL,
     });
   };
 

@@ -9,6 +9,7 @@ import { ForbiddenException } from '@core/common/exception/ForbiddenException';
 import { NotFoundException } from '@core/common/exception/NotFoundException';
 import { inject } from 'inversify';
 import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { ChapterUseCaseDto } from '@core/application/chapter/usecase/dto/ChapterUseCaseDto';
 
 export class CreateChapterService implements CreateChapterUseCase {
   constructor(
@@ -18,7 +19,7 @@ export class CreateChapterService implements CreateChapterUseCase {
     private readonly courseRepository: CourseRepositoryPort,
   ) {}
 
-  async execute(payload: CreateChapterPort): Promise<Chapter> {
+  async execute(payload: CreateChapterPort): Promise<ChapterUseCaseDto> {
     const { courseId, title, description, actor } = payload;
 
     const course = CoreAssert.notEmpty(
@@ -42,6 +43,6 @@ export class CreateChapterService implements CreateChapterUseCase {
 
     const savedChapter = await this.chapterRepository.save(chapter);
 
-    return savedChapter;
+    return ChapterUseCaseDto.fromEntity(savedChapter);
   }
 }

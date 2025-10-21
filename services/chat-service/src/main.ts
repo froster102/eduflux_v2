@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { HttpServer } from "@api/http-rest/HttpServer";
+import { HttpServer } from "@api/http/HttpServer";
 import { MongooseConnection } from "@infrastructure/adapter/persistence/mongoose/MongooseConnection";
 import { container } from "@di/RootModule";
 import type { KafkaEventBusProducerAdapter } from "@infrastructure/adapter/kafka/KafkaEventBusProducerAdapter";

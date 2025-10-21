@@ -19,6 +19,10 @@ export class Chapter extends Entity<string> {
     this._objectIndex = payload.objectIndex;
   }
 
+  get class(): ClassType {
+    return this._class;
+  }
+
   get courseId(): string {
     return this._courseId;
   }
@@ -65,17 +69,5 @@ export class Chapter extends Entity<string> {
 
   static new(payload: NewChapterPayload): Chapter {
     return new Chapter(payload);
-  }
-
-  toJSON() {
-    return {
-      _class: this._class,
-      id: this._id,
-      courseId: this._courseId,
-      title: this._title,
-      description: this._description,
-      sortOrder: this._sortOrder,
-      objectIndex: this._objectIndex,
-    };
   }
 }

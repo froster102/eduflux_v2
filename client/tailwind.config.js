@@ -24,7 +24,116 @@ module.exports = {
       addCommonColors: false, // override common colors (e.g. "blue",green,"pink").
       defaultTheme: "light", // default theme from the themes object
       themes: {
+        light: {
+          colors: {
+            default: {
+              50: "#f9fafb",
+              100: "#f3f4f6",
+              200: "#e5e7eb",
+              300: "#d1d5db",
+              400: "#9ca3af",
+              500: "#6b7280",
+              600: "#4b5563",
+              700: "#374151",
+              800: "#1f2937",
+              900: "#111827",
+              foreground: "#000",
+              DEFAULT: "#f3f4f6",
+            },
+            primary: {
+              50: "#f0fdf4",
+              100: "#dcfce7",
+              200: "#bbf7d0",
+              300: "#86efac",
+              400: "#4ade80",
+              500: "#22c55e",
+              600: "#16a34a",
+              700: "#15803d",
+              800: "#166534",
+              900: "#14532d",
+              foreground: "#fff",
+              DEFAULT: "#22c55e", // Softer green for e-learning accents (e.g., buttons, progress)
+            },
+            secondary: {
+              50: "#fdfaf7",
+              100: "#fff7ed",
+              200: "#ffedd5",
+              300: "#fed7aa",
+              400: "#fdba74",
+              500: "#fb923c",
+              600: "#f97316",
+              700: "#ea580c",
+              800: "#c2410c",
+              900: "#9a3412",
+              foreground: "#fff",
+              DEFAULT: "#fdba74",
+            },
+            success: {
+              50: "#f0fdfa",
+              100: "#ccfbf1",
+              200: "#99f6e4",
+              300: "#5eead4",
+              400: "#2dd4bf",
+              500: "#14b8a6",
+              600: "#0d9488",
+              700: "#0f766e",
+              800: "#115e59",
+              900: "#134e4a",
+              foreground: "#fff",
+              DEFAULT: "#2dd4bf",
+            },
+            warning: {
+              50: "#fefce8",
+              100: "#fef9c3",
+              200: "#fef08a",
+              300: "#fde047",
+              400: "#facc15",
+              500: "#eab308",
+              600: "#ca8a04",
+              700: "#a16207",
+              800: "#854d0e",
+              900: "#713f12",
+              foreground: "#fff",
+              DEFAULT: "#fde047",
+            },
+            danger: {
+              50: "#fff1f2",
+              100: "#ffe4e6",
+              200: "#fecdd3",
+              300: "#fda4af",
+              400: "#fb7185",
+              500: "#f43f5e",
+              600: "#e11d48",
+              700: "#be123c",
+              800: "#9f1239",
+              900: "#881337",
+              foreground: "#fff",
+              DEFAULT: "#f43f5e",
+            },
+            background: "#ffffff", // Soft white for readability
+            foreground: "#111827",
+            content1: {
+              DEFAULT: "#f9fafb",
+              foreground: "#000",
+            },
+            content2: {
+              DEFAULT: "#f3f4f6",
+              foreground: "#000",
+            },
+            content3: {
+              DEFAULT: "#e5e7eb",
+              foreground: "#000",
+            },
+            content4: {
+              DEFAULT: "#d1d5db",
+              foreground: "#000",
+            },
+            focus: "#3b82f6",
+            overlay: "#000000",
+          },
+        },
         dark: {
+          // Your existing dark theme, with minor tweaks for e-learning (e.g., softer primary for less visual intensity)
           colors: {
             default: {
               50: "#060804",
@@ -45,14 +154,14 @@ module.exports = {
               100: "#697947",
               200: "#8fa662",
               300: "#b6d27c",
-              400: "#dcff96",
+              400: "#dcff96", // Kept, but ensure it's not too bright for long reading
               500: "#e2ffa8",
               600: "#e8ffbb",
               700: "#eeffcd",
               800: "#f5ffe0",
               900: "#fbfff2",
               foreground: "#000",
-              DEFAULT: "#dcff96",
+              DEFAULT: "#b6d27c", // Softened default for better contrast in dark mode
             },
             secondary: {
               50: "#4d443c",
@@ -133,10 +242,8 @@ module.exports = {
           },
         },
       },
-
       layout: {
         disabledOpacity: "0.5",
-
       },
     }),
   ],

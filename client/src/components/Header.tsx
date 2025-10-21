@@ -65,7 +65,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full">
+      <header className="w-full">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="lg:hidden">

@@ -2,6 +2,7 @@ import { AssetDITokens } from '@core/application/asset/di/AssetDITokens';
 import type { AssetRepositoryPort } from '@core/application/asset/port/persistence/AssetRepositoryPort';
 import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import type { ChapterRepositoryPort } from '@core/application/chapter/port/persistence/ChapterRepositoryPort';
+import { ChapterUseCaseDto } from '@core/application/chapter/usecase/dto/ChapterUseCaseDto';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { GetCourseCurriculumPort } from '@core/application/course/port/usecase/GetCourseCurriculumPort';
@@ -101,7 +102,9 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
       fetchedAssets.forEach((asset) => assetMap.set(asset.id, asset));
     }
 
-    const curriculumItems: CurriculumItemWithAsset[] = [...chapters];
+    const curriculumItems: CurriculumItemWithAsset[] = [
+      ...ChapterUseCaseDto.fromEntities(chapters),
+    ];
 
     lectures.forEach((lecture) => {
       const lectureWithAsset: Lecture & { asset?: Partial<Asset> } = {

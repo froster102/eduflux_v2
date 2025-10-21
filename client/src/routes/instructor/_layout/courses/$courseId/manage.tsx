@@ -56,19 +56,19 @@ function Manage() {
             ) : (
               <CourseForm
                 initialValues={
-                  courseInfo
+                  courseInfo?.data
                     ? {
-                        categoryId: courseInfo.categoryId,
-                        title: courseInfo.title,
-                        description: courseInfo.description,
-                        isFree: courseInfo.isFree,
-                        level: courseInfo.level || CourseLevel.BEGINNER,
-                        price: courseInfo.price,
-                        thumbnail: courseInfo.thumbnail,
+                        categoryId: courseInfo.data.categoryId,
+                        title: courseInfo.data.title,
+                        description: courseInfo.data.description,
+                        isFree: courseInfo.data.isFree,
+                        level: courseInfo.data.level || CourseLevel.BEGINNER,
+                        price: courseInfo.data.price,
+                        thumbnail: courseInfo.data.thumbnail,
                       }
                     : {}
                 }
-                isPublished={courseInfo?.status === "published"}
+                isPublished={courseInfo?.data?.status === "published"}
                 isPublishing={publishCourse.isPending}
                 onPublishHandler={onPublishHandler}
                 onSubmitHandler={onSubmitHandler}

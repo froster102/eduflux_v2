@@ -7,6 +7,7 @@ import type { CreateChapterUseCase } from '@core/application/chapter/usecase/Cre
 import { updateChapterSchema } from '@api/http/validators/updateChapterSchema';
 import type { UpdateChapterUseCase } from '@core/application/chapter/usecase/UpdateChapterUseCase';
 import type { DeleteChapterUseCase } from '@core/application/chapter/usecase/DeleteChapterUseCase';
+import { jsonApiResponse } from '@shared/utils/jsonApi';
 
 export class ChapterController {
   constructor(
@@ -30,7 +31,7 @@ export class ChapterController {
             description: parsedBody.description,
             title: parsedBody.title,
           });
-          return response.toJSON();
+          return jsonApiResponse({ data: response });
         })
         .put('/:chapterId', async ({ params, body, user }) => {
           const parsedBody = updateChapterSchema.parse(body);
@@ -40,7 +41,7 @@ export class ChapterController {
             ...parsedBody,
             actor: user,
           });
-          return response.toJSON();
+          return jsonApiResponse({ data: response });
         })
         .delete('/:chapterId', async ({ params, user }) => {
           await this.deleteChapterUseCase.execute({

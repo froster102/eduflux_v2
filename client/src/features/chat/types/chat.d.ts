@@ -24,20 +24,19 @@ declare global {
   };
 
   export type GetChatsQueryParmeters = {
-    role: ChatRole;
-  } & QueryParmeters;
+    filter: {
+      role: ChatRole;
+    };
+  } & PaginationQueryParameters;
 
-  export type GetMessagesQueryParameters = {
-    before: string;
-  } & QueryParmeters;
+  export type GetMessagesQueryParameters = CursorPaginationQueryParameters;
 
-  export type GetMessagesResponse = {
-    messages: Message[];
-  };
+  export type GetChatWithInstructorResponse = JsonApiResponse<Chat | null>;
 
-  export type GetUserChatsQueryResult = {
-    chats: Chat[];
-    pagination: Pagination;
+  export type GetMessagesResponse = JsonApiResponse<Message[]>;
+
+  export type GetUserChatsQueryResult = JsonApiResponse<Chat[]> & {
+    meta: Pagination;
   };
 }
 

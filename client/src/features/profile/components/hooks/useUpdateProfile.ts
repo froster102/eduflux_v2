@@ -20,10 +20,13 @@ export function useUpdateProfile() {
 
       const prev = queryClient.getQueryData([key]);
 
-      queryClient.setQueryData([key], (old: UserProfile) => ({
-        ...old,
-        ...newProfile,
-      }));
+      queryClient.setQueryData(
+        [key],
+        (old: JsonApiResponse<UserProfile>): JsonApiResponse<UserProfile> => ({
+          ...old,
+          ...newProfile,
+        }),
+      );
 
       return { prev };
     },

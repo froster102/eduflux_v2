@@ -3,7 +3,6 @@ import { Input } from "@heroui/input";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import debounce from "lodash.debounce";
 import React from "react";
-import { Pagination } from "@heroui/pagination";
 import { Spinner } from "@heroui/spinner";
 
 import { SearchIcon } from "@/components/Icons";
@@ -25,8 +24,10 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const { data, isLoading } = useGetInstructorCourses({
-    page,
-    limit: 10,
+    page: {
+      number: page,
+      size: 10,
+    },
   });
 
   const [openCreateCourseModal, setOpenCreateCourseModal] =
@@ -40,7 +41,7 @@ function RouteComponent() {
     [],
   );
 
-  const totalPages = data ? Math.ceil(data.total / 10) : 0;
+  const totalPages = data ? data.meta.totalPages : 0;
 
   function onCreateCourseHandler(data: CreateCourseFormData) {
     createCourse.mutate(data);
@@ -78,7 +79,7 @@ function RouteComponent() {
           ) : (
             data && (
               <CoursesList
-                courses={data!.courses}
+                courses={data!.data}
                 currentPage={page}
                 isInstructorListing={true}
                 totalPages={totalPages}
@@ -88,39 +89,6 @@ function RouteComponent() {
               />
             )
           )}
-        </div>
-        <div className="flex justify-center pt-4 items-center gap-2">
-          {data && data.total ? (
-            <>
-              <Button
-                className="mr-2"
-                color="primary"
-                size="sm"
-                variant="flat"
-                onPress={() => setPage((prev) => (prev > 1 ? prev - 1 : prev))}
-              >
-                Previous
-              </Button>
-              <Pagination
-                color="primary"
-                page={page}
-                total={totalPages}
-                onChange={setPage}
-              />
-              <div className="flex gap-2">
-                <Button
-                  color="primary"
-                  size="sm"
-                  variant="flat"
-                  onPress={() =>
-                    setPage((prev) => (prev < totalPages ? prev + 1 : prev))
-                  }
-                >
-                  Next
-                </Button>
-              </div>
-            </>
-          ) : null}
         </div>
       </div>
 

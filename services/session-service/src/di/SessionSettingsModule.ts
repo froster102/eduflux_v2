@@ -1,4 +1,4 @@
-import { SessionSettingsController } from '@api/http-rest/controller/SessionSettingsController';
+import { SessionSettingsController } from '@api/http/controller/SessionSettingsController';
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
 import type { SessionSettingsRepositoryPort } from '@core/application/session-settings/port/persistence/SessionSettingsPort';
 import { EnableSessionService } from '@core/application/session-settings/service/EnableSessionService';

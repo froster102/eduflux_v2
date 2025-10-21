@@ -21,6 +21,7 @@ interface Column {
 }
 
 interface DataTableProps<T> {
+  tableName?: string;
   columns: Column[];
   data: T[];
   keyProp: string;
@@ -55,13 +56,14 @@ export default function DataTable<T>({
   onSearchChange,
   onPaginationChange,
   onRowsPerPageChange,
+  tableName,
   isAbleToAddRecord,
   addButtonText,
   onRecordAdd,
 }: DataTableProps<T>) {
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-
   const pages = Math.ceil(totalCount / pageSize);
+
+  const debouncedDelay = 1000;
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -80,26 +82,28 @@ export default function DataTable<T>({
     onPaginationChange(1);
   }, []);
 
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce((query: string) => {
+        onSearchChange(query);
+        onPaginationChange(1);
+      }, debouncedDelay),
+    [onSearchChange, onPaginationChange],
+  );
+
   const topContent = React.useMemo(() => {
     return (
       <>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 items-end">
             <Input
-              ref={searchInputRef}
               isClearable
               className="w-full sm:max-w-[44%]"
               color="default"
               placeholder={`Search by ${searchKey}`}
               startContent={<SearchIcon />}
-              // value={searchFilter}
               onClear={() => onClear()}
-              onValueChange={() => {
-                debounce(
-                  () => onSearchChange(searchInputRef.current?.value!),
-                  1000,
-                )();
-              }}
+              onValueChange={debouncedSearch}
             />
             {isAbleToAddRecord && (
               <div className="flex gap-3">
@@ -111,13 +115,13 @@ export default function DataTable<T>({
           </div>
 
           <div className="flex justify-between items-center">
-            <span className="text-default-400 text-small">
-              Total {totalCount} users
+            <span className="text-default-500 text-small">
+              Total {totalCount} {tableName ?? "Items"}
             </span>
-            <label className="flex items-center text-default-400 text-small">
+            <label className="flex items-center text-default-500 text-small">
               Rows per page:
               <select
-                className="bg-transparent outline-none text-default-400 text-small"
+                className="bg-transparent outline-none text-default-500 text-small"
                 onChange={(e) => {
                   onRowsPerPageChange(Number(e.target.value));
                 }}
@@ -143,14 +147,16 @@ export default function DataTable<T>({
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400" />
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          page={page}
-          total={pages}
-          onChange={onPaginationChange}
-        />
+        {data.length > 0 && (
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            page={page}
+            total={pages}
+            onChange={onPaginationChange}
+          />
+        )}
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
             isDisabled={pages === 1}
@@ -176,16 +182,17 @@ export default function DataTable<T>({
   return (
     <Table
       isHeaderSticky
-      aria-label="Example table with custom cells, pagination and sorting"
+      aria-label={`Table for ${tableName}`}
       bottomContent={!isLoading && bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px] bg-background",
+        wrapper: "max-h-[382px] bg-background border border-default-300",
       }}
+      shadow="none"
       topContent={topContent}
       topContentPlacement="outside"
     >
-      <TableHeader className="bg-secondary-100" columns={columns}>
+      <TableHeader className="bg-secondary-100 " columns={columns}>
         {(column) => (
           <TableColumn
             key={column.uid}

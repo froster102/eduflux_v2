@@ -55,11 +55,14 @@ export class MongooseEnrollmentRepositoryAdapter
     };
   }
 
-  async findEnrollmentWithUserAndInstructorId(
-    userId: string,
+  async findEnrollmentWithLearnerAndInstructorId(
+    learnerId: string,
     instructorId: string,
   ): Promise<Enrollment | null> {
-    const enrollment = await EnrollmentModel.findOne({ userId, instructorId });
+    const enrollment = await EnrollmentModel.findOne({
+      learnerId,
+      instructorId,
+    });
     return enrollment
       ? MongooseEnrollmentMapper.toDomainEntity(enrollment)
       : null;

@@ -21,12 +21,26 @@ declare global {
     };
   };
 
-  export type GetInstructorsResult = {
-    instructors: Instructor[];
-    pagination: Pagination;
+  export type InstructorStats = {
+    id: string;
+    sessionsConducted: number;
+    totalCourses: number;
+    totalLearners: number;
+    isSessionEnabled: boolean;
   };
 
-  export type GetInstructorsQueryParameters = {} & QueryParmeters;
+  export type GetInstructorsResult = JsonApiResponse<Instructor[]> & {
+    meta: Pagination;
+  };
+
+  export type GetInstructorsQueryParameters = {} & PaginationQueryParameters;
+
+  export type AvailabilitySlotQueryParameters = {
+    filter: {
+      date: string;
+      timeZone: string;
+    };
+  };
 }
 
 export {};

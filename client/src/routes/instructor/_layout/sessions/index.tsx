@@ -26,8 +26,12 @@ function RouteComponent() {
   const [page, setPage] = React.useState(1);
   const navigate = useNavigate();
   const { data: sessionsQueryResult } = useGetUserSessions({
-    page,
-    preferedRole: Role.INSTRUCTOR,
+    page: {
+      number: page,
+    },
+    filter: {
+      preferedRole: Role.INSTRUCTOR,
+    },
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,7 +42,7 @@ function RouteComponent() {
   const updateSessionSettings = useUpdateSessionSettings();
   const enableSessions = useEnableSessions();
 
-  const isEnabled = !!sessionSettings?.settings;
+  const isEnabled = !!sessionSettings?.data.settings;
 
   const handleEnableSessions = (data: SessionSettingsFormData) => {
     enableSessions.mutate(data, {
@@ -122,7 +126,7 @@ function RouteComponent() {
         </Tooltip>
 
         {sessionsQueryResult &&
-          sessionsQueryResult.sessions.map((session) => (
+          sessionsQueryResult.data.map((session) => (
             <SessionCard
               key={session.id}
               role={Role.INSTRUCTOR}
@@ -130,16 +134,15 @@ function RouteComponent() {
               onJoin={handlerJoinSession}
             />
           ))}
-        {sessionsQueryResult &&
-          sessionsQueryResult.pagination.totalPages > 1 && (
-            <div className="pt-4 flex w-full justify-center">
-              <PaginationWithNextAndPrevious
-                currentPage={sessionsQueryResult.pagination.currentPage}
-                totalPages={sessionsQueryResult.pagination.totalPages}
-                onPageChange={setPage}
-              />
-            </div>
-          )}
+        {sessionsQueryResult && sessionsQueryResult.meta.totalPages > 1 && (
+          <div className="pt-4 flex w-full justify-center">
+            <PaginationWithNextAndPrevious
+              currentPage={sessionsQueryResult.meta.pageNumber}
+              totalPages={sessionsQueryResult.meta.totalPages}
+              onPageChange={setPage}
+            />
+          </div>
+        )}
       </div>
 
       <FormModal
@@ -148,7 +151,7 @@ function RouteComponent() {
             classNames={{
               gridLayout: "grid md:grid-cols-1 xl:grid-cols-2",
             }}
-            initialValue={sessionSettings.settings}
+            initialValue={sessionSettings.data.settings}
             isPending={updateSessionSettings.isPending}
             submitText="Update Settings"
             onCancel={onClose}

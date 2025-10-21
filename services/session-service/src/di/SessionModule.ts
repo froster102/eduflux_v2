@@ -4,7 +4,7 @@ import { BookSessionService } from '@core/application/session/service/usecase/Bo
 import type { BookSessionUseCase } from '@core/application/session/usecase/BookSessionUseCase';
 import { MongooseSessionRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/session/MongooseSessionRepositoryAdapter';
 import { ContainerModule } from 'inversify';
-import { SessionController } from '@api/http-rest/controller/SessionController';
+import { SessionController } from '@api/http/controller/SessionController';
 import type { HandleExpiredPendingPaymentsUseCase } from '@core/application/session/usecase/HandleExpiredPendingPaymentsUseCase';
 import { HandleExpiredPendingPaymentsService } from '@core/application/session/service/usecase/HandleExpiredPendingPaymentsService';
 import type { JoinSessionUseCase } from '@core/application/session/usecase/JoinSessionUseCase';

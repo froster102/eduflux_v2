@@ -10,6 +10,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.7.15",
+    "@types/nodemailer": "^7.0.2",
     "dotenv": "^17.2.2",
     "elysia": "latest",
     "http-status": "^2.1.0",
@@ -17,6 +18,7 @@
     "jose": "^6.0.11",
     "kafkajs": "^2.2.4",
     "nanoid": "^5.1.5",
+    "nodemailer": "^7.0.9",
     "reflect-metadata": "^0.2.2",
     "uuid": "^13.0.0",
     "winston": "^3.17.0",
