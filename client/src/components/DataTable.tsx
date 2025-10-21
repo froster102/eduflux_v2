@@ -61,9 +61,9 @@ export default function DataTable<T>({
   addButtonText,
   onRecordAdd,
 }: DataTableProps<T>) {
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-
   const pages = Math.ceil(totalCount / pageSize);
+
+  const debouncedDelay = 1000;
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -82,25 +82,28 @@ export default function DataTable<T>({
     onPaginationChange(1);
   }, []);
 
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce((query: string) => {
+        onSearchChange(query);
+        onPaginationChange(1);
+      }, debouncedDelay),
+    [onSearchChange, onPaginationChange],
+  );
+
   const topContent = React.useMemo(() => {
     return (
       <>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 items-end">
             <Input
-              ref={searchInputRef}
               isClearable
               className="w-full sm:max-w-[44%]"
               color="default"
               placeholder={`Search by ${searchKey}`}
               startContent={<SearchIcon />}
               onClear={() => onClear()}
-              onValueChange={() => {
-                debounce(
-                  () => onSearchChange(searchInputRef.current?.value!),
-                  2000,
-                )();
-              }}
+              onValueChange={debouncedSearch}
             />
             {isAbleToAddRecord && (
               <div className="flex gap-3">
