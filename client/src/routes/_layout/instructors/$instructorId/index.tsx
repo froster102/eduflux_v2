@@ -46,8 +46,12 @@ function RouteComponent() {
   const { data: availableSlots, isPending: isAvailableSlotsLoading } =
     useGetInstructorAvailableSlots({
       instructorId,
-      date: selectedDate,
-      timeZone: getLocalTimeZone(),
+      queryParams: {
+        filter: {
+          date: selectedDate,
+          timeZone: getLocalTimeZone(),
+        },
+      },
     });
   const {
     data: existingChat,

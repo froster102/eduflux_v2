@@ -10,6 +10,7 @@ import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
 import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
 import type { SessionConfimedEvent } from '@core/domain/session/events/SessionConfirmedEvent';
 import type { SessionPaymentSuccessfullEvent } from '@core/domain/session/events/SessionPaymentSuccessfullEvent';
+import { envVariables } from '@shared/env/envVariables';
 import { inject } from 'inversify';
 
 export class SessionPaymentSuccessfullEventHandlerService
@@ -55,7 +56,8 @@ export class SessionPaymentSuccessfullEventHandlerService
       status: session.status,
       startTime: session.startTime.toISOString(),
       endTime: session.endTime.toISOString(),
-      path: `/sessions/${session.id}`,
+      path: `${envVariables.SESSION_PAGE_PATH}`,
+      joinLink: `${envVariables.JOIN_SESSION_PAGE_URL}/${session.id}`,
       occuredAt: new Date().toISOString(),
     };
     await this.eventBus.sendEvent(sessionConfirmedEvent);

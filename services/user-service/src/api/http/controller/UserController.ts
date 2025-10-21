@@ -20,6 +20,8 @@ import { paginationSchema } from '@api/http/validators/paginationSchema';
 import { getSubscribedCoursesSchema } from '@api/http/validators/getSubscribedCoursesSchema';
 import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
 import { calculateOffset } from '@shared/utils/helper';
+import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
+import type { GetInstructorUseCase } from '@core/application/instructor/usecase/GetInstructorUseCase';
 
 export class UserController {
   constructor(
@@ -37,6 +39,8 @@ export class UserController {
     private readonly getSubscribedCourseViewsUseCase: GetSubscribedCourseViewsUseCase,
     @inject(TaughtCourseViewDITokens.GetTaughtCourseViewUseCase)
     private readonly getTaughtCourseViewUseCase: GetTaughtCourseViewsUseCase,
+    @inject(InstructorDITokens.GetInstructorUseCase)
+    private readonly getInstructorUseCase: GetInstructorUseCase,
   ) {}
 
   register(): Elysia {
@@ -89,6 +93,12 @@ export class UserController {
             pageSize: parsedQuery.page.size,
             totalCount,
           });
+        })
+        .get('/instructors/me/stats', async ({ user }) => {
+          const instructor = await this.getInstructorUseCase.execute({
+            instructorId: user.id,
+          });
+          return jsonApiResponse({ data: instructor });
         })
         .get('/instructors/:id', async ({ params }) => {
           const instructor = await this.getInstructorViewUseCase.execute({

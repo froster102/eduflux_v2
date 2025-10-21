@@ -13,9 +13,19 @@ export function useMarkNotificationAsSeen() {
 
       const previousNotifications = queryClient.getQueryData([`notifications`]);
 
-      queryClient.setQueryData(["notifications"], (old: AppNotification[]) => {
-        return old.filter((notification) => notification.id !== notificationId);
-      });
+      queryClient.setQueryData(
+        ["notifications"],
+        (
+          old: JsonApiResponse<AppNotification[]>,
+        ): JsonApiResponse<AppNotification[]> => {
+          return {
+            ...old,
+            data: old.data.filter(
+              (notification) => notification.id !== notificationId,
+            ),
+          };
+        },
+      );
 
       return { previousNotifications };
     },

@@ -3,7 +3,7 @@ import { Skeleton } from "@heroui/skeleton";
 
 import { getGreeting } from "@/utils/date";
 import { useAuthStore } from "@/store/auth-store";
-import StatisticsCard from "@/components/StatisticsCard";
+import StatisticsCard from "@/components/StatsCard";
 import { useGetLearnerStats } from "@/features/learner/hooks/useGetLearnerStats";
 
 export const Route = createFileRoute("/_layout/home/")({

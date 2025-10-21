@@ -27,13 +27,21 @@ export async function getInstructors(
   return response.data;
 }
 
+export async function getInstructorStats(): Promise<
+  JsonApiResponse<InstructorStats>
+> {
+  const response = await api.get("/users/instructors/me/stats");
+
+  return response.data;
+}
+
 export async function getInstructorAvailableSlots(data: {
   instructorId: string;
-  date: string;
-  timeZone: string;
+  queryParams: AvailabilitySlotQueryParameters;
 }): Promise<JsonApiResponse<AvailableSlots[]>> {
+  const queryString = buildJsonApiQueryString(data.queryParams);
   const response = await api.get(
-    `/sessions/instructors/${data.instructorId}/slots?date=${data.date}&timeZone=${data.timeZone}`,
+    `/sessions/instructors/${data.instructorId}/slots${queryString}`,
   );
 
   return response.data;

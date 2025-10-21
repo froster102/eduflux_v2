@@ -35,6 +35,7 @@ declare global {
     firstName: string;
     lastName: string;
     image: string;
+    email: string;
     bio: string;
     roles: Role[];
     socialLinks: SocialLinks[];

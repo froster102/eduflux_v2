@@ -1,5 +1,7 @@
 import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
 import type { SessionConfirmedEventHandler } from "@core/application/notification/handler/SessionConfirmedEventHandler";
+import type { EmailServicePort } from "@core/application/notification/port/gateway/EmailServicePort";
+import type { TemplateServicePort } from "@core/application/notification/port/gateway/TemplateServicePort";
 import type { UserServicePort } from "@core/application/notification/port/gateway/UserServicePort";
 import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
 import { NotificationUseCaseDto } from "@core/application/notification/usecase/dto/NotificationUseCaseDto";
@@ -21,10 +23,14 @@ export class SessionConfirmedEventHandlerService
     private readonly notificationRepository: NotificationRepositoryPort,
     @inject(CoreDITokens.UserService)
     private readonly userService: UserServicePort,
+    @inject(CoreDITokens.TemplateService)
+    private readonly templateService: TemplateServicePort,
+    @inject(CoreDITokens.EmailService)
+    private readonly emailService: EmailServicePort,
   ) {}
 
   async handle(event: SessionConfimedEvent): Promise<void> {
-    const { instructorId, learnerId, path } = event;
+    const { instructorId, learnerId, path, joinLink, startTime } = event;
 
     const instructor = await this.userService.getUser(instructorId);
     const learner = await this.userService.getUser(learnerId);
@@ -33,6 +39,10 @@ export class SessionConfirmedEventHandlerService
     const instructorName = `${instructor.firstName} ${instructor.lastName}`;
     const learnerName = `${learner.firstName} ${learner.lastName}`;
     const status = NotificationStatus.UNSEEN;
+
+    const unsubscribeLink = ``;
+    const privacyLink = ``;
+    const sessionTitle = `Session with instructor ${instructorName}`;
 
     const learnerNotification = Notification.create({
       id: uuidV4(),
@@ -53,6 +63,37 @@ export class SessionConfirmedEventHandlerService
       type: ServerEvents.USER_NOTIFICATON,
     };
     eventEmitter.emit(ServerEvents.USER_NOTIFICATON, learnerEventPayload);
+
+    const formattedDate = new Date(startTime).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    const formattedTime = new Date(startTime).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+
+    const learnerEmailData = {
+      userName: learner.firstName,
+      message: `Great news! Your session with instructor "${instructorName}" has been confirmed. We're excited to have you join us for this interactive learning experience.`,
+      sessionDate: formattedDate,
+      sessionTime: formattedTime,
+      instructorName,
+      joinLink,
+      unsubscribeLink,
+      privacyLink,
+    };
+    const learnerEmailHtml = this.templateService.render(
+      "session-confirmed",
+      learnerEmailData,
+    );
+    await this.emailService.sendEmail({
+      to: learner.email,
+      subject: `Session Confirmed: ${sessionTitle}`,
+      html: learnerEmailHtml,
+    });
 
     const instructorNotification = Notification.create({
       id: uuidV4(),

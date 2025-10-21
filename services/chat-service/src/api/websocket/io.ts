@@ -97,7 +97,7 @@ export class SocketIOServer {
 
   setupSocketListeners() {
     this.io.on(WebSocketEvents.CONNECTION, (socket) => {
-      console.log("A user connected:", socket.id);
+      this.logger.debug(`A user connected: ${socket.id}`);
 
       this.onlineUsers.set(socket.data.user.id, socket.id);
 
@@ -243,7 +243,7 @@ export class SocketIOServer {
       );
 
       socket.on(WebSocketEvents.DISCONNECT, () => {
-        console.log("User disconnected:", socket.id);
+        this.logger.debug(`User disconnected: ${socket.id}`);
       });
     });
   }

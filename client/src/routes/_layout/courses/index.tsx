@@ -93,7 +93,9 @@ function RouteComponent() {
                   currentPage={page}
                   totalPages={totalPages}
                   type="my-courses"
-                  onCoursePress={() => {}}
+                  onCoursePress={(course) => {
+                    navigate({ to: `/courses/${course.id}/learn` });
+                  }}
                   onPageChange={(page) => setPage(page)}
                 />
               )}

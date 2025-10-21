@@ -59,6 +59,8 @@ export function buildJsonApiQueryString(params: Record<string, any>): string {
       urlSearchParams.append("page[number]", String(params.page.number));
     if (params.page.size !== undefined)
       urlSearchParams.append("page[size]", String(params.page.size));
+    if (params.page.cursor)
+      urlSearchParams.append("page[cursor]", String(params.page.cursor));
   }
 
   if (params.sort) {
