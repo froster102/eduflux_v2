@@ -3,6 +3,7 @@ import {
   emailOTPClient,
   inferAdditionalFields,
   jwtClient,
+  adminClient,
 } from "better-auth/client/plugins";
 
 export const auth = createAuthClient({
@@ -18,6 +19,7 @@ export const auth = createAuthClient({
     }),
     emailOTPClient(),
     jwtClient(),
+    adminClient(),
   ],
 });
 

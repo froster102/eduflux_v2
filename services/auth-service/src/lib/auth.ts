@@ -2,7 +2,7 @@ import { betterAuth, BetterAuthError, type User } from 'better-auth';
 import { createAuthMiddleware, APIError } from 'better-auth/api';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import * as schema from '@/database/schema';
-import { emailOTP, jwt, getJwtToken } from 'better-auth/plugins';
+import { emailOTP, jwt, getJwtToken, admin } from 'better-auth/plugins';
 import { betterAuthConfig } from '@/shared/config/better-auth.config';
 import { googleOAuthConfig } from '@/shared/config/googleOAuth.config';
 import { addRole } from './plugins/add-role';
@@ -203,5 +203,6 @@ export const auth = betterAuth({
       },
     }),
     addRole(),
+    admin(),
   ],
 });

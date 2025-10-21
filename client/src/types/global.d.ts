@@ -1,4 +1,7 @@
 import { SVGProps } from "react";
+import { UserWithRole } from "better-auth/plugins/admin";
+
+import { Role } from "@/shared/enums/Role";
 
 declare global {
   export type IconSvgProps = SVGProps<SVGSVGElement> & {
@@ -96,6 +99,12 @@ declare global {
       next?: string;
       prev?: string | null;
     };
+  }
+
+  export type UserTableAction = "view" | "ban" | "unban";
+
+  export interface ExtendedUser extends UserWithRole {
+    roles: Role[];
   }
 }
 

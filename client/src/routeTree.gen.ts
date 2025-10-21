@@ -21,8 +21,10 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-password'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as InstructorLayoutRouteRouteImport } from './routes/instructor/_layout/route'
+import { Route as AdminLayoutRouteRouteImport } from './routes/admin/_layout/route'
 import { Route as MeetingsMeetingsIdIndexRouteImport } from './routes/meetings/$meetingsId/index'
 import { Route as InstructorLayoutIndexRouteImport } from './routes/instructor/_layout/index'
+import { Route as AdminLayoutIndexRouteImport } from './routes/admin/_layout/index'
 import { Route as LayoutSettingsIndexRouteImport } from './routes/_layout/settings/index'
 import { Route as LayoutSessionsIndexRouteImport } from './routes/_layout/sessions/index'
 import { Route as LayoutInstructorsIndexRouteImport } from './routes/_layout/instructors/index'
@@ -30,6 +32,9 @@ import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index
 import { Route as LayoutCoursesIndexRouteImport } from './routes/_layout/courses/index'
 import { Route as LayoutChatsIndexRouteImport } from './routes/_layout/chats/index'
 import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
+import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/users'
+import { Route as AdminLayoutPaymentsRouteImport } from './routes/admin/_layout/payments'
+import { Route as AdminLayoutCoursesRouteImport } from './routes/admin/_layout/courses'
 import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
 import { Route as InstructorLayoutPaymentsIndexRouteImport } from './routes/instructor/_layout/payments/index'
 import { Route as InstructorLayoutCoursesIndexRouteImport } from './routes/instructor/_layout/courses/index'
@@ -40,10 +45,16 @@ import { Route as LayoutCoursesCourseIdLearnIndexRouteImport } from './routes/_l
 import { Route as InstructorLayoutCoursesCourseIdManageRouteImport } from './routes/instructor/_layout/courses/$courseId/manage'
 
 const InstructorRouteImport = createFileRoute('/instructor')()
+const AdminRouteImport = createFileRoute('/admin')()
 
 const InstructorRoute = InstructorRouteImport.update({
   id: '/instructor',
   path: '/instructor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -94,6 +105,10 @@ const InstructorLayoutRouteRoute = InstructorLayoutRouteRouteImport.update({
   id: '/_layout',
   getParentRoute: () => InstructorRoute,
 } as any)
+const AdminLayoutRouteRoute = AdminLayoutRouteRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => AdminRoute,
+} as any)
 const MeetingsMeetingsIdIndexRoute = MeetingsMeetingsIdIndexRouteImport.update({
   id: '/meetings/$meetingsId/',
   path: '/meetings/$meetingsId/',
@@ -103,6 +118,11 @@ const InstructorLayoutIndexRoute = InstructorLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => InstructorLayoutRouteRoute,
+} as any)
+const AdminLayoutIndexRoute = AdminLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminLayoutRouteRoute,
 } as any)
 const LayoutSettingsIndexRoute = LayoutSettingsIndexRouteImport.update({
   id: '/settings/',
@@ -138,6 +158,21 @@ const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
   id: '/google/callback',
   path: '/google/callback',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const AdminLayoutUsersRoute = AdminLayoutUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminLayoutRouteRoute,
+} as any)
+const AdminLayoutPaymentsRoute = AdminLayoutPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminLayoutRouteRoute,
+} as any)
+const AdminLayoutCoursesRoute = AdminLayoutCoursesRouteImport.update({
+  id: '/courses',
+  path: '/courses',
+  getParentRoute: () => AdminLayoutRouteRoute,
 } as any)
 const InstructorLayoutSessionsIndexRoute =
   InstructorLayoutSessionsIndexRouteImport.update({
@@ -191,6 +226,7 @@ const InstructorLayoutCoursesCourseIdManageRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin': typeof AdminLayoutRouteRouteWithChildren
   '/instructor': typeof InstructorLayoutRouteRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
@@ -198,6 +234,9 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/admin/courses': typeof AdminLayoutCoursesRoute
+  '/admin/payments': typeof AdminLayoutPaymentsRoute
+  '/admin/users': typeof AdminLayoutUsersRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/chats': typeof LayoutChatsIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
@@ -205,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/instructors': typeof LayoutInstructorsIndexRoute
   '/sessions': typeof LayoutSessionsIndexRoute
   '/settings': typeof LayoutSettingsIndexRoute
+  '/admin/': typeof AdminLayoutIndexRoute
   '/instructor/': typeof InstructorLayoutIndexRoute
   '/meetings/$meetingsId': typeof MeetingsMeetingsIdIndexRoute
   '/courses/$courseId': typeof LayoutCoursesCourseIdIndexRoute
@@ -218,6 +258,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminLayoutIndexRoute
   '/instructor': typeof InstructorLayoutIndexRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
@@ -225,6 +266,9 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
+  '/admin/courses': typeof AdminLayoutCoursesRoute
+  '/admin/payments': typeof AdminLayoutPaymentsRoute
+  '/admin/users': typeof AdminLayoutUsersRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/chats': typeof LayoutChatsIndexRoute
   '/courses': typeof LayoutCoursesIndexRoute
@@ -247,6 +291,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/_layout': typeof AdminLayoutRouteRouteWithChildren
   '/instructor': typeof InstructorRouteWithChildren
   '/instructor/_layout': typeof InstructorLayoutRouteRouteWithChildren
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -255,6 +301,9 @@ export interface FileRoutesById {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
+  '/admin/_layout/courses': typeof AdminLayoutCoursesRoute
+  '/admin/_layout/payments': typeof AdminLayoutPaymentsRoute
+  '/admin/_layout/users': typeof AdminLayoutUsersRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/_layout/chats/': typeof LayoutChatsIndexRoute
   '/_layout/courses/': typeof LayoutCoursesIndexRoute
@@ -262,6 +311,7 @@ export interface FileRoutesById {
   '/_layout/instructors/': typeof LayoutInstructorsIndexRoute
   '/_layout/sessions/': typeof LayoutSessionsIndexRoute
   '/_layout/settings/': typeof LayoutSettingsIndexRoute
+  '/admin/_layout/': typeof AdminLayoutIndexRoute
   '/instructor/_layout/': typeof InstructorLayoutIndexRoute
   '/meetings/$meetingsId/': typeof MeetingsMeetingsIdIndexRoute
   '/_layout/courses/$courseId/': typeof LayoutCoursesCourseIdIndexRoute
@@ -278,6 +328,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/admin'
     | '/instructor'
     | '/auth/forgot-password'
     | '/auth/reset-password'
@@ -285,6 +336,9 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/admin/courses'
+    | '/admin/payments'
+    | '/admin/users'
     | '/auth/google/callback'
     | '/chats'
     | '/courses'
@@ -292,6 +346,7 @@ export interface FileRouteTypes {
     | '/instructors'
     | '/sessions'
     | '/settings'
+    | '/admin/'
     | '/instructor/'
     | '/meetings/$meetingsId'
     | '/courses/$courseId'
@@ -305,6 +360,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/instructor'
     | '/auth/forgot-password'
     | '/auth/reset-password'
@@ -312,6 +368,9 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth'
+    | '/admin/courses'
+    | '/admin/payments'
+    | '/admin/users'
     | '/auth/google/callback'
     | '/chats'
     | '/courses'
@@ -333,6 +392,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_layout'
     | '/auth'
+    | '/admin'
+    | '/admin/_layout'
     | '/instructor'
     | '/instructor/_layout'
     | '/auth/forgot-password'
@@ -341,6 +402,9 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/auth/verify'
     | '/auth/'
+    | '/admin/_layout/courses'
+    | '/admin/_layout/payments'
+    | '/admin/_layout/users'
     | '/auth/google/callback'
     | '/_layout/chats/'
     | '/_layout/courses/'
@@ -348,6 +412,7 @@ export interface FileRouteTypes {
     | '/_layout/instructors/'
     | '/_layout/sessions/'
     | '/_layout/settings/'
+    | '/admin/_layout/'
     | '/instructor/_layout/'
     | '/meetings/$meetingsId/'
     | '/_layout/courses/$courseId/'
@@ -364,6 +429,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LayoutRouteRoute: typeof LayoutRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  AdminRoute: typeof AdminRouteWithChildren
   InstructorRoute: typeof InstructorRouteWithChildren
   MeetingsMeetingsIdIndexRoute: typeof MeetingsMeetingsIdIndexRoute
 }
@@ -375,6 +441,13 @@ declare module '@tanstack/react-router' {
       path: '/instructor'
       fullPath: '/instructor'
       preLoaderRoute: typeof InstructorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -447,6 +520,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstructorLayoutRouteRouteImport
       parentRoute: typeof InstructorRoute
     }
+    '/admin/_layout': {
+      id: '/admin/_layout'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminLayoutRouteRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/meetings/$meetingsId/': {
       id: '/meetings/$meetingsId/'
       path: '/meetings/$meetingsId'
@@ -460,6 +540,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/instructor/'
       preLoaderRoute: typeof InstructorLayoutIndexRouteImport
       parentRoute: typeof InstructorLayoutRouteRoute
+    }
+    '/admin/_layout/': {
+      id: '/admin/_layout/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminLayoutIndexRouteImport
+      parentRoute: typeof AdminLayoutRouteRoute
     }
     '/_layout/settings/': {
       id: '/_layout/settings/'
@@ -509,6 +596,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/google/callback'
       preLoaderRoute: typeof AuthGoogleCallbackRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/admin/_layout/users': {
+      id: '/admin/_layout/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminLayoutUsersRouteImport
+      parentRoute: typeof AdminLayoutRouteRoute
+    }
+    '/admin/_layout/payments': {
+      id: '/admin/_layout/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminLayoutPaymentsRouteImport
+      parentRoute: typeof AdminLayoutRouteRoute
+    }
+    '/admin/_layout/courses': {
+      id: '/admin/_layout/courses'
+      path: '/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AdminLayoutCoursesRouteImport
+      parentRoute: typeof AdminLayoutRouteRoute
     }
     '/instructor/_layout/sessions/': {
       id: '/instructor/_layout/sessions/'
@@ -622,6 +730,33 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface AdminLayoutRouteRouteChildren {
+  AdminLayoutCoursesRoute: typeof AdminLayoutCoursesRoute
+  AdminLayoutPaymentsRoute: typeof AdminLayoutPaymentsRoute
+  AdminLayoutUsersRoute: typeof AdminLayoutUsersRoute
+  AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
+}
+
+const AdminLayoutRouteRouteChildren: AdminLayoutRouteRouteChildren = {
+  AdminLayoutCoursesRoute: AdminLayoutCoursesRoute,
+  AdminLayoutPaymentsRoute: AdminLayoutPaymentsRoute,
+  AdminLayoutUsersRoute: AdminLayoutUsersRoute,
+  AdminLayoutIndexRoute: AdminLayoutIndexRoute,
+}
+
+const AdminLayoutRouteRouteWithChildren =
+  AdminLayoutRouteRoute._addFileChildren(AdminLayoutRouteRouteChildren)
+
+interface AdminRouteChildren {
+  AdminLayoutRouteRoute: typeof AdminLayoutRouteRouteWithChildren
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLayoutRouteRoute: AdminLayoutRouteRouteWithChildren,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface InstructorLayoutRouteRouteChildren {
   InstructorLayoutIndexRoute: typeof InstructorLayoutIndexRoute
   InstructorLayoutChatsIndexRoute: typeof InstructorLayoutChatsIndexRoute
@@ -662,6 +797,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRouteRoute: LayoutRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  AdminRoute: AdminRouteWithChildren,
   InstructorRoute: InstructorRouteWithChildren,
   MeetingsMeetingsIdIndexRoute: MeetingsMeetingsIdIndexRoute,
 }
