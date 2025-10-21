@@ -69,14 +69,15 @@ function RouteComponent() {
           page={page}
           pageSize={pageSize}
           payments={instructorPayments?.data.payments ?? []}
+          searchValue={paymentSummaryFilters?.referenceId ?? ""}
           setPage={setPage}
           setPageSize={setPageSize}
-          setSearchFilter={(value) =>
+          onSearchValueChange={(value) => {
             setInstructorPaymentFilters((prev) => ({
               ...prev,
               filter: { ...prev.filter, referenceId: value },
-            }))
-          }
+            }));
+          }}
         />
       </div>
     </div>

@@ -37,8 +37,7 @@ interface DataTableProps<T> {
   page: number;
   pageSize: number;
   totalCount: number;
-  searchFilter: string;
-  onSearchChange: (query: string) => void;
+  onSeachValueChange: (query: string) => void;
   onPaginationChange: (page: number) => void;
   onRowsPerPageChange: (rowsPerPage: number) => void;
 }
@@ -51,9 +50,8 @@ export default function DataTable<T>({
   page,
   pageSize,
   totalCount,
-  searchFilter,
   searchKey,
-  onSearchChange,
+  onSeachValueChange,
   onPaginationChange,
   onRowsPerPageChange,
   tableName,
@@ -78,17 +76,17 @@ export default function DataTable<T>({
   }, [page, pages]);
 
   const onClear = React.useCallback(() => {
-    onSearchChange("");
+    onSeachValueChange("");
     onPaginationChange(1);
   }, []);
 
   const debouncedSearch = React.useMemo(
     () =>
       debounce((query: string) => {
-        onSearchChange(query);
+        onSeachValueChange(query);
         onPaginationChange(1);
       }, debouncedDelay),
-    [onSearchChange, onPaginationChange],
+    [onSeachValueChange, onPaginationChange],
   );
 
   const topContent = React.useMemo(() => {
@@ -135,13 +133,7 @@ export default function DataTable<T>({
         </div>
       </>
     );
-  }, [
-    searchFilter,
-    onSearchChange,
-    onRowsPerPageChange,
-    data.length,
-    pageSize,
-  ]);
+  }, [onSeachValueChange, onRowsPerPageChange, data.length, pageSize]);
 
   const bottomContent = React.useMemo(() => {
     return (

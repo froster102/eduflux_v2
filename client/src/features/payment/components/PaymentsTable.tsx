@@ -14,14 +14,15 @@ const PaymentStatusColorMap: Record<
   refunded: "secondary",
 };
 
-interface Props {
+interface PaymentsTableProps {
   payments: Payment[];
   isLoading: boolean;
   page: number;
   pageSize: number;
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
-  setSearchFilter: (value: string) => void;
+  searchValue: string;
+  onSearchValueChange: (value: string) => void;
 }
 
 export default function PaymentsTable({
@@ -31,8 +32,8 @@ export default function PaymentsTable({
   pageSize,
   setPage,
   setPageSize,
-  setSearchFilter,
-}: Props) {
+  onSearchValueChange,
+}: PaymentsTableProps) {
   const PaymentTypeMap: Record<PaymentType, string> = {
     course_purchase: "Course Purchase",
     session_booking: "Session Booking",
@@ -81,7 +82,6 @@ export default function PaymentsTable({
       page={page}
       pageSize={pageSize}
       renderCell={renderCell}
-      searchFilter=""
       searchKey="referenceId"
       tableName="Payments"
       totalCount={payments.length}
@@ -90,7 +90,7 @@ export default function PaymentsTable({
         setPageSize(rows);
         setPage(1);
       }}
-      onSearchChange={setSearchFilter}
+      onSeachValueChange={onSearchValueChange}
     />
   );
 }

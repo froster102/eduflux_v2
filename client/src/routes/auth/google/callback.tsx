@@ -4,6 +4,7 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import ScreenLoader from "@/components/ScreenLoader";
 import { useSession } from "@/lib/better-auth/auth";
 import { useAuthStore } from "@/store/auth-store";
+import { Role } from "@/shared/enums/Role";
 
 export const Route = createFileRoute("/auth/google/callback")({
   component: RouteComponent,
@@ -18,6 +19,7 @@ function RouteComponent() {
     if (data && data.user) {
       setUser({
         ...data.user,
+        roles: data.user.roles as Role[],
         createdAt: data.user.createdAt.toISOString(),
         updatedAt: data.user.updatedAt.toISOString(),
       });
