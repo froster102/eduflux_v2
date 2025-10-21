@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import { useAuthStore } from "@/store/auth-store";
 import { auth } from "@/lib/better-auth/auth";
+import { Role } from "@/shared/enums/Role";
 
 import { signIn } from "../services/auth";
 
@@ -20,7 +21,11 @@ export function useSignIn() {
       setUser(data.user as unknown as User);
 
       navigate({
-        to: redirectTo ?? "/home",
+        to:
+          (redirectTo ??
+          (data.user as unknown as User)?.roles[0] === Role.ADMIN)
+            ? "/admin"
+            : "/home",
       });
     },
 

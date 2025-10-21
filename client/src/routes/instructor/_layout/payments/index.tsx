@@ -69,7 +69,6 @@ function RouteComponent() {
           page={page}
           pageSize={pageSize}
           payments={instructorPayments?.data.payments ?? []}
-          searchValue={paymentSummaryFilters?.referenceId ?? ""}
           setPage={setPage}
           setPageSize={setPageSize}
           onSearchValueChange={(value) => {

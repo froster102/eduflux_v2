@@ -9,6 +9,7 @@ import { Button } from "@heroui/button";
 
 import DataTable from "@/components/DataTable";
 import { VerticalDotsIcon } from "@/components/VerticalDotsIcon";
+import { useAuthStore } from "@/store/auth-store";
 
 const UserStatusColorMap: Record<"active" | "banned", "success" | "danger"> = {
   active: "success",
@@ -22,7 +23,7 @@ interface UserTableProps {
   pageSize: number;
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
-  setSearchFilter: (value: string) => void;
+  onSearchChange: (value: string) => void;
   handleAction: (user: ExtendedUser, action: UserTableAction) => void;
 }
 
@@ -33,9 +34,10 @@ export default function UsersTable({
   pageSize,
   setPage,
   setPageSize,
-  setSearchFilter,
+  onSearchChange,
   handleAction,
 }: UserTableProps) {
+  const { user: authUser } = useAuthStore();
   const columns = [
     { uid: "name", name: "Name", sortable: true },
     { uid: "email", name: "Email", sortable: true },
@@ -48,7 +50,20 @@ export default function UsersTable({
   const renderCell = (user: ExtendedUser, columnKey: string) => {
     switch (columnKey) {
       case "name":
-        return user.name;
+        return (
+          <div className="flex">
+            {user.id === authUser?.id ? (
+              <>
+                <p>{user.name}</p>
+                <Chip className="text-4 p-1" size="sm">
+                  {"self"}
+                </Chip>
+              </>
+            ) : (
+              user.name
+            )}
+          </div>
+        );
       case "email":
         return user.email;
       case "roles":
@@ -73,13 +88,16 @@ export default function UsersTable({
             </DropdownTrigger>
             <DropdownMenu
               aria-label="Actions"
+              disabledKeys={
+                new Set(user.id === authUser!?.id ? ["view", "ban"] : [])
+              }
               variant="flat"
               onAction={(action) => {
                 handleAction(user, action.toString() as UserTableAction);
               }}
             >
               <DropdownItem key="view">View</DropdownItem>
-              <DropdownItem key={user.banned ? "ban" : "unban"}>
+              <DropdownItem key={user.banned ? "unban" : "ban"}>
                 {user.banned ? "Unban" : "Ban"}
               </DropdownItem>
             </DropdownMenu>
@@ -99,7 +117,6 @@ export default function UsersTable({
       page={page}
       pageSize={pageSize}
       renderCell={renderCell}
-      searchFilter=""
       searchKey="name"
       tableName="Users"
       totalCount={users.length}
@@ -108,7 +125,7 @@ export default function UsersTable({
         setPageSize(rows);
         setPage(1);
       }}
-      onSearchChange={setSearchFilter}
+      onSeachValueChange={onSearchChange}
     />
   );
 }

@@ -21,7 +21,6 @@ interface PaymentsTableProps {
   pageSize: number;
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
-  searchValue: string;
   onSearchValueChange: (value: string) => void;
 }
 
