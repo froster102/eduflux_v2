@@ -1,0 +1,15 @@
+{
+  "root": "apps/client",
+  "sourceRoot": "apps/client/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "command": "cd apps/client && bun run dev"
+      }
+    }
+  }
+}
