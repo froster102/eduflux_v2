@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { getNotifications } from "@/features/notification/service/notification";
+import { getNotifications } from '@/features/notification/service/notification';
 
 export function useGetNotifications() {
   return useQuery({
-    queryKey: ["notifications"],
+    queryKey: ['notifications'],
     queryFn: getNotifications,
   });
 }

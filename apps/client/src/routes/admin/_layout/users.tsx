@@ -1,20 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
-import React from "react";
+import { createFileRoute } from '@tanstack/react-router';
+import React from 'react';
 
-import UsersTable from "@/features/admin/components/UsersTable";
-import { useListUsers } from "@/features/admin/hooks/useListUsers";
-import ConfirmationModal from "@/components/ConfirmationModal";
-import { useBanUser } from "@/features/admin/hooks/useBanUser";
-import { useUnbanUser } from "@/features/admin/hooks/useUnbanUser";
+import UsersTable from '@/features/admin/components/UsersTable';
+import { useListUsers } from '@/features/admin/hooks/useListUsers';
+import ConfirmationModal from '@/components/ConfirmationModal';
+import { useBanUser } from '@/features/admin/hooks/useBanUser';
+import { useUnbanUser } from '@/features/admin/hooks/useUnbanUser';
 
-export const Route = createFileRoute("/admin/_layout/users")({
+export const Route = createFileRoute('/admin/_layout/users')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const [listUsersQuery, setListUsersQuery] = React.useState<ListUsersQuery>({
-    searchField: "name",
-    searchOperator: "contains",
+    searchField: 'name',
+    searchOperator: 'contains',
   });
   const { data, isPending } = useListUsers(listUsersQuery);
   const [page, setPage] = React.useState(1);
@@ -22,7 +22,7 @@ function RouteComponent() {
 
   const [openConfirmationModal, setOpenConfirmationModal] =
     React.useState(false);
-  const [modalMessage, setModalMessage] = React.useState("");
+  const [modalMessage, setModalMessage] = React.useState('');
   const [isActionPending, setIsActionPending] = React.useState(false);
 
   const [selectedUser, setSelectedUser] = React.useState<ExtendedUser | null>(
@@ -38,7 +38,7 @@ function RouteComponent() {
     user: ExtendedUser,
     action: UserTableAction,
   ) => {
-    if (action === "view") {
+    if (action === 'view') {
       // console.log("Viewing user:", user);
 
       return;
@@ -48,14 +48,14 @@ function RouteComponent() {
     setSelectedAction(action);
 
     switch (action) {
-      case "ban":
+      case 'ban':
         setModalMessage(`Are you sure you want to ban user ${user.name}?`);
         break;
-      case "unban":
+      case 'unban':
         setModalMessage(`Are you sure you want to unban user ${user.name}?`);
         break;
       default:
-        setModalMessage("Are you sure you want to perform this action?");
+        setModalMessage('Are you sure you want to perform this action?');
     }
 
     setOpenConfirmationModal(true);
@@ -68,10 +68,10 @@ function RouteComponent() {
 
     try {
       switch (selectedAction) {
-        case "ban":
+        case 'ban':
           await banUser.mutateAsync(selectedUser.id);
           break;
-        case "unban":
+        case 'unban':
           await unbanUser.mutateAsync(selectedUser.id);
           break;
       }

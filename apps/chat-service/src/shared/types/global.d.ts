@@ -1,5 +1,5 @@
 declare global {
-  type ClassType = "chapter" | "lecture" | "asset";
+  type ClassType = 'chapter' | 'lecture' | 'asset';
 
   type User = {
     id: string;

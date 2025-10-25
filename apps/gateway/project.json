@@ -1,0 +1,24 @@
+{
+  "root": "apps/gateway",
+  "sourceRoot": "apps/gateway/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "command": "cd apps/gateway && bun run build",
+        "outputPath": "apps/gateway/build"
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "command": "cd apps/gateway && bun run dev"
+      }
+    }
+  }
+}

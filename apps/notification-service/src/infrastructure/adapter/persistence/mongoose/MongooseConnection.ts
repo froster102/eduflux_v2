@@ -1,15 +1,15 @@
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { DatabaseException } from "@infrastructure/exceptions/DatabaseException";
-import { DatabaseConfig } from "@shared/config/DatabaseConfig";
-import { tryCatch } from "@shared/util/try-catch";
-import mongoose from "mongoose";
-import { container } from "src/di/RootModule";
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { DatabaseException } from '@infrastructure/exceptions/DatabaseException';
+import { DatabaseConfig } from '@shared/config/DatabaseConfig';
+import { tryCatch } from '@shared/util/try-catch';
+import mongoose from 'mongoose';
+import { container } from 'src/di/RootModule';
 
 export class MongooseConnection {
   private static readonly logger = container
     .get<LoggerPort>(CoreDITokens.Logger)
-    .fromContext("DATABASE_CLIENT");
+    .fromContext('DATABASE_CLIENT');
 
   static async connect(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison

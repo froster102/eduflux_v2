@@ -1,4 +1,4 @@
-import { Role } from "@/shared/enums/Role";
+import { Role } from '@/shared/enums/Role';
 
 declare global {
   export type SessionSettings = {
@@ -52,7 +52,7 @@ declare global {
     instructorId: string;
     startTime: string;
     endTime: string;
-    status: "BOOKED" | "AVAILABLE";
+    status: 'BOOKED' | 'AVAILABLE';
   };
 
   export type ConnectionDetails = {
@@ -75,7 +75,7 @@ declare global {
       image?: string;
       amount: number;
     };
-    itemType: "session";
+    itemType: 'session';
   }>;
 }
 

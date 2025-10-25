@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableHeader,
@@ -6,13 +6,13 @@ import {
   TableBody,
   TableRow,
   TableCell,
-} from "@heroui/table";
-import { Button } from "@heroui/button";
-import { Pagination } from "@heroui/pagination";
-import { Spinner } from "@heroui/spinner";
-import { PlusIcon, SearchIcon } from "lucide-react";
-import { Input } from "@heroui/input";
-import debounce from "lodash.debounce";
+} from '@heroui/table';
+import { Button } from '@heroui/button';
+import { Pagination } from '@heroui/pagination';
+import { Spinner } from '@heroui/spinner';
+import { PlusIcon, SearchIcon } from 'lucide-react';
+import { Input } from '@heroui/input';
+import debounce from 'lodash.debounce';
 
 interface Column {
   uid: string;
@@ -76,7 +76,7 @@ export default function DataTable<T>({
   }, [page, pages]);
 
   const onClear = React.useCallback(() => {
-    onSeachValueChange("");
+    onSeachValueChange('');
     onPaginationChange(1);
   }, []);
 
@@ -106,7 +106,7 @@ export default function DataTable<T>({
             {isAbleToAddRecord && (
               <div className="flex gap-3">
                 <Button color="primary" onPress={onRecordAdd}>
-                  {addButtonText ? addButtonText : "Add"} <PlusIcon size={16} />{" "}
+                  {addButtonText ? addButtonText : 'Add'} <PlusIcon size={16} />{' '}
                 </Button>
               </div>
             )}
@@ -114,7 +114,7 @@ export default function DataTable<T>({
 
           <div className="flex justify-between items-center">
             <span className="text-default-500 text-small">
-              Total {totalCount} {tableName ?? "Items"}
+              Total {totalCount} {tableName ?? 'Items'}
             </span>
             <label className="flex items-center text-default-500 text-small">
               Rows per page:
@@ -178,7 +178,7 @@ export default function DataTable<T>({
       bottomContent={!isLoading && bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px] bg-background border border-default-300",
+        wrapper: 'max-h-[382px] bg-background border border-default-300',
       }}
       shadow="none"
       topContent={topContent}
@@ -188,14 +188,14 @@ export default function DataTable<T>({
         {(column) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
+            align={column.uid === 'actions' ? 'center' : 'start'}
           >
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
       <TableBody
-        emptyContent={"No items found"}
+        emptyContent={'No items found'}
         isLoading={isLoading}
         items={data}
         loadingContent={<Spinner />}

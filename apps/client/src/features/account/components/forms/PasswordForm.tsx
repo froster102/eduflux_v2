@@ -1,14 +1,14 @@
-import { Divider } from "@heroui/divider";
-import { Input } from "@heroui/input";
-import { Form } from "@heroui/form";
-import { useForm } from "react-hook-form";
-import { Button } from "@heroui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { Divider } from '@heroui/divider';
+import { Input } from '@heroui/input';
+import { Form } from '@heroui/form';
+import { useForm } from 'react-hook-form';
+import { Button } from '@heroui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 
-import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
+import { EyeFilledIcon, EyeSlashFilledIcon } from '@/components/Icons';
 
-import { updatePasswordSchema } from "../schemas/account-schema";
+import { updatePasswordSchema } from '../schemas/account-schema';
 
 export default function PasswordForm({
   onSubmitHandler,
@@ -22,9 +22,9 @@ export default function PasswordForm({
   } = useForm<UpdatePasswordFormData>({
     resolver: zodResolver(updatePasswordSchema),
     defaultValues: {
-      confirmNewPassword: "",
-      currentPassword: "",
-      newPassword: "",
+      confirmNewPassword: '',
+      currentPassword: '',
+      newPassword: '',
     },
   });
   const [passwordVisible, setPasswordVisible] = React.useState<{
@@ -51,7 +51,7 @@ export default function PasswordForm({
       >
         <Input
           radius="sm"
-          {...register("currentPassword")}
+          {...register('currentPassword')}
           color="default"
           endContent={
             <button
@@ -78,11 +78,11 @@ export default function PasswordForm({
           labelPlacement="outside"
           name="currentPassword"
           placeholder="Current Password"
-          type={passwordVisible.currentPassword ? "text" : "password"}
+          type={passwordVisible.currentPassword ? 'text' : 'password'}
         />
         <Input
           radius="sm"
-          {...register("newPassword")}
+          {...register('newPassword')}
           endContent={
             <button
               aria-label="toggle password visibility"
@@ -108,11 +108,11 @@ export default function PasswordForm({
           labelPlacement="outside"
           name="newPassword"
           placeholder="New Password"
-          type={passwordVisible.newPassword ? "text" : "password"}
+          type={passwordVisible.newPassword ? 'text' : 'password'}
         />
         <Input
           radius="sm"
-          {...register("confirmNewPassword")}
+          {...register('confirmNewPassword')}
           endContent={
             <button
               aria-label="toggle password visibility"
@@ -138,7 +138,7 @@ export default function PasswordForm({
           labelPlacement="outside"
           name="confirmNewPassword"
           placeholder="Confirm New Password"
-          type={passwordVisible.confirmNewPassword ? "text" : "password"}
+          type={passwordVisible.confirmNewPassword ? 'text' : 'password'}
         />
         <div className="ml-auto space-x-2">
           {isDirty && (
@@ -169,7 +169,7 @@ export default function PasswordForm({
         <div>
           <p className="font-semibold text-lg">Letters</p>
           <small className="text-zinc-500">
-            Use a number of letters (uppercase or lowercase){" "}
+            Use a number of letters (uppercase or lowercase){' '}
           </small>
         </div>
         <Divider orientation="horizontal" />

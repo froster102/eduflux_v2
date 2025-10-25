@@ -1,4 +1,4 @@
-import { envVariables } from "@shared/env/envVariables";
+import { envVariables } from '@shared/env/envVariables';
 
 export class NodeMailerConfig {
   static readonly SMTP_HOST = envVariables.SMTP_HOST;

@@ -1,9 +1,9 @@
-import { Card, CardBody } from "@heroui/card";
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
-import React from "react";
+import { Card, CardBody } from '@heroui/card';
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
+import React from 'react';
 
-import PlayIcon from "@/components/icons/PlayIcon";
-import HLSPlayer from "@/components/HLSPlayer";
+import PlayIcon from '@/components/icons/PlayIcon';
+import HLSPlayer from '@/components/HLSPlayer';
 
 interface PreviewLectureModalProps {
   lectures: Lecture[];

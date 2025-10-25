@@ -1,16 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Card } from "@heroui/card";
-import { Button } from "@heroui/button";
-import { Badge } from "@heroui/badge";
-import { Skeleton } from "@heroui/skeleton";
+import { createFileRoute } from '@tanstack/react-router';
+import { Card } from '@heroui/card';
+import { Button } from '@heroui/button';
+import { Badge } from '@heroui/badge';
+import { Skeleton } from '@heroui/skeleton';
 
-import StatsCard from "@/components/StatsCard";
-import TaskManager from "@/features/task/components/TaskManager";
-import { useAuthStore } from "@/store/auth-store";
-import UpcomingSessionSection from "@/features/session/components/UpcomingSessionSection";
-import { useGetInstructorStats } from "@/features/instructor/hooks/useGetInstructorStats";
+import StatsCard from '@/components/StatsCard';
+import TaskManager from '@/features/task/components/TaskManager';
+import { useAuthStore } from '@/store/auth-store';
+import UpcomingSessionSection from '@/features/session/components/UpcomingSessionSection';
+import { useGetInstructorStats } from '@/features/instructor/hooks/useGetInstructorStats';
 
-export const Route = createFileRoute("/instructor/_layout/")({
+export const Route = createFileRoute('/instructor/_layout/')({
   component: RouteComponent,
 });
 
@@ -22,51 +22,51 @@ function RouteComponent() {
   const courses = [
     {
       id: 1,
-      title: "Start in Web",
-      views: "14,235",
+      title: 'Start in Web',
+      views: '14,235',
       rating: 4.9,
-      price: "$25",
-      lessons: "24 lessons",
-      hours: "2 hours",
-      level: "Basic",
-      image: "https://via.placeholder.com/200x150?text=Start+in+Web", // Mock image
-      instructor: "Esther Howard",
+      price: '$25',
+      lessons: '24 lessons',
+      hours: '2 hours',
+      level: 'Basic',
+      image: 'https://via.placeholder.com/200x150?text=Start+in+Web', // Mock image
+      instructor: 'Esther Howard',
     },
     {
       id: 2,
-      title: "Figma",
-      views: "14,235",
+      title: 'Figma',
+      views: '14,235',
       rating: 4.8,
-      price: "$25",
-      lessons: "24 lessons",
-      hours: "2 hours",
-      level: "Basic",
-      image: "https://via.placeholder.com/200x150?text=Figma",
-      instructor: "Esther Howard",
+      price: '$25',
+      lessons: '24 lessons',
+      hours: '2 hours',
+      level: 'Basic',
+      image: 'https://via.placeholder.com/200x150?text=Figma',
+      instructor: 'Esther Howard',
     },
     {
       id: 3,
-      title: "Motion",
-      views: "14,235",
+      title: 'Motion',
+      views: '14,235',
       rating: 4.7,
-      price: "$25",
-      lessons: "24 lessons",
-      hours: "2 hours",
-      level: "Motion",
-      image: "https://via.placeholder.com/200x150?text=Motion",
-      instructor: "Esther Howard",
+      price: '$25',
+      lessons: '24 lessons',
+      hours: '2 hours',
+      level: 'Motion',
+      image: 'https://via.placeholder.com/200x150?text=Motion',
+      instructor: 'Esther Howard',
     },
     {
       id: 4,
-      title: "UX",
-      views: "14,235",
+      title: 'UX',
+      views: '14,235',
       rating: 4.6,
-      price: "$25",
-      lessons: "24 lessons",
-      hours: "2 hours",
-      level: "Basic",
-      image: "https://via.placeholder.com/200x150?text=UX",
-      instructor: "Esther Howard",
+      price: '$25',
+      lessons: '24 lessons',
+      hours: '2 hours',
+      level: 'Basic',
+      image: 'https://via.placeholder.com/200x150?text=UX',
+      instructor: 'Esther Howard',
     },
   ];
 
@@ -91,16 +91,16 @@ function RouteComponent() {
             <>
               <StatsCard
                 title="Learners"
-                value={instructorStats.data.totalLearners + ""}
+                value={instructorStats.data.totalLearners + ''}
               />
               <StatsCard
                 title="Courses"
-                value={instructorStats.data.totalCourses + ""}
+                value={instructorStats.data.totalCourses + ''}
               />
               <StatsCard title="Total Earnings" value="$14" />
               <StatsCard
                 title="Sessions Conducted"
-                value={instructorStats.data.sessionsConducted + ""}
+                value={instructorStats.data.sessionsConducted + ''}
               />
             </>
           )

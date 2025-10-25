@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addToast } from "@heroui/toast";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addToast } from '@heroui/toast';
 
-import { updateCourse } from "../services/course";
+import { updateCourse } from '../services/course';
 
 export function useUpdateInstructorCourse() {
   const queryClient = useQueryClient();
@@ -29,9 +29,9 @@ export function useUpdateInstructorCourse() {
 
     onSuccess: () => {
       addToast({
-        title: "Course updation",
-        description: "Course info updated sucessfully.",
-        color: "success",
+        title: 'Course updation',
+        description: 'Course info updated sucessfully.',
+        color: 'success',
       });
     },
 
@@ -41,9 +41,9 @@ export function useUpdateInstructorCourse() {
         context?.previousCourseInfo,
       );
       addToast({
-        title: "Course updation",
-        description: "Failed to update course.",
-        color: "danger",
+        title: 'Course updation',
+        description: 'Failed to update course.',
+        color: 'danger',
       });
     },
   });

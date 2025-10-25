@@ -1,6 +1,6 @@
-import { marked } from "marked";
-import React from "react";
-import ReactMarkdown from "react-markdown";
+import { marked } from 'marked';
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function parseMarkdownIntoBlocks(markdown: string): string[] {
   const tokens = marked.lexer(markdown);
@@ -19,7 +19,7 @@ const MemoizedMarkdownBlock = React.memo(
   },
 );
 
-MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
+MemoizedMarkdownBlock.displayName = 'MemoizedMarkdownBlock';
 
 export const MemoizedMarkdown = React.memo(
   ({ content, id }: { content: string; id: string }) => {
@@ -34,4 +34,4 @@ export const MemoizedMarkdown = React.memo(
   },
 );
 
-MemoizedMarkdown.displayName = "MemoizedMarkdown";
+MemoizedMarkdown.displayName = 'MemoizedMarkdown';

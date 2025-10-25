@@ -1,11 +1,11 @@
-import React from "react";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Divider } from "@heroui/divider";
-import { Button } from "@heroui/button";
+import React from 'react';
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Divider } from '@heroui/divider';
+import { Button } from '@heroui/button';
 
-import { getDeviceName } from "@/utils/helpers";
-import { formatTo12HourWithDate } from "@/utils/date";
-import ConfirmationModal from "@/components/ConfirmationModal";
+import { getDeviceName } from '@/utils/helpers';
+import { formatTo12HourWithDate } from '@/utils/date';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 interface RecentDevicesCardProps {
   sessions: Session[];
@@ -20,8 +20,8 @@ export default function RecentDevicesCard({
     React.useState(false);
 
   const imageMapping: Record<string, any> = {
-    Desktop: "/desktop_device.png",
-    Mobile: "/mobile_device.png",
+    Desktop: '/desktop_device.png',
+    Mobile: '/mobile_device.png',
   };
 
   function handleSessionTermination() {
@@ -55,14 +55,14 @@ export default function RecentDevicesCard({
                           className="h-[32px]"
                           src={
                             imageMapping[
-                              deviceInfo.deviceCategory.split(" ")[0]
+                              deviceInfo.deviceCategory.split(' ')[0]
                             ]
                           }
                         />
                         <div>
                           <p>{deviceInfo.deviceCategory}</p>
                           <p className="text-xs text-zinc-600">
-                            {deviceInfo.browser.name || "unknown"}
+                            {deviceInfo.browser.name || 'unknown'}
                           </p>
                         </div>
                       </div>
@@ -71,7 +71,7 @@ export default function RecentDevicesCard({
                       <div>
                         <p>IP Address: {session.ipAddress}</p>
                         <p>
-                          Created At:{" "}
+                          Created At:{' '}
                           {formatTo12HourWithDate(new Date(session.createdAt))}
                         </p>
                       </div>
@@ -99,7 +99,7 @@ export default function RecentDevicesCard({
       </Card>
       <ConfirmationModal
         isOpen={openConfirmationModal}
-        message={"Are you sure that you want to terminate this session ?"}
+        message={'Are you sure that you want to terminate this session ?'}
         onClose={() => setOpenConfirmationModal(false)}
         onConfirm={handleSessionTermination}
       />

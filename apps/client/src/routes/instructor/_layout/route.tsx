@@ -1,21 +1,21 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
-import HomeIcon from "@/components/icons/HomeIcon";
-import CourseIcon from "@/components/icons/CourseIcon";
-import SessionIcon from "@/components/icons/SessionIcon";
-import MessageIcon from "@/components/icons/MessageIcon";
-import DefaultLayout from "@/layout/DefaultLayout";
-import CashoutIcon from "@/components/icons/CashoutIcon";
-import { useAuthStore } from "@/store/auth-store";
-import { Role } from "@/shared/enums/Role";
+import HomeIcon from '@/components/icons/HomeIcon';
+import CourseIcon from '@/components/icons/CourseIcon';
+import SessionIcon from '@/components/icons/SessionIcon';
+import MessageIcon from '@/components/icons/MessageIcon';
+import DefaultLayout from '@/layout/DefaultLayout';
+import CashoutIcon from '@/components/icons/CashoutIcon';
+import { useAuthStore } from '@/store/auth-store';
+import { Role } from '@/shared/enums/Role';
 
-export const Route = createFileRoute("/instructor/_layout")({
+export const Route = createFileRoute('/instructor/_layout')({
   beforeLoad: ({ location }) => {
     const user = useAuthStore.getState().user;
 
     if (!user || !user.roles.includes(Role.INSTRUCTOR)) {
       throw redirect({
-        to: "/auth/sign-in",
+        to: '/auth/sign-in',
         search: {
           redirect: location.href,
         },
@@ -28,29 +28,29 @@ export const Route = createFileRoute("/instructor/_layout")({
 function Layout() {
   const navItems = [
     {
-      path: "/instructor",
+      path: '/instructor',
       icon: <HomeIcon width={24} />,
-      label: "Home",
+      label: 'Home',
     },
     {
-      path: "/instructor/courses",
+      path: '/instructor/courses',
       icon: <CourseIcon width={24} />,
-      label: "Courses",
+      label: 'Courses',
     },
     {
-      path: "/instructor/sessions",
+      path: '/instructor/sessions',
       icon: <SessionIcon width={24} />,
-      label: "Sessions",
+      label: 'Sessions',
     },
     {
-      path: "/instructor/chats",
+      path: '/instructor/chats',
       icon: <MessageIcon width={24} />,
-      label: "Chats",
+      label: 'Chats',
     },
     {
-      path: "/instructor/payments",
+      path: '/instructor/payments',
       icon: <CashoutIcon width={24} />,
-      label: "Payments",
+      label: 'Payments',
     },
   ];
 

@@ -1,19 +1,19 @@
-import { Input } from "@heroui/input";
-import { Form } from "@heroui/form";
-import { Controller, useForm } from "react-hook-form";
-import { DollarSign } from "lucide-react";
-import { NumberInput } from "@heroui/number-input";
-import { Select, SelectItem } from "@heroui/select";
-import { Button } from "@heroui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { Input } from '@heroui/input';
+import { Form } from '@heroui/form';
+import { Controller, useForm } from 'react-hook-form';
+import { DollarSign } from 'lucide-react';
+import { NumberInput } from '@heroui/number-input';
+import { Select, SelectItem } from '@heroui/select';
+import { Button } from '@heroui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 
-import { updateCourseSchema } from "@/features/course/schemas/course";
-import RichTextEditor from "@/components/text-editor/RichTextEditor";
-import { IMAGE_BASE_URL } from "@/config/image";
-import FileUploader from "@/components/FileUploader";
+import { updateCourseSchema } from '@/features/course/schemas/course';
+import RichTextEditor from '@/components/text-editor/RichTextEditor';
+import { IMAGE_BASE_URL } from '@/config/image';
+import FileUploader from '@/components/FileUploader';
 
-import { useGetCourseCategories } from "../../hooks/useGetCourseCategories";
+import { useGetCourseCategories } from '../../hooks/useGetCourseCategories';
 
 export default function CourseForm({
   onSubmitHandler,
@@ -53,7 +53,7 @@ export default function CourseForm({
     >
       <div className="w-full">
         <Input
-          {...register("title")}
+          {...register('title')}
           errorMessage={errors.title?.message}
           isInvalid={!!errors.title}
           label="Title"
@@ -81,9 +81,9 @@ export default function CourseForm({
                 field.onChange(value.anchorKey);
               }}
             >
-              <SelectItem key={"beginner"}>Beginner</SelectItem>
-              <SelectItem key={"intermediate"}>Intermediate</SelectItem>
-              <SelectItem key={"advanced"}>Advanced</SelectItem>
+              <SelectItem key={'beginner'}>Beginner</SelectItem>
+              <SelectItem key={'intermediate'}>Intermediate</SelectItem>
+              <SelectItem key={'advanced'}>Advanced</SelectItem>
             </Select>
           )}
         />
@@ -96,7 +96,7 @@ export default function CourseForm({
             <>
               <p className="text-sm pb-2">Description</p>
               <RichTextEditor
-                value={field.value ?? ""}
+                value={field.value ?? ''}
                 onValueChange={field.onChange}
               />
               {errors.description && (
@@ -163,7 +163,7 @@ export default function CourseForm({
         <p className="text-sm pb-2">Thumbnail</p>
         <Controller
           control={control}
-          name={"thumbnail"}
+          name={'thumbnail'}
           render={({ field }) => (
             <>
               <FileUploader

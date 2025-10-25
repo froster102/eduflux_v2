@@ -1,5 +1,5 @@
 export const BACKEND_BASE_URL =
-  import.meta.env.VITE_NODE_ENV === "production"
+  import.meta.env.VITE_NODE_ENV === 'production'
     ? import.meta.env.VITE_BACKEND_BASE_PRODUCTION_URL
     : import.meta.env.VITE_BACKEND_BASE_DEVELOPMENT_URL;
 

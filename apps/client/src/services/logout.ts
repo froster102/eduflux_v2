@@ -1,4 +1,4 @@
-import { auth } from "@/lib/better-auth/auth";
+import { auth } from '@/lib/better-auth/auth';
 
 export async function logout() {
   const { data, error } = await auth.signOut();

@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { useChatContext } from "@/context/ChatContext";
-import ChatPanel from "@/features/chat/components/ChatPanel";
-import { useGetChatMessages } from "@/features/chat/hooks/useGetChatMessages";
-import { useChatStore } from "@/store/useChatStore";
-import { WebSocketEvents } from "@/shared/enums/WebSocketEvents";
-import { MessageStatus } from "@/features/chat/contants/MessageStatus";
-import { useAuthStore } from "@/store/auth-store";
+import { useChatContext } from '@/context/ChatContext';
+import ChatPanel from '@/features/chat/components/ChatPanel';
+import { useGetChatMessages } from '@/features/chat/hooks/useGetChatMessages';
+import { useChatStore } from '@/store/useChatStore';
+import { WebSocketEvents } from '@/shared/enums/WebSocketEvents';
+import { MessageStatus } from '@/features/chat/contants/MessageStatus';
+import { useAuthStore } from '@/store/auth-store';
 
 export default function ChatPanelLoader() {
   const { selectedChat } = useChatStore();

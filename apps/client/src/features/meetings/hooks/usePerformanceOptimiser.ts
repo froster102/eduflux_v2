@@ -7,8 +7,8 @@ import {
   VideoQuality,
   LocalVideoTrack,
   isVideoTrack,
-} from "livekit-client";
-import * as React from "react";
+} from 'livekit-client';
+import * as React from 'react';
 
 export type LowCPUOptimizerOptions = {
   reducePublisherVideoQuality: boolean;

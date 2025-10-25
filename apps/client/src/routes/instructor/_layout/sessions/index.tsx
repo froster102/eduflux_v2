@@ -1,24 +1,24 @@
-import { Button } from "@heroui/button";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import React from "react";
-import { Tooltip } from "@heroui/tooltip";
-import { Skeleton } from "@heroui/skeleton";
-import { useDisclosure } from "@heroui/modal";
+import { Button } from '@heroui/button';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import React from 'react';
+import { Tooltip } from '@heroui/tooltip';
+import { Skeleton } from '@heroui/skeleton';
+import { useDisclosure } from '@heroui/modal';
 
-import { useGetUserSessions } from "@/features/session/hooks/useGetUserSessions";
-import PaginationWithNextAndPrevious from "@/components/Pagination";
-import { Role } from "@/shared/enums/Role";
-import SettingsIcon from "@/components/icons/SettingsIcon";
-import FormModal from "@/components/FormModal";
-import SessionSettingsForm from "@/features/session/components/forms/SessionSettingsForm";
-import { useUpdateSessionSettings } from "@/features/session/hooks/useUpdateSessionSettings";
-import { useEnableSessions } from "@/features/session/hooks/useEnableSession";
-import { SessionSettingsFormData } from "@/features/session/validation/session-schema";
-import { useGetSessionSettings } from "@/features/session/hooks/useGetSessionSettings";
-import SessionCard from "@/features/session/components/SessionCard";
+import { useGetUserSessions } from '@/features/session/hooks/useGetUserSessions';
+import PaginationWithNextAndPrevious from '@/components/Pagination';
+import { Role } from '@/shared/enums/Role';
+import SettingsIcon from '@/components/icons/SettingsIcon';
+import FormModal from '@/components/FormModal';
+import SessionSettingsForm from '@/features/session/components/forms/SessionSettingsForm';
+import { useUpdateSessionSettings } from '@/features/session/hooks/useUpdateSessionSettings';
+import { useEnableSessions } from '@/features/session/hooks/useEnableSession';
+import { SessionSettingsFormData } from '@/features/session/validation/session-schema';
+import { useGetSessionSettings } from '@/features/session/hooks/useGetSessionSettings';
+import SessionCard from '@/features/session/components/SessionCard';
 
-export const Route = createFileRoute("/instructor/_layout/sessions/")({
+export const Route = createFileRoute('/instructor/_layout/sessions/')({
   component: RouteComponent,
 });
 
@@ -149,7 +149,7 @@ function RouteComponent() {
         form={
           <SessionSettingsForm
             classNames={{
-              gridLayout: "grid md:grid-cols-1 xl:grid-cols-2",
+              gridLayout: 'grid md:grid-cols-1 xl:grid-cols-2',
             }}
             initialValue={sessionSettings.data.settings}
             isPending={updateSessionSettings.isPending}

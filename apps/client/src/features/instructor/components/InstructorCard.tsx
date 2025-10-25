@@ -1,13 +1,13 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Button } from "@heroui/button";
-import { useNavigate } from "@tanstack/react-router";
-import { Divider } from "@heroui/divider";
-import { User } from "@heroui/user";
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
+import { Button } from '@heroui/button';
+import { useNavigate } from '@tanstack/react-router';
+import { Divider } from '@heroui/divider';
+import { User } from '@heroui/user';
 
-import { IMAGE_BASE_URL } from "@/config/image";
-import UsersIcon from "@/components/icons/UsersIcon";
-import CourseIcon from "@/components/icons/CourseIcon";
-import InstructorIcon from "@/components/icons/InstructorIcon";
+import { IMAGE_BASE_URL } from '@/config/image';
+import UsersIcon from '@/components/icons/UsersIcon';
+import CourseIcon from '@/components/icons/CourseIcon';
+import InstructorIcon from '@/components/icons/InstructorIcon';
 
 interface InstructorCardProps {
   instructor: Instructor;
@@ -23,13 +23,13 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
           avatarProps={{
             src: `${instructor.profile.image ? `${IMAGE_BASE_URL}${instructor.profile.image}` : undefined}`,
             // size: "lg",
-            className: "w-16 h-16",
-            radius: "md",
+            className: 'w-16 h-16',
+            radius: 'md',
           }}
           classNames={{
-            name: "font-semibold text-lg",
-            base: "",
-            wrapper: "flex flex-col",
+            name: 'font-semibold text-lg',
+            base: '',
+            wrapper: 'flex flex-col',
           }}
           name={`${instructor.profile.name}`}
         />
@@ -42,15 +42,15 @@ export default function InstructorCard({ instructor }: InstructorCardProps) {
           <p className="flex gap-2 items-center">
             <span>
               <InstructorIcon width={20} />
-            </span>{" "}
+            </span>{' '}
             {instructor.sessionsConducted} Sessions conducted
           </p>
           <div className="flex h-6 overflow-hidden items-center space-x-4">
             <p className="flex gap-2 items-center">
-              {" "}
+              {' '}
               <span>
                 <CourseIcon width={20} />
-              </span>{" "}
+              </span>{' '}
               {instructor.totalCourses} Courses
             </p>
             <Divider orientation="vertical" />

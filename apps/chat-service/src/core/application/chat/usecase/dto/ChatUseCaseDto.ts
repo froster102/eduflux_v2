@@ -1,4 +1,4 @@
-import { Chat, type ChatParticipant } from "@core/domain/chat/entity/Chat";
+import { Chat, type ChatParticipant } from '@core/domain/chat/entity/Chat';
 
 export class ChatUseCaseDto {
   readonly id: string;

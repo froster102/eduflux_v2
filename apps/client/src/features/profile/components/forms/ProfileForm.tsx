@@ -1,20 +1,20 @@
-import { Input, Textarea } from "@heroui/input";
-import { Controller, useForm } from "react-hook-form";
-import { Form } from "@heroui/form";
-import React from "react";
-import { Button } from "@heroui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Avatar } from "@heroui/avatar";
-import axios from "axios";
-import { Progress } from "@heroui/progress";
+import { Input, Textarea } from '@heroui/input';
+import { Controller, useForm } from 'react-hook-form';
+import { Form } from '@heroui/form';
+import React from 'react';
+import { Button } from '@heroui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Avatar } from '@heroui/avatar';
+import axios from 'axios';
+import { Progress } from '@heroui/progress';
 
-import { formatTo12HourWithDate } from "@/utils/date";
-import EditIcon from "@/components/icons/EditIcon";
-import UploadIcon from "@/components/icons/UploadIcon";
-import { IMAGE_BASE_URL } from "@/config/image";
-import { getUploadCredentials } from "@/services/upload";
+import { formatTo12HourWithDate } from '@/utils/date';
+import EditIcon from '@/components/icons/EditIcon';
+import UploadIcon from '@/components/icons/UploadIcon';
+import { IMAGE_BASE_URL } from '@/config/image';
+import { getUploadCredentials } from '@/services/upload';
 
-import { updateProfileSchema } from "../../schemas/profile-schema";
+import { updateProfileSchema } from '../../schemas/profile-schema';
 
 interface ProfileImageUploadState {
   isUploading: boolean;
@@ -37,7 +37,7 @@ export default function ProfileForm({
     resolver: zodResolver(updateProfileSchema),
   });
 
-  const [action, setAction] = React.useState<"edit" | "view">("view");
+  const [action, setAction] = React.useState<'edit' | 'view'>('view');
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const [profileImageUploadState, setProfileImageUploadState] =
     React.useState<ProfileImageUploadState>({
@@ -49,11 +49,11 @@ export default function ProfileForm({
   const onSubmit = (data: Partial<UserProfile>) => {
     onSubmitHandler(data);
     reset(data);
-    setAction("view");
+    setAction('view');
   };
 
   function handleProfileImageUpdateClick() {
-    setAction("edit");
+    setAction('edit');
     fileInputRef.current?.click();
   }
 
@@ -63,7 +63,7 @@ export default function ProfileForm({
     if (file) {
       const fileKey = await uploadFile(file);
 
-      setValue("image", fileKey, { shouldDirty: true });
+      setValue('image', fileKey, { shouldDirty: true });
     }
   }
 
@@ -76,12 +76,12 @@ export default function ProfileForm({
 
       const { formFields, uploadUrl } = await getUploadCredentials({
         fileName: file.name,
-        resourceType: file.type.startsWith("image") ? "image" : "video",
+        resourceType: file.type.startsWith('image') ? 'image' : 'video',
       });
 
       const formData = new FormData();
 
-      formData.append("file", file);
+      formData.append('file', file);
 
       for (let key in formFields) {
         if (Object.prototype.hasOwnProperty.call(formFields, key)) {
@@ -131,13 +131,13 @@ export default function ProfileForm({
       validationBehavior="native"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {action === "view" && (
+      {action === 'view' && (
         <Button
           isIconOnly
           className="absolute right-0 bg-transparent border border-default-200"
           size="sm"
           onPress={() => {
-            setAction("edit");
+            setAction('edit');
           }}
         >
           <EditIcon width={24} />
@@ -158,7 +158,7 @@ export default function ProfileForm({
         <input
           ref={fileInputRef}
           accept="image/*"
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           type="file"
           onChange={handleFileChange}
         />
@@ -182,7 +182,7 @@ export default function ProfileForm({
       <div className="flex w-full gap-4">
         <Controller
           control={control}
-          name={"firstName"}
+          name={'firstName'}
           render={({ field }) => (
             <Input
               {...field}
@@ -193,7 +193,7 @@ export default function ProfileForm({
               labelPlacement="outside"
               name="firstName"
               radius="sm"
-              readOnly={action === "view"}
+              readOnly={action === 'view'}
             />
           )}
         />
@@ -210,7 +210,7 @@ export default function ProfileForm({
             labelPlacement="outside"
             name="email"
             radius="sm"
-            readOnly={action === "view"}
+            readOnly={action === 'view'}
             type="text"
           />
         )}
@@ -220,7 +220,7 @@ export default function ProfileForm({
         name="bio"
         render={({ field }) => (
           <Textarea
-            readOnly={action === "view"}
+            readOnly={action === 'view'}
             {...field}
             errorMessage={errors?.bio?.message}
             isInvalid={!!errors.bio}
@@ -242,7 +242,7 @@ export default function ProfileForm({
             value={
               (initialValue?.createdAt &&
                 formatTo12HourWithDate(new Date(initialValue.createdAt))) ||
-              ""
+              ''
             }
           />
           <Input
@@ -255,12 +255,12 @@ export default function ProfileForm({
             value={
               (initialValue?.updatedAt &&
                 formatTo12HourWithDate(new Date(initialValue.updatedAt))) ||
-              ""
+              ''
             }
           />
         </div>
       </div>
-      {action === "edit" && (
+      {action === 'edit' && (
         <div className="ml-auto">
           <Button
             color="danger"
@@ -268,7 +268,7 @@ export default function ProfileForm({
             type="reset"
             variant="flat"
             onPress={() => {
-              setAction("view");
+              setAction('view');
               reset(initialValue);
             }}
           >

@@ -1,24 +1,24 @@
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import debounce from "lodash.debounce";
-import React from "react";
-import { Spinner } from "@heroui/spinner";
+import { Button } from '@heroui/button';
+import { Input } from '@heroui/input';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import debounce from 'lodash.debounce';
+import React from 'react';
+import { Spinner } from '@heroui/spinner';
 
-import { SearchIcon } from "@/components/Icons";
-import FormModal from "@/components/FormModal";
-import { useCreateCourse } from "@/features/course/hooks/useCreateCourse";
-import { useGetInstructorCourses } from "@/features/course/hooks/useGetInstructorCourses";
-import CreateCourseForm from "@/features/course/components/forms/CreateCourseForm";
-import CoursesList from "@/features/course/components/CoursesList";
+import { SearchIcon } from '@/components/Icons';
+import FormModal from '@/components/FormModal';
+import { useCreateCourse } from '@/features/course/hooks/useCreateCourse';
+import { useGetInstructorCourses } from '@/features/course/hooks/useGetInstructorCourses';
+import CreateCourseForm from '@/features/course/components/forms/CreateCourseForm';
+import CoursesList from '@/features/course/components/CoursesList';
 
-export const Route = createFileRoute("/instructor/_layout/courses/")({
+export const Route = createFileRoute('/instructor/_layout/courses/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_searchQuery, setSearchQuery] = React.useState("");
+  const [_searchQuery, setSearchQuery] = React.useState('');
   const [page, setPage] = React.useState(1);
   const createCourse = useCreateCourse();
   const navigate = useNavigate();

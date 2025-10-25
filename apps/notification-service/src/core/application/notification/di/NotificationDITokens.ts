@@ -1,30 +1,30 @@
 export class NotificationDITokens {
   //use-cases
   static readonly CreateNotificationUseCase: unique symbol = Symbol(
-    "CreateNotificationUseCase",
+    'CreateNotificationUseCase',
   );
   static readonly MarkNotificationAsSeenUseCase: unique symbol = Symbol(
-    "MarkNotificationAsSeenUseCase",
+    'MarkNotificationAsSeenUseCase',
   );
   static readonly GetNotificationsUseCase: unique symbol = Symbol(
-    "GetNotificationsUseCase",
+    'GetNotificationsUseCase',
   );
 
   //handler
   static readonly EnrollmentSuccessEventHandler: unique symbol = Symbol(
-    "EnrollmentSuccessEventHandler",
+    'EnrollmentSuccessEventHandler',
   );
   static readonly SessionConfirmedEventHandler: unique symbol = Symbol(
-    "SessionConfirmedEventHandler",
+    'SessionConfirmedEventHandler',
   );
 
   //respository
   static readonly NotificationRepository: unique symbol = Symbol(
-    "NotificationRepository",
+    'NotificationRepository',
   );
 
   //Controller
   static readonly NotificationController: unique symbol = Symbol(
-    "NotificationController",
+    'NotificationController',
   );
 }

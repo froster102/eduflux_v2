@@ -1,25 +1,25 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import React from "react";
-import { Spinner } from "@heroui/spinner";
-import { Tab, Tabs } from "@heroui/tabs";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import React from 'react';
+import { Spinner } from '@heroui/spinner';
+import { Tab, Tabs } from '@heroui/tabs';
 
-import CoursesList from "@/features/course/components/CoursesList";
-import { useGetSubsribedCourses } from "@/features/course/hooks/useGetSubsribedCourses";
-import { useGetCourses } from "@/features/course/hooks/useGetCourses";
+import CoursesList from '@/features/course/components/CoursesList';
+import { useGetSubsribedCourses } from '@/features/course/hooks/useGetSubsribedCourses';
+import { useGetCourses } from '@/features/course/hooks/useGetCourses';
 
-export const Route = createFileRoute("/_layout/courses/")({
+export const Route = createFileRoute('/_layout/courses/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_searchQuery] = React.useState("");
+  const [_searchQuery] = React.useState('');
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(8);
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = React.useState<
-    "all-courses" | "my-courses"
-  >("all-courses");
+    'all-courses' | 'my-courses'
+  >('all-courses');
 
   const { data: subscribedCourses, isLoading: isSubscribedCoursesLoading } =
     useGetSubsribedCourses({
@@ -29,7 +29,7 @@ function RouteComponent() {
           size: limit,
         },
       },
-      enabled: currentTab === "my-courses",
+      enabled: currentTab === 'my-courses',
     });
 
   const { data: allCourses, isLoading: isAllCoursesLoading } = useGetCourses({
@@ -40,9 +40,9 @@ function RouteComponent() {
   });
 
   const courses =
-    currentTab === "all-courses" && !isAllCoursesLoading
+    currentTab === 'all-courses' && !isAllCoursesLoading
       ? allCourses
-      : currentTab === "my-courses" && !isSubscribedCoursesLoading
+      : currentTab === 'my-courses' && !isSubscribedCoursesLoading
         ? subscribedCourses
         : 0;
 
@@ -60,7 +60,7 @@ function RouteComponent() {
           className="pt-2"
           variant="underlined"
           onSelectionChange={(value) => {
-            setCurrentTab(value as "all-courses" | "my-courses");
+            setCurrentTab(value as 'all-courses' | 'my-courses');
           }}
         >
           <Tab key="all-courses" title="All course">

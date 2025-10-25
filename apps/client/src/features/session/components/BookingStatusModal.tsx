@@ -1,9 +1,9 @@
-import { Chip } from "@heroui/chip";
-import { Divider } from "@heroui/divider";
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Chip } from '@heroui/chip';
+import { Divider } from '@heroui/divider';
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 
-import CheckIcon from "@/components/icons/CheckIcon";
-import CrossIcon from "@/components/icons/CrossIcon";
+import CheckIcon from '@/components/icons/CheckIcon';
+import CrossIcon from '@/components/icons/CrossIcon';
 
 interface BookingStatusModalProps {
   isOpen: boolean;
@@ -57,7 +57,7 @@ export default function BookingStatusModal({
             <div className="flex w-full flex-col gap-1">
               <p>Invited</p>
               <small>
-                {instructor}{" "}
+                {instructor}{' '}
                 <span>
                   <Chip
                     className="text-[10px] text-primary/50  bg-primary/20 h-4"
@@ -100,7 +100,7 @@ export default function BookingStatusModal({
       backdrop="blur"
       className="flex flex-col gap-5 w-[375px]"
       classNames={{
-        backdrop: "bg-background/80 backdrop-opacity-50",
+        backdrop: 'bg-background/80 backdrop-opacity-50',
       }}
       hideCloseButton={true}
       isOpen={isOpen}

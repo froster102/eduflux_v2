@@ -1,23 +1,23 @@
-import { Server, type DefaultEventsMap } from "socket.io";
-import type { Server as HTTPServer } from "node:http";
-import { validateToken } from "@shared/utils/jwt.util";
-import { tryCatch } from "@shared/utils/try-catch";
-import { AuthenticatedUserDto } from "@core/common/dto/AuthenticatedDto";
-import { parseCookieHeader } from "@shared/utils/helper";
-import { WebSocketEvents } from "@shared/enums/WebSocketEvents";
-import { container } from "@di/RootModule";
-import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
-import type { VerifyChatParticipantUseCase } from "@core/application/chat/usecase/VerifyChatParticipantUseCase";
-import { Code } from "@core/common/error/Code";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { CreateMessageUseCase } from "@core/application/message/usecase/CreateMessageUseCase";
-import { MessageDITokens } from "@core/application/message/di/MessageDITokens";
-import type { UpdateMessageStatusUseCase } from "@core/application/message/usecase/UpdateMessageStatusUseCase";
-import { MessageStatus } from "@core/common/enum/MessageStatus";
-import type { GetChatUseCase } from "@core/application/chat/usecase/GetChatUseCase";
-import type { Socket } from "socket.io";
-import type { Role } from "@core/common/enum/Role";
+import { Server, type DefaultEventsMap } from 'socket.io';
+import type { Server as HTTPServer } from 'node:http';
+import { validateToken } from '@shared/utils/jwt.util';
+import { tryCatch } from '@shared/utils/try-catch';
+import { AuthenticatedUserDto } from '@core/common/dto/AuthenticatedDto';
+import { parseCookieHeader } from '@shared/utils/helper';
+import { WebSocketEvents } from '@shared/enums/WebSocketEvents';
+import { container } from '@di/RootModule';
+import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
+import type { VerifyChatParticipantUseCase } from '@core/application/chat/usecase/VerifyChatParticipantUseCase';
+import { Code } from '@core/common/error/Code';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { CreateMessageUseCase } from '@core/application/message/usecase/CreateMessageUseCase';
+import { MessageDITokens } from '@core/application/message/di/MessageDITokens';
+import type { UpdateMessageStatusUseCase } from '@core/application/message/usecase/UpdateMessageStatusUseCase';
+import { MessageStatus } from '@core/common/enum/MessageStatus';
+import type { GetChatUseCase } from '@core/application/chat/usecase/GetChatUseCase';
+import type { Socket } from 'socket.io';
+import type { Role } from '@core/common/enum/Role';
 
 interface SocketData {
   user: AuthenticatedUserDto;
@@ -61,7 +61,7 @@ export class SocketIOServer {
       DefaultEventsMap,
       SocketData
     >(httpServer, {
-      path: "/ws/",
+      path: '/ws/chats/',
     });
     this.setupMiddleware();
     this.setupSocketListeners();
@@ -70,16 +70,16 @@ export class SocketIOServer {
   setupMiddleware() {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     this.io.use(async (socket, next) => {
-      const cookie = parseCookieHeader(socket.handshake.headers["cookie"]!);
-      const token = cookie.get("user_jwt");
+      const cookie = parseCookieHeader(socket.handshake.headers['cookie']!);
+      const token = cookie.get('user_jwt');
       if (!token) {
-        return next(new Error("Authentication error: No token provided"));
+        return next(new Error('Authentication error: No token provided'));
       }
 
       const { data: payload, error } = await tryCatch(validateToken(token));
 
       if (error) {
-        next(new Error("Authentication error: Invalid token"));
+        next(new Error('Authentication error: Invalid token'));
       }
 
       if (payload) {

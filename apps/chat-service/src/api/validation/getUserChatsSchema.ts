@@ -1,6 +1,6 @@
-import { paginationSchema } from "@api/validation/paginationSchema";
-import { Role } from "@core/common/enum/Role";
-import { z } from "zod/v4";
+import { paginationSchema } from '@api/validation/paginationSchema';
+import { Role } from '@core/common/enum/Role';
+import { z } from 'zod/v4';
 
 const getUserChatsFilter = z.object({
   filter: z.object({

@@ -1,7 +1,7 @@
-import { Button } from "@heroui/button";
-import { Form } from "@heroui/form";
-import { InputOtp } from "@heroui/input-otp";
-import { useForm, Controller } from "react-hook-form";
+import { Button } from '@heroui/button';
+import { Form } from '@heroui/form';
+import { InputOtp } from '@heroui/input-otp';
+import { useForm, Controller } from 'react-hook-form';
 
 export default function VerifyOtpForm({
   onSubmitHandler,
@@ -13,7 +13,7 @@ export default function VerifyOtpForm({
     formState: { errors },
   } = useForm<VerifyOtpFormData>({
     defaultValues: {
-      otp: "",
+      otp: '',
     },
   });
 
@@ -36,10 +36,10 @@ export default function VerifyOtpForm({
             />
           )}
           rules={{
-            required: "OTP is required",
+            required: 'OTP is required',
             minLength: {
               value: 4,
-              message: "Please enter a valid OTP",
+              message: 'Please enter a valid OTP',
             },
           }}
         />

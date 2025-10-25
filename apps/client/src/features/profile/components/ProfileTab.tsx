@@ -1,8 +1,8 @@
-import { Skeleton } from "@heroui/skeleton";
+import { Skeleton } from '@heroui/skeleton';
 
-import ProfileForm from "./forms/ProfileForm";
-import { useUpdateProfile } from "./hooks/useUpdateProfile";
-import { useGetUserProfile } from "./hooks/useGetUserProfile";
+import ProfileForm from './forms/ProfileForm';
+import { useUpdateProfile } from './hooks/useUpdateProfile';
+import { useGetUserProfile } from './hooks/useGetUserProfile';
 
 export default function ProfileTab() {
   const { data: profile, isLoading: isProfileLoading } = useGetUserProfile();

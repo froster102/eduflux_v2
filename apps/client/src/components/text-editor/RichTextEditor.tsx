@@ -1,11 +1,11 @@
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-import TextStyle from "@tiptap/extension-text-style";
-import Highlight from "@tiptap/extension-highlight";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import TextStyle from '@tiptap/extension-text-style';
+import Highlight from '@tiptap/extension-highlight';
 
-import Toolbar from "./toolbar";
+import Toolbar from './toolbar';
 
 export default function RichTextEditor({
   value,
@@ -21,14 +21,14 @@ export default function RichTextEditor({
       Highlight,
       TextStyle,
       TextAlign.configure({
-        types: ["paragraph"],
+        types: ['paragraph'],
       }),
     ],
     content: value,
     editorProps: {
       attributes: {
         class:
-          "prose max-w-full focus:outline-none w-full p-2 h-[224px] overflow-y-scroll scrollbar-hide bg-default-100 dark:prose-invert",
+          'prose max-w-full focus:outline-none w-full p-2 h-[224px] overflow-y-scroll scrollbar-hide bg-default-100 dark:prose-invert',
       },
     },
     onUpdate: ({ editor }) => {

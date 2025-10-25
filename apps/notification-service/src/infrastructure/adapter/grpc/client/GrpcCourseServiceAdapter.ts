@@ -1,10 +1,10 @@
-import type { CourseServicePort } from "@core/application/notification/port/gateway/CourseServicePort";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { credentials, type ServiceError } from "@grpc/grpc-js";
-import { CourseServiceClient } from "@infrastructure/adapter/grpc/generated/course";
-import { GrpcCourseServiceConfig } from "@shared/config/GrpcCourseServiceConfig";
-import { inject } from "inversify";
+import type { CourseServicePort } from '@core/application/notification/port/gateway/CourseServicePort';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { credentials, type ServiceError } from '@grpc/grpc-js';
+import { CourseServiceClient } from '@infrastructure/adapter/grpc/generated/course';
+import { GrpcCourseServiceConfig } from '@shared/config/GrpcCourseServiceConfig';
+import { inject } from 'inversify';
 
 export class GrpcCourseServiceAdapter implements CourseServicePort {
   private client: CourseServiceClient;

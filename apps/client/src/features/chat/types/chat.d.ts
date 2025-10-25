@@ -1,4 +1,4 @@
-import { MessageStatus } from "@/features/chat/contants/MessageStatus";
+import { MessageStatus } from '@/features/chat/contants/MessageStatus';
 
 declare global {
   export type Chat = {

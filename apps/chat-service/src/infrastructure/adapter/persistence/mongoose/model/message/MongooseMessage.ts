@@ -1,5 +1,5 @@
-import { MessageStatus } from "@core/common/enum/MessageStatus";
-import { Schema, model, Document } from "mongoose";
+import { MessageStatus } from '@core/common/enum/MessageStatus';
+import { Schema, model, Document } from 'mongoose';
 
 export interface MongooseMessage extends Document {
   _id: string;
@@ -45,4 +45,4 @@ const messageSchema = new Schema<MongooseMessage>(
   },
 );
 
-export const MessageModel = model<MongooseMessage>("Message", messageSchema);
+export const MessageModel = model<MongooseMessage>('Message', messageSchema);

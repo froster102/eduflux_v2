@@ -1,17 +1,17 @@
-import { Card, CardBody } from "@heroui/card";
-import React from "react";
-import { FileRejection, useDropzone } from "react-dropzone";
-import { addToast } from "@heroui/toast";
-import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
-import { Image } from "@heroui/image";
-import { Progress } from "@heroui/progress";
+import { Card, CardBody } from '@heroui/card';
+import React from 'react';
+import { FileRejection, useDropzone } from 'react-dropzone';
+import { addToast } from '@heroui/toast';
+import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { Image } from '@heroui/image';
+import { Progress } from '@heroui/progress';
 
-import CloseBoldIcon from "@/components/icons/CloseBoldIcon";
-import UploadIcon from "@/components/icons/UploadIcon";
-import { getUploadCredentials } from "@/services/upload";
+import CloseBoldIcon from '@/components/icons/CloseBoldIcon';
+import UploadIcon from '@/components/icons/UploadIcon';
+import { getUploadCredentials } from '@/services/upload';
 
-import ImageCropper from "./ImageCropper";
+import ImageCropper from './ImageCropper';
 
 interface UploaderState {
   id: string | null;
@@ -22,18 +22,18 @@ interface UploaderState {
   isDeleting: boolean;
   error: boolean;
   objectUrl?: string;
-  fileType: "image" | "video";
+  fileType: 'image' | 'video';
   showCropper: boolean;
 }
 
 interface UploaderProps {
-  acceptedFileType: "image" | "video";
+  acceptedFileType: 'image' | 'video';
   maxSize: number;
   maxFiles: number;
   enableMultipleFile?: boolean;
   onSuccess: (
     fileKey: string,
-    resourceType: "video" | "image",
+    resourceType: 'video' | 'image',
     uuid: string,
   ) => void;
   value: string | null;
@@ -52,7 +52,7 @@ export default function FileUploader({
   targetHeight,
 }: UploaderProps) {
   const accept: Record<string, any> =
-    acceptedFileType === "image" ? { "image/*": [] } : { "video/mp4": [] };
+    acceptedFileType === 'image' ? { 'image/*': [] } : { 'video/mp4': [] };
 
   const [fileState, setFileState] = React.useState<UploaderState>({
     error: false,
@@ -88,11 +88,11 @@ export default function FileUploader({
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0];
 
-        if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+        if (fileState.objectUrl && !fileState.objectUrl.startsWith('http')) {
           URL.revokeObjectURL(fileState.objectUrl);
         }
 
-        if (acceptedFileType === "image") {
+        if (acceptedFileType === 'image') {
           const dimensionsValid = await checkDimensions(file);
 
           if (!dimensionsValid) {
@@ -125,7 +125,7 @@ export default function FileUploader({
 
   React.useEffect(() => {
     return () => {
-      if (fileState.objectUrl && !fileState.objectUrl.startsWith("http")) {
+      if (fileState.objectUrl && !fileState.objectUrl.startsWith('http')) {
         URL.revokeObjectURL(fileState.objectUrl);
       }
     };
@@ -141,12 +141,12 @@ export default function FileUploader({
 
       const { formFields, uploadUrl } = await getUploadCredentials({
         fileName: file.name,
-        resourceType: file.type.startsWith("image") ? "image" : "video",
+        resourceType: file.type.startsWith('image') ? 'image' : 'video',
       });
 
       const formData = new FormData();
 
-      formData.append("file", file);
+      formData.append('file', file);
 
       for (let key in formFields) {
         if (Object.prototype.hasOwnProperty.call(formFields, key)) {
@@ -200,23 +200,23 @@ export default function FileUploader({
   function rejectedFiles(fileRejection: FileRejection[]) {
     if (fileRejection.length) {
       const tooManyFiles = fileRejection.find(
-        (rejection) => rejection.errors[0].code === "too-many-files",
+        (rejection) => rejection.errors[0].code === 'too-many-files',
       );
 
       if (tooManyFiles) {
         addToast({
-          title: "Too many files",
+          title: 'Too many files',
           description: `You have selected multiple file`,
         });
       }
 
       const fileTooBig = fileRejection.find(
-        (rejection) => rejection.errors[0].code === "file-too-large",
+        (rejection) => rejection.errors[0].code === 'file-too-large',
       );
 
       if (fileTooBig) {
         addToast({
-          title: "File too large",
+          title: 'File too large',
           description: `Selected file is too large to upload. max files allowed is ${maxSize / (1024 * 1024)}MB.`,
         });
       }
@@ -249,7 +249,7 @@ export default function FileUploader({
         }));
         uploadFile(croppedFile);
       }
-    }, fileState.file?.type || "image/jpeg");
+    }, fileState.file?.type || 'image/jpeg');
   };
 
   function renderContent() {
@@ -285,9 +285,9 @@ export default function FileUploader({
     }
 
     if (fileState.objectUrl) {
-      if (fileState.fileType === "image") {
+      if (fileState.fileType === 'image') {
         return <Image src={fileState.objectUrl} />;
-      } else if (fileState.fileType === "video") {
+      } else if (fileState.fileType === 'video') {
         return (
           // eslint-disable-next-line jsx-a11y/media-has-caption
           <video controls className="rounded-md" src={fileState.objectUrl} />
@@ -312,7 +312,7 @@ export default function FileUploader({
     <div {...getRootProps()}>
       <input accept="image/jpeg, image/jpg, image/png" {...getInputProps()} />
       <Card
-        className={`border border-default-${isDragActive ? "500" : "200"} w-full min-h-40`}
+        className={`border border-default-${isDragActive ? '500' : '200'} w-full min-h-40`}
         shadow="none"
       >
         <CardBody className="flex justify-center items-center">

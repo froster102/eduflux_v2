@@ -1,4 +1,4 @@
-import type { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
+import type { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
 
 export type CreateNotificationPayload = {
   id: string;

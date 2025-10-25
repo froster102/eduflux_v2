@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { deleteChapter } from "../services/course";
+import { deleteChapter } from '../services/course';
 
 export function useDeleteChapter() {
   return useMutation({

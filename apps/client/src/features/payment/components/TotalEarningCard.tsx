@@ -1,6 +1,6 @@
-import { Card, CardBody, CardFooter } from "@heroui/card";
+import { Card, CardBody, CardFooter } from '@heroui/card';
 
-import MasterCardIcon from "@/components/icons/MasterCardIcon";
+import MasterCardIcon from '@/components/icons/MasterCardIcon';
 
 interface TotalEarningCardProps {
   userName: string;

@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import {
   formatChatMessageLinks,
   LocalUserChoices,
   RoomContext,
   VideoConference as LiveKitVideoConference,
-} from "@livekit/components-react";
+} from '@livekit/components-react';
 import {
   ExternalE2EEKeyProvider,
   RoomOptions,
@@ -16,13 +16,13 @@ import {
   RoomEvent,
   TrackPublishDefaults,
   VideoCaptureOptions,
-} from "livekit-client";
-import { addToast } from "@heroui/toast";
+} from 'livekit-client';
+import { addToast } from '@heroui/toast';
 
-import { KeyboardShortcuts } from "@/features/meetings/components/KeyboardShortcuts";
-import { useSetupE2EE } from "@/features/meetings/hooks/useSetupE2EE";
-import { decodePassphrase } from "@/lib/utils";
-import { useLowCPUOptimizer } from "@/features/meetings/hooks/usePerformanceOptimiser";
+import { KeyboardShortcuts } from '@/features/meetings/components/KeyboardShortcuts';
+import { useSetupE2EE } from '@/features/meetings/hooks/useSetupE2EE';
+import { decodePassphrase } from '@/lib/utils';
+import { useLowCPUOptimizer } from '@/features/meetings/hooks/usePerformanceOptimiser';
 
 interface VideoConferenceProps {
   userChoices: LocalUserChoices;
@@ -44,9 +44,9 @@ export default function VideoConference(props: VideoConferenceProps) {
   const roomOptions = React.useMemo((): RoomOptions => {
     let videoCodec: VideoCodec | undefined = props.options.codec
       ? props.options.codec
-      : "vp9";
+      : 'vp9';
 
-    if (e2eeEnabled && (videoCodec === "av1" || videoCodec === "vp9")) {
+    if (e2eeEnabled && (videoCodec === 'av1' || videoCodec === 'vp9')) {
       videoCodec = undefined;
     }
     const videoCaptureDefaults: VideoCaptureOptions = {
@@ -157,7 +157,7 @@ export default function VideoConference(props: VideoConferenceProps) {
 
   React.useEffect(() => {
     if (lowPowerMode) {
-      addToast({ description: "Low power mode enabled", color: "warning" });
+      addToast({ description: 'Low power mode enabled', color: 'warning' });
     }
   }, [lowPowerMode]);
 

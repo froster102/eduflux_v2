@@ -1,4 +1,4 @@
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 
 export default function CourseErrorModal({
   isOpen,
@@ -15,7 +15,7 @@ export default function CourseErrorModal({
     <Modal
       backdrop="blur"
       classNames={{
-        backdrop: "bg-background/80 backdrop-opacity-50",
+        backdrop: 'bg-background/80 backdrop-opacity-50',
       }}
       isOpen={isOpen}
       placement="top-center"

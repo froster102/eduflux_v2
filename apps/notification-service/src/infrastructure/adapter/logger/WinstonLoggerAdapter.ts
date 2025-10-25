@@ -1,16 +1,16 @@
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { NOTIFICATION_SERVICE } from "@shared/constants/services";
-import { envVariables } from "@shared/env/envVariables";
-import { asyncLocalStorage } from "@shared/util/store";
-import { unmanaged } from "inversify";
-import winston from "winston";
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { NOTIFICATION_SERVICE } from '@shared/constants/services';
+import { envVariables } from '@shared/env/envVariables';
+import { asyncLocalStorage } from '@shared/util/store';
+import { unmanaged } from 'inversify';
+import winston from 'winston';
 
 const { combine, timestamp, printf, colorize, json, errors } = winston.format;
 
 const devConsoleFormat = printf(
   ({ level, message, timestamp, correlationId, context, ...info }) => {
-    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : "";
-    const correlationPart = correlationId ? `[${correlationId as string}]` : "";
+    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : '';
+    const correlationPart = correlationId ? `[${correlationId as string}]` : '';
     return `[${NOTIFICATION_SERVICE}] [${timestamp as string}] ${correlationPart} [${(context as string) ?? NOTIFICATION_SERVICE}] ${level.toUpperCase()}: ${message as string} ${meta}`;
   },
 );
@@ -22,18 +22,18 @@ export class WinstonLoggerAdapter implements LoggerPort {
   constructor(@unmanaged() context?: string) {
     this._context = context;
 
-    const isDevelopment = envVariables.NODE_ENV === "development";
+    const isDevelopment = envVariables.NODE_ENV === 'development';
 
     this._logger = winston.createLogger({
-      level: isDevelopment ? "debug" : "info",
+      level: isDevelopment ? 'debug' : 'info',
       levels: winston.config.npm.levels,
       format: combine(
         winston.format((info) => {
           info.context = this._context || info.context;
           const store = asyncLocalStorage.getStore();
 
-          if (store && store.has("correlationId")) {
-            info.correlationId = store.get("correlationId");
+          if (store && store.has('correlationId')) {
+            info.correlationId = store.get('correlationId');
             info.application = NOTIFICATION_SERVICE;
             info.enviroment = envVariables.NODE_ENV;
           }
@@ -41,7 +41,7 @@ export class WinstonLoggerAdapter implements LoggerPort {
         })(),
         isDevelopment
           ? timestamp({ format: this.istTimestampFormat() })
-          : timestamp({ format: "YYYY-MM-DDTHH:mm:ss.SSSZ" }),
+          : timestamp({ format: 'YYYY-MM-DDTHH:mm:ss.SSSZ' }),
         isDevelopment ? devConsoleFormat : this.prodJsonFormat,
         isDevelopment ? colorize({ all: true }) : winston.format.uncolorize(),
       ),
@@ -55,21 +55,21 @@ export class WinstonLoggerAdapter implements LoggerPort {
   }
 
   private istTimestampFormat() {
-    return new Date().toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZoneName: "short",
+    return new Date().toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZoneName: 'short',
       // hour12: false,
     });
   }
 
   private prodJsonFormat = combine(
-    timestamp({ format: "YYYY-MM-DDTHH:mm:ss.SSSZ" }),
+    timestamp({ format: 'YYYY-MM-DDTHH:mm:ss.SSSZ' }),
     errors({ stack: true }),
     json(),
   );

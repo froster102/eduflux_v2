@@ -1,5 +1,5 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Select, SelectItem } from "@heroui/select";
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Select, SelectItem } from '@heroui/select';
 import {
   LineChart,
   Line,
@@ -8,10 +8,10 @@ import {
   ResponsiveContainer,
   Tooltip,
   Legend,
-} from "recharts";
+} from 'recharts';
 
-import { CustomTooltip } from "@/components/CustomToolTip";
-import { PaymentType } from "@/shared/enums/PaymentType";
+import { CustomTooltip } from '@/components/CustomToolTip';
+import { PaymentType } from '@/shared/enums/PaymentType';
 
 interface PaymentsGraphProps {
   graphData: any[];
@@ -59,13 +59,13 @@ export default function PaymentsGraph({
             />
             <YAxis
               axisLine={false}
-              domain={[0, "auto"]}
+              domain={[0, 'auto']}
               stroke="#fff"
               tickFormatter={formatYAxis}
               tickLine={false}
             />
             <Tooltip content={<CustomTooltip />} cursor={false} />
-            <Legend wrapperStyle={{ color: "#fff" }} />
+            <Legend wrapperStyle={{ color: '#fff' }} />
             <Line
               dataKey="instructorRevenue"
               dot={false}

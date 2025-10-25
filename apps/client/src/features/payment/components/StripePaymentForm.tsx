@@ -1,7 +1,7 @@
-import { loadStripe } from "@stripe/stripe-js";
-import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
+import { loadStripe } from '@stripe/stripe-js';
+import { CheckoutProvider } from '@stripe/react-stripe-js/checkout';
 
-import CheckoutForm from "@/features/payment/components/CheckoutForm";
+import CheckoutForm from '@/features/payment/components/CheckoutForm';
 
 const stripe = loadStripe(import.meta.env.VITE_STRIPE_PULISHABLE_KEY);
 

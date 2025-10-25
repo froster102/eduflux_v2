@@ -1,17 +1,17 @@
-import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { EnrollmentSuccessEventHandler } from "@core/application/notification/handler/EnrollmentSuccessEventHandler";
-import type { CourseServicePort } from "@core/application/notification/port/gateway/CourseServicePort";
-import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
-import { NotificationUseCaseDto } from "@core/application/notification/usecase/dto/NotificationUseCaseDto";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import { eventEmitter } from "@core/common/util/event/eventEmitter";
-import { Notification } from "@core/domain/notification/entiy/Notification";
-import { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
-import { ServerEvents } from "@shared/enum/ServerEvents";
-import type { EnrollmentSuccessEvent } from "@shared/events/EnrollmentEvent";
-import type { ServerEvent } from "@shared/types/ServerEvent";
-import { inject } from "inversify";
-import { v4 as uuidV4 } from "uuid";
+import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
+import type { EnrollmentSuccessEventHandler } from '@core/application/notification/handler/EnrollmentSuccessEventHandler';
+import type { CourseServicePort } from '@core/application/notification/port/gateway/CourseServicePort';
+import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
+import { NotificationUseCaseDto } from '@core/application/notification/usecase/dto/NotificationUseCaseDto';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { eventEmitter } from '@core/common/util/event/eventEmitter';
+import { Notification } from '@core/domain/notification/entiy/Notification';
+import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
+import { ServerEvents } from '@shared/enum/ServerEvents';
+import type { EnrollmentSuccessEvent } from '@shared/events/EnrollmentEvent';
+import type { ServerEvent } from '@shared/types/ServerEvent';
+import { inject } from 'inversify';
+import { v4 as uuidV4 } from 'uuid';
 
 export class EnrollmentSuccessEventHandlerService
   implements EnrollmentSuccessEventHandler
@@ -32,7 +32,7 @@ export class EnrollmentSuccessEventHandlerService
     const notification = Notification.create({
       id: uuidV4(),
       userId,
-      title: "Course Enrollment",
+      title: 'Course Enrollment',
       description: `You have successfully enrolled for the course ${course.title}`,
       path,
       status: NotificationStatus.UNSEEN,

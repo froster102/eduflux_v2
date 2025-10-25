@@ -1,11 +1,11 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { motion } from "motion/react";
-import { Card, CardBody } from "@heroui/card";
-import { Image } from "@heroui/image";
+import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { motion } from 'motion/react';
+import { Card, CardBody } from '@heroui/card';
+import { Image } from '@heroui/image';
 
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute('/auth')({
   component: AuthLayout,
 });
 
@@ -25,7 +25,7 @@ function AuthLayout() {
             <Card className="bg-transparent max-w-sm w-full" shadow="none">
               <CardBody className="p-0">
                 <div className="p-5 w-full">
-                  {" "}
+                  {' '}
                   <Outlet />
                 </div>
               </CardBody>

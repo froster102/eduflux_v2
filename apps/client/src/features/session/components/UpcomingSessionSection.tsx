@@ -1,10 +1,10 @@
-import { Button } from "@heroui/button";
-import { Card } from "@heroui/card";
+import { Button } from '@heroui/button';
+import { Card } from '@heroui/card';
 const groups = [
-  { name: "UI/UX Group A", students: 28, color: "green" },
-  { name: "UI/UX Group B", students: 28, color: "yellow" },
-  { name: "Motion Design Group", students: 28, color: "green" },
-  { name: "Motion Design Group", students: 28, color: "yellow" },
+  { name: 'UI/UX Group A', students: 28, color: 'green' },
+  { name: 'UI/UX Group B', students: 28, color: 'yellow' },
+  { name: 'Motion Design Group', students: 28, color: 'green' },
+  { name: 'Motion Design Group', students: 28, color: 'yellow' },
 ];
 
 export default function UpcomingSessionSection() {

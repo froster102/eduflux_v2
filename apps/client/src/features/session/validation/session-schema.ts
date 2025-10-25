@@ -1,7 +1,7 @@
-import { parseTime } from "@internationalized/date";
-import { z } from "zod/v4";
+import { parseTime } from '@internationalized/date';
+import { z } from 'zod/v4';
 
-import { getAllTimeZones } from "@/utils/date";
+import { getAllTimeZones } from '@/utils/date';
 
 export const slotSchema = z
   .object({
@@ -14,37 +14,37 @@ export const slotSchema = z
     if (ctx.value.enabled) {
       if (!ctx.value.startTime) {
         ctx.issues.push({
-          code: "custom",
-          message: "Start time is required if day is selected.",
+          code: 'custom',
+          message: 'Start time is required if day is selected.',
           input: ctx.value,
-          path: ["startTime"],
+          path: ['startTime'],
         });
       }
       if (!ctx.value.endTime) {
         ctx.issues.push({
-          code: "custom",
+          code: 'custom',
           input: ctx.value,
-          message: "End time is required if day is selected.",
-          path: ["endTime"],
+          message: 'End time is required if day is selected.',
+          path: ['endTime'],
         });
       }
 
       if (ctx.value.startTime && ctx.value.endTime) {
         const start =
-          typeof ctx.value.startTime === "string"
+          typeof ctx.value.startTime === 'string'
             ? parseTime(ctx.value.startTime)
             : ctx.value.startTime;
         const end =
-          typeof ctx.value.endTime === "string"
+          typeof ctx.value.endTime === 'string'
             ? parseTime(ctx.value.endTime)
             : ctx.value.endTime;
 
         if (end.compare(start) <= 0) {
           ctx.issues.push({
-            code: "custom",
+            code: 'custom',
             input: ctx.value.endTime,
-            message: "End time must be after start time.",
-            path: ["endTime"],
+            message: 'End time must be after start time.',
+            path: ['endTime'],
           });
 
           return;
@@ -54,10 +54,10 @@ export const slotSchema = z
 
         if (end.compare(minEndTimeRequired) < 0) {
           ctx.issues.push({
-            code: "custom",
+            code: 'custom',
             input: ctx.value.endTime,
-            message: "Availability must be at least 60 minutes long.",
-            path: ["endTime"],
+            message: 'Availability must be at least 60 minutes long.',
+            path: ['endTime'],
           });
         }
       }
@@ -67,22 +67,22 @@ export const slotSchema = z
 export const sessionSettingsSchema = z.object({
   price: z
     .number({
-      error: "Session price is required",
+      error: 'Session price is required',
     })
-    .min(0.01, "Session price must be greater than 0")
-    .max(10000, "Session price cannot exceed 10,000"),
-  currency: z.string().min(1, "Currency is required"),
+    .min(0.01, 'Session price must be greater than 0')
+    .max(10000, 'Session price cannot exceed 10,000'),
+  currency: z.string().min(1, 'Currency is required'),
   duration: z
     .number({
-      error: "Session duration is required",
+      error: 'Session duration is required',
     })
-    .min(15, "Session duration must be at least 15 minutes")
-    .max(240, "Session duration cannot exceed 240 minutes (4 hours)"),
+    .min(15, 'Session duration must be at least 15 minutes')
+    .max(240, 'Session duration cannot exceed 240 minutes (4 hours)'),
   weeklySchedules: z.array(slotSchema),
   applyForWeeks: z.number().min(1).max(12),
   timeZone: z
     .string()
-    .refine((val) => getAllTimeZones().has(val), { error: "Invalid timezone" }),
+    .refine((val) => getAllTimeZones().has(val), { error: 'Invalid timezone' }),
 });
 
 export type SessionSettingsFormData = z.infer<typeof sessionSettingsSchema>;

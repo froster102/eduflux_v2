@@ -1,12 +1,12 @@
-import { Card, CardHeader } from "@heroui/card";
-import React from "react";
+import { Card, CardHeader } from '@heroui/card';
+import React from 'react';
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
-} from "@heroui/drawer";
-import { Link } from "@tanstack/react-router";
+} from '@heroui/drawer';
+import { Link } from '@tanstack/react-router';
 
 interface SidebarProps {
   navItems: Array<{
@@ -23,7 +23,7 @@ export default function Sidebar({
   isOpen,
   onOpenChange,
 }: SidebarProps) {
-  const [selected, setSelected] = React.useState<string>("home");
+  const [selected, setSelected] = React.useState<string>('home');
 
   // const [openLogoutConfirmation, setOpenLogoutConfirmation] =
   //   React.useState(false);
@@ -39,7 +39,7 @@ export default function Sidebar({
       <Drawer
         backdrop="transparent"
         classNames={{
-          base: "m-2 rounded-medium",
+          base: 'm-2 rounded-medium',
         }}
         isOpen={isOpen}
         placement="left"
@@ -66,7 +66,7 @@ export default function Sidebar({
                     >
                       <Card
                         className={`text-base
-                     font-medium transition-colors ${selected === item.label ? "bg-black text-white dark:!bg-primary dark:text-black" : "bg-transparent text-black dark:text-white"}
+                     font-medium transition-colors ${selected === item.label ? 'bg-black text-white dark:!bg-primary dark:text-black' : 'bg-transparent text-black dark:text-white'}
                      `}
                         shadow="none"
                       >

@@ -1,6 +1,6 @@
-import { KafkaLoggerAdapter } from "@infrastructure/adapter/kafka/KafkaLoggerAdapter";
-import { KafkaConfig } from "@shared/config/KafkaConfig";
-import { Kafka, type Consumer, type Producer } from "kafkajs";
+import { KafkaLoggerAdapter } from '@infrastructure/adapter/kafka/KafkaLoggerAdapter';
+import { KafkaConfig } from '@shared/config/KafkaConfig';
+import { Kafka, type Consumer, type Producer } from 'kafkajs';
 
 export class KafkaConnection {
   private kafka: Kafka;

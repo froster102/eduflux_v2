@@ -1,22 +1,22 @@
-import { Avatar } from "@heroui/avatar";
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Input } from "@heroui/input";
-import React from "react";
-import { Form } from "@heroui/form";
-import { Spinner } from "@heroui/spinner";
+import { Avatar } from '@heroui/avatar';
+import { Button } from '@heroui/button';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
+import { Chip } from '@heroui/chip';
+import { Input } from '@heroui/input';
+import React from 'react';
+import { Form } from '@heroui/form';
+import { Spinner } from '@heroui/spinner';
 
-import SendIcon from "@/components/icons/SendIcon";
-import { useAuthStore } from "@/store/auth-store";
-import { useChatStore } from "@/store/useChatStore";
-import { IMAGE_BASE_URL } from "@/config/image";
-import { useChatContext } from "@/context/ChatContext";
-import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
-import { formatRelative } from "@/utils/date";
-import { MessageStatus } from "@/features/chat/contants/MessageStatus";
-import ReadIcon from "@/components/icons/ReadIcon";
-import DeliveredIcon from "@/components/icons/DeliveredIcon";
+import SendIcon from '@/components/icons/SendIcon';
+import { useAuthStore } from '@/store/auth-store';
+import { useChatStore } from '@/store/useChatStore';
+import { IMAGE_BASE_URL } from '@/config/image';
+import { useChatContext } from '@/context/ChatContext';
+import InfiniteScrollContainer from '@/components/InfiniteScrollContainer';
+import { formatRelative } from '@/utils/date';
+import { MessageStatus } from '@/features/chat/contants/MessageStatus';
+import ReadIcon from '@/components/icons/ReadIcon';
+import DeliveredIcon from '@/components/icons/DeliveredIcon';
 
 interface ChatPanelProps {
   messages: Message[];
@@ -50,7 +50,7 @@ export default function ChatPanel({
 }: ChatPanelProps) {
   const { user: currentUser } = useAuthStore();
   const { selectedChat } = useChatStore();
-  const [textInput, setTextInput] = React.useState("");
+  const [textInput, setTextInput] = React.useState('');
   const { sendMessage } = useChatContext();
   const [autoScrollToBottom, setAutoScrollToBottom] = React.useState(true);
 
@@ -108,7 +108,7 @@ export default function ChatPanel({
       (entries) =>
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const messageId = entry.target.getAttribute("data-message-id");
+            const messageId = entry.target.getAttribute('data-message-id');
 
             if (messageId) {
               onMessageRead(messageId);
@@ -129,12 +129,12 @@ export default function ChatPanel({
     return () => observer.disconnect();
   }, [messages, onMessageRead, currentUser]);
 
-  let lastDate: string = "";
+  let lastDate: string = '';
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     sendMessage(selectedChat!.id, textInput);
-    setTextInput("");
+    setTextInput('');
     if (messageInputRef) {
       messageInputRef.current?.focus();
     }
@@ -201,7 +201,7 @@ export default function ChatPanel({
                         messageRefs.current.delete(message.id);
                       }
                     }}
-                    className={`w-full flex ${message.senderId === currentUser!.id ? "justify-end" : "justify-start"} pt-2`}
+                    className={`w-full flex ${message.senderId === currentUser!.id ? 'justify-end' : 'justify-start'} pt-2`}
                     data-message-id={message.id}
                   >
                     <Card
@@ -211,11 +211,11 @@ export default function ChatPanel({
                       <CardBody className="p-2">
                         {message.content}
                         <small
-                          className={`pt-0  text-right text-[0.6rem] flex justify-end items-center gap-1 ${message.senderId === currentUser!.id ? "text-white/80" : "text-gray-500"}`}
+                          className={`pt-0  text-right text-[0.6rem] flex justify-end items-center gap-1 ${message.senderId === currentUser!.id ? 'text-white/80' : 'text-gray-500'}`}
                         >
                           {new Date(message.createdAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
+                            hour: '2-digit',
+                            minute: '2-digit',
                           })}
                           {message.senderId === currentUser!.id &&
                             getStatusIcon(message.status)}
@@ -237,13 +237,13 @@ export default function ChatPanel({
             <Input
               ref={messageInputRef}
               classNames={{
-                inputWrapper: "h-14 bg-default-200/90",
+                inputWrapper: 'h-14 bg-default-200/90',
               }}
               endContent={
                 <Button
                   isIconOnly
                   color="primary"
-                  isDisabled={textInput === ""}
+                  isDisabled={textInput === ''}
                   size="sm"
                   type="submit"
                 >

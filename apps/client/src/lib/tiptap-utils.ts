@@ -1,5 +1,5 @@
-import type { Attrs, Node } from "@tiptap/pm/model";
-import type { Editor } from "@tiptap/react";
+import type { Attrs, Node } from '@tiptap/pm/model';
+import type { Editor } from '@tiptap/react';
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -69,7 +69,7 @@ export function isEmptyNode(node?: Node | null): boolean {
 export function cn(
   ...classes: (string | boolean | undefined | null)[]
 ): string {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 /**
@@ -105,7 +105,7 @@ export function findNodePosition(props: {
         return { pos: nodePos!, node: nodeAtPos };
       }
     } catch (error) {
-      console.error("Error checking node at position:", error);
+      console.error('Error checking node at position:', error);
 
       return null;
     }
@@ -147,7 +147,7 @@ export const handleImageUpload = async (
 ): Promise<string> => {
   // Validate file
   if (!file) {
-    throw new Error("No file provided");
+    throw new Error('No file provided');
   }
 
   if (file.size > MAX_FILE_SIZE) {
@@ -159,13 +159,13 @@ export const handleImageUpload = async (
   // For demo/testing: Simulate upload progress
   for (let progress = 0; progress <= 100; progress += 10) {
     if (abortSignal?.aborted) {
-      throw new Error("Upload cancelled");
+      throw new Error('Upload cancelled');
     }
     await new Promise((resolve) => setTimeout(resolve, 500));
     onProgress?.({ progress });
   }
 
-  return "/images/placeholder-image.png";
+  return '/images/placeholder-image.png';
 
   // Uncomment for production use:
   // return convertFileToBase64(file, abortSignal);
@@ -182,7 +182,7 @@ export const convertFileToBase64 = (
   abortSignal?: AbortSignal,
 ): Promise<string> => {
   if (!file) {
-    return Promise.reject(new Error("No file provided"));
+    return Promise.reject(new Error('No file provided'));
   }
 
   return new Promise((resolve, reject) => {
@@ -190,22 +190,22 @@ export const convertFileToBase64 = (
 
     const abortHandler = () => {
       reader.abort();
-      reject(new Error("Upload cancelled"));
+      reject(new Error('Upload cancelled'));
     };
 
     if (abortSignal) {
-      abortSignal.addEventListener("abort", abortHandler);
+      abortSignal.addEventListener('abort', abortHandler);
     }
 
     reader.onloadend = () => {
       if (abortSignal) {
-        abortSignal.removeEventListener("abort", abortHandler);
+        abortSignal.removeEventListener('abort', abortHandler);
       }
 
-      if (typeof reader.result === "string") {
+      if (typeof reader.result === 'string') {
         resolve(reader.result);
       } else {
-        reject(new Error("Failed to convert File to base64"));
+        reject(new Error('Failed to convert File to base64'));
       }
     };
 

@@ -1,12 +1,12 @@
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import type { EventBusPort } from "@core/common/port/message/EventBusPort";
-import type { KafkaConnection } from "@infrastructure/adapter/kafka/KafkaConnection";
-import { InfrastructureDITokens } from "@infrastructure/di/InfrastructureDITokens";
-import { CHAT_TOPIC } from "@shared/constants/topics";
-import { tryCatch } from "@shared/utils/try-catch";
-import { inject } from "inversify";
-import type { Producer } from "kafkajs";
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { EventBusPort } from '@core/common/port/message/EventBusPort';
+import type { KafkaConnection } from '@infrastructure/adapter/kafka/KafkaConnection';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import { CHAT_TOPIC } from '@shared/constants/topics';
+import { tryCatch } from '@shared/utils/try-catch';
+import { inject } from 'inversify';
+import type { Producer } from 'kafkajs';
 
 export class KafkaEventBusProducerAdapter implements EventBusPort {
   private readonly producer: Producer;
@@ -18,11 +18,11 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
     this.logger = logger.fromContext(KafkaEventBusProducerAdapter.name);
 
     this.producer = this.kafkaConnection.getProducer();
-    this.producer.on("producer.connect", () => {
-      this.logger.debug("Connected to kafka producer");
+    this.producer.on('producer.connect', () => {
+      this.logger.debug('Connected to kafka producer');
     });
-    this.producer.on("producer.disconnect", () => {
-      this.logger.debug("Disconnected from kafka producer");
+    this.producer.on('producer.disconnect', () => {
+      this.logger.debug('Disconnected from kafka producer');
     });
   }
 
@@ -44,7 +44,7 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
     const messageValue = JSON.stringify(event);
     let topic: string;
     switch (event.type) {
-      case "user.chat.created": {
+      case 'user.chat.created': {
         topic = CHAT_TOPIC;
         break;
       }
@@ -66,7 +66,7 @@ export class KafkaEventBusProducerAdapter implements EventBusPort {
             value: messageValue,
             headers: {
               //attach correlation id from async store
-              "x-correlation-id": "",
+              'x-correlation-id': '',
             },
           },
         ],

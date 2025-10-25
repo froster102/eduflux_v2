@@ -1,26 +1,26 @@
-import type { ChatController } from "@api/http/controller/ChatController";
-import { SocketIOServer } from "@api/websocket/io";
-import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { container } from "@di/RootModule";
-import { HttpServerConfig } from "@shared/HttpServerConfig";
-import { Hono } from "hono";
-import type { Server as HTTPServer } from "node:http";
-import { serve } from "@hono/node-server";
-import { correlationIdSetupMiddleware } from "@api/http/middlewares/correlationIdSetup.middleware";
-import { httpLoggerMiddleware } from "@api/http/middlewares/httpLoggerMiddleware";
+import type { ChatController } from '@api/http/controller/ChatController';
+import { SocketIOServer } from '@api/websocket/io';
+import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { container } from '@di/RootModule';
+import { HttpServerConfig } from '@shared/HttpServerConfig';
+import { Hono } from 'hono';
+import type { Server as HTTPServer } from 'node:http';
+import { serve } from '@hono/node-server';
+import { correlationIdSetupMiddleware } from '@api/http/middlewares/correlationIdSetup.middleware';
+import { httpLoggerMiddleware } from '@api/http/middlewares/httpLoggerMiddleware';
 import {
   errorHandler,
   notFoundHandler,
-} from "@api/http/middlewares/errorHandlerMiddleware";
+} from '@api/http/middlewares/errorHandlerMiddleware';
 
 export class HttpServer {
   private app: Hono;
   private port: number;
   private logger = container
     .get<LoggerPort>(CoreDITokens.Logger)
-    .fromContext("HTTP_SERVER");
+    .fromContext('HTTP_SERVER');
   private chatController: ChatController;
 
   constructor() {
@@ -39,10 +39,10 @@ export class HttpServer {
   }
 
   private setupRoutes(): void {
-    this.app.get("/health", (c) => {
-      return c.json({ message: "Api running successfully." });
+    this.app.get('/health', (c) => {
+      return c.json({ message: 'Api running successfully.' });
     });
-    this.app.route("/api/chats/", this.chatController.register());
+    this.app.route('/api/chats/', this.chatController.register());
   }
 
   private initSocketIOServer(server: HTTPServer) {

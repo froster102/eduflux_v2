@@ -1,13 +1,13 @@
-import { paginationSchema } from "@api/validation/paginationSchema";
-import { Role } from "@core/common/enum/Role";
-import { z } from "zod/v4";
+import { paginationSchema } from '@api/validation/paginationSchema';
+import { Role } from '@core/common/enum/Role';
+import { z } from 'zod/v4';
 
 export const getChatsSchema = paginationSchema.extend({
   role: z.enum([Role.INSTRUCTOR, Role.LEARNER]).default(Role.LEARNER),
 });
 
 export const createChatSchema = z.object({
-  instructorId: z.string({ error: "Instructor id is required" }),
+  instructorId: z.string({ error: 'Instructor id is required' }),
 });
 
 export const getChatExistsSchema = z.object({

@@ -1,9 +1,9 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Divider } from "@heroui/divider";
-import { User } from "@heroui/user";
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Chip } from '@heroui/chip';
+import { Divider } from '@heroui/divider';
+import { User } from '@heroui/user';
 
-import { formatTo12HourWithDate } from "@/utils/date";
+import { formatTo12HourWithDate } from '@/utils/date';
 
 interface ProfileCardProps {
   email: string;
@@ -27,12 +27,12 @@ export default function ProfileCard({
       <CardHeader>
         <User
           avatarProps={{
-            size: "lg",
-            radius: "sm",
+            size: 'lg',
+            radius: 'sm',
             src: image,
           }}
           classNames={{
-            name: "text-xl font-semibold capitalize",
+            name: 'text-xl font-semibold capitalize',
           }}
           description={email}
           name={name}

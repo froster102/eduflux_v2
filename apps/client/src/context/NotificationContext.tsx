@@ -1,9 +1,9 @@
-import React from "react";
-import { addToast } from "@heroui/toast";
-import { useQueryClient } from "@tanstack/react-query";
+import React from 'react';
+import { addToast } from '@heroui/toast';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { NOTIFICATION_SSE_URL } from "@/lib/constants";
-import { ServerEvents } from "@/shared/constants/ServerEvents";
+import { NOTIFICATION_SSE_URL } from '@/lib/constants';
+import { ServerEvents } from '@/shared/constants/ServerEvents';
 
 export interface NotificationContextType {}
 
@@ -46,7 +46,7 @@ export const NotificationProvider = ({
         });
 
         queryClient.setQueryData(
-          ["notifications"],
+          ['notifications'],
           (old: AppNotification[]) => [...old, data],
         );
       },

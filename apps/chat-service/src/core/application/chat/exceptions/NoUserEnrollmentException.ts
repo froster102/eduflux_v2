@@ -1,5 +1,5 @@
-import { Code } from "@core/common/error/Code";
-import { Exception } from "@core/common/exception/Exception";
+import { Code } from '@core/common/error/Code';
+import { Exception } from '@core/common/exception/Exception';
 
 export class NoUserEnrollmentException extends Exception<{
   userId: string;

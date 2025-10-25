@@ -1,5 +1,5 @@
-import { PaymentStatus } from "@/shared/enums/PaymentStatus";
-import { PaymentType } from "@/shared/enums/PaymentType";
+import { PaymentStatus } from '@/shared/enums/PaymentStatus';
+import { PaymentType } from '@/shared/enums/PaymentType';
 
 declare global {
   export type CheckoutItem = {
@@ -9,7 +9,7 @@ declare global {
       image?: string;
       amount: number;
     };
-    itemType: "course";
+    itemType: 'course';
   };
 
   export type Payment = {
@@ -45,7 +45,7 @@ declare global {
   };
 
   export type GetPaymentSummaryQueryParameter = {
-    filter?: GetPaymentQueryParameters["filter"] & {
+    filter?: GetPaymentQueryParameters['filter'] & {
       groupBy?: PaymentSummaryGroup;
       startDate?: Date;
       endDate?: Date;

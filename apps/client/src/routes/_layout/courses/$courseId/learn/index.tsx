@@ -1,21 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Skeleton } from "@heroui/skeleton";
-import { Progress } from "@heroui/progress";
-import { Accordion, AccordionItem } from "@heroui/accordion";
-import React from "react";
-import { Checkbox } from "@heroui/checkbox";
-import { Spinner } from "@heroui/spinner";
+import { createFileRoute } from '@tanstack/react-router';
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Skeleton } from '@heroui/skeleton';
+import { Progress } from '@heroui/progress';
+import { Accordion, AccordionItem } from '@heroui/accordion';
+import React from 'react';
+import { Checkbox } from '@heroui/checkbox';
+import { Spinner } from '@heroui/spinner';
 
-import HLSPlayer from "@/components/HLSPlayer";
-import { useGetCourseInfo } from "@/features/course/hooks/useGetCourseInfo";
-import { useGetPublishedCourseCurriculum } from "@/features/course/hooks/useGetPublishedCourseCurriculum";
-import { useGetSubscribedCourseCurriculumItem } from "@/features/course/hooks/useGetSubscribedCourseCurriculumItem";
-import { useAddCourseProgress } from "@/features/progress/hooks/useAddCourseProgress";
-import { useDeleteCourseProgress } from "@/features/progress/hooks/useDeleteCourseProgress";
-import { useGetCourseProgress } from "@/features/progress/hooks/useGetCourseProgress";
+import HLSPlayer from '@/components/HLSPlayer';
+import { useGetCourseInfo } from '@/features/course/hooks/useGetCourseInfo';
+import { useGetPublishedCourseCurriculum } from '@/features/course/hooks/useGetPublishedCourseCurriculum';
+import { useGetSubscribedCourseCurriculumItem } from '@/features/course/hooks/useGetSubscribedCourseCurriculumItem';
+import { useAddCourseProgress } from '@/features/progress/hooks/useAddCourseProgress';
+import { useDeleteCourseProgress } from '@/features/progress/hooks/useDeleteCourseProgress';
+import { useGetCourseProgress } from '@/features/progress/hooks/useGetCourseProgress';
 
-export const Route = createFileRoute("/_layout/courses/$courseId/learn/")({
+export const Route = createFileRoute('/_layout/courses/$courseId/learn/')({
   component: RouteComponent,
 });
 
@@ -42,7 +42,7 @@ function RouteComponent() {
   const totalModulesWithoutChapter = React.useMemo(() => {
     if (courseCurriculum) {
       return courseCurriculum.data.reduce((acc, el) => {
-        if (el._class !== "chapter") {
+        if (el._class !== 'chapter') {
           acc++;
         }
 
@@ -82,7 +82,7 @@ function RouteComponent() {
     for (let i = chapterIndex + 1; i < curriculumItems.length; i++) {
       const currentItem = curriculumItems[i];
 
-      if (currentItem && currentItem._class === "chapter") {
+      if (currentItem && currentItem._class === 'chapter') {
         break;
       }
       if (currentItem) {
@@ -94,7 +94,7 @@ function RouteComponent() {
   }
 
   function handleCourseProgress(item: CurriculumItem, isCompleted: boolean) {
-    if (item._class == "lecture") {
+    if (item._class == 'lecture') {
       if (isCompleted) {
         addCourseLectureProgress.mutate({
           courseId,
@@ -115,8 +115,8 @@ function RouteComponent() {
         <CardBody className="p-0 border border-default-200">
           {isItemContentLoading ? (
             <Spinner />
-          ) : itemContent && itemContent!.data._class === "lecture" ? (
-            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+          ) : itemContent && itemContent!.data._class === 'lecture' ? (
+            <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
               <div className="absolute top-0 left-0 w-full h-full">
                 <HLSPlayer
                   options={{
@@ -157,7 +157,7 @@ function RouteComponent() {
           ) : (
             <Accordion>
               {courseCurriculum!.data.map((item, i) => {
-                if (item._class === "chapter") {
+                if (item._class === 'chapter') {
                   const chapterItems = findChapterItems(
                     courseCurriculum!.data,
                     i,
@@ -180,7 +180,7 @@ function RouteComponent() {
                         ? chapterItems.map((chapterItem, i) => (
                             <div
                               key={chapterItem.id}
-                              className={`${i !== 0 ? "pt-2" : ""}`}
+                              className={`${i !== 0 ? 'pt-2' : ''}`}
                             >
                               <Card
                                 isPressable

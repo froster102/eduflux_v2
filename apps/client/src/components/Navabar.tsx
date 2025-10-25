@@ -1,6 +1,6 @@
-import { Tab, Tabs } from "@heroui/tabs";
-import { useLocation, useNavigate } from "@tanstack/react-router";
-import React from "react";
+import { Tab, Tabs } from '@heroui/tabs';
+import { useLocation, useNavigate } from '@tanstack/react-router';
+import React from 'react';
 
 interface NavabarProps {
   navItems: {
@@ -17,7 +17,7 @@ export default function Navbar({ navItems }: NavabarProps) {
   const activeRouteKey = React.useMemo(() => {
     return (
       navItems.find((item) => item.path.startsWith(location.pathname))?.path ||
-      ""
+      ''
     );
   }, [location.pathname, navItems]);
 
@@ -40,10 +40,10 @@ export default function Navbar({ navItems }: NavabarProps) {
         className="w-full"
         classNames={{
           tabList:
-            "gap-6 w-full relative rounded-none p-0 border-b border-default-500 border-divider",
-          cursor: "w-full",
-          tab: "max-w-fit px-0 h-14",
-          tabContent: "group-data-[selected=true]:text-default-500",
+            'gap-6 w-full relative rounded-none p-0 border-b border-default-500 border-divider',
+          cursor: 'w-full',
+          tab: 'max-w-fit px-0 h-14',
+          tabContent: 'group-data-[selected=true]:text-default-500',
         }}
         color="primary"
         selectedKey={activeRouteKey}

@@ -1,5 +1,5 @@
-import type { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
-import mongoose, { Model, Schema, type Document } from "mongoose";
+import type { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
+import mongoose, { Model, Schema, type Document } from 'mongoose';
 
 export interface MongooseNotification extends Document {
   _id: string;
@@ -57,4 +57,4 @@ export const NotificationSchema = new Schema<MongooseNotification>(
 );
 
 export const NotificationModel: Model<MongooseNotification> =
-  mongoose.model<MongooseNotification>("Notification", NotificationSchema);
+  mongoose.model<MongooseNotification>('Notification', NotificationSchema);

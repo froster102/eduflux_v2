@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export interface Verification {
   verificationEmail: string | null;
@@ -19,7 +19,7 @@ export const useVerificationStore = create<Verification>()(
       },
     }),
     {
-      name: "__temp",
+      name: '__temp',
     },
   ),
 );

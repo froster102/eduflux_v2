@@ -12,40 +12,16 @@ services:
       - "4040:4040"
     networks:
       - eduflux-network
-    depends_on:
-      - kong
     restart: "no"
 
-  kong:
-    image: kong:latest
-    container_name: kong
-    networks:
-      - eduflux-network
-    environment:
-      KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
-      KONG_PROXY_ACCESS_LOG: /dev/stdout
-      KONG_ADMIN_ACCESS_LOG: /dev/stdout
-      KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
-      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl
-      KONG_ADMIN_GUI_LISTEN: 0.0.0.0:8002, 0.0.0.0:8445 ssl # Kong Manager on HTTP + HTTPS
-      KONG_ADMIN_GUI_URL: http://${GW_HOST:-localhost}:8002 # URL for GUI links
-      KONG_PASSWORD: handyshake # Required for logging in to Kong Manager (RBAC)
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:4.1.4-management
     volumes:
-      - ../apps/gateway/kong.yml:/usr/local/kong/declarative/kong.yml:ro
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     ports:
-      - "8000:8000" # Proxy
-      - "8443:8443" # Proxy SSL
-      - "8001:8001" # Admin API
-      - "8002:8002" # Kong manager
-      - "8444:8444" # Admin API SSL
-    healthcheck:
-      test: [ "CMD", "kong", "health" ]
-      interval: 10s
-      timeout: 10s
-      retries: 10
+      - 15672:15672
+      - 5672:5672
     restart: on-failure
 
   eduflux_auth_db:

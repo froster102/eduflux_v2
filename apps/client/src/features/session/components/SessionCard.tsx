@@ -1,15 +1,15 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { User } from "@heroui/user";
-import { Chip } from "@heroui/chip";
-import React from "react";
+import { Button } from '@heroui/button';
+import { Card, CardBody } from '@heroui/card';
+import { User } from '@heroui/user';
+import { Chip } from '@heroui/chip';
+import React from 'react';
 
-import { IMAGE_BASE_URL } from "@/config/image";
-import ClockIcon from "@/components/icons/ClockIcon";
-import { formatSessionDataTime } from "@/utils/date";
-import VideoIcon from "@/components/icons/VideoIcon";
-import { Role } from "@/shared/enums/Role";
-import { SessionStatus } from "@/shared/enums/SessionStatus";
+import { IMAGE_BASE_URL } from '@/config/image';
+import ClockIcon from '@/components/icons/ClockIcon';
+import { formatSessionDataTime } from '@/utils/date';
+import VideoIcon from '@/components/icons/VideoIcon';
+import { Role } from '@/shared/enums/Role';
+import { SessionStatus } from '@/shared/enums/SessionStatus';
 
 interface SessionCardProps {
   session: UserSession;
@@ -17,9 +17,9 @@ interface SessionCardProps {
   role: Role;
 }
 
-const sessionSuccessState = ["BOOKED", "CONFIRMED", "COMPLETED"];
-const sessionWarnStates = ["IN_PROGRESS", "PENDING_PAYMENT"];
-const sessionFailureStates = ["PAYMENT_EXPIRED"];
+const sessionSuccessState = ['BOOKED', 'CONFIRMED', 'COMPLETED'];
+const sessionWarnStates = ['IN_PROGRESS', 'PENDING_PAYMENT'];
+const sessionFailureStates = ['PAYMENT_EXPIRED'];
 
 export default function SessionCard({
   session,
@@ -33,16 +33,16 @@ export default function SessionCard({
 
   const getSessionStatusColor = React.useCallback((status: SessionStatus) => {
     if (sessionSuccessState.includes(status)) {
-      return "success";
+      return 'success';
     }
     if (sessionWarnStates.includes(status)) {
-      return "warning";
+      return 'warning';
     }
     if (sessionFailureStates.includes(status)) {
-      return "danger";
+      return 'danger';
     }
 
-    return "success";
+    return 'success';
   }, []);
 
   return (
@@ -54,7 +54,7 @@ export default function SessionCard({
               <div className="flex items-center gap-2">
                 <User
                   avatarProps={{
-                    size: "sm",
+                    size: 'sm',
                     src: `${IMAGE_BASE_URL}${session.instructor.image}`,
                   }}
                   name={`${role === Role.LEARNER ? session.instructor.name : session.learner.name}`}
@@ -65,7 +65,7 @@ export default function SessionCard({
                   size="sm"
                   variant="flat"
                 >
-                  {session.status.toLowerCase().replace("_", " ")}
+                  {session.status.toLowerCase().replace('_', ' ')}
                 </Chip>
               </div>
               <p>{date}</p>

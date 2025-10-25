@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, CardBody, CardHeader } from '@heroui/card';
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -6,14 +6,14 @@ import {
   RadarChart,
   ResponsiveContainer,
   Tooltip,
-} from "recharts";
+} from 'recharts';
 
 interface AnalyticsChartProps {
   title: string;
   angleAxisDataKey: string;
   radarDataKey: string;
   name: string;
-  timeframe: "weekly" | "monthly";
+  timeframe: 'weekly' | 'monthly';
   data: any[];
   classNames?: {
     wrapper?: string;
@@ -70,7 +70,7 @@ const CustomTooltip = ({
     >
       <CardHeader className="p-0">
         <p className="text-xs">
-          <span className="text-default-500 pr-4">Login</span>{" "}
+          <span className="text-default-500 pr-4">Login</span>{' '}
           {payload && payload[0]?.payload?.value}
         </p>
       </CardHeader>

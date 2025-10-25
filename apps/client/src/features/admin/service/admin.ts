@@ -1,4 +1,4 @@
-import { auth } from "@/lib/better-auth/auth";
+import { auth } from '@/lib/better-auth/auth';
 
 export async function banUser(userId: string) {
   const { data, error } = await auth.admin.banUser({ userId: userId });

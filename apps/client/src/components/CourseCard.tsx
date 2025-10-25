@@ -1,11 +1,11 @@
-import { Card, CardBody, CardFooter } from "@heroui/card";
-import { Image } from "@heroui/image";
-import { Chip } from "@heroui/chip";
-import { Button } from "@heroui/button";
+import { Card, CardBody, CardFooter } from '@heroui/card';
+import { Image } from '@heroui/image';
+import { Chip } from '@heroui/chip';
+import { Button } from '@heroui/button';
 
-import { IMAGE_BASE_URL } from "@/config/image";
-import UsersIcon from "@/components/icons/UsersIcon";
-import { courseLevelMap } from "@/config/course-level";
+import { IMAGE_BASE_URL } from '@/config/image';
+import UsersIcon from '@/components/icons/UsersIcon';
+import { courseLevelMap } from '@/config/course-level';
 
 interface CourseCardProps {
   course: Course;
@@ -38,7 +38,7 @@ export default function CourseCard({
         src={
           course.thumbnail
             ? `${IMAGE_BASE_URL}${course.thumbnail}`
-            : "/placeholder.png"
+            : '/placeholder.png'
         }
       />
 
@@ -46,7 +46,7 @@ export default function CourseCard({
         <div className="flex items-center justify-between">
           <Chip
             className="capitalize text-xs"
-            color={courseLevelMap[course.level] || "default"}
+            color={courseLevelMap[course.level] || 'default'}
             size="sm"
             variant="flat"
           >

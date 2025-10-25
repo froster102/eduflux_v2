@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from '@/store/auth-store';
 
-import { deleteCourseProgress } from "../service/progress";
+import { deleteCourseProgress } from '../service/progress';
 
 export function useDeleteCourseProgress() {
   const { user } = useAuthStore();

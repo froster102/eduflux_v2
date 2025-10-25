@@ -1,6 +1,6 @@
-import { Card, CardBody } from "@heroui/card";
-import React from "react";
-import { motion } from "motion/react";
+import { Card, CardBody } from '@heroui/card';
+import React from 'react';
+import { motion } from 'motion/react';
 
 interface TimeCardProps {
   className?: string;

@@ -1,3 +1,3 @@
 export enum TemplateNames {
-  SESSION_CONFIRMED = "session-confirmed",
+  SESSION_CONFIRMED = 'session-confirmed',
 }

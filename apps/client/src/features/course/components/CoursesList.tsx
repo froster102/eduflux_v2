@@ -1,12 +1,12 @@
-import CourseCard from "@/components/CourseCard";
-import PaginationWithNextAndPrevious from "@/components/Pagination";
+import CourseCard from '@/components/CourseCard';
+import PaginationWithNextAndPrevious from '@/components/Pagination';
 
 interface CoursesListProps {
   courses: Course[];
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  type: "all-course" | "my-courses";
+  type: 'all-course' | 'my-courses';
   isInstructorListing?: boolean;
   onCoursePress: (course: Course) => void;
 }
@@ -28,7 +28,7 @@ export default function CoursesList({
             key={course.id}
             course={course}
             isInstructorCourse={isInstructorListing}
-            isSubscribed={type === "my-courses"}
+            isSubscribed={type === 'my-courses'}
             onPress={() => {
               if (onCoursePress) {
                 onCoursePress(course);

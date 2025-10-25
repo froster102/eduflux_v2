@@ -1,12 +1,12 @@
-import React from "react";
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import React from 'react';
+import { createFileRoute, Navigate } from '@tanstack/react-router';
 
-import ScreenLoader from "@/components/ScreenLoader";
-import { useSession } from "@/lib/better-auth/auth";
-import { useAuthStore } from "@/store/auth-store";
-import { Role } from "@/shared/enums/Role";
+import ScreenLoader from '@/components/ScreenLoader';
+import { useSession } from '@/lib/better-auth/auth';
+import { useAuthStore } from '@/store/auth-store';
+import { Role } from '@/shared/enums/Role';
 
-export const Route = createFileRoute("/auth/google/callback")({
+export const Route = createFileRoute('/auth/google/callback')({
   component: RouteComponent,
 });
 

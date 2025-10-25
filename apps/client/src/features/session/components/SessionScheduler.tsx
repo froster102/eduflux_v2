@@ -1,15 +1,15 @@
-import { Calendar, DateValue } from "@heroui/calendar";
-import { Avatar } from "@heroui/avatar";
-import { Tab, Tabs } from "@heroui/tabs";
-import { ScrollShadow } from "@heroui/scroll-shadow";
-import { Button } from "@heroui/button";
-import { Spinner } from "@heroui/spinner";
-import { parseAbsoluteToLocal, parseDateTime } from "@internationalized/date";
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Calendar, DateValue } from '@heroui/calendar';
+import { Avatar } from '@heroui/avatar';
+import { Tab, Tabs } from '@heroui/tabs';
+import { ScrollShadow } from '@heroui/scroll-shadow';
+import { Button } from '@heroui/button';
+import { Spinner } from '@heroui/spinner';
+import { parseAbsoluteToLocal, parseDateTime } from '@internationalized/date';
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 
-import { IMAGE_BASE_URL } from "@/config/image";
-import ClockIcon from "@/components/icons/ClockIcon";
-import VideoIcon from "@/components/icons/VideoIcon";
+import { IMAGE_BASE_URL } from '@/config/image';
+import ClockIcon from '@/components/icons/ClockIcon';
+import VideoIcon from '@/components/icons/VideoIcon';
 
 interface SessionSchedulerProps {
   isOpen: boolean;
@@ -42,7 +42,7 @@ export default function SessionScheduler({
     <Modal
       backdrop="blur"
       classNames={{
-        backdrop: "bg-background/80 backdrop-opacity-50",
+        backdrop: 'bg-background/80 backdrop-opacity-50',
       }}
       isOpen={isOpen}
       size="5xl"
@@ -89,16 +89,16 @@ export default function SessionScheduler({
                     calendarWidth={372}
                     className="overflow-hidden"
                     classNames={{
-                      base: "!bg-transparent border-0 shadow-none",
-                      cell: "p-1.5 w-full",
+                      base: '!bg-transparent border-0 shadow-none',
+                      cell: 'p-1.5 w-full',
                       gridBodyRow:
-                        "!gap-x-1 !px-3 !mb-1 !first:mt-4 !last:mb-0",
-                      gridHeader: "!bg-transparent !shadow-none",
-                      gridHeaderCell: "!text-default-400 !text-xs !p-0 !w-full",
-                      gridHeaderRow: "px-3 pb-3",
-                      gridWrapper: "pb-2",
-                      headerWrapper: "!bg-transparent",
-                      title: "font-semibold text-white",
+                        '!gap-x-1 !px-3 !mb-1 !first:mt-4 !last:mb-0',
+                      gridHeader: '!bg-transparent !shadow-none',
+                      gridHeaderCell: '!text-default-400 !text-xs !p-0 !w-full',
+                      gridHeaderRow: 'px-3 pb-3',
+                      gridWrapper: 'pb-2',
+                      headerWrapper: '!bg-transparent',
+                      title: 'font-semibold text-white',
                     }}
                     showShadow={false}
                     value={parseDateTime(selectedDate) as any}
@@ -139,14 +139,14 @@ export default function SessionScheduler({
                                 <div
                                   className={`absolute left-0 transition-all duration-300 ease-in-out ${
                                     selectedSlot && selectedSlot.id === slot.id
-                                      ? "w-[55%]"
-                                      : "w-full"
+                                      ? 'w-[55%]'
+                                      : 'w-full'
                                   }`}
                                 >
                                   <Button
                                     fullWidth
                                     className="font-medium bg-background border border-default-200"
-                                    isDisabled={slot.status === "BOOKED"}
+                                    isDisabled={slot.status === 'BOOKED'}
                                     onPress={() => onSlotSelectionChange(slot)}
                                   >
                                     {startTime} - {endTime}
@@ -155,8 +155,8 @@ export default function SessionScheduler({
                                 <div
                                   className={`transition-all duration-300 ease-in-out ${
                                     selectedSlot && selectedSlot.id === slot.id
-                                      ? "w-[40%] opacity-100"
-                                      : "w-0 opacity-0"
+                                      ? 'w-[40%] opacity-100'
+                                      : 'w-0 opacity-0'
                                   } overflow-hidden`}
                                 >
                                   <Button
@@ -164,7 +164,7 @@ export default function SessionScheduler({
                                     color="primary"
                                     isDisabled={
                                       isConfirmBookingPending ||
-                                      slot.status === "BOOKED"
+                                      slot.status === 'BOOKED'
                                     }
                                     isLoading={isConfirmBookingPending}
                                     onPress={() =>

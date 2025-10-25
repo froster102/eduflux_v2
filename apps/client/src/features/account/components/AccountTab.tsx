@@ -1,6 +1,6 @@
-import { useUpdatePassword } from "../hooks/useUpdatePassword";
+import { useUpdatePassword } from '../hooks/useUpdatePassword';
 
-import PasswordForm from "./forms/PasswordForm";
+import PasswordForm from './forms/PasswordForm';
 
 export default function AccountTab() {
   const updatePassword = useUpdatePassword();

@@ -1,18 +1,18 @@
-import { createAuthClient } from "better-auth/react";
+import { createAuthClient } from 'better-auth/react';
 import {
   emailOTPClient,
   inferAdditionalFields,
   jwtClient,
   adminClient,
-} from "better-auth/client/plugins";
+} from 'better-auth/client/plugins';
 
 export const auth = createAuthClient({
-  baseURL: "http://localhost:8000",
+  baseURL: 'http://localhost:8000',
   plugins: [
     inferAdditionalFields({
       user: {
         roles: {
-          type: "string[]",
+          type: 'string[]',
           input: false,
         },
       },

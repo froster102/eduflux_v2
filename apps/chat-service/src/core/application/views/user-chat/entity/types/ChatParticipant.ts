@@ -1,4 +1,4 @@
-import type { Role } from "@core/common/enum/Role";
+import type { Role } from '@core/common/enum/Role';
 
 export type ChatParticipant = {
   id: string;

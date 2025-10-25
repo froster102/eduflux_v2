@@ -1,10 +1,10 @@
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
 import {
   InterceptingCall,
   ListenerBuilder,
   RequesterBuilder,
   type Interceptor,
-} from "@grpc/grpc-js";
+} from '@grpc/grpc-js';
 
 export function createClientLoggingInterceptor(
   logger: LoggerPort,

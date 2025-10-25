@@ -1,6 +1,6 @@
-import { Entity } from "@core/common/entity/Entity";
-import type { Role } from "@core/common/enum/Role";
-import type { CreateChatPayload } from "@core/domain/chat/entity/type/CreateChatPayload";
+import { Entity } from '@core/common/entity/Entity';
+import type { Role } from '@core/common/enum/Role';
+import type { CreateChatPayload } from '@core/domain/chat/entity/type/CreateChatPayload';
 
 export interface ChatParticipant {
   userId: string;
@@ -17,7 +17,7 @@ export class Chat extends Entity<string> {
   constructor(payload: CreateChatPayload) {
     super(payload.id);
     this._participants = payload.participants;
-    this._lastMessagePreview = "";
+    this._lastMessagePreview = '';
     this._lastMessageAt = payload.lastMessageAt;
     this._createdAt = payload.createdAt;
     this._updatedAt = payload.updatedAt;

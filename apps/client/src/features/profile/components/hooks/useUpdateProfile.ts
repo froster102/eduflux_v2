@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addToast } from "@heroui/toast";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { addToast } from '@heroui/toast';
 
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from '@/store/auth-store';
 
-import { updateProfile } from "../../service/profile";
+import { updateProfile } from '../../service/profile';
 
 export function useUpdateProfile() {
   const { user, updateUser } = useAuthStore();
@@ -34,21 +34,21 @@ export function useUpdateProfile() {
     onSuccess: (_, requestData) => {
       updateUser({
         ...requestData,
-        name: requestData.firstName + " " + requestData.lastName,
+        name: requestData.firstName + ' ' + requestData.lastName,
       });
       addToast({
-        title: "Profile updation",
-        description: "Your profile has been update successfully",
-        color: "success",
+        title: 'Profile updation',
+        description: 'Your profile has been update successfully',
+        color: 'success',
       });
     },
 
     onError: (_, _var, context) => {
       queryClient.setQueryData([key], context!.prev);
       addToast({
-        title: "Profile updation",
-        description: "Failed to update your profile",
-        color: "danger",
+        title: 'Profile updation',
+        description: 'Failed to update your profile',
+        color: 'danger',
       });
     },
   });

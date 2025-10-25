@@ -1,17 +1,17 @@
-import { Chip } from "@heroui/chip";
+import { Chip } from '@heroui/chip';
 
-import DataTable from "@/components/DataTable";
-import { PaymentStatus } from "@/shared/enums/PaymentStatus";
-import { PaymentType } from "@/shared/enums/PaymentType";
+import DataTable from '@/components/DataTable';
+import { PaymentStatus } from '@/shared/enums/PaymentStatus';
+import { PaymentType } from '@/shared/enums/PaymentType';
 
 const PaymentStatusColorMap: Record<
   PaymentStatus,
-  "default" | "primary" | "secondary" | "success" | "warning" | "danger"
+  'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
 > = {
-  pending: "warning",
-  completed: "success",
-  failed: "danger",
-  refunded: "secondary",
+  pending: 'warning',
+  completed: 'success',
+  failed: 'danger',
+  refunded: 'secondary',
 };
 
 interface PaymentsTableProps {
@@ -34,41 +34,41 @@ export default function PaymentsTable({
   onSearchValueChange,
 }: PaymentsTableProps) {
   const PaymentTypeMap: Record<PaymentType, string> = {
-    course_purchase: "Course Purchase",
-    session_booking: "Session Booking",
+    course_purchase: 'Course Purchase',
+    session_booking: 'Session Booking',
   };
 
   const columns = [
-    { uid: "referenceId", name: "Reference ID" },
-    { uid: "platformFee", name: "Platform Fee", sortable: true },
-    { uid: "instructorRevenue", name: "Instructor Revenue", sortable: true },
+    { uid: 'referenceId', name: 'Reference ID' },
+    { uid: 'platformFee', name: 'Platform Fee', sortable: true },
+    { uid: 'instructorRevenue', name: 'Instructor Revenue', sortable: true },
     // { uid: "status", name: "Status" },
-    { uid: "createdAt", name: "Payment Date", sortable: true },
-    { uid: "type", name: "Payment Type", sortable: true },
+    { uid: 'createdAt', name: 'Payment Date', sortable: true },
+    { uid: 'type', name: 'Payment Type', sortable: true },
   ];
 
   const renderCell = (item: Payment, columnKey: string) => {
     switch (columnKey) {
-      case "referenceId":
+      case 'referenceId':
         return item.referenceId;
-      case "platformFee":
+      case 'platformFee':
         return `$${item.platformFee.toFixed(2)}`;
-      case "instructorRevenue":
+      case 'instructorRevenue':
         return `$${item.instructorRevenue.toFixed(2)}`;
-      case "status":
+      case 'status':
         return (
           <Chip color={PaymentStatusColorMap[item.status]}>{item.status}</Chip>
         );
-      case "createdAt":
-        return new Date(item.createdAt).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
+      case 'createdAt':
+        return new Date(item.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
         });
-      case "type":
+      case 'type':
         return PaymentTypeMap[item.type];
       default:
-        return "";
+        return '';
     }
   };
 

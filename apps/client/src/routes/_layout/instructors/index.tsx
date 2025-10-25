@@ -1,13 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Spinner } from "@heroui/spinner";
-import React from "react";
+import { createFileRoute } from '@tanstack/react-router';
+import { Spinner } from '@heroui/spinner';
+import React from 'react';
 
-import InstructorCard from "@/features/instructor/components/InstructorCard";
-import SearchBox from "@/components/SearchBox";
-import { useGetInstructors } from "@/features/instructor/hooks/useGetInstructors";
-import PaginationWithNextAndPrevious from "@/components/Pagination";
+import InstructorCard from '@/features/instructor/components/InstructorCard';
+import SearchBox from '@/components/SearchBox';
+import { useGetInstructors } from '@/features/instructor/hooks/useGetInstructors';
+import PaginationWithNextAndPrevious from '@/components/Pagination';
 
-export const Route = createFileRoute("/_layout/instructors/")({
+export const Route = createFileRoute('/_layout/instructors/')({
   component: RouteComponent,
 });
 

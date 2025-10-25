@@ -1,16 +1,16 @@
-import { useMutation } from "@tanstack/react-query";
-import { addToast } from "@heroui/toast";
+import { useMutation } from '@tanstack/react-query';
+import { addToast } from '@heroui/toast';
 
-import { updateUserPassword } from "../service/account";
+import { updateUserPassword } from '../service/account';
 
 export function useUpdatePassword() {
   return useMutation({
     mutationFn: updateUserPassword,
     onSuccess: () => {
       addToast({
-        title: "Update Password",
-        description: "Your password has been updated sucessfully",
-        color: "success",
+        title: 'Update Password',
+        description: 'Your password has been updated sucessfully',
+        color: 'success',
       });
     },
   });

@@ -1,27 +1,27 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Skeleton } from "@heroui/skeleton";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import Dompurify from "dompurify";
-import { Button } from "@heroui/button";
-import React from "react";
-import { Avatar } from "@heroui/avatar";
-import { Image } from "@heroui/image";
-import { VideoIcon } from "lucide-react";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Skeleton } from '@heroui/skeleton';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
+import Dompurify from 'dompurify';
+import { Button } from '@heroui/button';
+import React from 'react';
+import { Avatar } from '@heroui/avatar';
+import { Image } from '@heroui/image';
+import { VideoIcon } from 'lucide-react';
 
-import CourseIcon from "@/components/icons/CourseIcon";
-import PlayIcon from "@/components/icons/PlayIcon";
-import PreviewLectureModal from "@/features/course/components/PreviewLectureModal";
-import { tryCatch } from "@/utils/try-catch";
-import { IMAGE_BASE_URL } from "@/config/image";
-import NoteIcon from "@/components/icons/NoteIcon";
-import MessageIcon from "@/components/icons/MessageIcon";
-import { useGetCourseInfo } from "@/features/course/hooks/useGetCourseInfo";
-import { useGetPublishedCourseCurriculum } from "@/features/course/hooks/useGetPublishedCourseCurriculum";
-import { useEnrollForCourse } from "@/features/enrollment/hooks/useEnrollForCourse";
-import { useGetInstructorProfile } from "@/features/instructor/hooks/useGetInstructorProfile";
-import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
+import CourseIcon from '@/components/icons/CourseIcon';
+import PlayIcon from '@/components/icons/PlayIcon';
+import PreviewLectureModal from '@/features/course/components/PreviewLectureModal';
+import { tryCatch } from '@/utils/try-catch';
+import { IMAGE_BASE_URL } from '@/config/image';
+import NoteIcon from '@/components/icons/NoteIcon';
+import MessageIcon from '@/components/icons/MessageIcon';
+import { useGetCourseInfo } from '@/features/course/hooks/useGetCourseInfo';
+import { useGetPublishedCourseCurriculum } from '@/features/course/hooks/useGetPublishedCourseCurriculum';
+import { useEnrollForCourse } from '@/features/enrollment/hooks/useEnrollForCourse';
+import { useGetInstructorProfile } from '@/features/instructor/hooks/useGetInstructorProfile';
+import { useCreateStripeCheckoutSession } from '@/features/payment/hooks/useCreateStripeCheckoutSession';
 
-export const Route = createFileRoute("/_layout/courses/$courseId/")({
+export const Route = createFileRoute('/_layout/courses/$courseId/')({
   component: RouteComponent,
 });
 
@@ -56,9 +56,9 @@ function RouteComponent() {
 
     return courseCurriculum.data.reduce(
       (acc, el) => {
-        if (el._class === "chapter") {
+        if (el._class === 'chapter') {
           acc.totalChapters++;
-        } else if (el._class === "lecture") {
+        } else if (el._class === 'lecture') {
           acc.totalLectures++;
         }
 
@@ -75,7 +75,7 @@ function RouteComponent() {
 
     return courseCurriculum.data.filter(
       (curriculum): curriculum is Lecture =>
-        curriculum._class === "lecture" && !!curriculum.asset,
+        curriculum._class === 'lecture' && !!curriculum.asset,
     );
   }, [isCourseCurriculumLoading, courseCurriculum]);
 
@@ -118,14 +118,14 @@ function RouteComponent() {
           >
             <CardBody className="flex lg:flex-row w-full gap-4">
               <div>
-                {" "}
+                {' '}
                 <Image
                   className="w-full object-cover"
                   isLoading={isCourseInfoLoading}
                   src={
                     !isCourseInfoLoading
                       ? `${IMAGE_BASE_URL}${courseInfo?.data?.thumbnail}`
-                      : ""
+                      : ''
                   }
                   width="100%"
                 />
@@ -168,8 +168,8 @@ function RouteComponent() {
                     }
                   >
                     {courseInfo?.data && courseInfo.data.isEnrolled
-                      ? "Go to course"
-                      : "Buy course now"}
+                      ? 'Go to course'
+                      : 'Buy course now'}
                   </Button>
                 </div>
               </div>
@@ -245,9 +245,9 @@ function RouteComponent() {
                       courseCurriculum.data.map((curriculum, index) => (
                         <div
                           key={curriculum.id}
-                          className={`capitalize py-2  ${curriculum._class === "lecture" ? "pl-8" : "pl-4"}  ${curriculum._class === "chapter" && index !== 0 ? "border-t border-secondary-100 pt-4 mt-4" : ""} `}
+                          className={`capitalize py-2  ${curriculum._class === 'lecture' ? 'pl-8' : 'pl-4'}  ${curriculum._class === 'chapter' && index !== 0 ? 'border-t border-secondary-100 pt-4 mt-4' : ''} `}
                         >
-                          {curriculum._class === "chapter" ? (
+                          {curriculum._class === 'chapter' ? (
                             <p className="font-bold text-lg">
                               {`${curriculum._class} ${curriculum.objectIndex}: ${curriculum.title}`}
                             </p>
@@ -261,7 +261,7 @@ function RouteComponent() {
                                 width={14}
                               />
                               <p className="flex-grow">{curriculum.title}</p>
-                              {curriculum._class === "lecture" &&
+                              {curriculum._class === 'lecture' &&
                               curriculum.preview ? (
                                 <Button
                                   className="bg-transparent flex text-xs items-center gap-2"
@@ -272,8 +272,8 @@ function RouteComponent() {
                                 >
                                   <span>
                                     <PlayIcon width={12} />
-                                  </span>{" "}
-                                  Preview{" "}
+                                  </span>{' '}
+                                  Preview{' '}
                                 </Button>
                               ) : null}
                             </div>

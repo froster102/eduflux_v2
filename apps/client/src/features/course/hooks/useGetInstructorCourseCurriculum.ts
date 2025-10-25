@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { getInstructorCourseCurriculum } from "../services/course";
+import { getInstructorCourseCurriculum } from '../services/course';
 
 export function useGetInstructorCourseCurriculum(courseId: string) {
   return useQuery({

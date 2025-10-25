@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { updateChapter } from "../services/course";
+import { updateChapter } from '../services/course';
 
 export function useUpdateChapter() {
   return useMutation({

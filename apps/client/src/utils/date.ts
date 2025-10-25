@@ -2,31 +2,31 @@ import {
   format,
   parseISO,
   formatRelative as dateFnsFormatRelative,
-} from "date-fns";
-import { DateFormatter, parseAbsolute } from "@internationalized/date";
+} from 'date-fns';
+import { DateFormatter, parseAbsolute } from '@internationalized/date';
 
 export function formatISOstring(ISOstring: string) {
   if (ISOstring) {
     const dateObj = parseISO(ISOstring);
 
-    const formattedDate = format(dateObj, "MMM dd, yyy hh:mm:ss a");
+    const formattedDate = format(dateObj, 'MMM dd, yyy hh:mm:ss a');
 
     return formattedDate;
   }
 
-  return "";
+  return '';
 }
 
 export function formatTo12Hour(date: Date) {
-  return format(date, "hh:mm:ss a");
+  return format(date, 'hh:mm:ss a');
 }
 
 export function formatTo12HourWithDate(date: Date) {
-  const formatter = new DateFormatter("en-US", {
-    month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
+  const formatter = new DateFormatter('en-US', {
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: true,
   });
 
@@ -38,11 +38,11 @@ export function getGreeting() {
   const hour = now.getHours();
 
   if (hour >= 5 && hour < 12) {
-    return "Good Morning";
+    return 'Good Morning';
   } else if (hour >= 12 && hour < 17) {
-    return "Good Afternoon";
+    return 'Good Afternoon';
   } else {
-    return "Good Evening";
+    return 'Good Evening';
   }
 }
 
@@ -61,7 +61,7 @@ export function convertToUTC(dateStr: string, timeStr: string) {
 }
 
 export function getAllTimeZones() {
-  const timeZones = (Intl as any).supportedValuesOf("timeZone") as string[];
+  const timeZones = (Intl as any).supportedValuesOf('timeZone') as string[];
 
   return new Set(timeZones);
 }
@@ -82,16 +82,16 @@ export function formatSessionDataTime(
   const start = parseAbsolute(startTime, timeZone);
   const end = parseAbsolute(endTime, timeZone);
 
-  const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
+  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
     timeZone,
   });
 
-  const timeFormatter = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
+  const timeFormatter = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
     hour12: true,
     timeZone,
   });
@@ -99,8 +99,8 @@ export function formatSessionDataTime(
   const formattedDate = dateFormatter.format(start.toDate());
   const formattedStartTime = timeFormatter
     .format(start.toDate())
-    .replace(":", ".");
-  const formattedEndTime = timeFormatter.format(end.toDate()).replace(":", ".");
+    .replace(':', '.');
+  const formattedEndTime = timeFormatter.format(end.toDate()).replace(':', '.');
 
   const durationMs = end.toDate().getTime() - start.toDate().getTime();
   const durationMins = Math.round(durationMs / 60000);
@@ -118,14 +118,14 @@ export function formatRelative(ISOstring: string): string {
 
   const formattedRelative = dateFnsFormatRelative(targetDate, now);
 
-  let output = "";
+  let output = '';
 
-  if (formattedRelative.startsWith("today")) {
-    output = "today";
-  } else if (formattedRelative.startsWith("yesterday")) {
-    output = "yesterday";
+  if (formattedRelative.startsWith('today')) {
+    output = 'today';
+  } else if (formattedRelative.startsWith('yesterday')) {
+    output = 'yesterday';
   } else {
-    output = format(targetDate, "MM/dd/yyyy");
+    output = format(targetDate, 'MM/dd/yyyy');
   }
 
   return output;

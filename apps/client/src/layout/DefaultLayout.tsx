@@ -1,9 +1,9 @@
-import React from "react";
-import { useDisclosure } from "@heroui/modal";
+import React from 'react';
+import { useDisclosure } from '@heroui/modal';
 
-import Header from "@/components/Header";
-import ConfirmationModal from "@/components/ConfirmationModal";
-import Navbar from "@/components/Navabar";
+import Header from '@/components/Header';
+import ConfirmationModal from '@/components/ConfirmationModal';
+import Navbar from '@/components/Navabar';
 
 export default function DefaultLayout({
   navItems,

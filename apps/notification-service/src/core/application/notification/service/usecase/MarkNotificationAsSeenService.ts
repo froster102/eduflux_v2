@@ -1,12 +1,12 @@
-import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import { NotificationNotFoundException } from "@core/application/notification/exceptions/NotificationNotFoundException";
-import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
-import type { MarkNotificationAsSeenPort } from "@core/application/notification/port/usecase/MarkNotificationAsSeenPort";
-import type { MarkNotificationAsSeenUseCase } from "@core/application/notification/usecase/MarkNotificationAsSeenUseCase";
-import { UnauthorizedException } from "@core/common/exception/UnauthorizedException";
-import { CoreAssert } from "@core/common/util/assert/CoreAssert";
-import { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
-import { inject } from "inversify";
+import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
+import { NotificationNotFoundException } from '@core/application/notification/exceptions/NotificationNotFoundException';
+import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
+import type { MarkNotificationAsSeenPort } from '@core/application/notification/port/usecase/MarkNotificationAsSeenPort';
+import type { MarkNotificationAsSeenUseCase } from '@core/application/notification/usecase/MarkNotificationAsSeenUseCase';
+import { UnauthorizedException } from '@core/common/exception/UnauthorizedException';
+import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
+import { inject } from 'inversify';
 
 export class MarkNotificationAsSeenService
   implements MarkNotificationAsSeenUseCase

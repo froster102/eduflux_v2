@@ -1,6 +1,6 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, CardBody, CardHeader } from '@heroui/card';
 
-import ChatItem from "@/features/chat/components/ChatItem";
+import ChatItem from '@/features/chat/components/ChatItem';
 
 interface ChatHistoryProps {
   chatHistory: Chat[];

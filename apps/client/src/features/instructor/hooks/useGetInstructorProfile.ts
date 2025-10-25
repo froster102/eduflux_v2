@@ -1,6 +1,6 @@
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { getInstructorProfile } from "../services/instructor";
+import { getInstructorProfile } from '../services/instructor';
 
 export const getInstructorProfileOptions = (userId: string) =>
   queryOptions({

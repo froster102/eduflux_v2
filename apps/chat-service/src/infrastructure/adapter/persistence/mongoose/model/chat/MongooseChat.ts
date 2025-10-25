@@ -1,6 +1,6 @@
-import { Schema, model, Document } from "mongoose";
-import { Role } from "@core/common/enum/Role";
-import type { ChatParticipant } from "@core/domain/chat/entity/Chat";
+import { Schema, model, Document } from 'mongoose';
+import { Role } from '@core/common/enum/Role';
+import type { ChatParticipant } from '@core/domain/chat/entity/Chat';
 
 export interface MongooseChat extends Document {
   _id: string;
@@ -39,7 +39,7 @@ const chatSchema = new Schema<MongooseChat>(
     },
     lastMessagePreview: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   {
@@ -47,4 +47,4 @@ const chatSchema = new Schema<MongooseChat>(
   },
 );
 
-export const ChatModel = model<MongooseChat>("Chat", chatSchema);
+export const ChatModel = model<MongooseChat>('Chat', chatSchema);

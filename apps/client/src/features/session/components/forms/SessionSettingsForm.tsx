@@ -1,39 +1,39 @@
-import { Form } from "@heroui/form";
-import { Controller, useForm } from "react-hook-form";
-import { NumberInput } from "@heroui/number-input";
-import { DollarSign } from "lucide-react";
-import { Input } from "@heroui/input";
-import { Checkbox } from "@heroui/checkbox";
-import { TimeInput } from "@heroui/date-input";
-import { parseTime } from "@internationalized/date";
-import { Select, SelectItem } from "@heroui/select";
-import { Button } from "@heroui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from '@heroui/form';
+import { Controller, useForm } from 'react-hook-form';
+import { NumberInput } from '@heroui/number-input';
+import { DollarSign } from 'lucide-react';
+import { Input } from '@heroui/input';
+import { Checkbox } from '@heroui/checkbox';
+import { TimeInput } from '@heroui/date-input';
+import { parseTime } from '@internationalized/date';
+import { Select, SelectItem } from '@heroui/select';
+import { Button } from '@heroui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { getAllTimeZones } from "@/utils/date";
+import { getAllTimeZones } from '@/utils/date';
 
 import {
   SessionSettingsFormData,
   sessionSettingsSchema,
-} from "../../validation/session-schema";
-import ScheduleGuidelines from "../SchedulingGuidelines";
-import PricingGuidelines from "../PricingGuidelines";
+} from '../../validation/session-schema';
+import ScheduleGuidelines from '../SchedulingGuidelines';
+import PricingGuidelines from '../PricingGuidelines';
 
 const weekdays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];
 
-const DEFAULT_START_TIME_STR = "10:00:00";
-const DEFAULT_END_TIME_STR = "23:00:00";
+const DEFAULT_START_TIME_STR = '10:00:00';
+const DEFAULT_END_TIME_STR = '23:00:00';
 
 const defaultSessionSetting = {
-  currency: "USD",
+  currency: 'USD',
   duration: 60,
   weeklySchedules: weekdays.map((_, index) => ({
     dayOfWeek: index,
@@ -47,8 +47,8 @@ const defaultSessionSetting = {
 
 export default function SessionSettingsForm({
   initialValue,
-  submitText = "Submit",
-  cancelText = "Cancel",
+  submitText = 'Submit',
+  cancelText = 'Cancel',
   onCancel,
   onSubmitHandler,
   isPending,
@@ -83,7 +83,7 @@ export default function SessionSettingsForm({
     resolver: zodResolver(sessionSettingsSchema),
   });
 
-  const watchedDays = watch("weeklySchedules");
+  const watchedDays = watch('weeklySchedules');
 
   function onSubmit(data: SessionSettingsFormData) {
     onSubmitHandler(data);
@@ -97,7 +97,7 @@ export default function SessionSettingsForm({
       onSubmit={handleSubmit(onSubmit)}
     >
       <div
-        className={`grid gap-2 ${classNames?.gridLayout || "md:grid-cols-2"}`}
+        className={`grid gap-2 ${classNames?.gridLayout || 'md:grid-cols-2'}`}
       >
         <div className="flex flex-col gap-4">
           <Controller
@@ -142,7 +142,7 @@ export default function SessionSettingsForm({
           />
           <Input
             radius="sm"
-            {...register("duration", { valueAsNumber: true })}
+            {...register('duration', { valueAsNumber: true })}
             isDisabled
             color="default"
             errorMessage={errors.duration?.message}
@@ -197,7 +197,7 @@ export default function SessionSettingsForm({
                       isInvalid={!!errors.weeklySchedules?.[index]?.startTime}
                       size="sm"
                       value={parseTime(field.value || DEFAULT_START_TIME_STR)}
-                      onChange={(v) => field.onChange(v ? v.toString() : "")}
+                      onChange={(v) => field.onChange(v ? v.toString() : '')}
                     />
                   )}
                 />
@@ -216,7 +216,7 @@ export default function SessionSettingsForm({
                       isInvalid={!!errors.weeklySchedules?.[index]?.endTime}
                       size="sm"
                       value={parseTime(field.value || DEFAULT_END_TIME_STR)}
-                      onChange={(v) => field.onChange(v ? v.toString() : "")}
+                      onChange={(v) => field.onChange(v ? v.toString() : '')}
                     />
                   )}
                 />

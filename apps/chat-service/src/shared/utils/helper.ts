@@ -13,7 +13,7 @@ export function parseCookieHeader(header: string): Map<string, string> {
       continue;
     }
 
-    const equalIndex = trimmedCookie.indexOf("=");
+    const equalIndex = trimmedCookie.indexOf('=');
     if (equalIndex === -1) {
       continue;
     }

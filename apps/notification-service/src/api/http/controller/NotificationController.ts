@@ -1,15 +1,15 @@
-import { authenticaionMiddleware } from "@api/http/middlewares/authenticationMiddleware";
-import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { NotificationUseCaseDto } from "@core/application/notification/usecase/dto/NotificationUseCaseDto";
-import type { GetNotificationsUseCase } from "@core/application/notification/usecase/GetNotificationsUseCase";
-import type { MarkNotificationAsSeenUseCase } from "@core/application/notification/usecase/MarkNotificationAsSeenUseCase";
-import { eventEmitter } from "@core/common/util/event/eventEmitter";
-import { ServerEvents } from "@shared/enum/ServerEvents";
-import type { ServerEvent } from "@shared/types/ServerEvent";
-import { jsonApiResponse } from "@shared/util/jsonApi";
-import Elysia from "elysia";
-import { inject } from "inversify";
-import { nanoid } from "nanoid";
+import { authenticaionMiddleware } from '@api/http/middlewares/authenticationMiddleware';
+import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
+import type { NotificationUseCaseDto } from '@core/application/notification/usecase/dto/NotificationUseCaseDto';
+import type { GetNotificationsUseCase } from '@core/application/notification/usecase/GetNotificationsUseCase';
+import type { MarkNotificationAsSeenUseCase } from '@core/application/notification/usecase/MarkNotificationAsSeenUseCase';
+import { eventEmitter } from '@core/common/util/event/eventEmitter';
+import { ServerEvents } from '@shared/enum/ServerEvents';
+import type { ServerEvent } from '@shared/types/ServerEvent';
+import { jsonApiResponse } from '@shared/util/jsonApi';
+import Elysia from 'elysia';
+import { inject } from 'inversify';
+import { nanoid } from 'nanoid';
 
 export class NotificationController {
   constructor(
@@ -22,16 +22,16 @@ export class NotificationController {
   register() {
     return new Elysia()
       .use(authenticaionMiddleware)
-      .group("/api/notifications", (group) =>
+      .group('/api/notifications', (group) =>
         group
-          .get("/events", ({ user, request }) => {
+          .get('/events', ({ user, request }) => {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const self = this;
             const stream = new ReadableStream({
               start(controller) {
-                const data = { message: "connected" };
+                const data = { message: 'connected' };
                 const connectMessage = self.createServerSentEvent({
-                  type: "connection",
+                  type: 'connection',
                   data,
                 });
                 controller.enqueue(new TextEncoder().encode(connectMessage));
@@ -60,7 +60,7 @@ export class NotificationController {
                 const pingInterval = setInterval(() => {
                   try {
                     const pingMessage = self.createServerSentEvent({
-                      type: "ping",
+                      type: 'ping',
                       data: {},
                     });
                     controller.enqueue(new TextEncoder().encode(pingMessage));
@@ -82,7 +82,7 @@ export class NotificationController {
                     //controller already closed.
                   }
                 };
-                request.signal.addEventListener("abort", cleanup);
+                request.signal.addEventListener('abort', cleanup);
 
                 //Additional cleanup for when the stream ends.
                 return cleanup;
@@ -91,22 +91,22 @@ export class NotificationController {
 
             return new Response(stream, {
               headers: {
-                "Content-Type": "text/event-stream",
-                "Cache-Control": "no-cache",
-                Connection: "keep-alive",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Cache-Control",
-                "X-Accel-Buffering": "no",
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                Connection: 'keep-alive',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Cache-Control',
+                'X-Accel-Buffering': 'no',
               },
             });
           })
-          .get("/", async ({ user }) => {
+          .get('/', async ({ user }) => {
             const response = await this.getNotificationUseCase.execute({
               userId: user.id,
             });
             return jsonApiResponse({ data: response });
           })
-          .patch("/:id/seen", async ({ user, params }) => {
+          .patch('/:id/seen', async ({ user, params }) => {
             await this.markNotificationAsSeen.execute({
               executorId: user.id,
               notificationId: params.id,

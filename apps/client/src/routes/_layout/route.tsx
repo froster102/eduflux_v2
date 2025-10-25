@@ -1,21 +1,21 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
-import HomeIcon from "@/components/icons/HomeIcon";
-import CourseIcon from "@/components/icons/CourseIcon";
-import SessionIcon from "@/components/icons/SessionIcon";
-import MessageIcon from "@/components/icons/MessageIcon";
-import InstructorIcon from "@/components/icons/InstructorIcon";
-import DefaultLayout from "@/layout/DefaultLayout";
-import { useAuthStore } from "@/store/auth-store";
-import { Role } from "@/shared/enums/Role";
+import HomeIcon from '@/components/icons/HomeIcon';
+import CourseIcon from '@/components/icons/CourseIcon';
+import SessionIcon from '@/components/icons/SessionIcon';
+import MessageIcon from '@/components/icons/MessageIcon';
+import InstructorIcon from '@/components/icons/InstructorIcon';
+import DefaultLayout from '@/layout/DefaultLayout';
+import { useAuthStore } from '@/store/auth-store';
+import { Role } from '@/shared/enums/Role';
 
-export const Route = createFileRoute("/_layout")({
+export const Route = createFileRoute('/_layout')({
   beforeLoad: ({ location }) => {
     const user = useAuthStore.getState().user;
 
     if (!user || !user.roles.includes(Role.LEARNER)) {
       throw redirect({
-        to: "/auth/sign-in",
+        to: '/auth/sign-in',
         search: {
           redirect: location.href,
         },
@@ -30,27 +30,27 @@ function Layout() {
     {
       path: `/home`,
       icon: <HomeIcon width={24} />,
-      label: "Home",
+      label: 'Home',
     },
     {
-      path: "/courses",
+      path: '/courses',
       icon: <CourseIcon width={24} />,
-      label: "Courses",
+      label: 'Courses',
     },
     {
-      path: "/sessions",
+      path: '/sessions',
       icon: <SessionIcon width={24} />,
-      label: "Sessions",
+      label: 'Sessions',
     },
     {
-      path: "/instructors",
+      path: '/instructors',
       icon: <InstructorIcon width={24} />,
-      label: "Instructors",
+      label: 'Instructors',
     },
     {
-      path: "/chats",
+      path: '/chats',
       icon: <MessageIcon width={24} />,
-      label: "Chats",
+      label: 'Chats',
     },
   ];
 

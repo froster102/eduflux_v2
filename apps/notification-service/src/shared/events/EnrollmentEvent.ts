@@ -1,5 +1,5 @@
-import type { EnrollmentEvents } from "@core/common/events/enum/EnrollmentEvents";
-import type { Event } from "@core/common/events/Event";
+import type { EnrollmentEvents } from '@core/common/events/enum/EnrollmentEvents';
+import type { Event } from '@core/common/events/Event';
 
 export interface EnrollmentSuccessEvent extends Event {
   readonly type: EnrollmentEvents.ENROLLMENT_SUCESS;

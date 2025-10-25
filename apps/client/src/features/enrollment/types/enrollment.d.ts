@@ -6,7 +6,7 @@ declare global {
       image?: string;
       amount: number;
     };
-    itemType: "course";
+    itemType: 'course';
   }>;
 }
 

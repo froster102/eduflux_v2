@@ -1,8 +1,8 @@
-import { useInView } from "react-intersection-observer";
+import { useInView } from 'react-intersection-observer';
 
 export interface InfiniteScrollContainerProps {
   children: React.ReactNode;
-  scrollDirection: "top" | "bottom";
+  scrollDirection: 'top' | 'bottom';
   onEndReached: () => void;
   className?: string;
 }
@@ -14,7 +14,7 @@ export default function InfiniteScrollContainer({
   className,
 }: InfiniteScrollContainerProps) {
   const { ref } = useInView({
-    rootMargin: "50px",
+    rootMargin: '50px',
     onChange(inView) {
       if (inView) {
         onEndReached();
@@ -24,9 +24,9 @@ export default function InfiniteScrollContainer({
 
   return (
     <div className={className}>
-      {scrollDirection === "top" && <div ref={ref} />}
+      {scrollDirection === 'top' && <div ref={ref} />}
       {children}
-      {scrollDirection === "bottom" && <div ref={ref} />}
+      {scrollDirection === 'bottom' && <div ref={ref} />}
     </div>
   );
 }

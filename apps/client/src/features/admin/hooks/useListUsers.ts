@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { listUsers } from "@/features/admin/service/admin";
+import { listUsers } from '@/features/admin/service/admin';
 
 export function useListUsers(query: ListUsersQuery) {
   console.log(query);
 
   return useQuery({
-    queryKey: ["users", query],
+    queryKey: ['users', query],
     queryFn: () => listUsers(query),
   });
 }

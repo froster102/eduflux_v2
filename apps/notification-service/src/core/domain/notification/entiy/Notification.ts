@@ -1,9 +1,9 @@
-import { Entity } from "@core/common/entity/Entity";
+import { Entity } from '@core/common/entity/Entity';
 import type {
   CreateNotificationPayload,
   NewNotificationPayload,
-} from "@core/domain/notification/entiy/type/CreateNotificationPayload";
-import { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
+} from '@core/domain/notification/entiy/type/CreateNotificationPayload';
+import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
 
 export class Notification extends Entity<string> {
   private readonly _userId: string;

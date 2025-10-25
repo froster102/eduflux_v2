@@ -1,6 +1,6 @@
-import { JwtConfig } from "@shared/config/JwtConfig";
-import type { JwtPayload } from "@shared/types/JwtPayload";
-import { jwtVerify, createRemoteJWKSet } from "jose";
+import { JwtConfig } from '@shared/config/JwtConfig';
+import type { JwtPayload } from '@shared/types/JwtPayload';
+import { jwtVerify, createRemoteJWKSet } from 'jose';
 
 const JWKS = createRemoteJWKSet(new URL(JwtConfig.JWKS_URL));
 

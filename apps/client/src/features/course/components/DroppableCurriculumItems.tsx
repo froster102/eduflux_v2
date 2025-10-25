@@ -6,34 +6,34 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import React from "react";
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
+} from '@dnd-kit/sortable';
+import React from 'react';
+import { Button } from '@heroui/button';
+import { Card, CardBody } from '@heroui/card';
 
-import { useCurriculumStore } from "@/store/curriculum-store";
-import FormModal from "@/components/FormModal";
-import { tryCatch } from "@/utils/try-catch";
+import { useCurriculumStore } from '@/store/curriculum-store';
+import FormModal from '@/components/FormModal';
+import { tryCatch } from '@/utils/try-catch';
 
-import { useCreateLecture } from "../hooks/useCreateLecture";
-import { useUpdateLecture } from "../hooks/useUpdateLecture";
-import { useDeleteLecture } from "../hooks/useDeleteLecture";
-import { useCreateChapter } from "../hooks/useCreateChapter";
-import { useUpdateChapter } from "../hooks/useUpdateChapter";
-import { useDeleteChapter } from "../hooks/useDeleteChapter";
-import { useAddContentToLecture } from "../hooks/useAddContentToLecture";
-import { useUpdateCurriculumItems } from "../hooks/useUpdateCurriculumItems";
+import { useCreateLecture } from '../hooks/useCreateLecture';
+import { useUpdateLecture } from '../hooks/useUpdateLecture';
+import { useDeleteLecture } from '../hooks/useDeleteLecture';
+import { useCreateChapter } from '../hooks/useCreateChapter';
+import { useUpdateChapter } from '../hooks/useUpdateChapter';
+import { useDeleteChapter } from '../hooks/useDeleteChapter';
+import { useAddContentToLecture } from '../hooks/useAddContentToLecture';
+import { useUpdateCurriculumItems } from '../hooks/useUpdateCurriculumItems';
 
-import SortableItem from "./SortableItem";
-import SortableChapterItem from "./SortableChapterItem";
-import SortableLectureItem from "./SortableLectureItem";
-import LectureForm from "./forms/LectureForm";
-import ChapterForm from "./forms/ChapterForm";
-import FileUploadModal from "./FileUploadModal";
+import SortableItem from './SortableItem';
+import SortableChapterItem from './SortableChapterItem';
+import SortableLectureItem from './SortableLectureItem';
+import LectureForm from './forms/LectureForm';
+import ChapterForm from './forms/ChapterForm';
+import FileUploadModal from './FileUploadModal';
 
 interface DroppableCurriculumItemsProps {
   courseId: string;
@@ -127,7 +127,7 @@ export default function DroppableCurriculumItems({
   }
 
   async function lectureOnSubmitHandler(data: LectureFormData) {
-    if (openLectureFormModal.mode === "create") {
+    if (openLectureFormModal.mode === 'create') {
       const { data: newLecture } = await tryCatch(
         createLecture.mutateAsync({ ...data, courseId }),
       );
@@ -137,7 +137,7 @@ export default function DroppableCurriculumItems({
         reOrderCurriculumItems();
         syncCurriculumOrder();
       }
-    } else if (openLectureFormModal.mode === "edit") {
+    } else if (openLectureFormModal.mode === 'edit') {
       if (selectedLecture && selectedIndex) {
         const { error } = await tryCatch(
           updateLecture.mutateAsync({
@@ -148,7 +148,7 @@ export default function DroppableCurriculumItems({
         );
 
         if (!error) {
-          if (selectedLecture._class === "lecture") {
+          if (selectedLecture._class === 'lecture') {
             updateLectureItem({ ...selectedLecture, ...data }, selectedIndex);
           }
         }
@@ -158,7 +158,7 @@ export default function DroppableCurriculumItems({
   }
 
   async function chapterFormSubmitHandler(data: ChapterFormData) {
-    if (openChapterFormModal.mode === "create") {
+    if (openChapterFormModal.mode === 'create') {
       const { data: chapter } = await tryCatch(
         createChapter.mutateAsync({ ...data, courseId }),
       );
@@ -170,7 +170,7 @@ export default function DroppableCurriculumItems({
           syncCurriculumOrder();
         }
       }
-    } else if (openChapterFormModal.mode === "edit") {
+    } else if (openChapterFormModal.mode === 'edit') {
       if (selectedChapter && selectedIndex) {
         await tryCatch(
           updateChapter.mutateAsync({
@@ -189,14 +189,14 @@ export default function DroppableCurriculumItems({
     setSelectedLecture(lecture);
     setSelectedIndex(index);
     setOpenLectureFormModal({
-      mode: "edit",
+      mode: 'edit',
       isOpen: true,
     });
   }
 
   function handleCreateLecture(selectedIndex: number) {
     setSelectedIndex(selectedIndex);
-    setOpenLectureFormModal({ mode: "create", isOpen: true });
+    setOpenLectureFormModal({ mode: 'create', isOpen: true });
   }
 
   async function handleDeleteLecture(lectureId: string) {
@@ -215,7 +215,7 @@ export default function DroppableCurriculumItems({
     setSelectedChapter(chapter);
     setSelectedIndex(index);
     setOpenChapterFormModal({
-      mode: "edit",
+      mode: 'edit',
       isOpen: true,
     });
   }
@@ -234,7 +234,7 @@ export default function DroppableCurriculumItems({
 
   function onContentUploadSuccessHandler(
     key: string,
-    resourceType: "image" | "video",
+    resourceType: 'image' | 'video',
     uuid: string,
   ) {
     if (selectedLecture) {
@@ -243,7 +243,7 @@ export default function DroppableCurriculumItems({
         lectureId: selectedLecture.id,
         key,
         uuid,
-        fileName: "null",
+        fileName: 'null',
         resourceType,
       });
     }
@@ -270,8 +270,8 @@ export default function DroppableCurriculumItems({
               {curriculumItems.map((item, i) => {
                 const isLastItem = i === curriculumItems.length - 1;
                 const nextItemIsChapter =
-                  !isLastItem && curriculumItems[i + 1]?._class === "chapter";
-                const isChapter = item._class === "chapter";
+                  !isLastItem && curriculumItems[i + 1]?._class === 'chapter';
+                const isChapter = item._class === 'chapter';
                 // Check if the current item is the last lecture in a chapter
                 const isLastItemInChapter =
                   !isChapter && (nextItemIsChapter || isLastItem);
@@ -295,9 +295,9 @@ export default function DroppableCurriculumItems({
                     <SortableItem id={item.id}>
                       <Card
                         className={` ${
-                          i !== 0 && isChapter ? "mt-4" : ""
-                        } ${isChapter ? "rounded-t-lg rounded-b-none" : "rounded-none"} ${
-                          isLastItemInChapter ? "rounded-b-lg" : ""
+                          i !== 0 && isChapter ? 'mt-4' : ''
+                        } ${isChapter ? 'rounded-t-lg rounded-b-none' : 'rounded-none'} ${
+                          isLastItemInChapter ? 'rounded-b-lg' : ''
                         }`}
                         shadow="none"
                       >
@@ -335,7 +335,7 @@ export default function DroppableCurriculumItems({
                   color="primary"
                   size="sm"
                   onPress={() => {
-                    setOpenChapterFormModal({ mode: "create", isOpen: true });
+                    setOpenChapterFormModal({ mode: 'create', isOpen: true });
                     setSelectedIndex(curriculumItems.length);
                   }}
                 >
@@ -351,7 +351,7 @@ export default function DroppableCurriculumItems({
                   <p>
                     <span className="font-semibold capitalize">
                       {activeItem._class} {activeItem.objectIndex}:
-                    </span>{" "}
+                    </span>{' '}
                     {activeItem.title}
                   </p>
                 </CardBody>
@@ -366,7 +366,7 @@ export default function DroppableCurriculumItems({
           <LectureForm
             initialValue={selectedLecture ? selectedLecture : undefined}
             isPending={
-              openLectureFormModal.mode === "create"
+              openLectureFormModal.mode === 'create'
                 ? createLecture.isPending
                 : updateLecture.isPending
             }
@@ -397,7 +397,7 @@ export default function DroppableCurriculumItems({
           />
         }
         isOpen={openLectureFormModal.isOpen}
-        title={`${openLectureFormModal.mode === "edit" ? "Update" : "Create"} lecture`}
+        title={`${openLectureFormModal.mode === 'edit' ? 'Update' : 'Create'} lecture`}
         onClose={() => {
           setOpenLectureFormModal({ ...openLectureFormModal, isOpen: false });
           setSelectedLecture(null);
@@ -409,7 +409,7 @@ export default function DroppableCurriculumItems({
           <ChapterForm
             initialValue={selectedChapter ? selectedChapter : undefined}
             isPending={
-              openChapterFormModal.mode === "create"
+              openChapterFormModal.mode === 'create'
                 ? createChapter.isPending
                 : createChapter.isPending
             }
@@ -424,7 +424,7 @@ export default function DroppableCurriculumItems({
           />
         }
         isOpen={openChapterFormModal.isOpen}
-        title={`${openChapterFormModal.mode === "edit" ? "Update" : "Create"} chapter`}
+        title={`${openChapterFormModal.mode === 'edit' ? 'Update' : 'Create'} chapter`}
         onClose={() =>
           setOpenChapterFormModal({ ...openChapterFormModal, isOpen: false })
         }

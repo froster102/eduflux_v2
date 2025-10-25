@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { markAsSeen } from "@/features/notification/service/notification";
+import { markAsSeen } from '@/features/notification/service/notification';
 
 export function useMarkNotificationAsSeen() {
   const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ export function useMarkNotificationAsSeen() {
       const previousNotifications = queryClient.getQueryData([`notifications`]);
 
       queryClient.setQueryData(
-        ["notifications"],
+        ['notifications'],
         (
           old: JsonApiResponse<AppNotification[]>,
         ): JsonApiResponse<AppNotification[]> => {
@@ -32,7 +32,7 @@ export function useMarkNotificationAsSeen() {
 
     onError: (_, __, context) => {
       queryClient.setQueryData(
-        ["notifications"],
+        ['notifications'],
         context?.previousNotifications,
       );
     },

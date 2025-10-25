@@ -1,4 +1,4 @@
-import { auth } from "@/lib/better-auth/auth";
+import { auth } from '@/lib/better-auth/auth';
 
 export async function signIn(signInData: SignInFormData) {
   const { data, error } = await auth.signIn.email({
@@ -49,7 +49,7 @@ export async function verifyOtp({
 export async function forgotPassword(email: string) {
   const { data, error } = await auth.emailOtp.sendVerificationOtp({
     email: email,
-    type: "forget-password",
+    type: 'forget-password',
   });
 
   if (error) {
@@ -84,7 +84,7 @@ export async function resetPassword({
 export async function resendOtp(email: string) {
   const { data, error } = await auth.emailOtp.sendVerificationOtp({
     email,
-    type: "forget-password",
+    type: 'forget-password',
   });
 
   if (error) {

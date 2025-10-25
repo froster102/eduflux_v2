@@ -1,8 +1,8 @@
-import "video.js/dist/video-js.css";
-import React from "react";
-import videojs from "video.js";
-import Player from "video.js/dist/types/player";
-import "video.js/dist/video-js.css";
+import 'video.js/dist/video-js.css';
+import React from 'react';
+import videojs from 'video.js';
+import Player from 'video.js/dist/types/player';
+import 'video.js/dist/video-js.css';
 
 interface VideoJsPlayerProps {
   options: {
@@ -24,14 +24,14 @@ const HLSPlayer: React.FC<VideoJsPlayerProps> = ({ options, onReady }) => {
 
   React.useEffect(() => {
     if (!playerRef.current && videoRef.current) {
-      const videoElement = document.createElement("video-js");
+      const videoElement = document.createElement('video-js');
 
-      videoElement.classList.add("vjs-big-play-centered");
-      videoElement.style.width = "100%";
+      videoElement.classList.add('vjs-big-play-centered');
+      videoElement.style.width = '100%';
       videoRef.current.appendChild(videoElement);
 
       const player = (playerRef.current = videojs(videoElement, options, () => {
-        videojs.log("player is ready");
+        videojs.log('player is ready');
         onReady && onReady(player);
       }));
     } else {

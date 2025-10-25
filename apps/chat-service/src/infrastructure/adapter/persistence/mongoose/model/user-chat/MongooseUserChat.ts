@@ -1,5 +1,5 @@
-import type { Role } from "@core/common/enum/Role";
-import { Schema, model, Document } from "mongoose";
+import type { Role } from '@core/common/enum/Role';
+import { Schema, model, Document } from 'mongoose';
 
 export interface MongooseUserChat extends Document {
   _id: string;
@@ -35,10 +35,10 @@ const userChatSchema = new Schema<MongooseUserChat>(
       required: true,
     },
   },
-  { timestamps: false, collection: "user_chats" },
+  { timestamps: false, collection: 'user_chats' },
 );
 
 export const UserChatModel = model<MongooseUserChat>(
-  "UserChat",
+  'UserChat',
   userChatSchema,
 );

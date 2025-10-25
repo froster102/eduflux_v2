@@ -1,4 +1,4 @@
-import { Divider } from "@heroui/divider";
+import { Divider } from '@heroui/divider';
 
 export default function ScheduleGuidelines() {
   return (

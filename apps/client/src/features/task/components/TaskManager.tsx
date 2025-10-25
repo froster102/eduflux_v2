@@ -1,7 +1,7 @@
-import { Button } from "@heroui/button";
-import { Card } from "@heroui/card";
+import { Button } from '@heroui/button';
+import { Card } from '@heroui/card';
 const events = [
-  { time: "10:00", title: "An event", date: "Wednesday, 24 Aug" },
+  { time: '10:00', title: 'An event', date: 'Wednesday, 24 Aug' },
 ];
 
 export default function TaskManager() {

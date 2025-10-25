@@ -1,15 +1,15 @@
-import type { DateValue } from "@react-types/calendar";
+import type { DateValue } from '@react-types/calendar';
 
-import React from "react";
-import { Calendar } from "@heroui/calendar";
+import React from 'react';
+import { Calendar } from '@heroui/calendar';
 import {
   today,
   getLocalTimeZone,
   startOfWeek,
   startOfMonth,
-} from "@internationalized/date";
-import { useLocale } from "@react-aria/i18n";
-import { Button, ButtonGroup } from "@heroui/button";
+} from '@internationalized/date';
+import { useLocale } from '@react-aria/i18n';
+import { Button, ButtonGroup } from '@heroui/button';
 
 export default function CalendarView() {
   let defaultDate = today(getLocalTimeZone());
@@ -26,10 +26,10 @@ export default function CalendarView() {
       calendarWidth={372}
       className="shrink-0 h-[358px] border-none dark:border-default-100 overflow-hidden"
       classNames={{
-        cell: "px-2 w-full",
-        gridBodyRow: "gap-x-1 px-3 mb-1 first:mt-4 last:mb-0",
-        gridHeader: "px-2",
-        gridHeaderCell: "px-2 md:w-full",
+        cell: 'px-2 w-full',
+        gridBodyRow: 'gap-x-1 px-3 mb-1 first:mt-4 last:mb-0',
+        gridHeader: 'px-2',
+        gridHeaderCell: 'px-2 md:w-full',
       }}
       focusedValue={value}
       showShadow={false}

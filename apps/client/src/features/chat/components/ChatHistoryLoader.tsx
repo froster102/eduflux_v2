@@ -1,6 +1,6 @@
-import ChatHistory from "@/features/chat/components/ChatHistory";
-import { useGetChatHistory } from "@/features/chat/hooks/useGetChatHistory";
-import { Role } from "@/shared/enums/Role";
+import ChatHistory from '@/features/chat/components/ChatHistory';
+import { useGetChatHistory } from '@/features/chat/hooks/useGetChatHistory';
+import { Role } from '@/shared/enums/Role';
 
 interface ChatHistoryLoaderProps {
   role: Role;

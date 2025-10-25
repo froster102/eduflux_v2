@@ -1,36 +1,36 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
-import HomeIcon from "@/components/icons/HomeIcon";
-import DefaultLayout from "@/layout/DefaultLayout";
-import CashoutIcon from "@/components/icons/CashoutIcon";
-import UsersIcon from "@/components/icons/UsersIcon";
-import CourseIcon from "@/components/icons/CourseIcon";
+import HomeIcon from '@/components/icons/HomeIcon';
+import DefaultLayout from '@/layout/DefaultLayout';
+import CashoutIcon from '@/components/icons/CashoutIcon';
+import UsersIcon from '@/components/icons/UsersIcon';
+import CourseIcon from '@/components/icons/CourseIcon';
 
-export const Route = createFileRoute("/admin/_layout")({
+export const Route = createFileRoute('/admin/_layout')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const navItems = [
     {
-      path: "/admin",
+      path: '/admin',
       icon: <HomeIcon width={24} />,
-      label: "Home",
+      label: 'Home',
     },
     {
-      path: "/admin/users",
+      path: '/admin/users',
       icon: <UsersIcon width={24} />,
-      label: "Users",
+      label: 'Users',
     },
     {
-      path: "/admin/courses",
+      path: '/admin/courses',
       icon: <CourseIcon width={24} />,
-      label: "Courses",
+      label: 'Courses',
     },
     {
-      path: "/admin/payments",
+      path: '/admin/payments',
       icon: <CashoutIcon width={24} />,
-      label: "Payments",
+      label: 'Payments',
     },
   ];
 

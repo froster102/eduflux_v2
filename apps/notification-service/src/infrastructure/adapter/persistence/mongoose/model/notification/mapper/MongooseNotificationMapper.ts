@@ -1,5 +1,5 @@
-import { Notification } from "@core/domain/notification/entiy/Notification";
-import type { MongooseNotification } from "@infrastructure/adapter/persistence/mongoose/model/notification/MongooseNotification";
+import { Notification } from '@core/domain/notification/entiy/Notification';
+import type { MongooseNotification } from '@infrastructure/adapter/persistence/mongoose/model/notification/MongooseNotification';
 
 export class MongooseNotificationMapper {
   static toDomain(document: MongooseNotification): Notification {

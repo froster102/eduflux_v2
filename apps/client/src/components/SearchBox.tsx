@@ -1,6 +1,6 @@
-import { Input } from "@heroui/input";
+import { Input } from '@heroui/input';
 
-import { SearchIcon } from "@/components/Icons";
+import { SearchIcon } from '@/components/Icons';
 
 interface SearchBoxProps {
   value?: string;
@@ -19,7 +19,7 @@ export default function SearchBox({
     <Input
       className={`max-w-lg ${className}`}
       labelPlacement="outside"
-      placeholder={placeholder || "Search here"}
+      placeholder={placeholder || 'Search here'}
       startContent={<SearchIcon />}
       type="email"
       value={value}

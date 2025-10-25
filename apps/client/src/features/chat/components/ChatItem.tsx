@@ -1,10 +1,10 @@
-import { Avatar } from "@heroui/avatar";
-import { Card } from "@heroui/card";
+import { Avatar } from '@heroui/avatar';
+import { Card } from '@heroui/card';
 
-import { useAuthStore } from "@/store/auth-store";
-import { IMAGE_BASE_URL } from "@/config/image";
-import { useChatStore } from "@/store/useChatStore";
-import { useChatContext } from "@/context/ChatContext";
+import { useAuthStore } from '@/store/auth-store';
+import { IMAGE_BASE_URL } from '@/config/image';
+import { useChatStore } from '@/store/useChatStore';
+import { useChatContext } from '@/context/ChatContext';
 
 interface ChatItemProps {
   chat: Chat;
@@ -19,7 +19,7 @@ export default function ChatItem({ chat }: ChatItemProps) {
   return (
     <Card
       isPressable
-      className={`flex w-full flex-row items-center gap-2 p-2 hover:bg-default-100 hover:text-white cursor-pointer rounded-full ${selectedChat?.id === chat.id ? "bg-primary text-background" : " bg-background"}`}
+      className={`flex w-full flex-row items-center gap-2 p-2 hover:bg-default-100 hover:text-white cursor-pointer rounded-full ${selectedChat?.id === chat.id ? 'bg-primary text-background' : ' bg-background'}`}
       shadow="none"
       onPress={() => {
         setSelectedChat(chat);

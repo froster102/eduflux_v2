@@ -1,11 +1,11 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Skeleton } from "@heroui/skeleton";
-import { Tab, Tabs } from "@heroui/tabs";
-import React from "react";
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Skeleton } from '@heroui/skeleton';
+import { Tab, Tabs } from '@heroui/tabs';
+import React from 'react';
 
-import RecentDevicesCard from "@/components/RecentDevicesCard";
-import ProfileCard from "@/components/ProfileCard";
-import { IMAGE_BASE_URL } from "@/config/image";
+import RecentDevicesCard from '@/components/RecentDevicesCard';
+import ProfileCard from '@/components/ProfileCard';
+import { IMAGE_BASE_URL } from '@/config/image';
 
 interface SettingsLayoutProps {
   user: User;
@@ -49,7 +49,7 @@ export default function SettingsLayout({
             email={user!.email}
             image={`${IMAGE_BASE_URL}${user?.image}`}
             lastLogin={latestSession?.createdAt}
-            name={user?.name || ""}
+            name={user?.name || ''}
           />
 
           <div className="hidden md:block">
@@ -80,10 +80,10 @@ export default function SettingsLayout({
               <Tabs
                 aria-label="Settings Tabs"
                 classNames={{
-                  tab: "capitalize",
+                  tab: 'capitalize',
                 }}
                 selectedKey={selectedTab}
-                variant={"underlined"}
+                variant={'underlined'}
                 onSelectionChange={(key) => onTabChange(key.toString())}
               >
                 {tabKeys.map((key) => (

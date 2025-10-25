@@ -1,11 +1,11 @@
-import { Avatar } from "@heroui/avatar";
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Input } from "@heroui/input";
-import { Skeleton } from "@heroui/skeleton";
+import { Avatar } from '@heroui/avatar';
+import { Button } from '@heroui/button';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
+import { Chip } from '@heroui/chip';
+import { Input } from '@heroui/input';
+import { Skeleton } from '@heroui/skeleton';
 
-import SendIcon from "@/components/icons/SendIcon";
+import SendIcon from '@/components/icons/SendIcon';
 
 export default function ChatPanelSkeleton() {
   const skeletonMessages = Array(12).fill(null);
@@ -36,7 +36,7 @@ export default function ChatPanelSkeleton() {
         {skeletonMessages.map((_, idx) => (
           <div
             key={idx}
-            className={`flex ${idx % 2 === 0 ? "justify-end" : "justify-start"}`}
+            className={`flex ${idx % 2 === 0 ? 'justify-end' : 'justify-start'}`}
           >
             <div className="p-2">
               <Skeleton
@@ -51,7 +51,7 @@ export default function ChatPanelSkeleton() {
         <div className="w-full">
           <Input
             classNames={{
-              inputWrapper: "h-14 bg-default-200/90",
+              inputWrapper: 'h-14 bg-default-200/90',
             }}
             endContent={
               <Button isIconOnly color="primary" size="sm">

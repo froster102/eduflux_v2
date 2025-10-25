@@ -1,9 +1,9 @@
-import { inject } from "inversify";
-import nodemailer from "nodemailer";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { EmailServicePort } from "@core/application/notification/port/gateway/EmailServicePort";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { NodeMailerConfig } from "@shared/config/NodeMailerConfig";
+import { inject } from 'inversify';
+import nodemailer from 'nodemailer';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { EmailServicePort } from '@core/application/notification/port/gateway/EmailServicePort';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { NodeMailerConfig } from '@shared/config/NodeMailerConfig';
 
 export class NodeMailerEmailServiceAdapter implements EmailServicePort {
   private transporter: nodemailer.Transporter;
@@ -44,7 +44,7 @@ export class NodeMailerEmailServiceAdapter implements EmailServicePort {
     html: string;
     from?: string;
   }): Promise<void> {
-    const { to, subject, html, from = "no-reply@eduflux.com" } = options;
+    const { to, subject, html, from = 'no-reply@eduflux.com' } = options;
 
     const mailOptions = {
       from,

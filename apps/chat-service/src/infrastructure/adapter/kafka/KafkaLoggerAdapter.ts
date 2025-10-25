@@ -1,18 +1,18 @@
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { logLevel, type LogEntry } from "kafkajs";
-import { container } from "src/di/RootModule";
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { logLevel, type LogEntry } from 'kafkajs';
+import { container } from 'src/di/RootModule';
 
 function getLogger() {
   if (container) {
-    return container.get<LoggerPort>(CoreDITokens.Logger).fromContext("KAFKA");
+    return container.get<LoggerPort>(CoreDITokens.Logger).fromContext('KAFKA');
   }
 }
 const kafkaLogLevelToWinston: Record<number, keyof LoggerPort> = {
-  [logLevel.ERROR]: "error",
-  [logLevel.WARN]: "warn",
-  [logLevel.INFO]: "info",
-  [logLevel.DEBUG]: "debug",
+  [logLevel.ERROR]: 'error',
+  [logLevel.WARN]: 'warn',
+  [logLevel.INFO]: 'info',
+  [logLevel.DEBUG]: 'debug',
 };
 
 export class KafkaLoggerAdapter {
@@ -26,13 +26,13 @@ export class KafkaLoggerAdapter {
 
         let combinedMeta = {};
 
-        if (typeof logger![winstonLevel] === "function") {
+        if (typeof logger![winstonLevel] === 'function') {
           combinedMeta = {
             namespace,
             ...meta,
           };
 
-          if (winstonLevel === "error" && meta.error instanceof Error) {
+          if (winstonLevel === 'error' && meta.error instanceof Error) {
             logger!.error(message, combinedMeta);
           } else {
             logger![winstonLevel](message, combinedMeta);

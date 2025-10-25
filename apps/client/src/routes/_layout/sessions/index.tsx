@@ -1,14 +1,14 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import React from "react";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import React from 'react';
 
-import { sessionSearchSchema } from "@/features/session/schemas/session-search.schema";
-import BookingStatusModal from "@/features/session/components/BookingStatusModal";
-import { useGetUserSessions } from "@/features/session/hooks/useGetUserSessions";
-import PaginationWithNextAndPrevious from "@/components/Pagination";
-import { Role } from "@/shared/enums/Role";
-import SessionCard from "@/features/session/components/SessionCard";
+import { sessionSearchSchema } from '@/features/session/schemas/session-search.schema';
+import BookingStatusModal from '@/features/session/components/BookingStatusModal';
+import { useGetUserSessions } from '@/features/session/hooks/useGetUserSessions';
+import PaginationWithNextAndPrevious from '@/components/Pagination';
+import { Role } from '@/shared/enums/Role';
+import SessionCard from '@/features/session/components/SessionCard';
 
-export const Route = createFileRoute("/_layout/sessions/")({
+export const Route = createFileRoute('/_layout/sessions/')({
   validateSearch: sessionSearchSchema,
   component: RouteComponent,
 });
@@ -63,7 +63,7 @@ function RouteComponent() {
         isOpen={openBookingStatusModal}
         onClose={() => {
           setOpenBookingStatusModal(false);
-          navigate({ to: "/sessions" });
+          navigate({ to: '/sessions' });
         }}
         onOpenChange={setOpenBookingStatusModal}
       />

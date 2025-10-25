@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { unbanUser } from "@/features/admin/service/admin";
+import { unbanUser } from '@/features/admin/service/admin';
 
 export function useUnbanUser() {
   const queryClient = useQueryClient();
@@ -8,12 +8,12 @@ export function useUnbanUser() {
   return useMutation({
     mutationFn: unbanUser,
     onMutate: async (userId: string) => {
-      await queryClient.cancelQueries({ queryKey: ["users"] });
+      await queryClient.cancelQueries({ queryKey: ['users'] });
 
-      const previousUsers = queryClient.getQueryData<ExtendedUser[]>(["users"]);
+      const previousUsers = queryClient.getQueryData<ExtendedUser[]>(['users']);
 
       if (previousUsers) {
-        queryClient.setQueryData<ListUsersReponse>(["users"], (old) => {
+        queryClient.setQueryData<ListUsersReponse>(['users'], (old) => {
           if (!old) return old;
 
           return {
@@ -30,7 +30,7 @@ export function useUnbanUser() {
 
     onError: (_err, _userId, context) => {
       if (context?.previousUsers) {
-        queryClient.setQueryData(["users"], context.previousUsers);
+        queryClient.setQueryData(['users'], context.previousUsers);
       }
     },
   });

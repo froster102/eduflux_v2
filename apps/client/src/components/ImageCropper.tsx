@@ -1,8 +1,8 @@
-import type { Selection } from "@cropper/element-selection";
+import type { Selection } from '@cropper/element-selection';
 
-import { Button } from "@heroui/button";
-import Cropper, { CropperImage } from "cropperjs";
-import React from "react";
+import { Button } from '@heroui/button';
+import Cropper, { CropperImage } from 'cropperjs';
+import React from 'react';
 
 interface ImageCropperProps {
   src: string;
@@ -74,8 +74,8 @@ export default function ImageCropper({
 
           canvas.style.width = `${containerWidth}px`;
           canvas.style.height = `${canvasHeight}px`;
-          canvas.style.minWidth = "0";
-          canvas.style.minHeight = "0";
+          canvas.style.minWidth = '0';
+          canvas.style.minHeight = '0';
 
           image.$center();
 
@@ -98,8 +98,8 @@ export default function ImageCropper({
         const canvasRect = cropperCanvas.getBoundingClientRect();
         const imageClone = cropperImage.cloneNode() as CropperImage;
 
-        imageClone.style.transform = `matrix(${event.detail.matrix.join(", ")})`;
-        imageClone.style.opacity = "0";
+        imageClone.style.transform = `matrix(${event.detail.matrix.join(', ')})`;
+        imageClone.style.opacity = '0';
         cropperCanvas.appendChild(imageClone);
         const imageRect = imageClone.getBoundingClientRect();
 
@@ -150,39 +150,39 @@ export default function ImageCropper({
 
       if (cropperSelection) {
         cropperSelection.addEventListener(
-          "change",
+          'change',
           handleSelectionChange as EventListener,
         );
       }
       if (cropperImage) {
         cropperImage.addEventListener(
-          "transform",
+          'transform',
           handleImageTransform as EventListener,
         );
       }
 
-      imageRef.current.addEventListener("load", handleImageLoad);
+      imageRef.current.addEventListener('load', handleImageLoad);
       setCropper(cropperInstance);
 
       return () => {
         if (cropperSelection) {
           cropperSelection.removeEventListener(
-            "change",
+            'change',
             handleSelectionChange as EventListener,
           );
         }
         if (cropperImage) {
           cropperImage.removeEventListener(
-            "transform",
+            'transform',
             handleImageTransform as EventListener,
           );
         }
         if (imageRef.current) {
-          imageRef.current.removeEventListener("load", handleImageLoad);
+          imageRef.current.removeEventListener('load', handleImageLoad);
         }
         if (containerRef.current) {
           const cropperCanvas =
-            containerRef.current.querySelector("cropper-canvas");
+            containerRef.current.querySelector('cropper-canvas');
 
           if (cropperCanvas) {
             cropperCanvas.remove();

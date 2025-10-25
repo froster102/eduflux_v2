@@ -1,13 +1,13 @@
-import { Form } from "@heroui/form";
-import { Input } from "@heroui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { Button } from "@heroui/button";
-import { Select, SelectItem } from "@heroui/select";
+import { Form } from '@heroui/form';
+import { Input } from '@heroui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { Button } from '@heroui/button';
+import { Select, SelectItem } from '@heroui/select';
 
-import { createCourseSchema } from "@/features/course/schemas/course";
+import { createCourseSchema } from '@/features/course/schemas/course';
 
-import { useGetCourseCategories } from "../../hooks/useGetCourseCategories";
+import { useGetCourseCategories } from '../../hooks/useGetCourseCategories';
 
 export default function CreateCourseForm({
   onSubmitHandler,
@@ -23,7 +23,7 @@ export default function CreateCourseForm({
     formState: { errors },
   } = useForm<CreateCourseFormData>({
     resolver: zodResolver(createCourseSchema),
-    defaultValues: mode === "edit" ? initialValue : {},
+    defaultValues: mode === 'edit' ? initialValue : {},
   });
 
   const { data: categories, isLoading } = useGetCourseCategories();
@@ -34,7 +34,7 @@ export default function CreateCourseForm({
       onSubmit={handleSubmit(onSubmitHandler)}
     >
       <Input
-        {...register("title")}
+        {...register('title')}
         errorMessage={errors.title?.message}
         isInvalid={!!errors.title}
         label="Title"

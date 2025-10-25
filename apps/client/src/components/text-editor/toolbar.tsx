@@ -1,6 +1,6 @@
-import { Editor } from "@tiptap/react";
-import { Button, ButtonGroup } from "@heroui/button";
-import { Tooltip } from "@heroui/tooltip";
+import { Editor } from '@tiptap/react';
+import { Button, ButtonGroup } from '@heroui/button';
+import { Tooltip } from '@heroui/tooltip';
 import {
   AlignCenter,
   AlignLeft,
@@ -9,9 +9,9 @@ import {
   List,
   ListOrdered,
   Underline,
-} from "lucide-react";
+} from 'lucide-react';
 
-import BoldIcon from "@/components/icons/BoldIcon";
+import BoldIcon from '@/components/icons/BoldIcon';
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -29,7 +29,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive("bold") ? "solid" : "flat"}
+            variant={editor.isActive('bold') ? 'solid' : 'flat'}
             onPress={() => editor.chain().focus().toggleBold().run()}
           >
             <BoldIcon width={20} />
@@ -39,7 +39,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive("italic") ? "solid" : "flat"}
+            variant={editor.isActive('italic') ? 'solid' : 'flat'}
             onPress={() => editor.chain().focus().toggleItalic().run()}
           >
             <Italic width={20} />
@@ -49,7 +49,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive("underline") ? "solid" : "flat"}
+            variant={editor.isActive('underline') ? 'solid' : 'flat'}
             onPress={() => editor.chain().focus().toggleUnderline().run()}
           >
             <Underline width={20} />
@@ -62,7 +62,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive("bulletList") ? "solid" : "flat"}
+            variant={editor.isActive('bulletList') ? 'solid' : 'flat'}
             onPress={() => editor.chain().focus().toggleBulletList().run()}
           >
             <List width={20} />
@@ -72,7 +72,7 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive("orderedList") ? "solid" : "flat"}
+            variant={editor.isActive('orderedList') ? 'solid' : 'flat'}
             onPress={() => editor.chain().focus().toggleOrderedList().run()}
           >
             <ListOrdered width={20} />
@@ -85,8 +85,8 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive({ textAlign: "left" }) ? "solid" : "flat"}
-            onPress={() => editor.chain().focus().setTextAlign("left").run()}
+            variant={editor.isActive({ textAlign: 'left' }) ? 'solid' : 'flat'}
+            onPress={() => editor.chain().focus().setTextAlign('left').run()}
           >
             <AlignLeft width={20} />
           </Button>
@@ -96,9 +96,9 @@ export default function Toolbar({ editor }: ToolbarProps) {
             isIconOnly
             size="sm"
             variant={
-              editor.isActive({ textAlign: "center" }) ? "solid" : "flat"
+              editor.isActive({ textAlign: 'center' }) ? 'solid' : 'flat'
             }
-            onPress={() => editor.chain().focus().setTextAlign("center").run()}
+            onPress={() => editor.chain().focus().setTextAlign('center').run()}
           >
             <AlignCenter width={20} />
           </Button>
@@ -107,8 +107,8 @@ export default function Toolbar({ editor }: ToolbarProps) {
           <Button
             isIconOnly
             size="sm"
-            variant={editor.isActive({ textAlign: "right" }) ? "solid" : "flat"}
-            onPress={() => editor.chain().focus().setTextAlign("right").run()}
+            variant={editor.isActive({ textAlign: 'right' }) ? 'solid' : 'flat'}
+            onPress={() => editor.chain().focus().setTextAlign('right').run()}
           >
             <AlignRight width={20} />
           </Button>

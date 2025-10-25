@@ -51,7 +51,7 @@ export const contentLimits = {
   MIN_COURSE_PRICE: 10,
   MAX_COURSE_PRICE: 500,
 
-  COURSE_LEVELS: ["beginner", "intermediate", "advanced"] as const,
-  RESOURCE_TYPES: ["image", "video", "raw"] as const,
-  CURRICULUM_CLASS_TYPES: ["chapter", "lecture"] as const,
+  COURSE_LEVELS: ['beginner', 'intermediate', 'advanced'] as const,
+  RESOURCE_TYPES: ['image', 'video', 'raw'] as const,
+  CURRICULUM_CLASS_TYPES: ['chapter', 'lecture'] as const,
 };

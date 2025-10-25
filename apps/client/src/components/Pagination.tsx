@@ -1,5 +1,5 @@
-import { Button } from "@heroui/button";
-import { Pagination } from "@heroui/pagination";
+import { Button } from '@heroui/button';
+import { Pagination } from '@heroui/pagination';
 
 interface PaginationProps {
   currentPage: number;

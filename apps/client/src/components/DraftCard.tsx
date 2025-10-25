@@ -1,9 +1,9 @@
-import React from "react";
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Check, X } from "lucide-react";
-import { Tooltip } from "@heroui/tooltip";
-import { AnimatePresence, motion } from "framer-motion";
+import React from 'react';
+import { Button } from '@heroui/button';
+import { Card, CardBody } from '@heroui/card';
+import { Check, X } from 'lucide-react';
+import { Tooltip } from '@heroui/tooltip';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface DraftCardProps {
   onSave: (content: string, color: string) => void;
@@ -17,7 +17,7 @@ export default function DraftCard({
   selectedColor,
 }: DraftCardProps) {
   const [hovered, setHovered] = React.useState(false);
-  const [content, setContent] = React.useState("");
+  const [content, setContent] = React.useState('');
   const discardTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   return (
@@ -65,7 +65,7 @@ export default function DraftCard({
                   onPress={onDiscard}
                 >
                   <X />
-                  {""}
+                  {''}
                 </Button>
               </Tooltip>
             </motion.div>
@@ -88,7 +88,7 @@ export default function DraftCard({
                   }}
                 >
                   <Check />
-                  {""}
+                  {''}
                 </Button>
               </Tooltip>
             </motion.div>

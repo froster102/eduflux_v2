@@ -1,7 +1,7 @@
-import { z } from "zod/v4";
+import { z } from 'zod/v4';
 
-import { contentLimits } from "@/config/content-limits";
-import { CourseLevel } from "@/shared/enums/CourseLevel";
+import { contentLimits } from '@/config/content-limits';
+import { CourseLevel } from '@/shared/enums/CourseLevel';
 
 const titleMinLength = 5;
 const titleMaxLength = 100;
@@ -18,9 +18,9 @@ export const createCourseSchema = z.object({
       error: `Title cannot exceed ${contentLimits.COURSE_TITLE.MAX_LENGTH} characters`,
     })
     .regex(contentLimits.NO_LEADING_SPECIAL_CHAR_REGEX, {
-      error: "Title cannot start with a special character or space",
+      error: 'Title cannot start with a special character or space',
     }),
-  categoryId: z.string({ error: "A valid category ID is required" }),
+  categoryId: z.string({ error: 'A valid category ID is required' }),
 });
 
 export const updateCourseSchema = z
@@ -34,15 +34,15 @@ export const updateCourseSchema = z
         error: `Title cannot exceed ${contentLimits.COURSE_TITLE.MAX_LENGTH} characters`,
       })
       .regex(contentLimits.NO_LEADING_SPECIAL_CHAR_REGEX, {
-        error: "Title cannot start with a special character or space",
+        error: 'Title cannot start with a special character or space',
       }),
     description: z.string().min(contentLimits.COURSE_DESCRIPTION.MIN_LENGTH, {
       error: `Description must be at least ${contentLimits.COURSE_DESCRIPTION.MIN_LENGTH} characters`,
     }),
-    categoryId: z.string({ error: "A valid category ID is required" }),
-    thumbnail: z.string({ error: "Thumbnail is required" }),
+    categoryId: z.string({ error: 'A valid category ID is required' }),
+    thumbnail: z.string({ error: 'Thumbnail is required' }),
     level: z.enum(Object.values(CourseLevel)),
-    price: z.number({ error: "Course pricing is required" }),
+    price: z.number({ error: 'Course pricing is required' }),
     isFree: z.boolean(),
   })
   .partial();
@@ -57,7 +57,7 @@ export const sectionSchema = z.object({
       error: `Title cannot exceed ${titleMaxLength} characters`,
     })
     .regex(noLeadingSpecialCharRegex, {
-      error: "Title cannot start with a special character or space",
+      error: 'Title cannot start with a special character or space',
     }),
 
   description: z.string().min(descriptionMinLength, {
@@ -77,13 +77,13 @@ export const lectureSchema = z.object({
       error: `Title cannot exceed ${titleMaxLength} characters`,
     })
     .regex(noLeadingSpecialCharRegex, {
-      error: "Title cannot start with a special character or space",
+      error: 'Title cannot start with a special character or space',
     }),
 
-  description: z.string({ error: "Required" }).min(descriptionMinLength, {
+  description: z.string({ error: 'Required' }).min(descriptionMinLength, {
     error: `Description must be at least ${descriptionMinLength} characters`,
   }),
-  preview: z.boolean({ error: "Required" }),
+  preview: z.boolean({ error: 'Required' }),
 });
 
 // export const updateLessonSchema = createLectureSchema.partial();

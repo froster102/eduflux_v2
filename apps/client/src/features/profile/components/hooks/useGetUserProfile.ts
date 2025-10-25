@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from '@/store/auth-store';
 
-import { getUserProfile } from "../../service/profile";
+import { getUserProfile } from '../../service/profile';
 
 export function useGetUserProfile() {
   const { user } = useAuthStore();

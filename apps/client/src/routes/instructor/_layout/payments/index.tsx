@@ -1,17 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
-import React from "react";
+import { createFileRoute } from '@tanstack/react-router';
+import React from 'react';
 
-import { useAuthStore } from "@/store/auth-store";
-import { useGetInstructorPayments } from "@/features/payment/hooks/useGetInstructorPayments";
-import { PaymentType } from "@/shared/enums/PaymentType";
-import { useGetPaymentSummary } from "@/features/payment/hooks/useGetPaymentSummary";
-import { PaymentSummaryGroup } from "@/shared/enums/PaymentSummaryGroup";
-import { mapPaymentSummaryToChartData } from "@/utils/helpers";
-import TotalEarningCard from "@/features/payment/components/TotalEarningCard";
-import PaymentsGraph from "@/features/payment/components/PaymentsGraph";
-import PaymentsTable from "@/features/payment/components/PaymentsTable";
+import { useAuthStore } from '@/store/auth-store';
+import { useGetInstructorPayments } from '@/features/payment/hooks/useGetInstructorPayments';
+import { PaymentType } from '@/shared/enums/PaymentType';
+import { useGetPaymentSummary } from '@/features/payment/hooks/useGetPaymentSummary';
+import { PaymentSummaryGroup } from '@/shared/enums/PaymentSummaryGroup';
+import { mapPaymentSummaryToChartData } from '@/utils/helpers';
+import TotalEarningCard from '@/features/payment/components/TotalEarningCard';
+import PaymentsGraph from '@/features/payment/components/PaymentsGraph';
+import PaymentsTable from '@/features/payment/components/PaymentsTable';
 
-export const Route = createFileRoute("/instructor/_layout/payments/")({
+export const Route = createFileRoute('/instructor/_layout/payments/')({
   component: RouteComponent,
 });
 
@@ -29,7 +29,7 @@ function RouteComponent() {
   const { data: instructorPayments, isPending: isPaymentsPending } =
     useGetInstructorPayments(instructorPaymentFilters);
   const [paymentSummaryFilters, setPaymentSummaryFilters] = React.useState<
-    GetPaymentSummaryQueryParameter["filter"]
+    GetPaymentSummaryQueryParameter['filter']
   >({
     groupBy: PaymentSummaryGroup.MONTH,
     type: PaymentType.COURSE_PURCHASE,

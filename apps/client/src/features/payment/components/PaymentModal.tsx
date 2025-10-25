@@ -1,13 +1,13 @@
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 import {
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@heroui/modal";
+} from '@heroui/modal';
 
-import { PaymentType } from "@/shared/enums/PaymentType";
+import { PaymentType } from '@/shared/enums/PaymentType';
 
 interface PaymentModalProps {
   paymentType: PaymentType;
@@ -30,7 +30,7 @@ export default function PaymentModal({
     <Modal
       backdrop="blur"
       classNames={{
-        backdrop: "bg-background/80 backdrop-opacity-50",
+        backdrop: 'bg-background/80 backdrop-opacity-50',
       }}
       isOpen={isOpen}
       size="2xl"

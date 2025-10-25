@@ -1,5 +1,5 @@
-import { z } from "zod/v4";
+import { z } from 'zod/v4';
 
 export const tabSchema = z.object({
-  tab: z.enum(["profile", "account"]).catch("profile"),
+  tab: z.enum(['profile', 'account']).catch('profile'),
 });

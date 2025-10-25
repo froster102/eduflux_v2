@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
 
-type FormModalState = { isOpen: boolean; mode: "create" | "edit" };
+type FormModalState = { isOpen: boolean; mode: 'create' | 'edit' };
 
 interface InitialState {
   courseId: string | null;
@@ -25,11 +25,11 @@ interface CurriculumStore extends InitialState {
   setCurriculumItems: (items: CurriculumItem[]) => void;
   setOpenChapterFormModal: (paylod: {
     isOpen: boolean;
-    mode: "create" | "edit";
+    mode: 'create' | 'edit';
   }) => void;
   setOpenLectureFormModal: (paylod: {
     isOpen: boolean;
-    mode: "create" | "edit";
+    mode: 'create' | 'edit';
   }) => void;
   updateLectureItem: (lecture: Lecture, index: number) => void;
   updateChapterItem: (chapter: Chapter, index: number) => void;
@@ -44,8 +44,8 @@ interface CurriculumStore extends InitialState {
 const initialState: InitialState = {
   courseId: null,
   curriculumItems: [],
-  openChapterFormModal: { isOpen: false, mode: "create" },
-  openLectureFormModal: { isOpen: false, mode: "create" },
+  openChapterFormModal: { isOpen: false, mode: 'create' },
+  openLectureFormModal: { isOpen: false, mode: 'create' },
   openFileUploadModal: false,
   activeId: null,
   selectedIndex: null,
@@ -80,12 +80,12 @@ export const useCurriculumStore = create<CurriculumStore>()(
         let itemsToMove: CurriculumItem[] = [];
         let itemsToRemoveCount = 0;
 
-        if (movedItem._class === "chapter") {
+        if (movedItem._class === 'chapter') {
           itemsToMove.push(movedItem);
           itemsToRemoveCount++;
 
           for (let i = activeIndex + 1; i < newItems.length; i++) {
-            if (newItems[i]._class === "chapter") {
+            if (newItems[i]._class === 'chapter') {
               break;
             }
             itemsToMove.push(newItems[i]);
@@ -112,12 +112,12 @@ export const useCurriculumStore = create<CurriculumStore>()(
         let currentLectureIndex = 1;
 
         for (let i = 0; i < newItems.length; i++) {
-          if (newItems[i]._class === "chapter") {
+          if (newItems[i]._class === 'chapter') {
             newItems[i] = {
               ...newItems[i],
               objectIndex: currentChapterIndex++,
             };
-          } else if (newItems[i]._class === "lecture") {
+          } else if (newItems[i]._class === 'lecture') {
             newItems[i] = {
               ...newItems[i],
               objectIndex: currentLectureIndex++,

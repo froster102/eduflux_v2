@@ -5,10 +5,10 @@ import type {
   LocalTrack,
   LocalVideoTrack,
   TrackProcessor,
-} from "livekit-client";
-import type { LocalUserChoices } from "@livekit/components-core";
+} from 'livekit-client';
+import type { LocalUserChoices } from '@livekit/components-core';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   createLocalAudioTrack,
   createLocalTracks,
@@ -17,26 +17,26 @@ import {
   Track,
   VideoPresets,
   Mutex,
-} from "livekit-client";
-import { log } from "@livekit/components-core";
+} from 'livekit-client';
+import { log } from '@livekit/components-core';
 import {
   MediaDeviceMenu,
   ParticipantPlaceholder,
   TrackToggle,
   useMediaDevices,
   usePersistentUserChoices,
-} from "@livekit/components-react";
-import { useTheme } from "@heroui/use-theme";
+} from '@livekit/components-react';
+import { useTheme } from '@heroui/use-theme';
 
-import { roomOptionsStringifyReplacer } from "@/lib/utils";
-import "@livekit/components-styles";
+import { roomOptionsStringifyReplacer } from '@/lib/utils';
+import '@livekit/components-styles';
 
 /**
  * Props for the PreJoin component.
  * @public
  */
 export interface PreJoinProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSubmit" | "onError"> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit' | 'onError'> {
   /** This function is called with the `LocalUserChoices` if validation is passed. */
   onSubmit?: (values: LocalUserChoices) => void;
   /**
@@ -118,7 +118,7 @@ export function usePreviewTracks(
 export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
   enabled: boolean,
   deviceId: string,
-  kind: "videoinput" | "audioinput",
+  kind: 'videoinput' | 'audioinput',
 ) {
   const [deviceError, setDeviceError] = React.useState<Error | null>(null);
   const [isCreatingTrack, setIsCreatingTrack] = React.useState<boolean>(false);
@@ -137,11 +137,11 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 
   const createTrack = async (
     deviceId: string,
-    kind: "videoinput" | "audioinput",
+    kind: 'videoinput' | 'audioinput',
   ) => {
     try {
       const track =
-        kind === "videoinput"
+        kind === 'videoinput'
           ? await createLocalVideoTrack({
               deviceId,
               resolution: VideoPresets.h720.resolution,
@@ -174,7 +174,7 @@ export function usePreviewDevice<T extends LocalVideoTrack | LocalAudioTrack>(
 
   React.useEffect(() => {
     if (enabled && !localTrack && !deviceError && !isCreatingTrack) {
-      log.debug("creating track", kind);
+      log.debug('creating track', kind);
       setIsCreatingTrack(true);
       createTrack(localDeviceId, kind).finally(() => {
         setIsCreatingTrack(false);
@@ -248,11 +248,11 @@ export function PreJoin({
   onSubmit,
   onError,
   debug,
-  joinLabel = "Join Room",
-  micLabel = "Microphone",
-  camLabel = "Camera",
+  joinLabel = 'Join Room',
+  micLabel = 'Microphone',
+  camLabel = 'Camera',
   onJoin,
-  userLabel = "Username",
+  userLabel = 'Username',
   persistUserChoices = true,
   videoProcessor,
   ...htmlProps
@@ -336,7 +336,7 @@ export function PreJoin({
 
       return facingMode;
     } else {
-      return "undefined";
+      return 'undefined';
     }
   }, [videoTrack]);
 
@@ -363,10 +363,10 @@ export function PreJoin({
 
   const handleValidation = React.useCallback(
     (values: LocalUserChoices) => {
-      if (typeof onValidate === "function") {
+      if (typeof onValidate === 'function') {
         return onValidate(values);
       } else {
-        return values.username !== "";
+        return values.username !== '';
       }
     },
     [onValidate],
@@ -466,7 +466,7 @@ export function PreJoin({
           <strong>User Choices:</strong>
           <ul
             className="lk-list"
-            style={{ overflow: "hidden", maxWidth: "15rem" }}
+            style={{ overflow: 'hidden', maxWidth: '15rem' }}
           >
             <li>Username: {`${userChoices.username}`}</li>
             <li>Video Enabled: {`${userChoices.videoEnabled}`}</li>

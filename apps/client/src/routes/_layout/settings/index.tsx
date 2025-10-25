@@ -1,19 +1,19 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import React from "react";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import React from 'react';
 
-import SettingsLayout from "@/layout/SettingsLayout";
-import ProfileTab from "@/features/profile/components/ProfileTab";
-import AccountTab from "@/features/account/components/AccountTab";
-import { useAuthStore } from "@/store/auth-store";
-import { useGetUserSessions } from "@/features/account/hooks/useGetUserSessions";
-import { tabSchema } from "@/utils/schema/tabSchema";
+import SettingsLayout from '@/layout/SettingsLayout';
+import ProfileTab from '@/features/profile/components/ProfileTab';
+import AccountTab from '@/features/account/components/AccountTab';
+import { useAuthStore } from '@/store/auth-store';
+import { useGetUserSessions } from '@/features/account/hooks/useGetUserSessions';
+import { tabSchema } from '@/utils/schema/tabSchema';
 
-export const Route = createFileRoute("/_layout/settings/")({
+export const Route = createFileRoute('/_layout/settings/')({
   component: RouteComponent,
   validateSearch: tabSchema,
 });
 
-type TabType = "profile" | "account";
+type TabType = 'profile' | 'account';
 
 function RouteComponent() {
   const { user } = useAuthStore();
@@ -22,7 +22,7 @@ function RouteComponent() {
 
   const { data: sessions, isLoading: isSessionsLoading } = useGetUserSessions();
 
-  const tabKeys = ["profile", "account"];
+  const tabKeys = ['profile', 'account'];
 
   const tabs: Record<TabType, React.ReactNode> = React.useMemo(() => {
     return {

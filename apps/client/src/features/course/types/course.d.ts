@@ -1,4 +1,4 @@
-import { CourseLevel } from "@/shared/enums/CourseLevel";
+import { CourseLevel } from '@/shared/enums/CourseLevel';
 
 declare global {
   export type UpdateCourseFormData = Partial<{
@@ -34,7 +34,7 @@ declare global {
 
   export type Chapter = {
     assetId: boolean;
-    _class: "chapter";
+    _class: 'chapter';
     id: string;
     courseId: string;
     title: string;
@@ -44,7 +44,7 @@ declare global {
   };
 
   export type Lecture = {
-    _class: "lecture";
+    _class: 'lecture';
     id: string;
     courseId: string;
     title: string;
@@ -57,13 +57,13 @@ declare global {
   };
 
   export type CourseStatus =
-    | "draft"
-    | "published"
-    | "unpublished"
-    | "archived"
-    | "in_review"
-    | "approved"
-    | "rejected";
+    | 'draft'
+    | 'published'
+    | 'unpublished'
+    | 'archived'
+    | 'in_review'
+    | 'approved'
+    | 'rejected';
 
   export type ChapterFormData = {
     title: string;

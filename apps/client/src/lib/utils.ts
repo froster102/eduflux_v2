@@ -1,18 +1,18 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function capitalize(s: string) {
-  return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
+  return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
 }
 
 export function testLoadingWithPromise(duration: number) {
   return new Promise((resolve) =>
     setTimeout(() => {
-      resolve("");
+      resolve('');
     }, duration),
   );
 }
@@ -22,11 +22,11 @@ export function isLowPowerDevice() {
 }
 
 export function roomOptionsStringifyReplacer(key: string, val: unknown) {
-  if (key === "processor" && val && typeof val === "object" && "name" in val) {
+  if (key === 'processor' && val && typeof val === 'object' && 'name' in val) {
     return val.name;
   }
-  if (key === "e2ee" && val) {
-    return "e2ee-enabled";
+  if (key === 'e2ee' && val) {
+    return 'e2ee-enabled';
   }
 
   return val;

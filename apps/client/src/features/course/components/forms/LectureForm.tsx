@@ -1,14 +1,14 @@
-import { Button } from "@heroui/button";
-import { Switch } from "@heroui/switch";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { Form } from "@heroui/form";
-import { Input, Textarea } from "@heroui/input";
-import React from "react";
+import { Button } from '@heroui/button';
+import { Switch } from '@heroui/switch';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { Form } from '@heroui/form';
+import { Input, Textarea } from '@heroui/input';
+import React from 'react';
 
-import { lectureSchema } from "@/features/course/schemas/course";
-import FileUploader from "@/components/FileUploader";
-import HLSPlayer from "@/components/HLSPlayer";
+import { lectureSchema } from '@/features/course/schemas/course';
+import FileUploader from '@/components/FileUploader';
+import HLSPlayer from '@/components/HLSPlayer';
 
 export default function LectureForm({
   onSubmitHandler,
@@ -28,7 +28,7 @@ export default function LectureForm({
   } | null;
   onContentUploadHander: (
     key: string,
-    resourseType: "image" | "video",
+    resourseType: 'image' | 'video',
     uuid: string,
   ) => void;
 }) {
@@ -39,7 +39,7 @@ export default function LectureForm({
     formState: { errors, isDirty },
   } = useForm<LectureFormData>({
     resolver: zodResolver(lectureSchema),
-    defaultValues: mode === "edit" ? initialValue : {},
+    defaultValues: mode === 'edit' ? initialValue : {},
   });
   const [updateContent, setUpdateContent] = React.useState(false);
 
@@ -49,7 +49,7 @@ export default function LectureForm({
       onSubmit={handleSubmit(onSubmitHandler)}
     >
       <Input
-        {...register("title")}
+        {...register('title')}
         errorMessage={errors.title?.message}
         isInvalid={!!errors.title}
         label="Title"
@@ -60,7 +60,7 @@ export default function LectureForm({
         variant="faded"
       />
       <Textarea
-        {...register("description")}
+        {...register('description')}
         disableAutosize={false}
         errorMessage={errors.description?.message}
         isInvalid={!!errors.description}

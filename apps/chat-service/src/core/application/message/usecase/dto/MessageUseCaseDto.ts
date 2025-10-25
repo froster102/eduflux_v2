@@ -1,5 +1,5 @@
-import type { MessageStatus } from "@core/common/enum/MessageStatus";
-import type { Message } from "@core/domain/message/entity/Message";
+import type { MessageStatus } from '@core/common/enum/MessageStatus';
+import type { Message } from '@core/domain/message/entity/Message';
 
 export class MessageUseCaseDto {
   readonly id: string;

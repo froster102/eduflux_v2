@@ -1,18 +1,18 @@
-import { ChatEvents } from "@core/application/chat/events/enum/ChatEvents";
-import { UserChatDITokens } from "@core/application/views/user-chat/di/UserChatDITokens";
-import type { UserChatCreatedEventHandler } from "@core/application/views/user-chat/handler/UserChatCreateEventHandler";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import { UserEvents } from "@core/application/views/user-chat/events/enum/UserEvents";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import type { KafkaConnection } from "@infrastructure/adapter/kafka/KafkaConnection";
-import { InfrastructureDITokens } from "@infrastructure/di/InfrastructureDITokens";
-import { CHAT_SERVICE_CONSUMER_GROUP } from "@shared/constants/consumer";
-import { CHAT_TOPIC, USERS_TOPIC } from "@shared/constants/topics";
-import type { KafkaEvent } from "@shared/types/KafkaEvent";
-import { tryCatch } from "@shared/utils/try-catch";
-import { inject } from "inversify";
-import type { Consumer, EachMessagePayload } from "kafkajs";
-import type { UserUpdatedEventHandler } from "@core/application/views/user-chat/handler/UserUpdatedEventHandler";
+import { ChatEvents } from '@core/application/chat/events/enum/ChatEvents';
+import { UserChatDITokens } from '@core/application/views/user-chat/di/UserChatDITokens';
+import type { UserChatCreatedEventHandler } from '@core/application/views/user-chat/handler/UserChatCreateEventHandler';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { UserEvents } from '@core/application/views/user-chat/events/enum/UserEvents';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { KafkaConnection } from '@infrastructure/adapter/kafka/KafkaConnection';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import { CHAT_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
+import { CHAT_TOPIC, USERS_TOPIC } from '@shared/constants/topics';
+import type { KafkaEvent } from '@shared/types/KafkaEvent';
+import { tryCatch } from '@shared/utils/try-catch';
+import { inject } from 'inversify';
+import type { Consumer, EachMessagePayload } from 'kafkajs';
+import type { UserUpdatedEventHandler } from '@core/application/views/user-chat/handler/UserUpdatedEventHandler';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -38,14 +38,14 @@ export class KafkaEventsConsumer {
   async run(): Promise<void> {
     try {
       await this.consumer.connect();
-      this.logger.info("Connected to Kafka consumer");
+      this.logger.info('Connected to Kafka consumer');
 
       await this.consumer.subscribe({
         topics: this.topics,
         fromBeginning: true,
       });
       this.logger.info(
-        `Kafka consumer subscribed to topics ${this.topics.join(",")}`,
+        `Kafka consumer subscribed to topics ${this.topics.join(',')}`,
       );
 
       await this.consumer.run({
@@ -107,7 +107,7 @@ export class KafkaEventsConsumer {
         `Failed to disconnect Kafka consumer: ${error.message}`,
       );
     } else {
-      this.logger.info("Kafka consumer disconnected gracefully.");
+      this.logger.info('Kafka consumer disconnected gracefully.');
     }
   }
 }

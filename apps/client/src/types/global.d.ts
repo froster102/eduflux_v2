@@ -1,7 +1,7 @@
-import { SVGProps } from "react";
-import { UserWithRole } from "better-auth/plugins/admin";
+import { SVGProps } from 'react';
+import { UserWithRole } from 'better-auth/plugins/admin';
 
-import { Role } from "@/shared/enums/Role";
+import { Role } from '@/shared/enums/Role';
 
 declare global {
   export type IconSvgProps = SVGProps<SVGSVGElement> & {
@@ -54,7 +54,7 @@ declare global {
     onSubmitHandler(data: TFormData): void;
     isPending?: boolean;
     onCancel?: () => void;
-    mode?: "create" | "edit";
+    mode?: 'create' | 'edit';
     initialValue?: TFormData;
     submitText?: string;
     cancelText?: string;
@@ -101,7 +101,7 @@ declare global {
     };
   }
 
-  export type UserTableAction = "view" | "ban" | "unban";
+  export type UserTableAction = 'view' | 'ban' | 'unban';
 
   export interface ExtendedUser extends UserWithRole {
     roles: Role[];

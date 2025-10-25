@@ -1,4 +1,4 @@
-import { MessageStatus } from "@core/common/enum/MessageStatus";
+import { MessageStatus } from '@core/common/enum/MessageStatus';
 
 export type CreateMessagePayload = {
   id: string;

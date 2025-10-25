@@ -1,4 +1,4 @@
-import { envVariables } from "@shared/env/envVariables";
+import { envVariables } from '@shared/env/envVariables';
 
 export class JwtConfig {
   static readonly JWT_ISS = envVariables.JWT_ISS;

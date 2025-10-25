@@ -1,5 +1,5 @@
-import api from "@/lib/axios";
-import { buildJsonApiQueryString } from "@/utils/helpers";
+import api from '@/lib/axios';
+import { buildJsonApiQueryString } from '@/utils/helpers';
 
 export async function getInstructorProfile(
   userId: string,
@@ -11,7 +11,7 @@ export async function getInstructorProfile(
 
 export async function becomeAInstructor() {
   const response = await api.post(`/auth/users/me/roles`, {
-    role: "INSTRUCTOR",
+    role: 'INSTRUCTOR',
   });
 
   return response.data;
@@ -30,7 +30,7 @@ export async function getInstructors(
 export async function getInstructorStats(): Promise<
   JsonApiResponse<InstructorStats>
 > {
-  const response = await api.get("/users/instructors/me/stats");
+  const response = await api.get('/users/instructors/me/stats');
 
   return response.data;
 }

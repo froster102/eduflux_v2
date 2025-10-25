@@ -1,7 +1,7 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { useAuthStore } from "@/store/auth-store";
-import { getUserChatChatHistory } from "@/features/chat/service/chat";
+import { useAuthStore } from '@/store/auth-store';
+import { getUserChatChatHistory } from '@/features/chat/service/chat';
 
 export function useGetChatHistory(queryParameters: GetChatsQueryParmeters) {
   const { user } = useAuthStore();

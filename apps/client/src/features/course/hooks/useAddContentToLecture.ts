@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { addAssetToLecture } from "../services/course";
+import { addAssetToLecture } from '../services/course';
 
 export function useAddContentToLecture() {
   const queryClient = useQueryClient();

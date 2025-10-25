@@ -1,15 +1,15 @@
-import type { ChatRepositoryPort } from "@core/application/chat/port/persistence/ChatRepositoryPort";
-import type { ChatQueryResult } from "@core/application/chat/port/persistence/type/ChatQueryResult";
-import type { Role } from "@core/common/enum/Role";
-import type { PaginationQueryParams } from "@core/common/port/persistence/type/QueryParameters";
-import type { Chat } from "@core/domain/chat/entity/Chat";
-import { MongooseBaseRepositoryAdpater } from "@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter";
-import { MongooseChatMapper } from "@infrastructure/adapter/persistence/mongoose/model/chat/mapper/MongooseChatMapper";
+import type { ChatRepositoryPort } from '@core/application/chat/port/persistence/ChatRepositoryPort';
+import type { ChatQueryResult } from '@core/application/chat/port/persistence/type/ChatQueryResult';
+import type { Role } from '@core/common/enum/Role';
+import type { PaginationQueryParams } from '@core/common/port/persistence/type/QueryParameters';
+import type { Chat } from '@core/domain/chat/entity/Chat';
+import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter';
+import { MongooseChatMapper } from '@infrastructure/adapter/persistence/mongoose/model/chat/mapper/MongooseChatMapper';
 import {
   ChatModel,
   type MongooseChat,
-} from "@infrastructure/adapter/persistence/mongoose/model/chat/MongooseChat";
-import type { FilterQuery } from "mongoose";
+} from '@infrastructure/adapter/persistence/mongoose/model/chat/MongooseChat';
+import type { FilterQuery } from 'mongoose';
 
 export class MongooseChatRepositoryAdapter
   extends MongooseBaseRepositoryAdpater<MongooseChat, Chat>
@@ -47,7 +47,7 @@ export class MongooseChatRepositoryAdapter
 
   async findExistingChat(userIds: string[]): Promise<Chat | null> {
     const query: FilterQuery<MongooseChat> = {
-      "participants.userId": { $all: userIds },
+      'participants.userId': { $all: userIds },
       participants: { $size: userIds.length },
     };
 

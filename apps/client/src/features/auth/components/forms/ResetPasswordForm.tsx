@@ -1,14 +1,14 @@
-import { Button } from "@heroui/button";
-import { Form } from "@heroui/form";
-import { Input } from "@heroui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { Loader } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Button } from '@heroui/button';
+import { Form } from '@heroui/form';
+import { Input } from '@heroui/input';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { Loader } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
-import { resetPasswordFormSchema } from "@/features/auth/validations/auth";
-import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/Icons";
+import { resetPasswordFormSchema } from '@/features/auth/validations/auth';
+import { EyeFilledIcon, EyeSlashFilledIcon } from '@/components/Icons';
 
 export default function ResetPasswordForm({
   onSubmitHandler,
@@ -48,7 +48,7 @@ export default function ResetPasswordForm({
     };
   }, [resendTimer]);
 
-  const toggleVisibility = (token: "newPassword" | "confirmPassword") =>
+  const toggleVisibility = (token: 'newPassword' | 'confirmPassword') =>
     setIsVisible((prev) => ({
       ...prev,
       [token]: !prev[token],
@@ -63,7 +63,7 @@ export default function ResetPasswordForm({
       >
         <div className="w-full">
           <Input
-            {...register("otp")}
+            {...register('otp')}
             errorMessage={errors.otp?.message}
             isInvalid={!!errors.otp}
             label="OTP"
@@ -72,7 +72,7 @@ export default function ResetPasswordForm({
             variant="bordered"
           />
           <button
-            className={`w-full flex justify-end ${resendTimer > 0 ? "text-default-500" : ""} text-xs block pt-1 hover:underline transition-all duration-500 text-right`}
+            className={`w-full flex justify-end ${resendTimer > 0 ? 'text-default-500' : ''} text-xs block pt-1 hover:underline transition-all duration-500 text-right`}
             disabled={resendTimer > 0}
             type="button"
             onClick={() => resendOtpHandler()}
@@ -80,19 +80,19 @@ export default function ResetPasswordForm({
             {isResendOtpPending ? (
               <Loader className=" w-4 h-4 animate-spin" />
             ) : (
-              <p>Resend OTP {resendTimer > 0 ? `in ${resendTimer}s` : ""}</p>
+              <p>Resend OTP {resendTimer > 0 ? `in ${resendTimer}s` : ''}</p>
             )}
           </button>
         </div>
         <div className="w-full relative">
           <Input
-            {...register("newPassword")}
+            {...register('newPassword')}
             endContent={
               <button
                 aria-label="toggle password visibility"
                 className="focus:outline-none"
                 type="button"
-                onClick={() => toggleVisibility("newPassword")}
+                onClick={() => toggleVisibility('newPassword')}
               >
                 {isVisible.newPassword ? (
                   <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
@@ -106,18 +106,18 @@ export default function ResetPasswordForm({
             label="Password"
             name="newPassword"
             placeholder="Enter your password"
-            type={isVisible.newPassword ? "text" : "password"}
+            type={isVisible.newPassword ? 'text' : 'password'}
             variant="bordered"
           />
           <Input
             className="pt-4"
-            {...register("confirmPassword")}
+            {...register('confirmPassword')}
             endContent={
               <button
                 aria-label="toggle password visibility"
                 className="focus:outline-none"
                 type="button"
-                onClick={() => toggleVisibility("confirmPassword")}
+                onClick={() => toggleVisibility('confirmPassword')}
               >
                 {isVisible.confirmPassword ? (
                   <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
@@ -131,7 +131,7 @@ export default function ResetPasswordForm({
             label="Confirm Password"
             name="confirmPassword"
             placeholder="Enter your password"
-            type={isVisible.confirmPassword ? "text" : "password"}
+            type={isVisible.confirmPassword ? 'text' : 'password'}
             variant="bordered"
           />
         </div>
@@ -148,7 +148,7 @@ export default function ResetPasswordForm({
           </Button>
         </div>
         <p className="text-sm hover:underline text-right w-full">
-          <Link to={"/auth/sign-in"}>Back to sign in</Link>
+          <Link to={'/auth/sign-in'}>Back to sign in</Link>
         </p>
       </Form>
     </div>

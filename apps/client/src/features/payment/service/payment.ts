@@ -1,5 +1,5 @@
-import api from "@/lib/axios";
-import { buildJsonApiQueryString } from "@/utils/helpers";
+import api from '@/lib/axios';
+import { buildJsonApiQueryString } from '@/utils/helpers';
 
 export async function createStripeChekoutSession({
   type,
@@ -16,7 +16,7 @@ export async function createStripeChekoutSession({
 export async function getInstructorPayments(
   queryParams?: GetPaymentQueryParameters,
 ): Promise<GetPaymentQueryResult> {
-  let queryString = "";
+  let queryString = '';
 
   if (queryParams) {
     queryString = buildJsonApiQueryString(queryParams);
@@ -29,7 +29,7 @@ export async function getInstructorPayments(
 export async function getPayments(
   queryParams?: GetPaymentQueryParameters,
 ): Promise<GetPaymentQueryResult> {
-  let queryString = "";
+  let queryString = '';
 
   if (queryParams) {
     queryString = buildJsonApiQueryString(queryParams);
@@ -42,7 +42,7 @@ export async function getPayments(
 export async function getPaymentSummary(
   queryParams?: GetPaymentSummaryQueryParameter,
 ): Promise<GetPaymentSummaryResponse> {
-  let queryString = "";
+  let queryString = '';
 
   if (queryParams) {
     queryString = buildJsonApiQueryString(queryParams);

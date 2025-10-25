@@ -1,14 +1,14 @@
-import { inject } from "inversify";
+import { inject } from 'inversify';
 
-import { UserChatDITokens } from "@core/application/views/user-chat/di/UserChatDITokens";
-import type { UserChatCreatedEvent } from "@core/application/views/user-chat/events/UserChatCreatedEvent";
-import type { UserChatCreatedEventHandler } from "@core/application/views/user-chat/handler/UserChatCreateEventHandler";
-import type { UserChatRepositoryPort } from "@core/application/views/user-chat/port/persistence/UserChatRepositoryPort";
+import { UserChatDITokens } from '@core/application/views/user-chat/di/UserChatDITokens';
+import type { UserChatCreatedEvent } from '@core/application/views/user-chat/events/UserChatCreatedEvent';
+import type { UserChatCreatedEventHandler } from '@core/application/views/user-chat/handler/UserChatCreateEventHandler';
+import type { UserChatRepositoryPort } from '@core/application/views/user-chat/port/persistence/UserChatRepositoryPort';
 
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import type { UserServicePort } from "@core/common/gateway/UserServicePort";
-import { UserChat } from "@core/application/views/user-chat/entity/UserChat";
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { UserServicePort } from '@core/common/gateway/UserServicePort';
+import { UserChat } from '@core/application/views/user-chat/entity/UserChat';
 
 export class UserChatCreatedEventHandlerService
   implements UserChatCreatedEventHandler
@@ -38,7 +38,7 @@ export class UserChatCreatedEventHandlerService
           }
           return {
             id: user.id,
-            name: user.firstName + " " + user.lastName,
+            name: user.firstName + ' ' + user.lastName,
             image: user.image,
             role: participant.role,
           };

@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import { addToast } from "@heroui/toast";
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { addToast } from '@heroui/toast';
 
-import { useAuthStore } from "@/store/auth-store";
-import { Role } from "@/shared/enums/Role";
+import { useAuthStore } from '@/store/auth-store';
+import { Role } from '@/shared/enums/Role';
 
-import { becomeAInstructor } from "../services/instructor";
+import { becomeAInstructor } from '../services/instructor';
 
 export function useBecomeAInstructor() {
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ export function useBecomeAInstructor() {
     onSuccess: () => {
       addUserRole(Role.INSTRUCTOR);
       addToast({
-        color: "success",
-        title: "Instructor",
-        description: "Congratulations! You are now an instructor.",
+        color: 'success',
+        title: 'Instructor',
+        description: 'Congratulations! You are now an instructor.',
       });
-      navigate({ to: "/instructor" });
+      navigate({ to: '/instructor' });
     },
   });
 }

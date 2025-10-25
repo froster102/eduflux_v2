@@ -1,16 +1,16 @@
-import { Inbox } from "lucide-react";
-import React from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
-import { Card } from "@heroui/card";
-import { Badge } from "@heroui/badge";
-import { Spinner } from "@heroui/spinner";
-import { Button } from "@heroui/button";
+import { Inbox } from 'lucide-react';
+import React from 'react';
+import { Popover, PopoverContent, PopoverTrigger } from '@heroui/popover';
+import { Card } from '@heroui/card';
+import { Badge } from '@heroui/badge';
+import { Spinner } from '@heroui/spinner';
+import { Button } from '@heroui/button';
 
-import NotificationIcon from "@/components/icons/NotificationIcon";
-import { useGetNotifications } from "@/features/notification/useGetNotifications";
-import NotificationCard from "@/features/notification/components/NotificationCard";
-import { useMarkNotificationAsSeen } from "@/features/notification/useMarkNotificationAsSeen";
-import WarnIcon from "@/components/icons/WarnIcon";
+import NotificationIcon from '@/components/icons/NotificationIcon';
+import { useGetNotifications } from '@/features/notification/useGetNotifications';
+import NotificationCard from '@/features/notification/components/NotificationCard';
+import { useMarkNotificationAsSeen } from '@/features/notification/useMarkNotificationAsSeen';
+import WarnIcon from '@/components/icons/WarnIcon';
 
 // import { useNotificationStore } from "@/store/notification-store";
 

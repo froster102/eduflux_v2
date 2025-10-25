@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from '@/store/auth-store';
 
-import { API_BASE_URL } from "./constants";
-import { auth } from "./better-auth/auth";
+import { API_BASE_URL } from './constants';
+import { auth } from './better-auth/auth';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   withCredentials: true,
 });
@@ -59,7 +59,7 @@ api.interceptors.response.use(
         const { data } = await auth.token();
 
         if (!data) {
-          throw new Error("Invalid session");
+          throw new Error('Invalid session');
         }
 
         processQueue(null, null);
@@ -67,7 +67,7 @@ api.interceptors.response.use(
         return api(error.config);
       } catch (refreshError) {
         useAuthStore.getState().signout();
-        window.location.replace("/auth/sign-in");
+        window.location.replace('/auth/sign-in');
         processQueue(refreshError);
 
         return Promise.reject(refreshError);

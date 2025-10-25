@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { getLecture } from "../services/course";
+import { getLecture } from '../services/course';
 
 export function useGetSubscribedCourseCurriculumItem(
   item: (CurriculumItem & { courseId: string }) | null,
@@ -12,7 +12,7 @@ export function useGetSubscribedCourseCurriculumItem(
         return null;
       }
       switch (item._class) {
-        case "lecture":
+        case 'lecture':
           return await getLecture({
             lectureId: item.id,
             courseId: item.courseId,

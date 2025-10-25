@@ -1,19 +1,19 @@
-import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { SessionConfirmedEventHandler } from "@core/application/notification/handler/SessionConfirmedEventHandler";
-import type { EmailServicePort } from "@core/application/notification/port/gateway/EmailServicePort";
-import type { TemplateServicePort } from "@core/application/notification/port/gateway/TemplateServicePort";
-import type { UserServicePort } from "@core/application/notification/port/gateway/UserServicePort";
-import type { NotificationRepositoryPort } from "@core/application/notification/port/persistence/NotificationRepositoryPort";
-import { NotificationUseCaseDto } from "@core/application/notification/usecase/dto/NotificationUseCaseDto";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import { eventEmitter } from "@core/common/util/event/eventEmitter";
-import { Notification } from "@core/domain/notification/entiy/Notification";
-import { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
-import { ServerEvents } from "@shared/enum/ServerEvents";
-import type { SessionConfimedEvent } from "@shared/events/SessionConfirmedEvent";
-import type { ServerEvent } from "@shared/types/ServerEvent";
-import { inject } from "inversify";
-import { v4 as uuidV4 } from "uuid";
+import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
+import type { SessionConfirmedEventHandler } from '@core/application/notification/handler/SessionConfirmedEventHandler';
+import type { EmailServicePort } from '@core/application/notification/port/gateway/EmailServicePort';
+import type { TemplateServicePort } from '@core/application/notification/port/gateway/TemplateServicePort';
+import type { UserServicePort } from '@core/application/notification/port/gateway/UserServicePort';
+import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
+import { NotificationUseCaseDto } from '@core/application/notification/usecase/dto/NotificationUseCaseDto';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { eventEmitter } from '@core/common/util/event/eventEmitter';
+import { Notification } from '@core/domain/notification/entiy/Notification';
+import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
+import { ServerEvents } from '@shared/enum/ServerEvents';
+import type { SessionConfimedEvent } from '@shared/events/SessionConfirmedEvent';
+import type { ServerEvent } from '@shared/types/ServerEvent';
+import { inject } from 'inversify';
+import { v4 as uuidV4 } from 'uuid';
 
 export class SessionConfirmedEventHandlerService
   implements SessionConfirmedEventHandler
@@ -47,7 +47,7 @@ export class SessionConfirmedEventHandlerService
     const learnerNotification = Notification.create({
       id: uuidV4(),
       userId: learnerId,
-      title: "Session Booked",
+      title: 'Session Booked',
       description: `Your session with ${instructorName} is confirmed. You'll receive an email shortly.`,
       timestamp,
       path,
@@ -64,15 +64,15 @@ export class SessionConfirmedEventHandlerService
     };
     eventEmitter.emit(ServerEvents.USER_NOTIFICATON, learnerEventPayload);
 
-    const formattedDate = new Date(startTime).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    const formattedDate = new Date(startTime).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
-    const formattedTime = new Date(startTime).toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      timeZoneName: "short",
+    const formattedTime = new Date(startTime).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
     });
 
     const learnerEmailData = {
@@ -86,7 +86,7 @@ export class SessionConfirmedEventHandlerService
       privacyLink,
     };
     const learnerEmailHtml = this.templateService.render(
-      "session-confirmed",
+      'session-confirmed',
       learnerEmailData,
     );
     await this.emailService.sendEmail({
@@ -98,7 +98,7 @@ export class SessionConfirmedEventHandlerService
     const instructorNotification = Notification.create({
       id: uuidV4(),
       userId: instructorId,
-      title: "New Session",
+      title: 'New Session',
       description: `A new session with ${learnerName} is confirmed. You'll receive an email shortly.`,
       timestamp,
       status,

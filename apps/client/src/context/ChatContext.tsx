@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect } from "react";
-import { io, Socket } from "socket.io-client";
-import { addToast } from "@heroui/toast";
+import React, { createContext, useContext, useEffect } from 'react';
+import { io, Socket } from 'socket.io-client';
+import { addToast } from '@heroui/toast';
 
-import { CHAT_WEBSOCKET_URL } from "@/lib/constants";
-import { WebSocketEvents } from "@/shared/enums/WebSocketEvents";
+import { CHAT_WEBSOCKET_URL } from '@/lib/constants';
+import { WebSocketEvents } from '@/shared/enums/WebSocketEvents';
 
 interface ChatContextType {
   socket: Socket | null;
@@ -20,7 +20,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const socketInstance = io(`${CHAT_WEBSOCKET_URL}`, {
-      path: "/ws",
+      path: '/ws/chats/',
       withCredentials: true,
     });
 
@@ -37,8 +37,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const setupSocketListeners = (socketInstance: Socket) => {
     socketInstance.on(WebSocketEvents.ERROR, (data: { message: string }) => {
       addToast({
-        description: data.message || "An unexpected error has occurred",
-        color: "danger",
+        description: data.message || 'An unexpected error has occurred',
+        color: 'danger',
       });
     });
   };
@@ -68,7 +68,7 @@ export const useChatContext = () => {
   const context = useContext(ChatContext);
 
   if (context === undefined) {
-    throw new Error("useChatContext must be used with ChatProvider");
+    throw new Error('useChatContext must be used with ChatProvider');
   }
 
   return context;

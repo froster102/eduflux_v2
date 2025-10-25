@@ -1,13 +1,13 @@
-import type { NotificationController } from "@api/http/controller/NotificationController";
-import { correlationIdSetupMiddleware } from "@api/http/middlewares/correlationIdSetupMiddleware";
-import { errorHandler } from "@api/http/middlewares/errorHandlerMiddleware";
-import { httpLoggerMiddleware } from "@api/http/middlewares/httpLoggerMiddleware";
-import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { container } from "@di/RootModule";
-import { HttpServerConfig } from "@shared/config/HttpServerConfig";
-import Elysia from "elysia";
+import type { NotificationController } from '@api/http/controller/NotificationController';
+import { correlationIdSetupMiddleware } from '@api/http/middlewares/correlationIdSetupMiddleware';
+import { errorHandler } from '@api/http/middlewares/errorHandlerMiddleware';
+import { httpLoggerMiddleware } from '@api/http/middlewares/httpLoggerMiddleware';
+import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { container } from '@di/RootModule';
+import { HttpServerConfig } from '@shared/config/HttpServerConfig';
+import Elysia from 'elysia';
 
 export class HttpServer {
   private app: Elysia;
@@ -32,8 +32,8 @@ export class HttpServer {
   }
 
   private setupRoutes(): void {
-    this.app.get("/health", () => ({
-      message: "Api running successfully.",
+    this.app.get('/health', () => ({
+      message: 'Api running successfully.',
     }));
     this.app.use(this.notificationController.register());
   }

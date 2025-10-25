@@ -1,6 +1,6 @@
-import type { BaseRepositoryPort } from "@core/common/port/persistence/BaseRepositoryPort";
-import type { Mapper } from "@infrastructure/adapter/persistence/mongoose/base/mapper/MongooseBaseMapper";
-import { Model } from "mongoose";
+import type { BaseRepositoryPort } from '@core/common/port/persistence/BaseRepositoryPort';
+import type { Mapper } from '@infrastructure/adapter/persistence/mongoose/base/mapper/MongooseBaseMapper';
+import { Model } from 'mongoose';
 
 export abstract class MongooseBaseRepositoryAdpater<TPersistence, TDomain>
   implements BaseRepositoryPort<TDomain>

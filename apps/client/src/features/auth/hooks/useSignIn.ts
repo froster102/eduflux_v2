@@ -1,12 +1,12 @@
-import { addToast } from "@heroui/toast";
-import { useMutation } from "@tanstack/react-query";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { addToast } from '@heroui/toast';
+import { useMutation } from '@tanstack/react-query';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 
-import { useAuthStore } from "@/store/auth-store";
-import { auth } from "@/lib/better-auth/auth";
-import { Role } from "@/shared/enums/Role";
+import { useAuthStore } from '@/store/auth-store';
+import { auth } from '@/lib/better-auth/auth';
+import { Role } from '@/shared/enums/Role';
 
-import { signIn } from "../services/auth";
+import { signIn } from '../services/auth';
 
 export function useSignIn() {
   const navigate = useNavigate();
@@ -24,34 +24,34 @@ export function useSignIn() {
         to:
           (redirectTo ??
           (data.user as unknown as User)?.roles[0] === Role.ADMIN)
-            ? "/admin"
-            : "/home",
+            ? '/admin'
+            : '/home',
       });
     },
 
     onError: async (error: BetterAuthError, request) => {
       switch (error.code) {
-        case "EMAIL_NOT_VERIFIED": {
+        case 'EMAIL_NOT_VERIFIED': {
           await auth.emailOtp.sendVerificationOtp({
             email: request.email,
-            type: "email-verification",
+            type: 'email-verification',
           });
           addToast({
-            title: "Sign In",
+            title: 'Sign In',
             description:
-              "Please verify your email to sign in, An OTP have been sent to your registered email",
-            color: "warning",
+              'Please verify your email to sign in, An OTP have been sent to your registered email',
+            color: 'warning',
           });
           navigate({
-            to: "/auth/sign-in",
+            to: '/auth/sign-in',
           });
           break;
         }
         default: {
           addToast({
-            title: "Sign in",
+            title: 'Sign in',
             description: error.message,
-            color: "danger",
+            color: 'danger',
           });
         }
       }

@@ -1,15 +1,15 @@
-import { Card } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import React, { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import { Card } from '@heroui/card';
+import { Chip } from '@heroui/chip';
+import React, { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import ChatHistoryLoader from "@/features/chat/components/ChatHistoryLoader";
-import ChatHistorySkeleton from "@/features/chat/components/ChatHistorySkeleton";
-import ChatPanelLoader from "@/features/chat/components/ChatPanelLoader";
-import ChatPanelSkeleton from "@/features/chat/components/ChatPanelSkeleton";
-import { useChatStore } from "@/store/useChatStore";
-import { Role } from "@/shared/enums/Role";
-import { useChatContext } from "@/context/ChatContext";
+import ChatHistoryLoader from '@/features/chat/components/ChatHistoryLoader';
+import ChatHistorySkeleton from '@/features/chat/components/ChatHistorySkeleton';
+import ChatPanelLoader from '@/features/chat/components/ChatPanelLoader';
+import ChatPanelSkeleton from '@/features/chat/components/ChatPanelSkeleton';
+import { useChatStore } from '@/store/useChatStore';
+import { Role } from '@/shared/enums/Role';
+import { useChatContext } from '@/context/ChatContext';
 
 interface ChatLayoutProps {
   role: Role;

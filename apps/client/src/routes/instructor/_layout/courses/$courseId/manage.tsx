@@ -1,18 +1,18 @@
-import React from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Tabs, Tab } from "@heroui/tabs";
+import React from 'react';
+import { createFileRoute } from '@tanstack/react-router';
+import { Tabs, Tab } from '@heroui/tabs';
 
-import DroppableCurriculumItems from "@/features/course/components/DroppableCurriculumItems";
-import CourseErrorModal from "@/features/course/components/CourseErrorModal";
-import { useGetInstructorCourse } from "@/features/course/hooks/useGetInstructorCourse";
-import { useGetInstructorCourseCurriculum } from "@/features/course/hooks/useGetInstructorCourseCurriculum";
-import { useUpdateInstructorCourse } from "@/features/course/hooks/useUpdateCourse";
-import { usePublishCourse } from "@/features/course/hooks/usePublishCourse";
-import CourseForm from "@/features/course/components/forms/CourseForm";
-import { CourseLevel } from "@/shared/enums/CourseLevel";
+import DroppableCurriculumItems from '@/features/course/components/DroppableCurriculumItems';
+import CourseErrorModal from '@/features/course/components/CourseErrorModal';
+import { useGetInstructorCourse } from '@/features/course/hooks/useGetInstructorCourse';
+import { useGetInstructorCourseCurriculum } from '@/features/course/hooks/useGetInstructorCourseCurriculum';
+import { useUpdateInstructorCourse } from '@/features/course/hooks/useUpdateCourse';
+import { usePublishCourse } from '@/features/course/hooks/usePublishCourse';
+import CourseForm from '@/features/course/components/forms/CourseForm';
+import { CourseLevel } from '@/shared/enums/CourseLevel';
 
 export const Route = createFileRoute(
-  "/instructor/_layout/courses/$courseId/manage",
+  '/instructor/_layout/courses/$courseId/manage',
 )({
   component: Manage,
 });
@@ -27,7 +27,7 @@ function Manage() {
   const [openCourseErrorModal, setOpenCourseErrorModal] = React.useState<{
     isOpen: boolean;
     error: string;
-  }>({ isOpen: false, error: "" });
+  }>({ isOpen: false, error: '' });
 
   const publishCourse = usePublishCourse({
     onError: (error: string) => {
@@ -68,7 +68,7 @@ function Manage() {
                       }
                     : {}
                 }
-                isPublished={courseInfo?.data?.status === "published"}
+                isPublished={courseInfo?.data?.status === 'published'}
                 isPublishing={publishCourse.isPending}
                 onPublishHandler={onPublishHandler}
                 onSubmitHandler={onSubmitHandler}
@@ -95,7 +95,7 @@ function Manage() {
       <CourseErrorModal
         error={openCourseErrorModal.error}
         isOpen={openCourseErrorModal.isOpen}
-        onClose={() => setOpenCourseErrorModal({ isOpen: false, error: "" })}
+        onClose={() => setOpenCourseErrorModal({ isOpen: false, error: '' })}
       />
     </div>
   );

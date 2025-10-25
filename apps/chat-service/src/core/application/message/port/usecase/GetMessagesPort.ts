@@ -1,4 +1,4 @@
-import type { MessageQueryParameters } from "@core/application/message/port/persistence/type/MessageQueryParameters";
+import type { MessageQueryParameters } from '@core/application/message/port/persistence/type/MessageQueryParameters';
 
 export interface GetMessagesUseCasePort {
   chatId: string;

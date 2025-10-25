@@ -1,14 +1,14 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 export default function ActivityChart() {
   const monthlyData = [
-    { month: "January", activity: 120 },
-    { month: "February", activity: 95 },
-    { month: "March", activity: 150 },
-    { month: "April", activity: 200 },
-    { month: "May", activity: 80 },
-    { month: "June", activity: 180 },
+    { month: 'January', activity: 120 },
+    { month: 'February', activity: 95 },
+    { month: 'March', activity: 150 },
+    { month: 'April', activity: 200 },
+    { month: 'May', activity: 80 },
+    { month: 'June', activity: 180 },
   ];
 
   return (
@@ -62,7 +62,7 @@ const CustomTooltip = ({
     >
       <CardHeader className="p-0">
         <p className="text-xs">
-          <span className="text-default-500 pr-4">Activity</span>{" "}
+          <span className="text-default-500 pr-4">Activity</span>{' '}
           {payload && payload[0]?.payload?.activity}
         </p>
       </CardHeader>

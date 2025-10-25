@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import { addToast } from "@heroui/toast";
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { addToast } from '@heroui/toast';
 
-import { forgotPassword } from "../services/auth";
+import { forgotPassword } from '../services/auth';
 
 export function useForgotPassword() {
   const navigate = useNavigate();
@@ -11,13 +11,13 @@ export function useForgotPassword() {
     mutationFn: forgotPassword,
     onSuccess: () => {
       addToast({
-        title: "Forgot Password",
+        title: 'Forgot Password',
         description:
-          "If an account with that email exists, you’ll receive a one-time password (OTP) shortly.",
-        color: "success",
+          'If an account with that email exists, you’ll receive a one-time password (OTP) shortly.',
+        color: 'success',
       });
 
-      navigate({ to: "/auth/reset-password" });
+      navigate({ to: '/auth/reset-password' });
     },
   });
 }

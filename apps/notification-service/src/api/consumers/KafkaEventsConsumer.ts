@@ -1,18 +1,18 @@
-import { NotificationDITokens } from "@core/application/notification/di/NotificationDITokens";
-import type { EnrollmentSuccessEventHandler } from "@core/application/notification/handler/EnrollmentSuccessEventHandler";
-import type { SessionConfirmedEventHandler } from "@core/application/notification/handler/SessionConfirmedEventHandler";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import { EnrollmentEvents } from "@core/common/events/enum/EnrollmentEvents";
-import { SessionEvents } from "@core/common/events/enum/SessionEvents";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import type { KafkaConnection } from "@infrastructure/adapter/messaging/kafka/KafkaConnection";
-import { InfrastructureDITokens } from "@infrastructure/di/InfrastructureDITokens";
-import { NOTIFICATION_SERVICE_CONSUMER_GROUP } from "@shared/constants/consumer";
-import { ENROLLMENTS_TOPIC, SESSION_TOPIC } from "@shared/constants/topic";
-import type { NotificationEvent } from "@shared/events/NotificationEvent";
-import { tryCatch } from "@shared/util/try-catch";
-import { inject } from "inversify";
-import type { Consumer, EachMessagePayload } from "kafkajs";
+import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
+import type { EnrollmentSuccessEventHandler } from '@core/application/notification/handler/EnrollmentSuccessEventHandler';
+import type { SessionConfirmedEventHandler } from '@core/application/notification/handler/SessionConfirmedEventHandler';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { EnrollmentEvents } from '@core/common/events/enum/EnrollmentEvents';
+import { SessionEvents } from '@core/common/events/enum/SessionEvents';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import { NOTIFICATION_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
+import { ENROLLMENTS_TOPIC, SESSION_TOPIC } from '@shared/constants/topic';
+import type { NotificationEvent } from '@shared/events/NotificationEvent';
+import { tryCatch } from '@shared/util/try-catch';
+import { inject } from 'inversify';
+import type { Consumer, EachMessagePayload } from 'kafkajs';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -42,14 +42,14 @@ export class KafkaEventsConsumer {
   async run(): Promise<void> {
     try {
       await this.consumer.connect();
-      this.logger.info("Connected to Kafka consumer");
+      this.logger.info('Connected to Kafka consumer');
 
       await this.consumer.subscribe({
         topics: this.topics,
         fromBeginning: true,
       });
       this.logger.info(
-        `Kafka consumer subscribed to topics ${this.topics.join(",")}`,
+        `Kafka consumer subscribed to topics ${this.topics.join(',')}`,
       );
 
       await this.consumer.run({
@@ -111,7 +111,7 @@ export class KafkaEventsConsumer {
         `Failed to disconnect Kafka consumer: ${error.message}`,
       );
     } else {
-      this.logger.info("Kafka consumer disconnected gracefully.");
+      this.logger.info('Kafka consumer disconnected gracefully.');
     }
   }
 }

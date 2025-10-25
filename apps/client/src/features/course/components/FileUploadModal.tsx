@@ -1,6 +1,6 @@
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@heroui/modal';
 
-import FileUploader from "@/components/FileUploader";
+import FileUploader from '@/components/FileUploader';
 
 export default function FileUploadModal({
   isOpen,
@@ -11,7 +11,7 @@ export default function FileUploadModal({
   onClose: () => void;
   onSuccess: (
     key: string,
-    resourceType: "image" | "video",
+    resourceType: 'image' | 'video',
     uuid: string,
   ) => void;
 }) {
@@ -19,7 +19,7 @@ export default function FileUploadModal({
     <Modal
       backdrop="blur"
       classNames={{
-        backdrop: "bg-background/80 backdrop-opacity-50",
+        backdrop: 'bg-background/80 backdrop-opacity-50',
       }}
       isOpen={isOpen}
       placement="top-center"

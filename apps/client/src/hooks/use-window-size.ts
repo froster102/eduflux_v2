@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 interface WindowSizeState {
   width: number;
@@ -21,7 +21,7 @@ export function useWindowSize(): WindowSizeState {
     handleResize();
 
     function handleResize() {
-      if (typeof window === "undefined") return;
+      if (typeof window === 'undefined') return;
 
       const vp = window.visualViewport;
 
@@ -46,14 +46,14 @@ export function useWindowSize(): WindowSizeState {
     const visualViewport = window.visualViewport;
 
     if (visualViewport) {
-      visualViewport.addEventListener("resize", handleResize);
-      visualViewport.addEventListener("scroll", handleResize);
+      visualViewport.addEventListener('resize', handleResize);
+      visualViewport.addEventListener('scroll', handleResize);
     }
 
     return () => {
       if (visualViewport) {
-        visualViewport.removeEventListener("resize", handleResize);
-        visualViewport.removeEventListener("scroll", handleResize);
+        visualViewport.removeEventListener('resize', handleResize);
+        visualViewport.removeEventListener('scroll', handleResize);
       }
     };
   }, []);

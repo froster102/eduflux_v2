@@ -1,5 +1,5 @@
-import { JwtConfig } from "@shared/config/JwtConfig";
-import { jwtVerify, createRemoteJWKSet } from "jose";
+import { JwtConfig } from '@shared/config/JwtConfig';
+import { jwtVerify, createRemoteJWKSet } from 'jose';
 
 const JWKS = createRemoteJWKSet(new URL(JwtConfig.JWKS_URL));
 export async function validateToken(token: string) {

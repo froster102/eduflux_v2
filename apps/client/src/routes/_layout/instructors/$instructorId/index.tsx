@@ -1,27 +1,27 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import React from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { Image } from "@heroui/image";
-import { Button } from "@heroui/button";
-import { getLocalTimeZone } from "@internationalized/date";
-import { format } from "date-fns";
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import React from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { Image } from '@heroui/image';
+import { Button } from '@heroui/button';
+import { getLocalTimeZone } from '@internationalized/date';
+import { format } from 'date-fns';
 
-import SessionScheduler from "@/features/session/components/SessionScheduler";
-import InstructorPageSkeleton from "@/features/instructor/components/InstructorPageSkeleton";
-import { IMAGE_BASE_URL } from "@/config/image";
-import BoltIcon from "@/components/icons/BoltIcon";
-import { useBookSession } from "@/features/session/hooks/useBookSession";
-import { tryCatch } from "@/utils/try-catch";
-import { getInstructorProfileOptions } from "@/features/instructor/hooks/useGetInstructorProfile";
-import { useGetInstructorAvailableSlots } from "@/features/instructor/hooks/useGetInstructorAvailableSlots";
-import { useCreateChat } from "@/features/chat/hooks/useCreateChat";
-import StartChatButton from "@/features/chat/components/StartChatButton";
-import { useChatStore } from "@/store/useChatStore";
-import { useGetChatWithInstructor } from "@/features/chat/hooks/useGetChatWithInstructor";
-import { useCreateStripeCheckoutSession } from "@/features/payment/hooks/useCreateStripeCheckoutSession";
+import SessionScheduler from '@/features/session/components/SessionScheduler';
+import InstructorPageSkeleton from '@/features/instructor/components/InstructorPageSkeleton';
+import { IMAGE_BASE_URL } from '@/config/image';
+import BoltIcon from '@/components/icons/BoltIcon';
+import { useBookSession } from '@/features/session/hooks/useBookSession';
+import { tryCatch } from '@/utils/try-catch';
+import { getInstructorProfileOptions } from '@/features/instructor/hooks/useGetInstructorProfile';
+import { useGetInstructorAvailableSlots } from '@/features/instructor/hooks/useGetInstructorAvailableSlots';
+import { useCreateChat } from '@/features/chat/hooks/useCreateChat';
+import StartChatButton from '@/features/chat/components/StartChatButton';
+import { useChatStore } from '@/store/useChatStore';
+import { useGetChatWithInstructor } from '@/features/chat/hooks/useGetChatWithInstructor';
+import { useCreateStripeCheckoutSession } from '@/features/payment/hooks/useCreateStripeCheckoutSession';
 
-export const Route = createFileRoute("/_layout/instructors/$instructorId/")({
+export const Route = createFileRoute('/_layout/instructors/$instructorId/')({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
     return queryClient.prefetchQuery(getInstructorProfileOptions(instructorId));
   },
@@ -128,7 +128,7 @@ function RouteComponent() {
         <div className="flex flex-col gap-4 w-full">
           <Card
             className="w-full h-fit bg-background border border-default-200"
-            shadow={"none"}
+            shadow={'none'}
           >
             <CardHeader className="text-lg font-medium flex pb-0">
               <p>About Me</p>

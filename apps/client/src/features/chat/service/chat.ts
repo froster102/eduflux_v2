@@ -1,10 +1,10 @@
-import api from "@/lib/axios";
-import { buildJsonApiQueryString } from "@/utils/helpers";
+import api from '@/lib/axios';
+import { buildJsonApiQueryString } from '@/utils/helpers';
 
 export async function createChat(
   instructorId: string,
 ): Promise<JsonApiResponse<Chat>> {
-  const response = await api.post<JsonApiResponse<Chat>>("/chats/", {
+  const response = await api.post<JsonApiResponse<Chat>>('/chats/', {
     instructorId,
   });
 
@@ -17,7 +17,7 @@ export async function getUserChatChatHistory(
   const queryString = buildJsonApiQueryString(queryParameters);
 
   const response = await api.get<GetUserChatsQueryResult>(
-    `/chats/users/me${queryString}`,
+    `/chats/me${queryString}`,
   );
 
   return response.data;
@@ -41,7 +41,7 @@ export async function getMessages(
     page: { cursor: undefined, size: 20 },
   };
 
-  let queryString = "";
+  let queryString = '';
 
   if (getMessagesQueryParameters) {
     queryString = buildJsonApiQueryString(query);

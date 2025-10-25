@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-import { Role } from "@/shared/enums/Role";
+import { Role } from '@/shared/enums/Role';
 
 export interface Auth {
   user: User | null;
@@ -51,7 +51,7 @@ export const useAuthStore = create<Auth>()(
       signout: () => set(() => ({ ...initialState })),
     }),
     {
-      name: "auth",
+      name: 'auth',
     },
   ),
 );

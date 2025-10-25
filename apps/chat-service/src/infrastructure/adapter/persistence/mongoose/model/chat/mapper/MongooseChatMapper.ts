@@ -1,5 +1,5 @@
-import { Chat } from "@core/domain/chat/entity/Chat";
-import type { MongooseChat } from "@infrastructure/adapter/persistence/mongoose/model/chat/MongooseChat";
+import { Chat } from '@core/domain/chat/entity/Chat';
+import type { MongooseChat } from '@infrastructure/adapter/persistence/mongoose/model/chat/MongooseChat';
 
 export class MongooseChatMapper {
   static toDomain(raw: MongooseChat): Chat {

@@ -1,19 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Skeleton } from "@heroui/skeleton";
+import { createFileRoute } from '@tanstack/react-router';
+import { Skeleton } from '@heroui/skeleton';
 
-import UpcomingSessionSection from "@/features/session/components/UpcomingSessionSection";
-import TaskManager from "@/features/task/components/TaskManager";
-import StatsCard from "@/components/StatsCard";
-import { useAuthStore } from "@/store/auth-store";
+import UpcomingSessionSection from '@/features/session/components/UpcomingSessionSection';
+import TaskManager from '@/features/task/components/TaskManager';
+import StatsCard from '@/components/StatsCard';
+import { useAuthStore } from '@/store/auth-store';
 
-export const Route = createFileRoute("/admin/_layout/")({
+export const Route = createFileRoute('/admin/_layout/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const { user } = useAuthStore();
 
-  console.log("called");
+  console.log('called');
 
   return (
     <div className="flex flex-col gap-6 w-full h-full p-4">

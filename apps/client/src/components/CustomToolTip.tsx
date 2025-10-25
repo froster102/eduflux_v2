@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, CardBody, CardHeader } from '@heroui/card';
 
 interface TooltipProps {
   active?: boolean;

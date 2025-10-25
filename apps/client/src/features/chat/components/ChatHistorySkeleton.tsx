@@ -1,5 +1,5 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Skeleton } from "@heroui/skeleton";
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { Skeleton } from '@heroui/skeleton';
 
 export default function ChatHistorySkeleton() {
   return (

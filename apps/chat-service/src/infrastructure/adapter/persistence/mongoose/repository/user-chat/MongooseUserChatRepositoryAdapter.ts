@@ -1,16 +1,16 @@
-import { MongooseBaseRepositoryAdpater } from "@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter";
+import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter';
 
-import type { FilterQuery } from "mongoose";
+import type { FilterQuery } from 'mongoose';
 import {
   UserChatModel,
   type MongooseUserChat,
-} from "@infrastructure/adapter/persistence/mongoose/model/user-chat/MongooseUserChat";
-import { MongooseUserChatMapper } from "@infrastructure/adapter/persistence/mongoose/model/user-chat/mapper/MongooseUserChatMapper";
-import type { UserChatRepositoryPort } from "@core/application/views/user-chat/port/persistence/UserChatRepositoryPort";
-import type { UserChat } from "@core/application/views/user-chat/entity/UserChat";
-import type { Role } from "@core/common/enum/Role";
-import type { PaginationQueryParams } from "@core/common/port/persistence/type/QueryParameters";
-import type { UserChatQueryResult } from "@core/application/views/user-chat/port/persistence/types/UserChatQueryResult";
+} from '@infrastructure/adapter/persistence/mongoose/model/user-chat/MongooseUserChat';
+import { MongooseUserChatMapper } from '@infrastructure/adapter/persistence/mongoose/model/user-chat/mapper/MongooseUserChatMapper';
+import type { UserChatRepositoryPort } from '@core/application/views/user-chat/port/persistence/UserChatRepositoryPort';
+import type { UserChat } from '@core/application/views/user-chat/entity/UserChat';
+import type { Role } from '@core/common/enum/Role';
+import type { PaginationQueryParams } from '@core/common/port/persistence/type/QueryParameters';
+import type { UserChatQueryResult } from '@core/application/views/user-chat/port/persistence/types/UserChatQueryResult';
 
 export class MongooseUserChatRepositoryAdapter
   extends MongooseBaseRepositoryAdpater<MongooseUserChat, UserChat>
@@ -52,18 +52,18 @@ export class MongooseUserChatRepositoryAdapter
     payload: { name: string; image?: string },
   ): Promise<void> {
     const setUpdates: Record<string, any> = {
-      "participants.$[elem].name": payload.name,
+      'participants.$[elem].name': payload.name,
     };
 
     if (payload.image !== undefined) {
-      setUpdates["participants.$[elem].image"] = payload.image;
+      setUpdates['participants.$[elem].image'] = payload.image;
     }
 
     await UserChatModel.updateMany(
-      { "participants.id": userId },
+      { 'participants.id': userId },
       { $set: setUpdates },
       {
-        arrayFilters: [{ "elem.id": userId }],
+        arrayFilters: [{ 'elem.id': userId }],
       },
     );
   }

@@ -1,26 +1,26 @@
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import type { Context, Next } from "hono";
-import { container } from "src/di/RootModule";
-import { getConnInfo } from "@hono/node-server/conninfo";
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { Context, Next } from 'hono';
+import { container } from 'src/di/RootModule';
+import { getConnInfo } from '@hono/node-server/conninfo';
 
 export const httpLoggerMiddleware = async (c: Context, next: Next) => {
   const logger = container
     .get<LoggerPort>(CoreDITokens.Logger)
-    .fromContext("HTTP");
+    .fromContext('HTTP');
 
   const start = Date.now();
 
   logger.info(`Incomming request: ${c.req.method} ${c.req.url}`, {
     ip: getConnInfo(c).remote.address,
-    userAgent: c.req.header("user-agent"),
+    userAgent: c.req.header('user-agent'),
   });
 
   await next();
 
   const duration = Date.now() - start;
   const statusCode = c.res.status;
-  const logLevel = statusCode >= 400 ? "error" : "info";
+  const logLevel = statusCode >= 400 ? 'error' : 'info';
   logger[logLevel](`Request completed: ${c.req.method} ${c.req.url}`, {
     statusCode,
     duration: `${duration}ms`,

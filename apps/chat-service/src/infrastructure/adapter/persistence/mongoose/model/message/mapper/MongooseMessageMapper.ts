@@ -1,5 +1,5 @@
-import { Message } from "@core/domain/message/entity/Message";
-import type { MongooseMessage } from "@infrastructure/adapter/persistence/mongoose/model/message/MongooseMessage";
+import { Message } from '@core/domain/message/entity/Message';
+import type { MongooseMessage } from '@infrastructure/adapter/persistence/mongoose/model/message/MongooseMessage';
 
 export class MongooseMessageMapper {
   static toDomain(raw: MongooseMessage): Message {

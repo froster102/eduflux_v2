@@ -1,20 +1,20 @@
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { z, ZodError } from "zod/v4";
-import httpStatus from "http-status";
-import { Exception } from "@core/common/exception/Exception";
-import { getHttpErrorCode } from "@shared/errors/error-code";
-import { Code } from "@core/common/error/Code";
-import { container } from "@di/RootModule";
-import type { Context } from "hono";
-import type { StatusCode } from "hono/utils/http-status";
-import type { HTTPResponseError } from "hono/types";
-import { createJsonApiError } from "@shared/utils/jsonApi";
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { z, ZodError } from 'zod/v4';
+import httpStatus from 'http-status';
+import { Exception } from '@core/common/exception/Exception';
+import { getHttpErrorCode } from '@shared/errors/error-code';
+import { Code } from '@core/common/error/Code';
+import { container } from '@di/RootModule';
+import type { Context } from 'hono';
+import type { StatusCode } from 'hono/utils/http-status';
+import type { HTTPResponseError } from 'hono/types';
+import { createJsonApiError } from '@shared/utils/jsonApi';
 
 export const errorHandler = (error: Error | HTTPResponseError, c: Context) => {
   const logger = container
     .get<LoggerPort>(CoreDITokens.Logger)
-    .fromContext("HttpErrorHandler");
+    .fromContext('HttpErrorHandler');
 
   logger.error(error?.message, error as Record<string, any>);
 

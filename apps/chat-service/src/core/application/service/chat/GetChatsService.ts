@@ -1,10 +1,10 @@
-import { ChatDITokens } from "@core/application/chat/di/ChatDITokens";
-import type { ChatRepositoryPort } from "@core/application/chat/port/persistence/ChatRepositoryPort";
-import type { GetChatsPort } from "@core/application/chat/port/usecase/GetChatsPort";
-import { ChatUseCaseDto } from "@core/application/chat/usecase/dto/ChatUseCaseDto";
-import type { GetChatsUseCase } from "@core/application/chat/usecase/GetChatsUseCase";
-import type { GetChatsUseCaseResult } from "@core/application/chat/usecase/type/GetChatsUseCaseResult";
-import { inject } from "inversify";
+import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
+import type { ChatRepositoryPort } from '@core/application/chat/port/persistence/ChatRepositoryPort';
+import type { GetChatsPort } from '@core/application/chat/port/usecase/GetChatsPort';
+import { ChatUseCaseDto } from '@core/application/chat/usecase/dto/ChatUseCaseDto';
+import type { GetChatsUseCase } from '@core/application/chat/usecase/GetChatsUseCase';
+import type { GetChatsUseCaseResult } from '@core/application/chat/usecase/type/GetChatsUseCaseResult';
+import { inject } from 'inversify';
 
 export class GetChatsService implements GetChatsUseCase {
   constructor(

@@ -1,5 +1,5 @@
-import api from "@/lib/axios";
-import { buildJsonApiQueryString } from "@/utils/helpers";
+import api from '@/lib/axios';
+import { buildJsonApiQueryString } from '@/utils/helpers';
 
 export async function getInstructorCourses(
   paginationQueryParams: PaginationQueryParameters,
@@ -44,7 +44,7 @@ export async function getCourseCategories(): Promise<GetCourseCategories> {
 }
 
 export async function createCourse(data: CreateCourseFormData) {
-  const response = await api.post("/courses/", data);
+  const response = await api.post('/courses/', data);
 
   return response.data;
 }
@@ -135,7 +135,7 @@ export async function addAssetToLecture(data: {
   fileName: string;
   courseId: string;
   lectureId: string;
-  resourceType: "image" | "video";
+  resourceType: 'image' | 'video';
 }) {
   const response = await api.post(
     `/courses/${data.courseId}/lectures/${data.lectureId}/assets`,

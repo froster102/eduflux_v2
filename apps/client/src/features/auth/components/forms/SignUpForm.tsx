@@ -1,14 +1,14 @@
-import { Button } from "@heroui/button";
-import { Form } from "@heroui/form";
-import { Input } from "@heroui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "@tanstack/react-router";
+import { Button } from '@heroui/button';
+import { Form } from '@heroui/form';
+import { Input } from '@heroui/input';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from '@tanstack/react-router';
 
-import { auth } from "@/lib/better-auth/auth";
-import GoogleIcon from "@/components/icons/GoogleIcon";
+import { auth } from '@/lib/better-auth/auth';
+import GoogleIcon from '@/components/icons/GoogleIcon';
 
-import { signUpSchema } from "../../validations/auth";
+import { signUpSchema } from '../../validations/auth';
 
 export default function SignUpForm({
   onSubmitHandler,
@@ -24,7 +24,7 @@ export default function SignUpForm({
 
   const googleLogin = async () => {
     await auth.signIn.social({
-      provider: "google",
+      provider: 'google',
       callbackURL: import.meta.env.VITE_GOOGLE_AUTH_CALLBACK_URL,
     });
   };
@@ -37,7 +37,7 @@ export default function SignUpForm({
         onSubmit={handleSubmit(onSubmitHandler)}
       >
         <Input
-          {...register("name")}
+          {...register('name')}
           errorMessage={errors.name?.message}
           isInvalid={!!errors.name}
           label="Fullname"
@@ -47,7 +47,7 @@ export default function SignUpForm({
           variant="bordered"
         />
         <Input
-          {...register("email")}
+          {...register('email')}
           errorMessage={errors.email?.message}
           isInvalid={!!errors.email}
           label="Email"
@@ -57,7 +57,7 @@ export default function SignUpForm({
           variant="bordered"
         />
         <Input
-          {...register("password")}
+          {...register('password')}
           errorMessage={errors.password?.message}
           isInvalid={!!errors.password}
           label="Password"
@@ -67,7 +67,7 @@ export default function SignUpForm({
           variant="bordered"
         />
         <Input
-          {...register("confirmPassword")}
+          {...register('confirmPassword')}
           errorMessage={errors.confirmPassword?.message}
           isInvalid={!!errors.confirmPassword}
           label="Confirm Password"

@@ -1,4 +1,4 @@
 export enum NotificationStatus {
-  SEEN = "SEEN",
-  UNSEEN = "UNSEEN",
+  SEEN = 'SEEN',
+  UNSEEN = 'UNSEEN',
 }

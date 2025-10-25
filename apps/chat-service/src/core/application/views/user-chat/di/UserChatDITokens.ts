@@ -1,22 +1,22 @@
 export class UserChatDITokens {
   //Use-cases
   static readonly GetUserChatsUserCase: unique symbol = Symbol(
-    "GetUserChatsUserCase",
+    'GetUserChatsUserCase',
   );
 
   //Handler
   static readonly UserChatCreatedEventHandler: unique symbol = Symbol(
-    "UserChatCreatedEventHandler",
+    'UserChatCreatedEventHandler',
   );
   static readonly UserUpdatedEventHandler: unique symbol = Symbol(
-    "UserUpdatedEventHandler",
+    'UserUpdatedEventHandler',
   );
 
   //Repository
   static readonly UserChatRepository: unique symbol =
-    Symbol("UserChatRepository");
+    Symbol('UserChatRepository');
 
   //Controller
   static readonly UserChatController: unique symbol =
-    Symbol("UserChatController");
+    Symbol('UserChatController');
 }

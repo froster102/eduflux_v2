@@ -1,22 +1,22 @@
-import { Select, SelectItem } from "@heroui/select";
-import React from "react";
-import { Selection } from "@heroui/table";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { Select, SelectItem } from '@heroui/select';
+import React from 'react';
+import { Selection } from '@heroui/table';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from '@/store/auth-store';
 // eslint-disable-next-line boundaries/element-types
-import { useBecomeAInstructor } from "@/features/instructor/hooks/useBecomeAInstructor";
-import AcademicIcon from "@/components/icons/AcademicIcon";
-import LearnerIcon from "@/components/icons/LearnerIcon";
-import { useChatStore } from "@/store/useChatStore";
+import { useBecomeAInstructor } from '@/features/instructor/hooks/useBecomeAInstructor';
+import AcademicIcon from '@/components/icons/AcademicIcon';
+import LearnerIcon from '@/components/icons/LearnerIcon';
+import { useChatStore } from '@/store/useChatStore';
 
-import ConfirmationModal from "./ConfirmationModal";
+import ConfirmationModal from './ConfirmationModal';
 
 export default function RoleSwitcher() {
   const location = useLocation();
-  const currentRole = location.pathname.startsWith("/instructor")
-    ? new Set(["INSTRUCTOR"])
-    : new Set(["LEARNER"]);
+  const currentRole = location.pathname.startsWith('/instructor')
+    ? new Set(['INSTRUCTOR'])
+    : new Set(['LEARNER']);
 
   const [role, setRole] = React.useState<Selection>(currentRole);
 
@@ -29,30 +29,30 @@ export default function RoleSwitcher() {
 
   const roles: Array<{ key: string; label: string; icon: React.ReactNode }> = [
     {
-      key: "LEARNER",
-      label: "Learner",
+      key: 'LEARNER',
+      label: 'Learner',
       icon: <LearnerIcon width={24} />,
     },
     {
-      key: "INSTRUCTOR",
-      label: "Instructor",
+      key: 'INSTRUCTOR',
+      label: 'Instructor',
       icon: <AcademicIcon width={24} />,
     },
   ];
 
   function handleSelectionChange(value: string) {
-    if (value === "INSTRUCTOR" && user) {
-      if (!user.roles.includes("INSTRUCTOR")) {
+    if (value === 'INSTRUCTOR' && user) {
+      if (!user.roles.includes('INSTRUCTOR')) {
         setOpenConfirmationModal(true);
       } else {
-        setRole(new Set(["INSTRUCTOR"]));
+        setRole(new Set(['INSTRUCTOR']));
         resetSelectedChat();
-        navigate({ to: "/instructor" });
+        navigate({ to: '/instructor' });
       }
-    } else if (value === "LEARNER") {
-      setRole(new Set(["LEARNER"]));
+    } else if (value === 'LEARNER') {
+      setRole(new Set(['LEARNER']));
       resetSelectedChat();
-      navigate({ to: "/home" });
+      navigate({ to: '/home' });
     }
   }
 

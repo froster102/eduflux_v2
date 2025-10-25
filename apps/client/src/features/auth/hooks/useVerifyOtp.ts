@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
-import { addToast } from "@heroui/toast";
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { addToast } from '@heroui/toast';
 
-import { verifyOtp } from "../services/auth";
+import { verifyOtp } from '../services/auth';
 
 export function useVerifyOtp() {
   const navigate = useNavigate();
@@ -11,12 +11,12 @@ export function useVerifyOtp() {
     mutationFn: verifyOtp,
     onSuccess: () => {
       addToast({
-        title: "OTP verfication successfull",
+        title: 'OTP verfication successfull',
         description:
-          "Your OTP have been verified successfully,Please sign in to continue",
-        color: "success",
+          'Your OTP have been verified successfully,Please sign in to continue',
+        color: 'success',
       });
-      navigate({ to: "/auth/sign-in" });
+      navigate({ to: '/auth/sign-in' });
     },
   });
 }

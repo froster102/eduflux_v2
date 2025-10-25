@@ -2,13 +2,13 @@ import {
   InfiniteData,
   useQueryClient,
   useSuspenseInfiniteQuery,
-} from "@tanstack/react-query";
-import React from "react";
+} from '@tanstack/react-query';
+import React from 'react';
 
-import { getMessages } from "@/features/chat/service/chat";
-import { useChatContext } from "@/context/ChatContext";
-import { MessageStatus } from "@/features/chat/contants/MessageStatus";
-import { WebSocketEvents } from "@/shared/enums/WebSocketEvents";
+import { getMessages } from '@/features/chat/service/chat';
+import { useChatContext } from '@/context/ChatContext';
+import { MessageStatus } from '@/features/chat/contants/MessageStatus';
+import { WebSocketEvents } from '@/shared/enums/WebSocketEvents';
 
 export function useGetChatMessages(chatId: string) {
   const { socket } = useChatContext();

@@ -1,15 +1,15 @@
-import type { UserServicePort } from "@core/application/notification/port/gateway/UserServicePort";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { credentials, type ServiceError } from "@grpc/grpc-js";
+import type { UserServicePort } from '@core/application/notification/port/gateway/UserServicePort';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { credentials, type ServiceError } from '@grpc/grpc-js';
 import {
   GetUserRequest,
   UserResponse,
   UserServiceClient,
-} from "@infrastructure/adapter/grpc/generated/user";
-import { GrpcUserServiceConfig } from "@shared/config/GrpcUserServiceConfig";
-import type { Role } from "@shared/enum/Role";
-import { inject } from "inversify";
+} from '@infrastructure/adapter/grpc/generated/user';
+import { GrpcUserServiceConfig } from '@shared/config/GrpcUserServiceConfig';
+import type { Role } from '@shared/enum/Role';
+import { inject } from 'inversify';
 
 export class GrpcUserServiceAdapter implements UserServicePort {
   private client: UserServiceClient;

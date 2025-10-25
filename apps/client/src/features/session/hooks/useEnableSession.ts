@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { addToast } from "@heroui/toast";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { addToast } from '@heroui/toast';
 
-import { useAuthStore } from "@/store/auth-store";
-import { DEFAULT_ERROR_MESSAGE } from "@/config/error-messages";
+import { useAuthStore } from '@/store/auth-store';
+import { DEFAULT_ERROR_MESSAGE } from '@/config/error-messages';
 
-import { enableSessions } from "../services/session";
+import { enableSessions } from '../services/session';
 
 export function useEnableSessions() {
   const queryClient = useQueryClient();
@@ -48,12 +48,12 @@ export function useEnableSessions() {
       if (error instanceof AxiosError) {
         addToast({
           description: error.response?.data.message || DEFAULT_ERROR_MESSAGE,
-          color: "danger",
+          color: 'danger',
         });
       } else if (error instanceof Error) {
         addToast({
           description: error.message || DEFAULT_ERROR_MESSAGE,
-          color: "danger",
+          color: 'danger',
         });
       }
     },

@@ -1,19 +1,19 @@
-import { Chip } from "@heroui/chip";
+import { Chip } from '@heroui/chip';
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@heroui/dropdown";
-import { Button } from "@heroui/button";
+} from '@heroui/dropdown';
+import { Button } from '@heroui/button';
 
-import DataTable from "@/components/DataTable";
-import { VerticalDotsIcon } from "@/components/VerticalDotsIcon";
-import { useAuthStore } from "@/store/auth-store";
+import DataTable from '@/components/DataTable';
+import { VerticalDotsIcon } from '@/components/VerticalDotsIcon';
+import { useAuthStore } from '@/store/auth-store';
 
-const UserStatusColorMap: Record<"active" | "banned", "success" | "danger"> = {
-  active: "success",
-  banned: "danger",
+const UserStatusColorMap: Record<'active' | 'banned', 'success' | 'danger'> = {
+  active: 'success',
+  banned: 'danger',
 };
 
 interface UserTableProps {
@@ -39,24 +39,24 @@ export default function UsersTable({
 }: UserTableProps) {
   const { user: authUser } = useAuthStore();
   const columns = [
-    { uid: "name", name: "Name", sortable: true },
-    { uid: "email", name: "Email", sortable: true },
-    { uid: "status", name: "Status" },
-    { uid: "roles", name: "Roles" },
-    { uid: "createdAt", name: "Created At", sortable: true },
-    { uid: "actions", name: "Actions" },
+    { uid: 'name', name: 'Name', sortable: true },
+    { uid: 'email', name: 'Email', sortable: true },
+    { uid: 'status', name: 'Status' },
+    { uid: 'roles', name: 'Roles' },
+    { uid: 'createdAt', name: 'Created At', sortable: true },
+    { uid: 'actions', name: 'Actions' },
   ];
 
   const renderCell = (user: ExtendedUser, columnKey: string) => {
     switch (columnKey) {
-      case "name":
+      case 'name':
         return (
           <div className="flex">
             {user.id === authUser?.id ? (
               <>
                 <p>{user.name}</p>
                 <Chip className="text-4 p-1" size="sm">
-                  {"self"}
+                  {'self'}
                 </Chip>
               </>
             ) : (
@@ -64,21 +64,21 @@ export default function UsersTable({
             )}
           </div>
         );
-      case "email":
+      case 'email':
         return user.email;
-      case "roles":
-        return user.roles.join(", ") ?? "-";
-      case "status":
-        const status = user.banned ? "banned" : "active";
+      case 'roles':
+        return user.roles.join(', ') ?? '-';
+      case 'status':
+        const status = user.banned ? 'banned' : 'active';
 
         return <Chip color={UserStatusColorMap[status]}>{status}</Chip>;
-      case "createdAt":
-        return new Date(user.createdAt).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
+      case 'createdAt':
+        return new Date(user.createdAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
         });
-      case "actions":
+      case 'actions':
         return (
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
@@ -89,7 +89,7 @@ export default function UsersTable({
             <DropdownMenu
               aria-label="Actions"
               disabledKeys={
-                new Set(user.id === authUser!?.id ? ["view", "ban"] : [])
+                new Set(user.id === authUser!?.id ? ['view', 'ban'] : [])
               }
               variant="flat"
               onAction={(action) => {
@@ -97,14 +97,14 @@ export default function UsersTable({
               }}
             >
               <DropdownItem key="view">View</DropdownItem>
-              <DropdownItem key={user.banned ? "unban" : "ban"}>
-                {user.banned ? "Unban" : "Ban"}
+              <DropdownItem key={user.banned ? 'unban' : 'ban'}>
+                {user.banned ? 'Unban' : 'Ban'}
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         );
       default:
-        return "";
+        return '';
     }
   };
 

@@ -1,25 +1,25 @@
-import { User } from "@heroui/user";
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import React from "react";
+import { User } from '@heroui/user';
+import { Button } from '@heroui/button';
+import { Input } from '@heroui/input';
+import React from 'react';
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@heroui/dropdown";
-import { useNavigate } from "@tanstack/react-router";
+} from '@heroui/dropdown';
+import { useNavigate } from '@tanstack/react-router';
 
-import { useAuthStore } from "@/store/auth-store";
-import { IMAGE_BASE_URL } from "@/config/image";
-import MenuIcon from "@/components/icons/MenuIcon";
+import { useAuthStore } from '@/store/auth-store';
+import { IMAGE_BASE_URL } from '@/config/image';
+import MenuIcon from '@/components/icons/MenuIcon';
 // eslint-disable-next-line boundaries/element-types
-import Notifications from "@/features/notification/components/Notifications";
-import { SearchIcon } from "@/components/Icons";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import ConfirmationModal from "@/components/ConfirmationModal";
-import { useLogout } from "@/hooks/useLogout";
-import RoleSwitcher from "@/components/RoleSwitcher";
+import Notifications from '@/features/notification/components/Notifications';
+import { SearchIcon } from '@/components/Icons';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import ConfirmationModal from '@/components/ConfirmationModal';
+import { useLogout } from '@/hooks/useLogout';
+import RoleSwitcher from '@/components/RoleSwitcher';
 
 interface HeaderProps {
   onOpenSidebar: () => void;
@@ -36,19 +36,19 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
   const handleDropdownAction = (key: React.Key) => {
     const actionKey = key.toString();
 
-    if (actionKey === "logout") {
+    if (actionKey === 'logout') {
       setOpenLogoutConfirmation(true);
 
       return;
     }
 
-    let targetPath = "";
+    let targetPath = '';
 
     switch (actionKey) {
-      case "profile":
+      case 'profile':
         targetPath = `/settings?tab=profile`;
         break;
-      case "account":
+      case 'account':
         targetPath = `/settings?tab=account`;
         break;
       default:
@@ -98,15 +98,15 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
               <DropdownTrigger>
                 <User
                   avatarProps={{
-                    size: "md",
-                    className: "block",
+                    size: 'md',
+                    className: 'block',
 
                     src: `${IMAGE_BASE_URL}${user?.image ?? undefined}`,
                   }}
                   className="sm:flex text-default-500 text-sm"
                   classNames={{
-                    name: "hidden sm:inline-flex text-sm text-black dark:text-white font-medium",
-                    description: "hidden sm:inline-flex text-default-600",
+                    name: 'hidden sm:inline-flex text-sm text-black dark:text-white font-medium',
+                    description: 'hidden sm:inline-flex text-default-600',
                   }}
                   description={user && user.email}
                   name={user && user.name}

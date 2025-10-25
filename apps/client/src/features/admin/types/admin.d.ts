@@ -1,15 +1,15 @@
 declare global {
   export type ListUsersQuery = {
     searchValue?: string | undefined;
-    searchField?: "name" | "email" | undefined;
-    searchOperator?: "contains" | "starts_with" | "ends_with" | undefined;
+    searchField?: 'name' | 'email' | undefined;
+    searchOperator?: 'contains' | 'starts_with' | 'ends_with' | undefined;
     limit?: string | number | undefined;
     offset?: string | number | undefined;
     sortBy?: string | undefined;
-    sortDirection?: "asc" | "desc" | undefined;
+    sortDirection?: 'asc' | 'desc' | undefined;
     filterField?: string | undefined;
     filterValue?: string | number | boolean | undefined;
-    filterOperator?: "eq" | "ne" | "lt" | "lte" | "gt" | "gte" | undefined;
+    filterOperator?: 'eq' | 'ne' | 'lt' | 'lte' | 'gt' | 'gte' | undefined;
   };
 
   export type ListUsersReponse = {

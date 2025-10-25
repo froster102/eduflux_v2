@@ -1,10 +1,10 @@
-import { Form } from "@heroui/form";
-import { Input, Textarea } from "@heroui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@heroui/button";
+import { Form } from '@heroui/form';
+import { Input, Textarea } from '@heroui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Button } from '@heroui/button';
 
-import { sectionSchema } from "@/features/course/schemas/course";
+import { sectionSchema } from '@/features/course/schemas/course';
 
 export default function ChapterForm({
   onSubmitHandler,
@@ -19,7 +19,7 @@ export default function ChapterForm({
     formState: { errors },
   } = useForm<ChapterFormData>({
     resolver: zodResolver(sectionSchema),
-    defaultValues: mode === "edit" ? initialValue : {},
+    defaultValues: mode === 'edit' ? initialValue : {},
   });
 
   return (
@@ -28,7 +28,7 @@ export default function ChapterForm({
       onSubmit={handleSubmit(onSubmitHandler)}
     >
       <Input
-        {...register("title")}
+        {...register('title')}
         errorMessage={errors.title?.message}
         isInvalid={!!errors.title}
         label="Title"
@@ -39,7 +39,7 @@ export default function ChapterForm({
         variant="faded"
       />
       <Textarea
-        {...register("description")}
+        {...register('description')}
         disableAutosize={false}
         errorMessage={errors.description?.message}
         isInvalid={!!errors.description}

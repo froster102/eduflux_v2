@@ -1,4 +1,4 @@
-import type { ServerEvents } from "@shared/enum/ServerEvents";
+import type { ServerEvents } from '@shared/enum/ServerEvents';
 
 export type ServerEvent<TPayload> = {
   type: ServerEvents;

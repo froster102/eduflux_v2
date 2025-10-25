@@ -1,19 +1,19 @@
 export class ChatDITokens {
   //Use-case
   static readonly CreateChatUseCase: unique symbol =
-    Symbol("CreateChatUseCase");
-  static readonly GetChatsUseCase: unique symbol = Symbol("GetChatsUseCase");
+    Symbol('CreateChatUseCase');
+  static readonly GetChatsUseCase: unique symbol = Symbol('GetChatsUseCase');
   static readonly GetChatWithInstructorUseCase: unique symbol = Symbol(
-    "GetChatWithInstructorUseCase",
+    'GetChatWithInstructorUseCase',
   );
-  static readonly GetChatUseCase: unique symbol = Symbol("GetChatUseCase");
+  static readonly GetChatUseCase: unique symbol = Symbol('GetChatUseCase');
   static readonly VerifyChatParticipantUseCase: unique symbol = Symbol(
-    "VerifyChatParticipantUseCase",
+    'VerifyChatParticipantUseCase',
   );
 
   //Repository
-  static readonly ChatRepository: unique symbol = Symbol("ChatRepository");
+  static readonly ChatRepository: unique symbol = Symbol('ChatRepository');
 
   //Controller
-  static readonly ChatController: unique symbol = Symbol("ChatController");
+  static readonly ChatController: unique symbol = Symbol('ChatController');
 }

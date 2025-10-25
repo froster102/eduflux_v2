@@ -1,14 +1,14 @@
-import { status as grpcStatus } from "@grpc/grpc-js";
-import httpStatus from "http-status";
-import { Code } from "@core/common/error/Code";
-import type { LoggerPort } from "@core/common/port/logger/LoggerPort";
-import { CoreDITokens } from "@core/common/di/CoreDITokens";
-import { container } from "@di/RootModule";
+import { status as grpcStatus } from '@grpc/grpc-js';
+import httpStatus from 'http-status';
+import { Code } from '@core/common/error/Code';
+import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { container } from '@di/RootModule';
 
 function getLogger() {
   return container
     .get<LoggerPort>(CoreDITokens.Logger)
-    .fromContext("ERROR_CODE");
+    .fromContext('ERROR_CODE');
 }
 
 //Http status code mapping

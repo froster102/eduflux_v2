@@ -1,11 +1,11 @@
-import { Card, CardBody } from "@heroui/card";
-import { Button } from "@heroui/button";
+import { Card, CardBody } from '@heroui/card';
+import { Button } from '@heroui/button';
 
-import EditIcon from "@/components/icons/EditIcon";
-import DeleteIcon from "@/components/icons/DeleteIcon";
-import DragIcon from "@/components/icons/DragIcon";
+import EditIcon from '@/components/icons/EditIcon';
+import DeleteIcon from '@/components/icons/DeleteIcon';
+import DragIcon from '@/components/icons/DragIcon';
 
-import SortableItem from "./SortableItem";
+import SortableItem from './SortableItem';
 
 interface SortableSectionItemProps {
   chapter: CurriculumItem;
@@ -26,7 +26,7 @@ export default function SortableChapterItem({
     <>
       <SortableItem id={chapter.id}>
         <Card
-          className={` ${isFirstItem ? "mt-4" : ""} rounded-t-lg rounded-b-none"
+          className={` ${isFirstItem ? 'mt-4' : ''} rounded-t-lg rounded-b-none"
         }`}
           shadow="none"
         >
@@ -41,7 +41,7 @@ export default function SortableChapterItem({
                     <p>
                       <span className="font-semibold">
                         Chapter {chapter.objectIndex}:
-                      </span>{" "}
+                      </span>{' '}
                       {chapter.title}
                     </p>
                     <div className="flex items-center opacity-0 invisible transition-opacity duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
@@ -50,7 +50,7 @@ export default function SortableChapterItem({
                         className="p-0 bg-transparent"
                         size="sm"
                         onPress={() => {
-                          if (chapter._class === "chapter") {
+                          if (chapter._class === 'chapter') {
                             onEdit(chapter, index);
                           }
                         }}

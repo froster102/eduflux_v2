@@ -1,5 +1,5 @@
-import type { Notification } from "@core/domain/notification/entiy/Notification";
-import type { NotificationStatus } from "@core/domain/notification/enum/NotificationStatus";
+import type { Notification } from '@core/domain/notification/entiy/Notification';
+import type { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
 
 export class NotificationUseCaseDto {
   readonly id: string;

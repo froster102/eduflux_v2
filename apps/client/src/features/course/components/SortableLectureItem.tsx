@@ -1,10 +1,10 @@
-import { Button } from "@heroui/button";
-import { CardBody } from "@heroui/card";
+import { Button } from '@heroui/button';
+import { CardBody } from '@heroui/card';
 
-import AddIcon from "@/components/icons/AddIcon";
-import DragIcon from "@/components/icons/DragIcon";
-import EditIcon from "@/components/icons/EditIcon";
-import DeleteIcon from "@/components/icons/DeleteIcon";
+import AddIcon from '@/components/icons/AddIcon';
+import DragIcon from '@/components/icons/DragIcon';
+import EditIcon from '@/components/icons/EditIcon';
+import DeleteIcon from '@/components/icons/DeleteIcon';
 
 interface SortableLectureItemProps {
   lecture: CurriculumItem;
@@ -37,7 +37,7 @@ export default function SortableLectureItem({
               <p>
                 <span className="font-semibold capitalize">
                   {lecture._class} {lecture.objectIndex}:
-                </span>{" "}
+                </span>{' '}
                 {lecture.title}
               </p>
               <div className="flex items-center opacity-0 invisible transition-opacity duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
@@ -46,7 +46,7 @@ export default function SortableLectureItem({
                   className="p-0 bg-transparent"
                   size="sm"
                   onPress={() => {
-                    if (lecture._class === "lecture") {
+                    if (lecture._class === 'lecture') {
                       onEdit(lecture, index);
                     }
                   }}
@@ -71,7 +71,7 @@ export default function SortableLectureItem({
                   size="sm"
                   startContent={<AddIcon width={12} />}
                   onPress={() => {
-                    if (lecture._class === "lecture") {
+                    if (lecture._class === 'lecture') {
                       onAddContent(lecture);
                     }
                   }}

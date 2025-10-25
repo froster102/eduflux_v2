@@ -1,11 +1,11 @@
-import { Button } from "@heroui/button";
+import { Button } from '@heroui/button';
 import {
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-} from "@heroui/modal";
+} from '@heroui/modal';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -23,18 +23,18 @@ export default function ConfirmationModal({
   isOpen,
   onConfirm,
   onClose,
-  title = "Confirm your action",
-  boldText = "",
-  message = "Are you sure to continue with your action",
-  confirmText = "Confirm",
-  cancelText = "Cancel",
+  title = 'Confirm your action',
+  boldText = '',
+  message = 'Are you sure to continue with your action',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
   loading,
 }: ConfirmationModalProps) {
   return (
     <Modal
       backdrop="blur"
       classNames={{
-        backdrop: "bg-background/80 backdrop-opacity-50",
+        backdrop: 'bg-background/80 backdrop-opacity-50',
       }}
       isOpen={isOpen}
       onClose={onClose}

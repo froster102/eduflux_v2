@@ -1,7 +1,7 @@
-import api from "@/lib/axios";
+import api from '@/lib/axios';
 
 export async function getUserProfile(): Promise<JsonApiResponse<UserProfile>> {
-  const response = await api.get("/users/me");
+  const response = await api.get('/users/me');
 
   return response.data;
 }

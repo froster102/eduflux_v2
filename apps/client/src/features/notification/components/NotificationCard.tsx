@@ -1,11 +1,11 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { AnimatePresence } from "framer-motion";
-import { motion } from "motion/react";
-import { useNavigate } from "@tanstack/react-router";
-import { Button } from "@heroui/button";
-import { X } from "lucide-react";
+import { Card, CardBody, CardHeader } from '@heroui/card';
+import { AnimatePresence } from 'framer-motion';
+import { motion } from 'motion/react';
+import { useNavigate } from '@tanstack/react-router';
+import { Button } from '@heroui/button';
+import { X } from 'lucide-react';
 
-import { formatRelative } from "@/utils/date";
+import { formatRelative } from '@/utils/date';
 
 interface NotificationCardProps {
   notification: AppNotification;

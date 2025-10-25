@@ -1,7 +1,7 @@
-import React from "react";
-import videojs from "video.js";
-import "video.js/dist/video-js.css";
-import Player from "video.js/dist/types/player";
+import React from 'react';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
+import Player from 'video.js/dist/types/player';
 
 interface VideoPlayerProps {
   videoId: string;
@@ -18,19 +18,19 @@ export default function VideoPlayer({ videoId, onVideoEnd }: VideoPlayerProps) {
 
   const availableResolutions = [
     {
-      label: "360p",
+      label: '360p',
       src: `${BASE_URL}/videos/${videoId}/360p/360p.m3u8`,
     },
     {
-      label: "480p",
+      label: '480p',
       src: `${BASE_URL}/videos/${videoId}/480p/480p.m3u8`,
     },
     {
-      label: "720p",
+      label: '720p',
       src: `${BASE_URL}/videos/${videoId}/720p/720p.m3u8`,
     },
     {
-      label: "1080p",
+      label: '1080p',
       src: `${BASE_URL}/videos/${videoId}/1080p/1080p.m3u8`,
     },
   ];
@@ -43,7 +43,7 @@ export default function VideoPlayer({ videoId, onVideoEnd }: VideoPlayerProps) {
     sources: [
       {
         src: masterFileSrc,
-        type: "application/x-mpegURL",
+        type: 'application/x-mpegURL',
       },
     ],
   };
@@ -55,7 +55,7 @@ export default function VideoPlayer({ videoId, onVideoEnd }: VideoPlayerProps) {
 
       player.src({
         src: availableResolutions[index].src,
-        type: "application/x-mpegURL",
+        type: 'application/x-mpegURL',
       });
       player.ready(() => {
         player.currentTime(currentTime);
@@ -65,17 +65,17 @@ export default function VideoPlayer({ videoId, onVideoEnd }: VideoPlayerProps) {
 
   React.useEffect(() => {
     if (!playerRef.current && videoRef.current) {
-      const videoElement = document.createElement("video-js");
+      const videoElement = document.createElement('video-js');
 
-      videoElement.classList.add("vjs-big-play-centered");
+      videoElement.classList.add('vjs-big-play-centered');
       videoRef.current.appendChild(videoElement);
 
       const player = (playerRef.current = videojs(videoElement, options));
 
       availableResolutions.forEach((resolution, index) => {
-        player.getChild("ControlBar")?.addChild("button", {
+        player.getChild('ControlBar')?.addChild('button', {
           controlText: resolution.label,
-          className: "vjs-visible-text",
+          className: 'vjs-visible-text',
           clickHandler: () => {
             handleResolutionChange(index);
           },
@@ -95,10 +95,10 @@ export default function VideoPlayer({ videoId, onVideoEnd }: VideoPlayerProps) {
     const player = playerRef.current;
 
     if (player) {
-      player.off("ended");
+      player.off('ended');
 
       if (onVideoEnd) {
-        player.on("ended", onVideoEnd);
+        player.on('ended', onVideoEnd);
       }
     }
   }, [onVideoEnd, videoId]);

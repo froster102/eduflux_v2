@@ -1,10 +1,10 @@
-import { Button } from "@heroui/button";
-import { Card } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Image } from "@heroui/image";
-import { useNavigate } from "@tanstack/react-router";
+import { Button } from '@heroui/button';
+import { Card } from '@heroui/card';
+import { Chip } from '@heroui/chip';
+import { Image } from '@heroui/image';
+import { useNavigate } from '@tanstack/react-router';
 
-import { IMAGE_BASE_URL } from "@/config/image";
+import { IMAGE_BASE_URL } from '@/config/image';
 
 export default function CourseListCard({ course }: { course: Course }) {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function CourseListCard({ course }: { course: Course }) {
             src={
               course.thumbnail
                 ? `${IMAGE_BASE_URL}/${course.thumbnail}`
-                : "/placeholder.png"
+                : '/placeholder.png'
             }
             width={200}
           />
@@ -32,7 +32,7 @@ export default function CourseListCard({ course }: { course: Course }) {
             <div>
               <Chip
                 className="capitalize"
-                color={course.status === "published" ? "success" : "default"}
+                color={course.status === 'published' ? 'success' : 'default'}
                 variant="flat"
               >
                 {course.status}

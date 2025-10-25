@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export default function useDeviceType() {
   const [isMobile, setIsMobile] = React.useState(false);
@@ -17,10 +17,10 @@ export default function useDeviceType() {
       timeoutId = setTimeout(checkDevice, 150);
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
       clearTimeout(timeoutId);
     };
   }, []);

@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { useAuthStore } from "@/store/auth-store";
+import { useAuthStore } from '@/store/auth-store';
 
-import { getSubscribedCourses } from "../services/course";
+import { getSubscribedCourses } from '../services/course';
 
 export function useGetSubsribedCourses({
   paginationQueryParams,

@@ -1,6 +1,6 @@
-import type { ChatParticipant } from "@core/application/views/user-chat/entity/types/ChatParticipant";
-import { UserChat } from "@core/application/views/user-chat/entity/UserChat";
-import type { MongooseUserChat } from "@infrastructure/adapter/persistence/mongoose/model/user-chat/MongooseUserChat";
+import type { ChatParticipant } from '@core/application/views/user-chat/entity/types/ChatParticipant';
+import { UserChat } from '@core/application/views/user-chat/entity/UserChat';
+import type { MongooseUserChat } from '@infrastructure/adapter/persistence/mongoose/model/user-chat/MongooseUserChat';
 
 export class MongooseUserChatMapper {
   static toDomain(document: MongooseUserChat): UserChat {

@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from 'zod/v4';
 
 export const sessionSearchSchema = z.object({
   success: z.boolean().optional(),

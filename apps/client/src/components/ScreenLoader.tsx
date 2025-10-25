@@ -1,6 +1,6 @@
-import { Spinner } from "@heroui/spinner";
+import { Spinner } from '@heroui/spinner';
 
-import { ThemeSwitcher } from "./ThemeSwitcher";
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 // import { ThemeSwitch } from "./theme-switch";
 
