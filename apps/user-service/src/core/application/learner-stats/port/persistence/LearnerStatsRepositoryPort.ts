@@ -1,4 +1,4 @@
-import type { BaseRepositoryPort } from '@core/common/port/BaseRepositoryPort';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 import type { LearnerStats } from '@core/domain/learner-stats/entity/LearnerStats';
 
 export interface LearnerStatsRepositoryPort

@@ -9,7 +9,7 @@ import {
   EnrollmentModel,
   type MongooseEnrollment,
 } from '@infrastructure/adapter/persistence/mongoose/model/enrollment/MongooseEnrollment';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import type { FilterQuery } from 'mongoose';
 
 export class MongooseEnrollmentRepositoryAdapter
@@ -17,7 +17,7 @@ export class MongooseEnrollmentRepositoryAdapter
   implements EnrollmentRepositoryPort
 {
   constructor() {
-    super(EnrollmentModel, MongooseEnrollmentMapper);
+    super(EnrollmentModel, new MongooseEnrollmentMapper());
   }
 
   async findUserEnrollmentForCourse(
@@ -25,9 +25,7 @@ export class MongooseEnrollmentRepositoryAdapter
     courseId: string,
   ): Promise<Enrollment | null> {
     const enrollment = await EnrollmentModel.findOne({ learnerId, courseId });
-    return enrollment
-      ? MongooseEnrollmentMapper.toDomainEntity(enrollment)
-      : null;
+    return enrollment ? this.mapper.toDomain(enrollment) : null;
   }
 
   async findUserEnrollments(
@@ -51,7 +49,7 @@ export class MongooseEnrollmentRepositoryAdapter
 
     return {
       totalCount,
-      enrollments: MongooseEnrollmentMapper.toDomainEntities(enrollments),
+      enrollments: this.mapper.toDomainEntities(enrollments),
     };
   }
 
@@ -63,9 +61,7 @@ export class MongooseEnrollmentRepositoryAdapter
       learnerId,
       instructorId,
     });
-    return enrollment
-      ? MongooseEnrollmentMapper.toDomainEntity(enrollment)
-      : null;
+    return enrollment ? this.mapper.toDomain(enrollment) : null;
   }
 
   async findByUserAndCourseId(
@@ -76,6 +72,6 @@ export class MongooseEnrollmentRepositoryAdapter
       learnerId: userId,
       courseId: courseId,
     });
-    return doc ? MongooseEnrollmentMapper.toDomainEntity(doc) : null;
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 }

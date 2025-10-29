@@ -1,4 +1,4 @@
-import type { QueryParameters } from '@core/common/port/persistence/types/QueryParameters';
+import type { PaginationQueryParams as QueryParameters } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
 import type { Enrollment } from '@core/domain/enrollment/entity/Enrollment';
 import type { EnrollmentStatus } from '@core/domain/enrollment/enum/EnrollmentStatus';
 

@@ -1,8 +1,9 @@
+import type { Mapper } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/mapper/MongooseBaseMapper';
 import type { MongoosePayment } from '@infrastructure/database/mongoose/model/MongoosePayment';
 import { Payment } from '@payment/entity/Payment';
 
-export class MongoosePaymentMapper {
-  static toDomainEntity(document: MongoosePayment): Payment {
+export class MongoosePaymentMapper implements Mapper<Payment, MongoosePayment> {
+  toDomain(document: MongoosePayment): Payment {
     return new Payment({
       id: document._id,
       userId: document.userId,
@@ -21,7 +22,7 @@ export class MongoosePaymentMapper {
     });
   }
 
-  static toMongooseEntity(entity: Payment): Partial<MongoosePayment> {
+  toPersistence(entity: Payment): Partial<MongoosePayment> {
     return {
       _id: entity.id,
       userId: entity.userId,
@@ -40,7 +41,7 @@ export class MongoosePaymentMapper {
     };
   }
 
-  static toDomainEntities(documents: MongoosePayment[]): Payment[] {
-    return documents.map((doc) => this.toDomainEntity(doc));
+  toDomainEntities(documents: MongoosePayment[]): Payment[] {
+    return documents.map((doc) => this.toDomain(doc));
   }
 }

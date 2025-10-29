@@ -6,12 +6,12 @@ import { ChatNotFoundException } from '@core/application/chat/exceptions/ChatNot
 import type { MessageRepositoryPort } from '@core/application/message/port/persistence/MessageRepositoryPort';
 import type { CreateMessagePort } from '@core/application/message/port/usecase/CreateMessagePort';
 import type { CreateMessageUseCase } from '@core/application/message/usecase/CreateMessageUseCase';
-import { MessageStatus } from '@core/common/enum/MessageStatus';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
 import { Message } from '@core/domain/message/entity/Message';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
 import { MessageUseCaseDto } from '@core/application/message/usecase/dto/MessageUseCaseDto';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
+import { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
 
 export class CreateMessageService implements CreateMessageUseCase {
   constructor(

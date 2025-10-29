@@ -1,5 +1,5 @@
-import type { EventHandler } from '@core/common/events/EventHandler';
-import type { SessionCompletedEvent } from '@core/domain/learner-stats/events/SessionCompletedEvent';
+import type { EventHandler } from '@eduflux-v2/shared/events/handler/EventHandler';
+import type { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
 
 export interface SessionCompletedEventHandler
   extends EventHandler<SessionCompletedEvent, void> {}

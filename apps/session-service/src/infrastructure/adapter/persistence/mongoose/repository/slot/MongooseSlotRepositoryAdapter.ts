@@ -6,7 +6,7 @@ import {
   SlotModel,
   type MongooseSlot,
 } from '@infrastructure/adapter/persistence/mongoose/model/slot/MongooseSlot';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { unmanaged } from 'inversify';
 import type { ClientSession } from 'mongoose';
 

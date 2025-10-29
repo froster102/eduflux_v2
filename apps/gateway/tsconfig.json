@@ -29,11 +29,12 @@
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "verbatimModuleSyntax": true,
-    "outDir": "./dist",
+    "outDir": "./build",
     "rootDirs": ["./src"],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@eduflux-v2/shared/*": ["../../packages/shared/src/*"],
+      "@gateway/*": ["src/*"]
     },
     // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
@@ -107,5 +108,10 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  }
+  },
+  "references": [
+    {
+      "path": "../../packages/shared/tsconfig.json"
+    }
+  ]
 }

@@ -1,20 +1,20 @@
-import type { TaughtCourseView } from '@core/application/views/taught-course/entity/TaughtCourseView';
-import type { TaughtCourseViewRepositoryPort } from '@core/application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
-import type { TaughtCourseViewQueryParameters } from '@core/application/views/taught-course/port/persistence/types/TaughtCourseViewQueryParameters';
-import type { TaughtCourseViewQueryResult } from '@core/application/views/taught-course/port/persistence/types/TaughtCourseViewQueryResult';
-import type { TaughtCourseViewUpsertPayload } from '@core/application/views/taught-course/port/persistence/types/TaughtCourseViewUpsertPayload';
+import type { TaughtCourseView } from '@application/views/taught-course/entity/TaughtCourseView';
+import type { TaughtCourseViewRepositoryPort } from '@application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
+import type { TaughtCourseViewQueryParameters } from '@application/views/taught-course/port/persistence/types/TaughtCourseViewQueryParameters';
+import type { TaughtCourseViewQueryResult } from '@application/views/taught-course/port/persistence/types/TaughtCourseViewQueryResult';
+import type { TaughtCourseViewUpsertPayload } from '@application/views/taught-course/port/persistence/types/TaughtCourseViewUpsertPayload';
 import { MongooseTaughtCourseViewMapper } from '@infrastructure/adapter/persistence/mongoose/models/taught-course/mapper/MongooseTaughtCourseViewMapper';
 import {
   TaughtCourseViewModel,
   type MongooseTaughtCourseView,
 } from '@infrastructure/adapter/persistence/mongoose/models/taught-course/MongooseTaughtCourseView';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
 import type { FilterQuery } from 'mongoose';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 
 export class MongooseTaughtCourseViewRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<
-    MongooseTaughtCourseView,
-    TaughtCourseView
+  extends MongooseBaseRepositoryAdapter<
+    TaughtCourseView,
+    MongooseTaughtCourseView
   >
   implements TaughtCourseViewRepositoryPort
 {

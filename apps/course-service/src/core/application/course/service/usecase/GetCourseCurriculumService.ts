@@ -12,10 +12,10 @@ import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDI
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import { Role } from '@core/common/enums/Role';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import type { Asset } from '@core/domain/asset/entity/Asset';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import { EnrollmentStatus } from '@core/domain/enrollment/enum/EnrollmentStatus';

@@ -1,8 +1,8 @@
 import type { PaymentStatus } from '@payment/entity/enum/PaymentStatus';
 import type { PaymentType } from '@payment/entity/enum/PaymentType';
-import type { PaginationQueryParameters } from '@shared/common/port/persistence/types/PaginationQueryParameters';
+import type { PaginationQueryParams } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
 
-export interface PaymentQueryParameters extends PaginationQueryParameters {
+export interface PaymentQueryParameters extends PaginationQueryParams {
   filter?: {
     status?: PaymentStatus;
     instructorId?: string;

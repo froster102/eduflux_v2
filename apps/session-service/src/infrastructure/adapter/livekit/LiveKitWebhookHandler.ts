@@ -1,8 +1,8 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { CompleteSessionOnFinishUseCase } from '@core/application/session/usecase/CompleteSessionOnFinishUseCase';
 import type { StartSessionOnJoinUseCase } from '@core/application/session/usecase/StartSessionOnJoinUseCase';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { inject } from 'inversify';
 import type { WebhookEvent } from 'livekit-server-sdk';
 

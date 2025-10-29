@@ -1,4 +1,4 @@
-import { TaughtCourseView } from '@core/application/views/taught-course/entity/TaughtCourseView';
+import { TaughtCourseView } from '@application/views/taught-course/entity/TaughtCourseView';
 import type { MongooseTaughtCourseView } from '@infrastructure/adapter/persistence/mongoose/models/taught-course/MongooseTaughtCourseView';
 
 export class MongooseTaughtCourseViewMapper {
@@ -20,7 +20,7 @@ export class MongooseTaughtCourseViewMapper {
     domainEntity: TaughtCourseView,
   ): Partial<MongooseTaughtCourseView> {
     return {
-      _id: domainEntity.getId(),
+      _id: domainEntity.id,
       instructorId: domainEntity.instructorId,
       title: domainEntity.title,
       thumbnail: domainEntity.thumbnail,

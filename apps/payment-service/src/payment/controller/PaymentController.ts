@@ -4,8 +4,11 @@ import { getPaymentSummarySchema } from '@payment/controller/validators/getPayme
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
 import type { PaymentService } from '@payment/service/PaymentService';
 import type { StripeService } from '@payment/service/StripeService';
-import { calculateOffset } from '@shared/utils/helper';
-import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
+import { calculateOffset } from '@eduflux-v2/shared/utils/helper';
+import {
+  jsonApiResponse,
+  parseJsonApiQuery,
+} from '@eduflux-v2/shared/utils/jsonApi';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 

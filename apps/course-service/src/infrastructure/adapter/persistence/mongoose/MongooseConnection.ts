@@ -1,9 +1,9 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { DatabaseException } from '@infrastructure/exceptions/DatabaseException';
 import { DatabaseConfig } from '@shared/config/DatabaseConfig';
-import { tryCatch } from '@shared/utils/try-catch';
 import mongoose from 'mongoose';
 
 export class MongooseConnection {

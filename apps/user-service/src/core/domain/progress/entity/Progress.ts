@@ -1,5 +1,5 @@
-import { Entity } from '@core/common/entity/Entity';
-import type { CreateProgressPayload } from '@core/domain/progress/entity/type/CreateProgressPayload';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import type { CreateProgressPayload } from '@core/domain/progress/entity/types/CreateProgressPayload';
 
 export class Progress extends Entity<string> {
   private userId: string;
@@ -7,8 +7,7 @@ export class Progress extends Entity<string> {
   private completedLectures: Set<string>;
 
   constructor(payload: CreateProgressPayload) {
-    super();
-    this.id = payload.id;
+    super(payload.id);
     this.userId = payload.userId;
     this.courseId = payload.courseId;
     this.completedLectures = payload.completedLectures;

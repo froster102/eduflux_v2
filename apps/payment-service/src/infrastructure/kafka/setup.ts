@@ -1,6 +1,6 @@
 import { container } from '@application/di/RootModule';
-import { CoreDITokens } from '@shared/common/di/CoreDITokens';
-import type { LoggerPort } from '@shared/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { PAYMENT_SERVICE } from '@shared/constants/service';
 import { envVariables } from '@shared/env/env-variables';
 import { Kafka, type Producer } from 'kafkajs';

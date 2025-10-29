@@ -4,10 +4,10 @@ import type { DeleteChapterPort } from '@core/application/chapter/port/usecase/D
 import type { DeleteChapterUseCase } from '@core/application/chapter/usecase/DeleteChapterUseCase';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class DeleteChapterService implements DeleteChapterUseCase {

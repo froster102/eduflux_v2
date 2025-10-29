@@ -1,3 +1,3 @@
-import type { QueryParameters } from '@core/common/persistence/type/QueryParameters';
+import type { PaginationQueryParams } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
 
-export type InstructorViewQueryParameters = {} & QueryParameters;
+export type InstructorViewQueryParameters = {} & PaginationQueryParams;

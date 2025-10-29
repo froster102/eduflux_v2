@@ -1,5 +1,5 @@
-import { Entity } from '@core/common/entity/Entity';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 import type { CreateSessionPayload } from '@core/domain/session/entity/types/CreateSessionPayload';
 import type { NewSessionPayload } from '@core/domain/session/entity/types/NewSessionPayload';
 

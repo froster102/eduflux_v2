@@ -1,21 +1,21 @@
-import type { InstructorView } from '@core/application/views/instructor-view/entity/InstructorView';
+import type { InstructorView } from '@application/views/instructor-view/entity/InstructorView';
 import type {
   InstructorViewRepositoryPort,
   UpsertPayload,
-} from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
-import type { InstructorViewQueryResult } from '@core/application/views/instructor-view/port/persistence/types/GetInstructorViewQueryResult';
-import type { InstructorViewQueryParameters } from '@core/application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
-import type { UpdateUserViewPayload } from '@core/application/views/instructor-view/port/persistence/types/UpdateUserViewPayload';
+} from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
+import type { InstructorViewQueryResult } from '@application/views/instructor-view/port/persistence/types/GetInstructorViewQueryResult';
+import type { InstructorViewQueryParameters } from '@application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
+import type { UpdateUserViewPayload } from '@application/views/instructor-view/port/persistence/types/UpdateUserViewPayload';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseInstructorViewMapper } from '@infrastructure/adapter/persistence/mongoose/models/instructor-view/mapper/MongooseInstructorViewMapper';
 import {
   InstructorViewModel,
   type MongooseInstructorView,
 } from '@infrastructure/adapter/persistence/mongoose/models/instructor-view/MongooseInstructorView';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
 import type { FilterQuery } from 'mongoose';
 
 export class MongooseInstructorRepositoryViewAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseInstructorView, InstructorView>
+  extends MongooseBaseRepositoryAdapter<InstructorView, MongooseInstructorView>
   implements InstructorViewRepositoryPort
 {
   constructor() {

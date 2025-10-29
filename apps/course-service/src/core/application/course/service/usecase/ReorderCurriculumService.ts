@@ -7,9 +7,9 @@ import type { ReorderCurriculumPort } from '@core/application/course/port/usecas
 import type { ReorderCurriculumUseCase } from '@core/application/course/usecase/ReorderCurriculumUseCase';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { Chapter } from '@core/domain/chapter/entity/Chapter';
 import { Lecture } from '@core/domain/lecture/entity/Lecture';
 import { inject } from 'inversify';

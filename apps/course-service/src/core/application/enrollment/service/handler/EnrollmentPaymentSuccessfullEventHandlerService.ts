@@ -5,13 +5,13 @@ import { CourseNotFoundException } from '@core/application/enrollment/exception/
 import { EnrollmentNotFoundException } from '@core/application/enrollment/exception/EnrollmentNotFoundException';
 import type { EnrollmentPaymentSuccessfullEventHandler } from '@core/application/enrollment/handler/EnrollmentPaymentSuccessfullEventHandler';
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { EventBusPort } from '@core/common/port/message/EventBustPort';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
-import type { EnrollmentCompletedEvent } from '@core/domain/enrollment/events/EnrollmentCompletedEvent';
-import type { EnrollmentPaymentSuccessfullEvent } from '@core/domain/enrollment/events/EnrollmentPaymentSuccessfullEvent';
-import { EnrollmentEvents } from '@core/domain/enrollment/events/enum/EnrollmentEvents';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
+import type { EnrollmentPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/course/EnrollmentPaymentSuccessfullEvent';
+import { EnrollmentEvents } from '@eduflux-v2/shared/events/course/enum/EnrollmentEvents';
 import { inject } from 'inversify';
+import type { EnrollmentCompletedEvent } from '@eduflux-v2/shared/events/course/EnrollmentCompletedEvent';
 
 export class EnrollmentPaymentSuccessfullEventHandlerService
   implements EnrollmentPaymentSuccessfullEventHandler

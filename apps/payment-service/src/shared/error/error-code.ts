@@ -1,8 +1,8 @@
 import { container } from '@application/di/RootModule';
 import { status as grpcStatus } from '@grpc/grpc-js';
-import { CoreDITokens } from '@shared/common/di/CoreDITokens';
-import { Code } from '@shared/common/error/Code';
-import type { LoggerPort } from '@shared/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import httpStatus from 'http-status';
 
 function getLogger() {

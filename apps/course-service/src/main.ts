@@ -4,8 +4,8 @@ import { container } from '@di/RootModule';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
 import { HttpServer } from '@api/http/HttpServer';
-import { GrpcServer } from '@infrastructure/adapter/grpc/GrpcServer';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { GrpcServer } from '@api/grpc/GrpcServer';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducer';
 
 async function bootstrap() {

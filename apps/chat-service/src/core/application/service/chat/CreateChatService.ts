@@ -9,15 +9,15 @@ import type { ChatRepositoryPort } from '@core/application/chat/port/persistence
 import type { CreateChatPort } from '@core/application/chat/port/usecase/CreateChatPort';
 import type { CreateChatUseCase } from '@core/application/chat/usecase/CreateChatUseCase';
 import { ChatUseCaseDto } from '@core/application/chat/usecase/dto/ChatUseCaseDto';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { Role } from '@core/common/enum/Role';
-import type { CourseServicePort } from '@core/common/gateway/EnrollmentServicePort';
-import type { UserServicePort } from '@core/common/gateway/UserServicePort';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
 import { Chat } from '@core/domain/chat/entity/Chat';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
+import type { CourseServicePort } from '@eduflux-v2/shared/ports/gateway/CourseServicePort';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 
 export class CreateChatService implements CreateChatUseCase {
   constructor(
@@ -83,7 +83,7 @@ export class CreateChatService implements CreateChatUseCase {
       createdAt: chatUseCaseDto.createdAt.toISOString(),
       lastMessageAt: chatUseCaseDto.lastMessageAt.toISOString(),
       updatedAt: chatUseCaseDto.updatedAt.toISOString(),
-      occuredAt: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
     };
 
     await this.eventBus.sendEvent(userChatCreatedEvent);

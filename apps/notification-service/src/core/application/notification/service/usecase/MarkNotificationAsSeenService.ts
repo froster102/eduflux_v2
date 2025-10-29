@@ -3,8 +3,8 @@ import { NotificationNotFoundException } from '@core/application/notification/ex
 import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
 import type { MarkNotificationAsSeenPort } from '@core/application/notification/port/usecase/MarkNotificationAsSeenPort';
 import type { MarkNotificationAsSeenUseCase } from '@core/application/notification/usecase/MarkNotificationAsSeenUseCase';
-import { UnauthorizedException } from '@core/common/exception/UnauthorizedException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { UnauthorizedException } from '@eduflux-v2/shared/exceptions/UnauthorizedException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
 import { inject } from 'inversify';
 

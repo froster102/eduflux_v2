@@ -1,54 +1,11 @@
-import * as winston from 'winston';
+import { AUTH_SERVICE } from '@/shared/constants/services';
+import { envVariables } from '@/shared/env/env-variables';
+import { WinstonLoggerAdapter } from '@eduflux-v2/shared/adapters/logger/WinstonLoggerAdapter';
+import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
 
-const { combine, timestamp, printf, colorize } = winston.format;
-
-const customFormat = printf(
-  ({ level, message, timestamp, context, ...info }) => {
-    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : '';
-    return `[${timestamp as string}] [${(context as string) ?? 'APP'}] ${level}: ${message as string} ${meta}`;
-  },
-);
-
-export class Logger {
-  private _logger: winston.Logger;
-  private _context: string;
-
-  constructor(context?: string) {
-    this._context = context || '';
-
-    this._logger = winston.createLogger({
-      level: 'info',
-      levels: winston.config.npm.levels,
-      format: combine(
-        colorize({ all: true }),
-        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        winston.format((info) => {
-          info.context = this._context;
-          return info;
-        })(),
-        customFormat,
-      ),
-      transports: [new winston.transports.Console()],
-    });
-  }
-
-  info(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.info(message, meta);
-  }
-
-  error(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.error(message, meta);
-  }
-
-  warn(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.warn(message, meta);
-  }
-
-  debug(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.debug(message, meta);
-  }
-
-  log(level: string, message: string, meta: Record<string, unknown> = {}) {
-    this._logger.log(level, message, meta);
-  }
-}
+const config: LoggerConfig = {
+  environment: envVariables.NODE_ENV,
+  serviceName: AUTH_SERVICE,
+  enableCorrelationId: true,
+};
+export const logger = new WinstonLoggerAdapter(config);

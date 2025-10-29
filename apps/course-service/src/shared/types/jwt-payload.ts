@@ -1,4 +1,4 @@
-import type { Role } from '@core/common/enums/Role';
+import type { Role } from '@eduflux-v2/shared/constants/Role';
 
 export interface JwtPayload {
   name: string;

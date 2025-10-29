@@ -1,6 +1,6 @@
 import type { ChatParticipant } from '@core/application/views/user-chat/entity/types/ChatParticipant';
 import type { CreateUserChatPayload } from '@core/application/views/user-chat/entity/types/CreateUserChatPayload';
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 
 export class UserChat extends Entity<string> {
   public readonly lastMessageAt: string;

@@ -1,17 +1,17 @@
-import { AuthenticatedUserDto } from '@core/common/dto/AuthenticatedUserDto';
-import type { Role } from '@core/common/enums/Role';
-import { UnauthorizedException } from '@core/common/exception/UnauthorizedException';
-import { validateToken } from '@shared/utils/jwt.util';
+import { AuthenticatedUserDto } from '@eduflux-v2/shared/dto/AuthenticatedUserDto';
+import { UnauthorizedException } from '@eduflux-v2/shared/exceptions/UnauthorizedException';
 import Elysia from 'elysia';
+import { validateToken } from '@eduflux-v2/shared/utils/jwtUtil';
+import { JwtConfig } from '@shared/config/JwtConfig';
 
 export const authenticaionMiddleware = new Elysia().derive(
   { as: 'global' },
   async ({ cookie }) => {
-    const token = cookie?.user_jwt.value;
+    const token = cookie?.user_jwt.value as string;
     if (!token) {
       throw new UnauthorizedException('Authentication Token Not Found');
     }
-    const payload = await validateToken(token).catch(() => {
+    const payload = await validateToken(token, JwtConfig).catch(() => {
       throw new UnauthorizedException(
         'Invalid token or token has been expired',
       );
@@ -20,7 +20,7 @@ export const authenticaionMiddleware = new Elysia().derive(
       payload.id,
       payload.name,
       payload.email,
-      payload.roles as Role[],
+      payload.roles,
     );
     return { user };
   },

@@ -1,5 +1,5 @@
-import type { EventHandler } from '@core/common/events/EventHandler';
-import type { SessionPaymentSuccessfullEvent } from '@core/domain/session/events/SessionPaymentSuccessfullEvent';
+import type { EventHandler } from '@eduflux-v2/shared/events/handler/EventHandler';
+import type { SessionPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/session/SessionPaymentSuccessfullEvent';
 
 export interface SessionPaymentSuccessfullEventHandler
   extends EventHandler<SessionPaymentSuccessfullEvent, void> {}

@@ -6,7 +6,7 @@ import type { MarkNotificationAsSeenUseCase } from '@core/application/notificati
 import { eventEmitter } from '@core/common/util/event/eventEmitter';
 import { ServerEvents } from '@shared/enum/ServerEvents';
 import type { ServerEvent } from '@shared/types/ServerEvent';
-import { jsonApiResponse } from '@shared/util/jsonApi';
+import { jsonApiResponse } from '@eduflux-v2/shared/utils/jsonApi';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 import { nanoid } from 'nanoid';

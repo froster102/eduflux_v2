@@ -1,8 +1,8 @@
-import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
-import type { TaughtCourseViewRepositoryPort } from '@core/application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
-import type { TaughtCourseViewQueryResult } from '@core/application/views/taught-course/port/persistence/types/TaughtCourseViewQueryResult';
-import type { GetTaughtCourseViewsPort } from '@core/application/views/taught-course/port/persistence/usecase/GetTaughtCourseViewsPort';
-import type { GetTaughtCourseViewsUseCase } from '@core/application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
+import { TaughtCourseViewDITokens } from '@application/views/taught-course/di/TaughtCourseViewDITokens';
+import type { TaughtCourseViewRepositoryPort } from '@application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
+import type { TaughtCourseViewQueryResult } from '@application/views/taught-course/port/persistence/types/TaughtCourseViewQueryResult';
+import type { GetTaughtCourseViewsPort } from '@application/views/taught-course/port/persistence/usecase/GetTaughtCourseViewsPort';
+import type { GetTaughtCourseViewsUseCase } from '@application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
 import { inject } from 'inversify';
 
 export class GetTaughtCourseViewsService

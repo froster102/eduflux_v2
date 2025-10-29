@@ -1,12 +1,12 @@
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { inject } from 'inversify';
 import type { PublishCourseRevisionUseCase } from '@core/application/course/usecase/PublishCourseRevisionUseCase';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { PublishCourseRevisionPort } from '@core/application/course/port/persistence/PublishCourseRevisionPort';
-import { Role } from '@core/common/enums/Role';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
 
 export class PublishCourseRevisionService
   implements PublishCourseRevisionUseCase

@@ -1,4 +1,4 @@
-import { User } from '@core/domain/user/entity/User';
+import { User } from '@domain/user/entity/User';
 import type { MongooseUser } from '@infrastructure/adapter/persistence/mongoose/models/user/MongooseUser';
 
 export class UserMapper {
@@ -18,7 +18,7 @@ export class UserMapper {
 
   static toPersistence(domainUser: User): Partial<MongooseUser> {
     const mongooseUser: Partial<MongooseUser> = {
-      _id: domainUser.getId(),
+      _id: domainUser.id,
       firstName: domainUser.getFirstName(),
       lastName: domainUser.getLastName(),
       email: domainUser.getEmail(),

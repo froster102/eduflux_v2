@@ -1,23 +1,23 @@
 import { Server, type DefaultEventsMap } from 'socket.io';
 import type { Server as HTTPServer } from 'node:http';
-import { validateToken } from '@shared/utils/jwt.util';
-import { tryCatch } from '@shared/utils/try-catch';
-import { AuthenticatedUserDto } from '@core/common/dto/AuthenticatedDto';
-import { parseCookieHeader } from '@shared/utils/helper';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
+import { parseCookieHeader } from '@eduflux-v2/shared/utils/helper';
 import { WebSocketEvents } from '@shared/enums/WebSocketEvents';
 import { container } from '@di/RootModule';
 import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
 import type { VerifyChatParticipantUseCase } from '@core/application/chat/usecase/VerifyChatParticipantUseCase';
-import { Code } from '@core/common/error/Code';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { CreateMessageUseCase } from '@core/application/message/usecase/CreateMessageUseCase';
 import { MessageDITokens } from '@core/application/message/di/MessageDITokens';
 import type { UpdateMessageStatusUseCase } from '@core/application/message/usecase/UpdateMessageStatusUseCase';
-import { MessageStatus } from '@core/common/enum/MessageStatus';
 import type { GetChatUseCase } from '@core/application/chat/usecase/GetChatUseCase';
 import type { Socket } from 'socket.io';
-import type { Role } from '@core/common/enum/Role';
+import { AuthenticatedUserDto } from '@eduflux-v2/shared/dto/AuthenticatedUserDto';
+import { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
+import { validateToken } from '@eduflux-v2/shared/utils/jwtUtil';
+import { JwtConfig } from '@shared/config/JwtConfig';
 
 interface SocketData {
   user: AuthenticatedUserDto;
@@ -76,7 +76,9 @@ export class SocketIOServer {
         return next(new Error('Authentication error: No token provided'));
       }
 
-      const { data: payload, error } = await tryCatch(validateToken(token));
+      const { data: payload, error } = await tryCatch(
+        validateToken(token, JwtConfig),
+      );
 
       if (error) {
         next(new Error('Authentication error: Invalid token'));
@@ -87,7 +89,7 @@ export class SocketIOServer {
           payload.id,
           payload.name,
           payload.email,
-          payload.roles as Role[],
+          payload.roles,
         );
       }
 

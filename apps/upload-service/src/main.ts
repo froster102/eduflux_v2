@@ -1,11 +1,10 @@
+import { errorHandler } from '@/middlewares/errorHandlerMiddleware';
+import { httpLoggerMiddleware } from '@/middlewares/httpLoggerMiddleware';
+import { uploadService } from '@/services';
+import { httpServerConfig } from '@/shared/config/httpServerConfig';
+import { logger } from '@/shared/utlis/logger';
+import { uploadSchema } from '@/validators/upload.schema';
 import { Elysia } from 'elysia';
-import { serverConfig } from './shared/config/server.config';
-import { Logger } from './shared/utlis/logger';
-import { UPLOAD_SERVICE } from './shared/constants/services';
-import { httpLoggerMiddleware } from './middlewares/http-logger.middleware';
-import { errorHandler } from './middlewares/error-handler.middleware';
-import { uploadSchema } from './validation/schema/upload.schema';
-import { uploadService } from './services';
 
 const app = new Elysia().get('/api/uploads/health', () => ({ ok: true }));
 
@@ -24,8 +23,6 @@ app.post('/api/uploads/get-upload-credentials', ({ body }) => {
   return response;
 });
 
-app.listen(serverConfig.PORT);
+app.listen(httpServerConfig.PORT);
 
-const logger = new Logger('UPLOAD_SERVICE');
-
-logger.info(`[${UPLOAD_SERVICE}] listening on port ${serverConfig.PORT}`);
+logger.info(`Http Server listening on port ${httpServerConfig.PORT}`);

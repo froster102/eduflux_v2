@@ -1,11 +1,10 @@
-import { Code } from '@core/common/errors/Code';
-import { Exception } from '@core/common/errors/Exception';
-import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
-import type { ProgressRepositoryPort } from '@core/application/progress/port/persistence/ProgressRepositoryPort';
-import type { GetProgressPort } from '@core/application/progress/port/usecase/GetProgressPort';
-import type { GetProgressUseCase } from '@core/application/progress/usecase/GetProgressUseCase';
-import type { ProgressDto } from '@core/domain/user/usecase/dto/ProgressDto';
-import { CoreAssert } from '@core/util/assert/CoreAssert';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { ProgressDITokens } from '@application/progress/di/ProgressDITokens';
+import type { ProgressRepositoryPort } from '@application/progress/port/persistence/ProgressRepositoryPort';
+import type { GetProgressPort } from '@application/progress/port/usecase/GetProgressPort';
+import type { GetProgressUseCase } from '@application/progress/usecase/GetProgressUseCase';
+import type { ProgressDto } from '@application/progress/usecase/dto/ProgressUseCaseDto';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class GetProgressService implements GetProgressUseCase {
@@ -19,13 +18,7 @@ export class GetProgressService implements GetProgressUseCase {
 
     const progress = CoreAssert.notEmpty(
       await this.progressRepository.findByUserIdAndCourseId(userId, courseId),
-      Exception.new({
-        code: Code.ENTITY_NOT_FOUND_ERROR,
-        overrideMessage: 'Progress for user not found',
-        data: {
-          userId,
-        },
-      }),
+      new NotFoundException('User not found.'),
     );
 
     return {

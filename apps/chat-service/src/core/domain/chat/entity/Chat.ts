@@ -1,6 +1,6 @@
-import { Entity } from '@core/common/entity/Entity';
-import type { Role } from '@core/common/enum/Role';
+import type { Role } from '@eduflux-v2/shared/constants/Role';
 import type { CreateChatPayload } from '@core/domain/chat/entity/type/CreateChatPayload';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 
 export interface ChatParticipant {
   userId: string;

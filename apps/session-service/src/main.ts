@@ -6,7 +6,7 @@ import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducerAdapter';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { GrpcServer } from '@api/grpc/GrpcServer';
 
 async function bootstrap() {

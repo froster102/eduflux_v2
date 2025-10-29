@@ -1,9 +1,9 @@
 import { authenticaionMiddleware } from '@api/http/middleware/authenticationMiddleware';
-import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
-import type { AddToProgressUseCase } from '@core/application/progress/usecase/AddToProgressUseCase';
-import type { GetProgressUseCase } from '@core/application/progress/usecase/GetProgressUseCase';
-import type { RemoveFromProgressUseCase } from '@core/application/progress/usecase/RemoveFromProgressUseCase';
-import { jsonApiResponse } from '@shared/utils/jsonApi';
+import { ProgressDITokens } from '@application/progress/di/ProgressDITokens';
+import type { AddToProgressUseCase } from '@application/progress/usecase/AddToProgressUseCase';
+import type { GetProgressUseCase } from '@application/progress/usecase/GetProgressUseCase';
+import type { RemoveFromProgressUseCase } from '@application/progress/usecase/RemoveFromProgressUseCase';
+import { jsonApiResponse } from '@eduflux-v2/shared/utils/jsonApi';
 import Elysia, { t } from 'elysia';
 import { inject } from 'inversify';
 

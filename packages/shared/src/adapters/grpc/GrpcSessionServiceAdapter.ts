@@ -1,0 +1,71 @@
+import { credentials, type ServiceError } from '@grpc/grpc-js';
+import type {
+  SessionServicePort,
+  Session,
+  BookSessionRequest,
+  BookSessionResponse,
+} from '@shared/ports/gateway/SessionServicePort';
+import type { LoggerPort } from '@shared/ports/logger/LoggerPort';
+
+import { createClientLoggingInterceptor } from '@shared/adapters/grpc/interceptors/clientLoggingInterceptor';
+import { CoreDITokens } from '@shared/di/CoreDITokens';
+import { inject } from 'inversify';
+import type { GrpcSessionServiceConfig } from '@shared/config/GrpcSessionServiceConfig';
+import {
+  GetSessionRequest,
+  SessionServiceClient,
+} from '@shared/adapters/grpc/generated/session';
+
+export class GrpcSessionServiceAdapter implements SessionServicePort {
+  private client: SessionServiceClient;
+  private address: string;
+
+  constructor(
+    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(CoreDITokens.GrpcSessionServiceConfig)
+    private readonly config: GrpcSessionServiceConfig,
+  ) {
+    this.logger = logger.fromContext(GrpcSessionServiceAdapter.name);
+    this.address = this.config.GRPC_SESSION_SERVICE_URL;
+    this.client = new SessionServiceClient(
+      this.address,
+      credentials.createInsecure(),
+      {
+        interceptors: [createClientLoggingInterceptor(this.logger)],
+      },
+    );
+    this.logger.info(
+      `gRPC session service client initialized, target:${this.address}`,
+    );
+  }
+
+  async getSession(sessionId: string): Promise<Session> {
+    const request: GetSessionRequest = { id: sessionId };
+
+    return new Promise((resolve, reject) => {
+      this.client.getSession(
+        request,
+        (error: ServiceError | null, response: Session | null) => {
+          if (error) {
+            this.logger.error(
+              `Error fetching session details: ${error.message}`,
+            );
+            reject(new Error(error.message));
+          }
+          if (response) {
+            resolve(response);
+          }
+        },
+      );
+    });
+  }
+
+  async bookSession(request: BookSessionRequest): Promise<BookSessionResponse> {
+    // Note: The session service doesn't have a bookSession gRPC method yet
+    // This would need to be added to the session service's gRPC interface
+    // For now, we'll throw an error indicating this needs to be implemented
+    throw new Error(
+      'bookSession method not yet implemented in session service gRPC interface',
+    );
+  }
+}

@@ -1,10 +1,10 @@
-import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
-import type { UserUpdatedEventHandler } from '@core/application/views/coordinator/handler/UserUpdatedEventHandler';
-import type { InstructorViewRepositoryPort } from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
-import { SubscribedCourseViewDITokens } from '@core/application/views/subscribed-course/di/SubscribedCourseViewDITokens';
-import type { SubscribedCourseViewRepositoryPort } from '@core/application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
-import type { UserUpdatedEvent } from '@core/domain/user/events/UserUpdatedEvent';
+import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
+import type { UserUpdatedEventHandler } from '@application/views/coordinator/handler/UserUpdatedEventHandler';
+import type { InstructorViewRepositoryPort } from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
+import { SubscribedCourseViewDITokens } from '@application/views/subscribed-course/di/SubscribedCourseViewDITokens';
+import type { SubscribedCourseViewRepositoryPort } from '@application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
 import { inject } from 'inversify';
+import type { UserUpdatedEvent } from '@eduflux-v2/shared/events/user/UserUpdatedEvents';
 
 export class UserUpdatedEventHandlerService implements UserUpdatedEventHandler {
   constructor(

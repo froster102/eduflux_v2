@@ -1,3 +1,3 @@
-import type { KafkaEvent } from '@core/common/events/KafkaEvent';
+import type { KafkaEvent } from '@infrastructure/adapter/messaging/kafka/KafkaEvent';
 
 export type NotificationEvent = KafkaEvent;

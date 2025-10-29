@@ -8,8 +8,8 @@ import type { GetMessagesUseCasePort } from '@core/application/message/port/usec
 import { MessageUseCaseDto } from '@core/application/message/usecase/dto/MessageUseCaseDto';
 import type { GetMessagesUseCase } from '@core/application/message/usecase/GetMessagesUseCase';
 import type { GetMessagesUseCaseResult } from '@core/application/message/usecase/type/GetMessagesUseCaseResult';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
 import { inject } from 'inversify';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 
 export class GetMessagesService implements GetMessagesUseCase {
   constructor(

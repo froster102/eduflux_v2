@@ -1,8 +1,8 @@
 import { inject } from 'inversify';
 import nodemailer from 'nodemailer';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { EmailServicePort } from '@core/application/notification/port/gateway/EmailServicePort';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { NodeMailerConfig } from '@shared/config/NodeMailerConfig';
 
 export class NodeMailerEmailServiceAdapter implements EmailServicePort {

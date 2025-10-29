@@ -1,5 +1,5 @@
-import { asyncLocalStorage } from '@/utils/async-store/asyncStore';
-import { logger } from '@/utils/logging/logger';
+import { asyncLocalStorage } from '@gateway/utils/async-store/asyncStore';
+import { logger } from '@gateway/utils/logging/logger';
 import { randomUUID } from 'crypto';
 import type { Request, Response, NextFunction } from 'express';
 

@@ -1,10 +1,10 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { AutoCompleteSessionsUseCase } from '@core/application/session/usecase/AutoCompleteSessionsUseCase';
 import type { HandleExpiredPendingPaymentsUseCase } from '@core/application/session/usecase/HandleExpiredPendingPaymentsUseCase';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
-import { tryCatch } from '@shared/utils/try-catch';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { inject } from 'inversify';
 import nodeCron from 'node-cron';
 

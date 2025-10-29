@@ -1,17 +1,17 @@
 import { inject } from 'inversify';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { JoinSessionUseCase } from '@core/application/session/usecase/JoinSessionUseCase';
 import type { JoinSessionUseCaseResult } from '@core/application/session/usecase/types/JoinSessionUseCaseResult';
 import type { MeetingServicePort } from '@core/application/session/port/gateway/MeetingServicePort';
-import type { UserServicePort } from '@core/application/session/port/gateway/UserServicePort';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import type { JoinSessionPort } from '@core/application/session/port/usecase/JoinSessionPort';
 import type { SessionRepositoryPort } from '@core/application/session/port/persistence/SessionRepositoryPort';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { ConflictException } from '@core/common/exception/ConflictException';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { ConflictException } from '@eduflux-v2/shared/exceptions/ConflictException';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 
 export class JoinSessionService implements JoinSessionUseCase {
   constructor(
@@ -28,7 +28,7 @@ export class JoinSessionService implements JoinSessionUseCase {
     const now = new Date();
 
     const user = CoreAssert.notEmpty(
-      await this.userService.getUserDetails(userId),
+      await this.userService.getUser(userId),
       new NotFoundException('User not found'),
     );
 

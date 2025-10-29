@@ -1,11 +1,11 @@
-import type { UserServicePort } from '@core/application/session/port/gateway/UserServicePort';
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
 import { UserSession } from '@core/application/views/user-session/entity/UserSession';
 import type { ConfirmSessionEventHandler } from '@core/application/views/user-session/handler/ConfirmSessionHandler';
 import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { SessionConfimedEvent } from '@core/domain/session/events/SessionConfirmedEvent';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { SessionConfirmedEvent } from '@eduflux-v2/shared/events/session/SessionConfirmedEvent';
 import { inject } from 'inversify';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 
 export class ConfirmSessionEventHandlerService
   implements ConfirmSessionEventHandler
@@ -17,12 +17,12 @@ export class ConfirmSessionEventHandlerService
     private readonly userService: UserServicePort,
   ) {}
 
-  async handle(event: SessionConfimedEvent): Promise<void> {
+  async handle(event: SessionConfirmedEvent): Promise<void> {
     const { learnerId, instructorId, sessionId, status, endTime, startTime } =
       event;
 
-    const learner = await this.userService.getUserDetails(learnerId);
-    const instructor = await this.userService.getUserDetails(instructorId);
+    const learner = await this.userService.getUser(learnerId);
+    const instructor = await this.userService.getUser(instructorId);
 
     const userSession = UserSession.new({
       ...event,

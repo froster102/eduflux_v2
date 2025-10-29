@@ -1,4 +1,4 @@
-import type { Event } from '@core/common/events/Event';
+import type { Event } from '@eduflux-v2/shared/events/Event';
 import type { CourseEvents } from '@shared/constants/events';
 
 export interface CoursePublishedEvent extends Event {

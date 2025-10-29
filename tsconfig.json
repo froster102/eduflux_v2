@@ -4,28 +4,7 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/auth-service"
-    },
-    {
-      "path": "./apps/chat-service"
-    },
-    {
-      "path": "./apps/course-service"
-    },
-    {
-      "path": "./apps/notification-service"
-    },
-    {
-      "path": "./apps/payment-service"
-    },
-    {
-      "path": "./apps/session-service"
-    },
-    {
-      "path": "./apps/upload-service"
-    },
-    {
-      "path": "./apps/user-service"
+      "path": "./packages/shared"
     }
   ]
 }

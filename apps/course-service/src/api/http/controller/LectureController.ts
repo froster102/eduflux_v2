@@ -11,7 +11,7 @@ import type { CreateLectureUseCase } from '@core/application/lecture/usecase/Cre
 import { updateLessonSchema } from '@api/http/validators/updateLessonSchema';
 import type { UpdateLectureUseCase } from '@core/application/lecture/usecase/UpdateLectureUseCase';
 import type { GetSubscriberLectureUseCase } from '@core/application/lecture/usecase/GetSubscriberLectureUseCase';
-import { jsonApiResponse } from '@shared/utils/jsonApi';
+import { jsonApiResponse } from '@eduflux-v2/shared/utils/jsonApi';
 
 export class LectureController {
   constructor(

@@ -4,9 +4,9 @@ import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
 import type { DeleteLecturePort } from '@core/application/lecture/port/usecase/DeleteLecturePort';
 import type { DeleteLectureUseCase } from '@core/application/lecture/usecase/DeleteLectureUseCase';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class DeleteLectureService implements DeleteLectureUseCase {

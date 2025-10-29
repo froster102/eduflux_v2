@@ -29,10 +29,11 @@
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "verbatimModuleSyntax": true,
-    "outDir": "./dist",
+    "outDir": "./build",
     "rootDirs": ["./src"],
     "baseUrl": "./",
     "paths": {
+      "@eduflux-v2/shared/*": ["../../packages/shared/src/*"],
       "@core/*": ["src/core/*"],
       "@application/*": ["src/core/application/*"],
       "@di/*": ["src/di/*"],
@@ -113,5 +114,10 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  }
+  },
+  "references": [
+    {
+      "path": "../../packages/shared"
+    }
+  ]
 }

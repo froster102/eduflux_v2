@@ -15,8 +15,11 @@ import type { LiveKitWebhookHandler } from '@infrastructure/adapter/livekit/Live
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
 import type { GetUserSessionsUseCase } from '@core/application/views/user-session/usecase/GetUserSessionsUseCase';
 import { getUserSessionSchema } from '@api/http/validation/getUserSessionSchema';
-import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
-import { calculateOffset } from '@shared/utils/helper';
+import {
+  jsonApiResponse,
+  parseJsonApiQuery,
+} from '@eduflux-v2/shared/utils/jsonApi';
+import { calculateOffset } from '@eduflux-v2/shared/utils/helper';
 
 export class SessionController {
   constructor(

@@ -1,7 +1,7 @@
-import type { CreateInstructorViewPayload } from '@core/application/views/instructor-view/entity/types/CreateInstructorViewPayload';
-import type { SessionPricingDetails } from '@core/application/views/instructor-view/entity/types/SessionPricingDetails';
-import { Entity } from '@core/common/entity/Entity';
-import type { UserProfile } from '@core/domain/user/events/types/UserProfile';
+import type { CreateInstructorViewPayload } from '@application/views/instructor-view/entity/types/CreateInstructorViewPayload';
+import type { SessionPricingDetails } from '@application/views/instructor-view/entity/types/SessionPricingDetails';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import type { UserProfile } from '@domain/user/events/types/UserProfile';
 
 export class InstructorView extends Entity<string> {
   public readonly profile: UserProfile;
@@ -13,8 +13,7 @@ export class InstructorView extends Entity<string> {
   public readonly pricing: SessionPricingDetails;
 
   private constructor(payload: CreateInstructorViewPayload) {
-    super();
-    this.id = payload.id;
+    super(payload.id);
     this.profile = payload.profile;
 
     this.sessionsConducted = payload.sessionsConducted ?? 0;

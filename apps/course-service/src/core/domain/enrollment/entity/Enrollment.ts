@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import type { CreateEnrollmentPayload } from '@core/domain/enrollment/entity/types/CreateEnrollmentPayload';
 import { EnrollmentStatus } from '@core/domain/enrollment/enum/EnrollmentStatus';
 

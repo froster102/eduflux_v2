@@ -1,12 +1,12 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import Elysia from 'elysia';
 import { ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
-import { Code } from '@core/common/errors/Code';
-import { Exception } from '@core/common/errors/Exception';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import { getHttpErrorCode } from '@shared/errors/error-code';
 import { container } from '@di/RootModule';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 const logger = container
   .get<LoggerPort>(CoreDITokens.Logger)
@@ -21,8 +21,8 @@ export const errorHandler = new Elysia()
     if (error instanceof ZodError) {
       set.status = httpStatus.BAD_REQUEST;
       return {
-        message: Code.ENTITY_VALIDATION_ERROR.message,
-        code: Code.ENTITY_VALIDATION_ERROR.code,
+        message: Code.VALIDATION_ERROR.message,
+        code: Code.VALIDATION_ERROR.code,
         error: error.issues,
       };
     }
@@ -38,8 +38,8 @@ export const errorHandler = new Elysia()
     if (code === 'NOT_FOUND') {
       set.status = httpStatus.NOT_FOUND;
       return {
-        message: Code.ENTITY_NOT_FOUND_ERROR.message,
-        code: Code.ENTITY_NOT_FOUND_ERROR.code,
+        message: Code.NOT_FOUND_ERROR.message,
+        code: Code.NOT_FOUND_ERROR.code,
       };
     }
 

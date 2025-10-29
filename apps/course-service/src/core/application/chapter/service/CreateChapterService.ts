@@ -5,10 +5,10 @@ import type { CourseRepositoryPort } from '@core/application/course/port/persist
 import type { CreateChapterPort } from '@core/application/chapter/port/usecase/CreateChapterPort';
 import type { CreateChapterUseCase } from '@core/application/chapter/usecase/CreateChapterUseCase';
 import { Chapter } from '@core/domain/chapter/entity/Chapter';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { inject } from 'inversify';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { ChapterUseCaseDto } from '@core/application/chapter/usecase/dto/ChapterUseCaseDto';
 
 export class CreateChapterService implements CreateChapterUseCase {

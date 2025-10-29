@@ -4,13 +4,13 @@ import type {
   StartSessionOnJoinUseCase,
   StartSessionOnPort,
 } from '@core/application/session/usecase/StartSessionOnJoinUseCase';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
-import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
-import type { SessionUpdatedEvent } from '@core/domain/session/events/SessionUpdatedEvent';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
+import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
+import type { SessionUpdatedEvent } from '@eduflux-v2/shared/events/session/SessionUpdatedEvent';
 import { inject } from 'inversify';
 
 export class StartSessionOnJoinService implements StartSessionOnJoinUseCase {
@@ -46,7 +46,7 @@ export class StartSessionOnJoinService implements StartSessionOnJoinUseCase {
         endTime: session.endTime.toISOString(),
         createdAt: session.createdAt.toISOString(),
         updatedAt: session.updatedAt.toISOString(),
-        occuredAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       };
 
       await this.eventBus.sendEvent(sessionUpdatedEvent);

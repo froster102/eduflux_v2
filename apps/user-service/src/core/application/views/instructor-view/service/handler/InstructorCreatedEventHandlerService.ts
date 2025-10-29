@@ -1,8 +1,8 @@
-import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
-import { InstructorView } from '@core/application/views/instructor-view/entity/InstructorView';
-import type { InstructorCreatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorCreatedEventHandler';
-import type { InstructorViewRepositoryPort } from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
-import type { InstructorCreatedEvent } from '@core/domain/user/events/InstructorCreatedEvent';
+import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
+import { InstructorView } from '@application/views/instructor-view/entity/InstructorView';
+import type { InstructorCreatedEventHandler } from '@application/views/instructor-view/handler/InstructorCreatedEventHandler';
+import type { InstructorViewRepositoryPort } from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
+import type { InstructorCreatedEvent } from '@domain/user/events/InstructorCreatedEvent';
 import { inject } from 'inversify';
 
 export class InstructorCreatedEventHandlerService

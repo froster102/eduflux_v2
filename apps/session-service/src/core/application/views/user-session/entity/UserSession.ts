@@ -1,7 +1,7 @@
 import type { CreateUserSessionPayload } from '@core/application/views/user-session/entity/types/CreateUserSessionPayload';
 import type { SessionParticipant } from '@core/application/views/user-session/entity/types/SessionParticipant';
-import { Entity } from '@core/common/entity/Entity';
-import type { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import type { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 
 export class UserSession extends Entity<string> {
   public readonly startTime: Date;

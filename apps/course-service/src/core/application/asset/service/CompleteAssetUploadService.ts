@@ -3,7 +3,7 @@ import type { AssetRepositoryPort } from '@core/application/asset/port/persisten
 import type { CompleteAssetUploadPort } from '@core/application/asset/port/usecase/CompleteAssetUploadPort';
 import type { CompleteAssetUploadUseCase } from '@core/application/asset/usecase/CompleteAssetUploadUseCase';
 import type { AssetUseCaseDto } from '@core/application/asset/usecase/dto/AssetUseCaseDto';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { inject } from 'inversify';
 
 export class CompleteAssetUploadService implements CompleteAssetUploadUseCase {

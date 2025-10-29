@@ -18,7 +18,7 @@ export class LearnerStatsMapper {
     domainLearnerStats: LearnerStats,
   ): Partial<MongooseLearnerStats> {
     const mongooseLearnerStats: Partial<MongooseLearnerStats> = {
-      _id: domainLearnerStats.getId(),
+      _id: domainLearnerStats.id,
       completedCourses: domainLearnerStats.getCompletedCourses(),
       completedSessions: domainLearnerStats.getCompletedSessions(),
       enrolledCourses: domainLearnerStats.getEnrolledCourses(),

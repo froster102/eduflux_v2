@@ -9,15 +9,15 @@ import type { PublishCoursePort } from '@core/application/course/port/usecase/Pu
 import type { PublishCourseUseCase } from '@core/application/course/usecase/PublishCourseUseCase';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { CourseEvents } from '@core/common/events/enum/CourseEvents';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { EventBusPort } from '@core/common/port/message/EventBustPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
 import { MediaStatus } from '@core/domain/asset/enum/MediaStatus';
 import type { Course } from '@core/domain/course/entity/Course';
-import type { CoursePublishedEvent } from '@core/domain/course/events/CoursePublishedEvent';
+import type { CoursePublishedEvent } from '@eduflux-v2/shared/events/course/CoursePublishedEvent';
 import { contentLimits } from '@shared/config/content-limits.config';
 import { inject } from 'inversify';
 

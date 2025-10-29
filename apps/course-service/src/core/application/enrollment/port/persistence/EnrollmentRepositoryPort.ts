@@ -2,7 +2,7 @@ import type {
   EnrollmentQueryParameters,
   EnrollmentQueryResults,
 } from '@core/application/enrollment/port/persistence/types/EnrollmentQueryTypes';
-import type { BaseRepositoryPort } from '@core/common/port/persistence/BaseRepositoryPort';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 import type { Enrollment } from '@core/domain/enrollment/entity/Enrollment';
 
 export interface EnrollmentRepositoryPort

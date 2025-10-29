@@ -1,4 +1,4 @@
-import type { BaseRepositoryPort } from '@core/common/port/persistence/BaseRepositoryPort';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 import type { SessionSettings } from '@core/domain/session-settings/entity/SessionSettings';
 
 export interface SessionSettingsRepositoryPort

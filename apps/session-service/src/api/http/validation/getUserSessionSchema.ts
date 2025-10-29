@@ -1,5 +1,5 @@
 import { paginationSchema } from '@api/http/validation/paginationSchema';
-import { Role } from '@core/common/enums/Role';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 import { z } from 'zod/v4';
 
 export const userSessionFilterSchema = z.object({

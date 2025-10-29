@@ -1,9 +1,9 @@
 import { NotificationController } from '@api/http/controller/NotificationController';
 import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
-import type { EnrollmentSuccessEventHandler } from '@core/application/notification/handler/EnrollmentSuccessEventHandler';
+import type { EnrollmentCompletedEventHandler } from '@core/application/notification/handler/EnrollmentCompletedEventHandler';
 import type { SessionConfirmedEventHandler } from '@core/application/notification/handler/SessionConfirmedEventHandler';
 import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
-import { EnrollmentSuccessEventHandlerService } from '@core/application/notification/service/handler/EnrollmentSuccessEventHandlerService';
+import { EnrollmentCompletedEventHandlerService } from '@core/application/notification/service/handler/EnrollmentCompletedEventHandlerService';
 import { SessionConfirmedEventHandlerService } from '@core/application/notification/service/handler/SessionConfirmedEventHandlerService';
 import { CreateNotificationService } from '@core/application/notification/service/usecase/CreateNotificationService';
 import { GetNotificationsService } from '@core/application/notification/service/usecase/GetNotificationsService';
@@ -35,10 +35,10 @@ export const NotificationModule: ContainerModule = new ContainerModule(
 
     //handlers
     options
-      .bind<EnrollmentSuccessEventHandler>(
-        NotificationDITokens.EnrollmentSuccessEventHandler,
+      .bind<EnrollmentCompletedEventHandler>(
+        NotificationDITokens.EnrollmentCompletedEventHandler,
       )
-      .to(EnrollmentSuccessEventHandlerService);
+      .to(EnrollmentCompletedEventHandlerService);
     options
       .bind<SessionConfirmedEventHandler>(
         NotificationDITokens.SessionConfirmedEventHandler,

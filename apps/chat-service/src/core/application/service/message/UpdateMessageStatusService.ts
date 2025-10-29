@@ -6,11 +6,11 @@ import { ChatNotFoundException } from '@core/application/chat/exceptions/ChatNot
 import type { MessageRepositoryPort } from '@core/application/message/port/persistence/MessageRepositoryPort';
 import type { UpdateMessageStatusPort } from '@core/application/message/port/usecase/UpdateMessageStatusPort';
 import type { UpdateMessageStatusUseCase } from '@core/application/message/usecase/UpdateMessageStatusUseCase';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
 import { inject } from 'inversify';
 import { MessageNotFoundException } from '@core/application/message/exceptions/MessageNotFoundException';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { MessageStatus } from '@core/common/enum/MessageStatus';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
+import { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
 
 export class UpdateMessageStatusService implements UpdateMessageStatusUseCase {
   constructor(

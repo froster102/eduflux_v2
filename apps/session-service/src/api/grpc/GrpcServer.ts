@@ -1,8 +1,8 @@
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 import { container } from '@di/RootModule';
 import { GrpcServerConfig } from '@shared/config/GrpcServerConfig';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { createServerLoggingInterceptor } from '@api/grpc/interceptors/createServerLoggingInterceptor';
 import type { GrpcSessionServiceController } from '@api/grpc/controller/GrpcSessionServiceController';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';

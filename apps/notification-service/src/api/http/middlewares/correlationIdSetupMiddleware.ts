@@ -1,4 +1,4 @@
-import { asyncLocalStorage } from '@shared/util/store';
+import { asyncLocalStorage } from '@shared/util/async-store';
 import Elysia from 'elysia';
 import { v4 as uuidV4 } from 'uuid';
 

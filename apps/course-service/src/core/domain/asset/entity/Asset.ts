@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import { StorageProvider } from '@core/domain/asset/enum/StorageProvider';
 import { AccessType } from '@core/domain/asset/enum/AccessType';
 import { ResourceType } from '@core/domain/asset/enum/ResourceType';

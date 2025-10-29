@@ -1,17 +1,17 @@
 import { inject } from 'inversify';
-import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
-import type { LearnerStatsRepositoryPort } from '@core/application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
-import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
-import type { InstructorRepositoryPort } from '@core/application/instructor/port/persistence/InstructorRepositoryPort';
-import { SubscribedCourseViewDITokens } from '@core/application/views/subscribed-course/di/SubscribedCourseViewDITokens';
-import type { SubscribedCourseViewRepositoryPort } from '@core/application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
-import { SubscribedCourseView } from '@core/application/views/subscribed-course/entity/SubscribedCourseView';
-import type { EnrollmentCompletedEventHandler } from '@core/application/learner-stats/handler/EnrollmentCompletedEventHandler';
-import type { EnrollmentCompletedEvent } from '@core/domain/learner-stats/events/EnrollmentCompletedEvent';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { EventBusPort } from '@core/common/message/EventBustPort';
-import type { InstructorStatsUpdatedEvent } from '@core/application/views/instructor-view/events/InstructorStatsUpdatedEvent';
-import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
+import { LearnerStatsDITokens } from '@application/learner-stats/di/LearnerStatsDITokens';
+import type { LearnerStatsRepositoryPort } from '@application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
+import { InstructorDITokens } from '@application/instructor/di/InstructorDITokens';
+import type { InstructorRepositoryPort } from '@application/instructor/port/persistence/InstructorRepositoryPort';
+import { SubscribedCourseViewDITokens } from '@application/views/subscribed-course/di/SubscribedCourseViewDITokens';
+import type { SubscribedCourseViewRepositoryPort } from '@application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
+import { SubscribedCourseView } from '@application/views/subscribed-course/entity/SubscribedCourseView';
+import type { EnrollmentCompletedEventHandler } from '@application/learner-stats/handler/EnrollmentCompletedEventHandler';
+import type { EnrollmentCompletedEvent } from '@eduflux-v2/shared/events/course/EnrollmentCompletedEvent';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { InstructorStatsUpdatedEvent } from '@application/views/instructor-view/events/InstructorStatsUpdatedEvent';
+import { InstructorEvents } from '@domain/instructor/events/InstructorEvents';
 
 export class EnrollmentCompletedEventHandlerService
   implements EnrollmentCompletedEventHandler
@@ -44,13 +44,13 @@ export class EnrollmentCompletedEventHandlerService
     //send event to update the instructor views
     if (updatedInstructor) {
       const instructorStatsUpdatedEvent: InstructorStatsUpdatedEvent = {
-        id: updatedInstructor.getId(),
+        id: updatedInstructor.id,
         type: InstructorEvents.INSTRUCTOR_STATS_UPDATED,
-        instructorId: updatedInstructor.getId(),
+        instructorId: updatedInstructor.id,
         sessionsConducted: updatedInstructor.getSessionsConducted(),
         totalCourses: updatedInstructor.getTotalCourses(),
         totalLearners: updatedInstructor.getTotalLearners(),
-        occuredAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       };
       await this.eventBus.sendEvent(instructorStatsUpdatedEvent);
     }

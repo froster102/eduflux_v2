@@ -7,7 +7,7 @@ import type { CreateChapterUseCase } from '@core/application/chapter/usecase/Cre
 import { updateChapterSchema } from '@api/http/validators/updateChapterSchema';
 import type { UpdateChapterUseCase } from '@core/application/chapter/usecase/UpdateChapterUseCase';
 import type { DeleteChapterUseCase } from '@core/application/chapter/usecase/DeleteChapterUseCase';
-import { jsonApiResponse } from '@shared/utils/jsonApi';
+import { jsonApiResponse } from '@eduflux-v2/shared/utils/jsonApi';
 
 export class ChapterController {
   constructor(

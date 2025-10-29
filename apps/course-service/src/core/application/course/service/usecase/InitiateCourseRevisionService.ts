@@ -6,9 +6,9 @@ import type { InitiateCourseRevisionPort } from '@core/application/course/port/p
 import type { InitiateCourseRevisionUseCase } from '@core/application/course/usecase/InitiateCourseRevisionUseCase';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import type { Course } from '@core/domain/course/entity/Course';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import { inject } from 'inversify';

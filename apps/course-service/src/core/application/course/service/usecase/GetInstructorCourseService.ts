@@ -2,8 +2,8 @@
 // import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 // import type { GetInstructorCoursePort } from '@core/application/course/port/usecase/GetInstructorCoursePort';
 // import type { GetInstructorCourseUseCase } from '@core/application/course/usecase/GetInstructorCourseUseCase';
-// import { NotFoundException } from '@core/common/exception/NotFoundException';
-// import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+// import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+// import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 // import type { Course } from '@core/domain/course/entity/Course';
 // import { inject } from 'inversify';
 

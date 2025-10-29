@@ -3,9 +3,9 @@ import type { SlotRepositoryPort } from '@core/application/slot/port/persistence
 import type { GetInstructorAvailableSlotsPort } from '@core/application/slot/port/usecase/GetInstructorAvailableSlotsPort';
 import { SlotUseCaseDto } from '@core/application/slot/usecase/dto/SlotUseCaseDto';
 import type { GetInstructorAvailableSlotsUseCase } from '@core/application/slot/usecase/GetInstructorAvailableSlotsUseCase';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
 import { getUtcRangeForLocalDay } from '@shared/utils/date';
-import { tryCatchSync } from '@shared/utils/try-catch';
+import { tryCatchSync } from '@eduflux-v2/shared/utils/tryCatch';
 import { inject } from 'inversify';
 
 export class GetInstructorAvailableSlotsService

@@ -1,10 +1,11 @@
-import { httpLogger } from '@/middleware/httpLoggerMiddleware';
-import { envVariables } from '@/utils/env/envVariables';
-import { logger } from '@/utils/logging/logger';
+import 'reflect-metadata';
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import type { CorsOptions } from 'cors';
 import cors from 'cors';
+import { envVariables } from '@gateway/utils/env/envVariables';
+import { httpLogger } from '@gateway/middleware/httpLoggerMiddleware';
+import { logger } from '@gateway/utils/logging/logger';
 
 const app = express();
 

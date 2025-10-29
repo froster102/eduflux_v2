@@ -5,9 +5,9 @@ import type { UserChatCreatedEvent } from '@core/application/views/user-chat/eve
 import type { UserChatCreatedEventHandler } from '@core/application/views/user-chat/handler/UserChatCreateEventHandler';
 import type { UserChatRepositoryPort } from '@core/application/views/user-chat/port/persistence/UserChatRepositoryPort';
 
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import type { UserServicePort } from '@core/common/gateway/UserServicePort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 import { UserChat } from '@core/application/views/user-chat/entity/UserChat';
 
 export class UserChatCreatedEventHandlerService
@@ -39,7 +39,7 @@ export class UserChatCreatedEventHandlerService
           return {
             id: user.id,
             name: user.firstName + ' ' + user.lastName,
-            image: user.image,
+            image: user?.image || '',
             role: participant.role,
           };
         }),

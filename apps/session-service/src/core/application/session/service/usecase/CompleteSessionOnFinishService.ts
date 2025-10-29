@@ -1,20 +1,20 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { SessionRepositoryPort } from '@core/application/session/port/persistence/SessionRepositoryPort';
 import type { MeetingServicePort } from '@core/application/session/port/gateway/MeetingServicePort';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 import { inject } from 'inversify';
 import type {
   CompleteSessionOnFinishPort,
   CompleteSessionOnFinishUseCase,
 } from '@core/application/session/usecase/CompleteSessionOnFinishUseCase';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { tryCatch } from '@shared/utils/try-catch';
-import type { SessionCompletedEvent } from '@core/domain/session/events/SessionCompletedEvent';
-import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
+import type { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
+import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
 
 export class CompleteSessionOnFinishService
   implements CompleteSessionOnFinishUseCase
@@ -56,7 +56,7 @@ export class CompleteSessionOnFinishService
         endTime: session.endTime.toISOString(),
         createdAt: session.createdAt.toISOString(),
         updatedAt: session.updatedAt.toISOString(),
-        occuredAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       };
 
       await this.eventBus.sendEvent(sessionCompletedEvent);

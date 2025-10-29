@@ -1,4 +1,4 @@
-import type { AuthenticatedUserDto } from '@core/common/dto/AuthenticatedUserDto';
+import type { AuthenticatedUserDto } from '@eduflux-v2/shared/dto/AuthenticatedUserDto';
 
 export interface CreateCoursePort {
   title: string;

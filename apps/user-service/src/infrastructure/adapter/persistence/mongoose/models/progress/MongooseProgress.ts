@@ -2,7 +2,7 @@ import mongoose, { Model } from 'mongoose';
 
 import { Schema } from 'mongoose';
 
-export interface IMongooseProgress extends Document {
+export interface MongooseProgress extends Document {
   _id: string;
   userId: string;
   courseId: string;
@@ -11,7 +11,7 @@ export interface IMongooseProgress extends Document {
   updatedAt: Date;
 }
 
-export const ProgressSchema = new Schema<IMongooseProgress>(
+export const ProgressSchema = new Schema<MongooseProgress>(
   {
     _id: {
       type: String,
@@ -29,5 +29,5 @@ export const ProgressSchema = new Schema<IMongooseProgress>(
   { timestamps: true },
 );
 
-export const MongooseProgress: Model<IMongooseProgress> =
-  mongoose.model<IMongooseProgress>('Progress', ProgressSchema);
+export const MongooseProgress: Model<MongooseProgress> =
+  mongoose.model<MongooseProgress>('Progress', ProgressSchema);

@@ -1,6 +1,6 @@
 import { container } from '@application/di/RootModule';
-import { CoreDITokens } from '@shared/common/di/CoreDITokens';
-import type { LoggerPort } from '@shared/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { Elysia } from 'elysia';
 
 export const httpLoggerMiddleware = (app: Elysia) => {

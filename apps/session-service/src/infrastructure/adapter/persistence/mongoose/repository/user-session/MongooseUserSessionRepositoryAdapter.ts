@@ -2,13 +2,13 @@ import type { UserSession } from '@core/application/views/user-session/entity/Us
 import type { UserSessionQueryParameters } from '@core/application/views/user-session/port/persistence/types/UserSessionQueryParameters';
 import type { UserSessionQueryResult } from '@core/application/views/user-session/port/persistence/types/UserSessionQueryResult';
 import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
-import { Role } from '@core/common/enums/Role';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 import { MongooseUserSessionMapper } from '@infrastructure/adapter/persistence/mongoose/model/user-session/mapper/MongooseUserSessionMapper';
 import {
   UserSessionModel,
   type MongooseUserSession,
 } from '@infrastructure/adapter/persistence/mongoose/model/user-session/MongooseUserSession';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import type { FilterQuery } from 'mongoose';
 
 export class MongooseUserSessionRepositoryAdapter

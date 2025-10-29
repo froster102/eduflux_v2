@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./build.sh",
     "dev": "tsx watch ./src/main.ts",
+    "typecheck": "tsc --watch --noEmit",
     "start": "node ./build/src/main.js",
     "lint": "eslint ./src --ext .ts --fix"
   },

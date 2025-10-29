@@ -3,7 +3,7 @@ import { EnrollmentNotFoundException } from '@core/application/enrollment/except
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
 import type { GetEnrollmentPort } from '@core/application/enrollment/port/usecase/GetEnrollmentPort';
 import type { GetEnrollmentUseCase } from '@core/application/enrollment/usecase/GetEnrollmentUseCase';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import type { Enrollment } from '@core/domain/enrollment/entity/Enrollment';
 import { inject } from 'inversify';
 

@@ -1,7 +1,7 @@
-import { Entity } from '@core/common/entity/Entity';
-import { Role } from '@core/common/enums/Role';
-import type { CreateUserPayload } from '@core/domain/user/entity/type/CreateUserPayload';
-import type { UpdateUserPayload } from '@core/domain/user/entity/type/UpdateUserPayload';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import type { UpdateUserPayload } from '@domain/user/entity/types/UpdateUserPayload';
+import type { CreateUserPayload } from '@domain/user/entity/types/CreateUserPayload';
 
 export class User extends Entity<string> {
   private firstName: string;
@@ -19,8 +19,7 @@ export class User extends Entity<string> {
   private modifiedFields: Partial<UpdateUserPayload> = {};
 
   constructor(payload: CreateUserPayload) {
-    super();
-    this.id = payload.id;
+    super(payload.id);
     this.firstName = payload.firstName;
     this.lastName = payload.lastName;
     this.email = payload.email;

@@ -1,5 +1,3 @@
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter';
-
 import type { FilterQuery } from 'mongoose';
 import {
   UserChatModel,
@@ -8,12 +6,13 @@ import {
 import { MongooseUserChatMapper } from '@infrastructure/adapter/persistence/mongoose/model/user-chat/mapper/MongooseUserChatMapper';
 import type { UserChatRepositoryPort } from '@core/application/views/user-chat/port/persistence/UserChatRepositoryPort';
 import type { UserChat } from '@core/application/views/user-chat/entity/UserChat';
-import type { Role } from '@core/common/enum/Role';
-import type { PaginationQueryParams } from '@core/common/port/persistence/type/QueryParameters';
 import type { UserChatQueryResult } from '@core/application/views/user-chat/port/persistence/types/UserChatQueryResult';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import type { PaginationQueryParams } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
+import type { Role } from '@eduflux-v2/shared/constants/Role';
 
 export class MongooseUserChatRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseUserChat, UserChat>
+  extends MongooseBaseRepositoryAdapter<UserChat, MongooseUserChat>
   implements UserChatRepositoryPort
 {
   constructor() {

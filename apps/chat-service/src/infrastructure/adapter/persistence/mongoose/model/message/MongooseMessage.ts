@@ -1,4 +1,4 @@
-import { MessageStatus } from '@core/common/enum/MessageStatus';
+import { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
 import { Schema, model, Document } from 'mongoose';
 
 export interface MongooseMessage extends Document {

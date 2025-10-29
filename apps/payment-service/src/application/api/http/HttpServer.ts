@@ -2,10 +2,10 @@ import { correlationIdSetupMiddleware } from '@application/api/http/middleware/c
 import { errorHandler } from '@application/api/http/middleware/errorHandlerMiddleware';
 import { httpLoggerMiddleware } from '@application/api/http/middleware/httpLoggerMiddleware';
 import { container } from '@application/di/RootModule';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { PaymentController } from '@payment/controller/PaymentController';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
-import { CoreDITokens } from '@shared/common/di/CoreDITokens';
-import type { LoggerPort } from '@shared/common/port/logger/LoggerPort';
 import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { PAYMENT_SERVICE } from '@shared/constants/service';
 import Elysia from 'elysia';

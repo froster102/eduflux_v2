@@ -2,9 +2,9 @@ import { UserSessionDITokens } from '@core/application/views/user-session/di/Use
 import type { UserSessionUpdatedEvent } from '@core/application/views/user-session/events/SessionUpdatedEvent';
 import type { UserSessionUpdatedEventHandler } from '@core/application/views/user-session/handler/UserSessionUpdatedEventHandler';
 import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { inject } from 'inversify';
 
 export class UserSessionUpdatedEventHandlerService

@@ -1,5 +1,5 @@
 import { Session } from '@core/domain/session/entity/Session';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 
 export class SessionUseCaseDto {
   readonly id: string;

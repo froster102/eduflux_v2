@@ -1,4 +1,4 @@
-import { Instructor } from '@core/domain/instructor/entity/Instructor';
+import { Instructor } from '@domain/instructor/entity/Instructor';
 import type { MongooseInstructor } from '@infrastructure/adapter/persistence/mongoose/models/instructor/MongooseInstructor';
 
 export class InstructorMapper {
@@ -19,7 +19,7 @@ export class InstructorMapper {
     domainInstructor: Instructor,
   ): Partial<MongooseInstructor> {
     const mongooseInstructor: Partial<MongooseInstructor> = {
-      _id: domainInstructor.getId(),
+      _id: domainInstructor.id,
       sessionsConducted: domainInstructor.getSessionsConducted(),
       isSessionEnabled: domainInstructor.getIsSessionEnabled(),
       totalCourses: domainInstructor.getTotalCourses(),

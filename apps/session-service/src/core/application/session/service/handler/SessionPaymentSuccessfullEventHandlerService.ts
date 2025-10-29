@@ -1,15 +1,15 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { SessionPaymentSuccessfullEventHandler } from '@core/application/session/handler/SessionPaymentSucessfullEventHandler';
 import type { SessionRepositoryPort } from '@core/application/session/port/persistence/SessionRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
-import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
-import type { SessionConfimedEvent } from '@core/domain/session/events/SessionConfirmedEvent';
-import type { SessionPaymentSuccessfullEvent } from '@core/domain/session/events/SessionPaymentSuccessfullEvent';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
+import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
+import type { SessionConfirmedEvent } from '@eduflux-v2/shared/events/session/SessionConfirmedEvent';
+import type { SessionPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/session/SessionPaymentSuccessfullEvent';
 import { envVariables } from '@shared/env/envVariables';
 import { inject } from 'inversify';
 
@@ -47,7 +47,7 @@ export class SessionPaymentSuccessfullEventHandlerService
     await this.sessionRepository.update(session.id, session);
 
     //Send event to SESSION_TOPIC to trigger notification
-    const sessionConfirmedEvent: SessionConfimedEvent = {
+    const sessionConfirmedEvent: SessionConfirmedEvent = {
       type: SessionEvents.SESSION_CONFIRMED,
       id: session.id,
       sessionId: session.id,
@@ -58,7 +58,7 @@ export class SessionPaymentSuccessfullEventHandlerService
       endTime: session.endTime.toISOString(),
       path: `${envVariables.SESSION_PAGE_PATH}`,
       joinLink: `${envVariables.JOIN_SESSION_PAGE_URL}/${session.id}`,
-      occuredAt: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
     };
     await this.eventBus.sendEvent(sessionConfirmedEvent);
   }

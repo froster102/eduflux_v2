@@ -1,6 +1,6 @@
-import { Entity } from '@core/common/entity/Entity';
-import { MessageStatus } from '@core/common/enum/MessageStatus';
 import type { CreateMessagePayload } from '@core/domain/message/entity/type/CreateMessagePayload';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
 
 export class Message extends Entity<string> {
   private readonly _chatId: string;

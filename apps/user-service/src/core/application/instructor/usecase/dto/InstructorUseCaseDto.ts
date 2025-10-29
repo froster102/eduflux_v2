@@ -1,6 +1,7 @@
-import { Instructor } from '@core/domain/instructor/entity/Instructor';
-import { User } from '@core/domain/user/entity/User';
-import { UserDto } from '@core/domain/user/usecase/dto/UserDto';
+import { Instructor } from '@domain/instructor/entity/Instructor';
+import { User } from '@domain/user/entity/User';
+import { UserUseCaseDto } from '@application/user/usecase/dto/UserUseCaseDto';
+import type { UserDto } from '@application/user/usecase/dto/UserUseCaseDto';
 
 export class InstructorUserCaseDto {
   public readonly id: string;
@@ -10,8 +11,8 @@ export class InstructorUserCaseDto {
   public readonly totalLearners: number;
 
   private constructor(user: User, instructor: Instructor) {
-    this.id = instructor.getId();
-    this.profile = UserDto.fromEntity(user);
+    this.id = instructor.id;
+    this.profile = UserUseCaseDto.fromEntity(user);
     this.sessionsConducted = instructor.getSessionsConducted();
     this.totalCourses = instructor.getTotalCourses();
     this.totalLearners = instructor.getTotalLearners();
@@ -30,13 +31,13 @@ export class InstructorUserCaseDto {
   ): InstructorUserCaseDto[] {
     const instructorMap = new Map<string, Instructor>();
     instructors.forEach((instructor) =>
-      instructorMap.set(instructor.getId(), instructor),
+      instructorMap.set(instructor.id, instructor),
     );
 
     return users
-      .filter((user) => instructorMap.has(user.getId()))
+      .filter((user) => instructorMap.has(user.id))
       .map((user) => {
-        const instructor = instructorMap.get(user.getId()) as Instructor;
+        const instructor = instructorMap.get(user.id) as Instructor;
         return this.fromUser(user, instructor);
       });
   }

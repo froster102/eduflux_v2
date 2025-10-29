@@ -1,16 +1,13 @@
 import { kafkaConfig } from '@/shared/config/kafka.config';
-import { AUTH_SERVICE } from '@/shared/constants/services';
-import { kafkaLogCreator } from '@/shared/utils/kafka-logger-adaptor';
-import { Logger } from '@/shared/utils/logger';
-import { tryCatch } from '@/shared/utils/try-catch';
+import { KafkaLoggerAdapter } from '@/shared/utils/KafkaLoggerAdapter';
+import { logger } from '@/shared/utils/logger';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { Kafka } from 'kafkajs';
-
-const logger = new Logger(AUTH_SERVICE);
 
 export const kafka = new Kafka({
   clientId: kafkaConfig.CLIENT_ID,
   brokers: kafkaConfig.BROKERS,
-  logCreator: kafkaLogCreator,
+  logCreator: KafkaLoggerAdapter.new(),
 });
 
 export const kafkaProducer = kafka.producer();

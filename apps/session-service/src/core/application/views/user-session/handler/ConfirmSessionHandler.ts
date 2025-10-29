@@ -1,5 +1,5 @@
-import type { EventHandler } from '@core/common/events/EventHandler';
-import type { SessionConfimedEvent } from '@core/domain/session/events/SessionConfirmedEvent';
+import type { EventHandler } from '@eduflux-v2/shared/events/handler/EventHandler';
+import type { SessionConfirmedEvent } from '@eduflux-v2/shared/events/session/SessionConfirmedEvent';
 
 export interface ConfirmSessionEventHandler
-  extends EventHandler<SessionConfimedEvent, void> {}
+  extends EventHandler<SessionConfirmedEvent, void> {}

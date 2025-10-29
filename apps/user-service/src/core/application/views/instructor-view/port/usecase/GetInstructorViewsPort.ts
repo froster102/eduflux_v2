@@ -1,4 +1,4 @@
-import type { InstructorViewQueryParameters } from '@core/application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
+import type { InstructorViewQueryParameters } from '@application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
 
 export interface GetInstructorViewsPort {
   executorId?: string;

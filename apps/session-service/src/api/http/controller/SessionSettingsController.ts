@@ -7,7 +7,7 @@ import { SessionSettingsDITokens } from '@core/application/session-settings/di/S
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
 import type { GetInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/GetInstructorSessionSettingsUseCase';
 import type { UpdateInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/UpdateInstructorSessionSettingsUseCase';
-import { jsonApiResponse } from '@shared/utils/jsonApi';
+import { jsonApiResponse } from '@eduflux-v2/shared/utils/jsonApi';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 

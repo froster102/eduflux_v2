@@ -1,6 +1,6 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { Code } from '@core/common/errors/Code';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import httpStatus from 'http-status';
 import { status as grpcStatus } from '@grpc/grpc-js';
 import { container } from '@di/RootModule';
@@ -9,15 +9,12 @@ function getLogger() {
   return container.get<LoggerPort>(CoreDITokens.Logger);
 }
 
+//Http status code mapping
 export const errorCodeToHttpStatusCode: Record<string, number> = {
   [Code.BAD_REQUEST_ERROR.code]: httpStatus.BAD_REQUEST,
   [Code.UNAUTHORIZED_ERROR.code]: httpStatus.UNAUTHORIZED,
-  [Code.WRONG_CREDENTIALS_ERROR.code]: httpStatus.UNAUTHORIZED,
-  [Code.ACCESS_DENIED_ERROR.code]: httpStatus.FORBIDDEN,
   [Code.INTERNAL_ERROR.code]: httpStatus.INTERNAL_SERVER_ERROR,
-  [Code.ENTITY_NOT_FOUND_ERROR.code]: httpStatus.NOT_FOUND,
-  [Code.ENTITY_ALREADY_EXISTS_ERROR.code]: httpStatus.CONFLICT,
-  [Code.ENTITY_VALIDATION_ERROR.code]: httpStatus.BAD_REQUEST,
+  [Code.CONFLICT_ERROR.code]: httpStatus.CONFLICT,
 };
 
 export const getHttpErrorCode = (code: string): number => {
@@ -31,15 +28,12 @@ export const getHttpErrorCode = (code: string): number => {
   return httpStatus.INTERNAL_SERVER_ERROR;
 };
 
+//Grpc status code mapping
 export const errorCodeToGrpcStatusCode: Record<string, number> = {
   [Code.BAD_REQUEST_ERROR.code]: grpcStatus.INVALID_ARGUMENT,
   [Code.UNAUTHORIZED_ERROR.code]: grpcStatus.UNAUTHENTICATED,
-  [Code.WRONG_CREDENTIALS_ERROR.code]: grpcStatus.UNAUTHENTICATED,
-  [Code.ACCESS_DENIED_ERROR.code]: grpcStatus.PERMISSION_DENIED,
   [Code.INTERNAL_ERROR.code]: grpcStatus.INTERNAL,
-  [Code.ENTITY_NOT_FOUND_ERROR.code]: grpcStatus.NOT_FOUND,
-  [Code.ENTITY_ALREADY_EXISTS_ERROR.code]: grpcStatus.ALREADY_EXISTS,
-  [Code.ENTITY_VALIDATION_ERROR.code]: grpcStatus.INVALID_ARGUMENT,
+  [Code.CONFLICT_ERROR.code]: grpcStatus.ALREADY_EXISTS,
 };
 
 export const getGrpcStatusCode = (code: string): number => {

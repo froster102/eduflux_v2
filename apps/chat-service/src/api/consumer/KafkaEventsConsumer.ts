@@ -1,18 +1,18 @@
 import { ChatEvents } from '@core/application/chat/events/enum/ChatEvents';
 import { UserChatDITokens } from '@core/application/views/user-chat/di/UserChatDITokens';
 import type { UserChatCreatedEventHandler } from '@core/application/views/user-chat/handler/UserChatCreateEventHandler';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
 import { UserEvents } from '@core/application/views/user-chat/events/enum/UserEvents';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
 import type { KafkaConnection } from '@infrastructure/adapter/kafka/KafkaConnection';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { CHAT_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
 import { CHAT_TOPIC, USERS_TOPIC } from '@shared/constants/topics';
 import type { KafkaEvent } from '@shared/types/KafkaEvent';
-import { tryCatch } from '@shared/utils/try-catch';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { inject } from 'inversify';
 import type { Consumer, EachMessagePayload } from 'kafkajs';
 import type { UserUpdatedEventHandler } from '@core/application/views/user-chat/handler/UserUpdatedEventHandler';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;

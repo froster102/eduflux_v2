@@ -1,8 +1,11 @@
 import { Category } from '@core/domain/category/entity/Category';
+import type { Mapper } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/mapper/MongooseBaseMapper';
 import type { MongooseCategory } from '@infrastructure/adapter/persistence/mongoose/model/category/MongooseCategory';
 
-export class MongooseCategoryMapper {
-  static toDomainEntity(doc: MongooseCategory): Category {
+export class MongooseCategoryMapper
+  implements Mapper<Category, MongooseCategory>
+{
+  toDomain(doc: MongooseCategory): Category {
     return Category.new({
       id: doc._id,
       title: doc.title,
@@ -10,11 +13,11 @@ export class MongooseCategoryMapper {
     });
   }
 
-  static toDomainEntities(docs: MongooseCategory[]): Category[] {
-    return docs.map((doc) => this.toDomainEntity(doc));
+  toDomainEntities(docs: MongooseCategory[]): Category[] {
+    return docs.map((doc) => this.toDomain(doc));
   }
 
-  static toMongooseEntity(domain: Category): MongooseCategory {
+  toPersistence(domain: Category): MongooseCategory {
     return {
       _id: domain.id,
       title: domain.title,

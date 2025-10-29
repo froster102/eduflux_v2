@@ -4,8 +4,8 @@ import type { ChapterRepositoryPort } from '@core/application/chapter/port/persi
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { GetCourseChaptersPort } from '@core/application/chapter/port/usecase/GetCourseChaptersPort';
 import type { GetCourseChaptersUseCase } from '@core/application/chapter/usecase/GetCourseChaptersUseCase';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { inject } from 'inversify';
 import type { Chapter } from '@core/domain/chapter/entity/Chapter';
 

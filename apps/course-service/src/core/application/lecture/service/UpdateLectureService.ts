@@ -4,9 +4,9 @@ import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
 import type { UpdateLecturePort } from '@core/application/lecture/port/usecase/UpdateLecturePort';
-import type { UseCase } from '@core/common/usecase/UseCase';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
+import type { UseCase } from '@eduflux-v2/shared/usecase/UseCase';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
 
 export class UpdateLectureService implements UseCase<UpdateLecturePort, void> {
   constructor(

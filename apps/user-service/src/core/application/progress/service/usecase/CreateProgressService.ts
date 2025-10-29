@@ -1,8 +1,8 @@
-import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
+import { ProgressDITokens } from '@application/progress/di/ProgressDITokens';
 import { Progress } from '@core/domain/progress/entity/Progress';
-import type { ProgressRepositoryPort } from '@core/application/progress/port/persistence/ProgressRepositoryPort';
-import type { CreateProgressPort } from '@core/application/progress/port/usecase/CreateProgressPort';
-import type { CreateProgressUseCase } from '@core/application/progress/usecase/CreateProgressUseCase';
+import type { ProgressRepositoryPort } from '@application/progress/port/persistence/ProgressRepositoryPort';
+import type { CreateProgressPort } from '@application/progress/port/usecase/CreateProgressPort';
+import type { CreateProgressUseCase } from '@application/progress/usecase/CreateProgressUseCase';
 import { nanoid } from '@shared/utils/nanoid';
 import { inject } from 'inversify';
 

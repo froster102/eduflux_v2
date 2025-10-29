@@ -1,16 +1,16 @@
 import { UserController } from 'src/api/http/controller/UserController';
-import { UserDITokens } from '@core/domain/user/di/UserDITokens';
-import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
-import type { CreateUserUseCase } from '@core/domain/user/usecase/CreateUserUseCase';
-import type { GetUsersUseCase } from '@core/domain/user/usecase/GetUsersUseCase';
-import type { GetUserUseCase } from '@core/domain/user/usecase/GetUserUseCase';
-import type { UpdateUserUseCase } from '@core/domain/user/usecase/UpdateUserUseCase';
-import { CreateUserService } from '@core/service/user/CreateUserService';
-import { GetUsersService } from '@core/service/user/GetUsersService';
-import { GetUserService } from '@core/service/user/GetUserService';
-import { UpdateUserService } from '@core/service/user/UpdateUserService';
+import { UserDITokens } from '@application/user/di/UserDITokens';
+import type { UserRepositoryPort } from '@application/user/port/persistence/UserRepositoryPort';
+import { CreateUserService } from '@application/user/service/CreateUserService';
+import { GetUsersService } from '@application/user/service/GetUsersService';
+import { GetUserService } from '@application/user/service/GetUserService';
+import { UpdateUserService } from '@application/user/service/UpdateUserService';
 import { MongooseUserRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repositories/user/MongooseUserRepositoryAdapter';
 import { ContainerModule } from 'inversify';
+import type { CreateUserUseCase } from '@application/user/usecase/CreateUserUseCase';
+import type { GetUsersUseCase } from '@application/user/usecase/GetUsersUseCase';
+import type { GetUserUseCase } from '@application/user/usecase/GetUserUseCase';
+import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
 
 export const UserModule: ContainerModule = new ContainerModule((options) => {
   options

@@ -1,4 +1,4 @@
-import { envVariables } from 'src/shared/validation/env-variables';
+import { envVariables } from '@shared/env/env-variables';
 
 export class CloudinaryConfig {
   static CLOUD_NAME = envVariables.CLOUDINARY_CLOUD_NAME;

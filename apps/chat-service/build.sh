@@ -6,9 +6,9 @@ rm -rf ./build
 mkdir -p ./build
 
 echo "Bundling with esbuild..."
-bunx esbuild ./src/main.ts --bundle --platform=node --target=node18 --outfile=./build/server.js
+bunx esbuild ./src/main.ts --bundle --platform=node --target=node24 --outfile=./build/server.js
 
-echo "Creating executable with pkg..."
-bunx pkg ./build/server.js --targets node18-linux-x64 --output ./build/server
+# echo "Creating executable with pkg..."
+# bunx pkg ./build/server.js --targets node20-linux-x64 --output ./build/server
 
-echo "Build complete! Executable is at build/server"
+echo "Build complete! file is at build/server.js"

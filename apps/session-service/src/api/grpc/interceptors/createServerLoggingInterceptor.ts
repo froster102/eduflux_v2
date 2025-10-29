@@ -1,4 +1,4 @@
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import {
   ResponderBuilder,
   ServerInterceptingCall,

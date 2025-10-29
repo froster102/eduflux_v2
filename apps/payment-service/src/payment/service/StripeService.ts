@@ -1,21 +1,23 @@
 import Stripe from 'stripe';
 import { StripeConfig } from '@shared/config/StripeConfig';
-import { BadRequestException } from '@shared/common/exception/BadRequestException';
 import type { CreateStripeCheckoutPayload } from '@payment/service/types/CreateStripeCheckoutPayload';
 import { PaymentStatus } from '@payment/entity/enum/PaymentStatus';
 import type { IPaymentRepository } from '@payment/repository/PaymentRepository';
 import { inject } from 'inversify';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
-import { tryCatch } from '@shared/utils/try-catch';
 import { StripeWebhookException } from '@payment/exceptions/StripeWebhookException';
-import type { EnrollmentPaymentSuccessfullEvent } from '@payment/events/EnrollmentPaymentSuccessfullEvent';
-import { EnrollmentEvents } from '@shared/events/enum/EnrollmentEvents';
 import type { PaymentSuccessMetadata } from '@payment/service/types/PaymentSuccessMetadata';
 import { producer } from '@infrastructure/kafka/setup';
 import { PaymentType } from '@payment/entity/enum/PaymentType';
 import { ENROLLMENT_TOPIC, SESSION_TOPIC } from '@shared/constants/topics';
-import type { SessionPaymentSuccessfullEvent } from '@payment/events/SessionPaymentSuccessfullEvent';
-import { SessionEvents } from '@shared/events/enum/SessionEvents';
+import { BadRequestException } from '@eduflux-v2/shared/exceptions/BadRequestException';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
+import type { EnrollmentPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/course/EnrollmentPaymentSuccessfullEvent';
+import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
+import type { SessionPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/session/SessionPaymentSuccessfullEvent';
+import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
+import type { Event } from '@eduflux-v2/shared/events/Event';
+import { EnrollmentEvents } from '@eduflux-v2/shared/events/course/enum/EnrollmentEvents';
 
 export class StripeService {
   private readonly stripe: Stripe;
@@ -25,7 +27,7 @@ export class StripeService {
     private readonly paymentRepository: IPaymentRepository,
   ) {
     this.stripe = new Stripe(StripeConfig.STRIPE_API_SECRET, {
-      apiVersion: '2025-06-30.basil',
+      apiVersion: '2025-08-27.basil',
       typescript: true,
     });
   }
@@ -110,7 +112,7 @@ export class StripeService {
         const enrollmentPaymentSuccessfullEvent: EnrollmentPaymentSuccessfullEvent =
           {
             id: payment.id,
-            type: EnrollmentEvents.ENROLLMENT_PAYMENT_SUCCESS,
+            type: EnrollmentEvents.ENROLLMENT_PAYMENT_SUCCESSFULL,
             paymentType: payment.type,
             paymentId: payment.id,
             enrollmentId: payment.referenceId,
@@ -138,7 +140,7 @@ export class StripeService {
         const sessionPaymentSuccessfullEvent: SessionPaymentSuccessfullEvent = {
           id: payment.referenceId,
           type: SessionEvents.SESSION_PAYMENT_SUCCESSFULL,
-          paymentType: PaymentType.COURSE_PURCHASE,
+          paymentType: PaymentType.SESSION_BOOKING,
           paymentId: payment.id,
           sessionId: payment.referenceId,
           instructorId: payment.instructorId,

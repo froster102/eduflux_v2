@@ -1,7 +1,7 @@
-import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
-import type { InstructorStatsUpdatedEvent } from '@core/application/views/instructor-view/events/InstructorStatsUpdatedEvent';
-import type { InstructorStatsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/InstructorStatsUpdatedEventHandler';
-import type { InstructorViewRepositoryPort } from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
+import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
+import type { InstructorStatsUpdatedEvent } from '@application/views/instructor-view/events/InstructorStatsUpdatedEvent';
+import type { InstructorStatsUpdatedEventHandler } from '@application/views/instructor-view/handler/InstructorStatsUpdatedEventHandler';
+import type { InstructorViewRepositoryPort } from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
 import { inject } from 'inversify';
 
 export class InstructorStatsUpdatedEventHandlerService

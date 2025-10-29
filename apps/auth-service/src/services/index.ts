@@ -1,3 +1,2 @@
-export * as kafkaService from './kafka.service';
-export * as emailService from './email.service';
-export * as userService from './user.service';
+export * as kafkaService from './kafkaService';
+export * as emailService from './emailService';

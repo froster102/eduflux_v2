@@ -1,5 +1,5 @@
-import { Code } from '@shared/common/error/Code';
-import { Exception } from '@shared/common/exception/Exception';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 export class StripeWebhookException extends Exception<void> {
   constructor(message: string) {

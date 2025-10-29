@@ -1,13 +1,12 @@
-import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
-import type { InstructorView } from '@core/application/views/instructor-view/entity/InstructorView';
-import type { InstructorViewRepositoryPort } from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
+import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
+import type { InstructorView } from '@application/views/instructor-view/entity/InstructorView';
+import type { InstructorViewRepositoryPort } from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
 import type {
   GetInstructorViewPort,
   GetInstructorViewUseCase,
-} from '@core/application/views/instructor-view/usecase/GetInstructorViewUseCase';
-import { Code } from '@core/common/errors/Code';
-import { Exception } from '@core/common/errors/Exception';
-import { CoreAssert } from '@core/util/assert/CoreAssert';
+} from '@application/views/instructor-view/usecase/GetInstructorViewUseCase';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class GetInstructorViewService implements GetInstructorViewUseCase {
@@ -23,10 +22,7 @@ export class GetInstructorViewService implements GetInstructorViewUseCase {
 
     const instructorViewEntity = CoreAssert.notEmpty(
       await this.instructorViewRepository.findById(instructorId),
-      Exception.new({
-        code: Code.ENTITY_NOT_FOUND_ERROR,
-        overrideMessage: Code.ENTITY_NOT_FOUND_ERROR.message,
-      }),
+      new NotFoundException(),
     );
 
     return instructorViewEntity;

@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import type { CreateChapterPayload } from './types/CreateChapterPayload';
 import type { NewChapterPayload } from './types/NewChapterPayload';
 

@@ -1,4 +1,4 @@
-import type { BaseRepositoryPort } from '@core/common/port/persistence/BaseRepositoryPort';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 import type { Lecture } from '@core/domain/lecture/entity/Lecture';
 
 export interface LectureRepositoryPort extends BaseRepositoryPort<Lecture> {

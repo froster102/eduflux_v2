@@ -1,13 +1,13 @@
 import Elysia from 'elysia';
 import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
-import { CoreDITokens } from '@shared/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { container } from '@application/di/RootModule';
-import type { LoggerPort } from '@shared/common/port/logger/LoggerPort';
-import { Code } from '@shared/common/error/Code';
-import { Exception } from '@shared/common/exception/Exception';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 import { getHttpErrorCode } from '@shared/error/error-code';
-import { createJsonApiError } from '@shared/utils/jsonApi';
+import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
 
 const logger = container
   .get<LoggerPort>(CoreDITokens.Logger)

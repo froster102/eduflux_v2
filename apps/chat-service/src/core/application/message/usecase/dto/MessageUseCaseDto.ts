@@ -1,5 +1,5 @@
-import type { MessageStatus } from '@core/common/enum/MessageStatus';
 import type { Message } from '@core/domain/message/entity/Message';
+import type { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
 
 export class MessageUseCaseDto {
   readonly id: string;

@@ -6,7 +6,7 @@ import type {
   GetChatPort,
   GetChatUseCase,
 } from '@core/application/chat/usecase/GetChatUseCase';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class GetChatService implements GetChatUseCase {

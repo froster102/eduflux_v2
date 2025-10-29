@@ -4,22 +4,35 @@ import type { CategoryRepositoryPort } from '@core/application/course/port/persi
 import type { UserServiceGatewayPort } from '@core/application/course/port/gateway/UserServiceGatewayPort';
 import type { FileStorageGatewayPort } from '@core/application/course/port/gateway/FileStorageGatewayPort';
 import { MongooseCategoryRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/category/MongooseCategoryRepositoryAdapter';
-import { GrpcUserServiceAdapter } from '@infrastructure/adapter/grpc/client/GrpcUserServiceAdapter';
 import { CloudinaryFileStorageAdapter } from '@infrastructure/adapter/storage/CloudinaryFileStorageAdapter';
 import { ContainerModule } from 'inversify';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { WinstonLoggerAdapter } from '@infrastructure/logger/WinstonLoggerAdapter';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
 import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducer';
-import type { EventBusPort } from '@core/common/port/message/EventBustPort';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { GrpcUserServiceAdapter } from '@eduflux-v2/shared/adapters/grpc/GrpcUserServiceAdapter';
+import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
+import { envVariables } from '@shared/env/env-variables';
+import { COURSE_SERVICE } from '@shared/constants/services';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { WinstonLoggerAdapter } from '@eduflux-v2/shared/adapters/logger/WinstonLoggerAdapter';
+import { GrpcUserServiceConfig } from '@shared/config/GrpcUserServiceConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
     //Logger
-    options.bind<LoggerPort>(CoreDITokens.Logger).to(WinstonLoggerAdapter);
+    const config: LoggerConfig = {
+      environment: envVariables.NODE_ENV,
+      serviceName: COURSE_SERVICE,
+      asyncLocalStorage: new AsyncLocalStorage<Map<string, string>>(),
+      enableCorrelationId: true,
+    };
+    options
+      .bind<LoggerPort>(CoreDITokens.Logger)
+      .toConstantValue(new WinstonLoggerAdapter(config));
 
     // Repository
     options
@@ -48,6 +61,11 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<FileStorageGatewayPort>(AssetDITokens.FileStorageGateway)
       .to(CloudinaryFileStorageAdapter);
+
+    //Grpc config
+    options
+      .bind(CoreDITokens.GrpcUserServiceConfig)
+      .toConstantValue(GrpcUserServiceConfig);
 
     // Producer
     options

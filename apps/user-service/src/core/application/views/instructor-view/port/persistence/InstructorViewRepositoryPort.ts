@@ -1,8 +1,8 @@
-import type { InstructorView } from '@core/application/views/instructor-view/entity/InstructorView';
-import type { InstructorViewQueryResult } from '@core/application/views/instructor-view/port/persistence/types/GetInstructorViewQueryResult';
-import type { InstructorViewQueryParameters } from '@core/application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
-import type { UpdateUserViewPayload } from '@core/application/views/instructor-view/port/persistence/types/UpdateUserViewPayload';
-import type { BaseRepositoryPort } from '@core/common/port/BaseRepositoryPort';
+import type { InstructorView } from '@application/views/instructor-view/entity/InstructorView';
+import type { InstructorViewQueryResult } from '@application/views/instructor-view/port/persistence/types/GetInstructorViewQueryResult';
+import type { InstructorViewQueryParameters } from '@application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
+import type { UpdateUserViewPayload } from '@application/views/instructor-view/port/persistence/types/UpdateUserViewPayload';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 
 export type UpsertPayload = {
   [key: string]: any;

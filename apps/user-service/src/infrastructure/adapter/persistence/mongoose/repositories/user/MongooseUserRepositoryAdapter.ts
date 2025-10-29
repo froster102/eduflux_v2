@@ -1,18 +1,18 @@
-import { Role } from '@core/common/enums/Role';
-import type { QueryParameters } from '@core/common/persistence/type/QueryParameters';
-import { User } from '@core/domain/user/entity/User';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { User } from '@domain/user/entity/User';
 import type {
   UserQueryParameters,
   UserQueryResults,
-} from '@core/domain/user/port/persistence/type/UserQueryParameter';
-import type { UserRepositoryPort } from '@core/domain/user/port/persistence/UserRepositoryPort';
+} from '@application/user/port/persistence/types/UserQueryParameter';
+import type { UserRepositoryPort } from '@application/user/port/persistence/UserRepositoryPort';
 import { UserMapper } from '@infrastructure/adapter/persistence/mongoose/models/user/mapper/MongooseUserMapper';
 import { MongooseUser } from '@infrastructure/adapter/persistence/mongoose/models/user/MongooseUser';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
 import type { FilterQuery } from 'mongoose';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import type { PaginationQueryParams } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
 
 export class MongooseUserRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseUser, User>
+  extends MongooseBaseRepositoryAdapter<User, MongooseUser>
   implements UserRepositoryPort
 {
   constructor() {
@@ -44,7 +44,7 @@ export class MongooseUserRepositoryAdapter
 
   async findInstructors(
     currentUserId: string,
-    queryParameters: QueryParameters,
+    queryParameters: PaginationQueryParams,
   ): Promise<UserQueryResults> {
     const query: FilterQuery<MongooseUser> = {
       roles: { $in: [Role.INSTRUCTOR] },

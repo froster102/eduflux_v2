@@ -1,8 +1,11 @@
 import { Enrollment } from '@core/domain/enrollment/entity/Enrollment';
+import type { Mapper } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/mapper/MongooseBaseMapper';
 import type { MongooseEnrollment } from '@infrastructure/adapter/persistence/mongoose/model/enrollment/MongooseEnrollment';
 
-export class MongooseEnrollmentMapper {
-  static toDomainEntity(document: MongooseEnrollment): Enrollment {
+export class MongooseEnrollmentMapper
+  implements Mapper<Enrollment, MongooseEnrollment>
+{
+  toDomain(document: MongooseEnrollment): Enrollment {
     return Enrollment.create({
       id: document._id,
       learnerId: document.learnerId,
@@ -15,7 +18,7 @@ export class MongooseEnrollmentMapper {
     });
   }
 
-  static toMongooseEntity(entity: Enrollment): Partial<MongooseEnrollment> {
+  toPersistence(entity: Enrollment): Partial<MongooseEnrollment> {
     return {
       _id: entity.id,
       learnerId: entity.learnerId,
@@ -28,7 +31,7 @@ export class MongooseEnrollmentMapper {
     };
   }
 
-  static toDomainEntities(documents: MongooseEnrollment[]): Enrollment[] {
-    return documents.map((document) => this.toDomainEntity(document));
+  toDomainEntities(documents: MongooseEnrollment[]): Enrollment[] {
+    return documents.map((document) => this.toDomain(document));
   }
 }

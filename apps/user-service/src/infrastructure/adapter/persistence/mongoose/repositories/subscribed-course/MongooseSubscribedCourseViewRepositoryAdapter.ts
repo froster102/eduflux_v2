@@ -1,21 +1,21 @@
-import type { SubscribedCourseView } from '@core/application/views/subscribed-course/entity/SubscribedCourseView';
-import type { SubscribedCourseViewQueryParameters } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryParameters';
-import type { SubscribedCourseViewQueryResult } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryResult';
-import type { SubscribedCourseViewUpsertPayload } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUpsertPayload';
-import type { SubscribedCourseViewUserUpdatePayload } from '@core/application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUserUpdatePayload';
-import type { SubscribedCourseViewRepositoryPort } from '@core/application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
+import type { SubscribedCourseView } from '@application/views/subscribed-course/entity/SubscribedCourseView';
+import type { SubscribedCourseViewQueryParameters } from '@application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryParameters';
+import type { SubscribedCourseViewQueryResult } from '@application/views/subscribed-course/port/persistence/types/SubscribedCourseViewQueryResult';
+import type { SubscribedCourseViewUpsertPayload } from '@application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUpsertPayload';
+import type { SubscribedCourseViewUserUpdatePayload } from '@application/views/subscribed-course/port/persistence/types/SubscribedCourseViewUserUpdatePayload';
+import type { SubscribedCourseViewRepositoryPort } from '@application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseSubscribedCourseViewMapper } from '@infrastructure/adapter/persistence/mongoose/models/subscribed-course/mapper/MongooseSubscribedCourseViewMapper';
 import {
   SubscribedCourseViewModel,
   type MongooseSubscribedCourseView,
 } from '@infrastructure/adapter/persistence/mongoose/models/subscribed-course/MongooseSubscribedCourseView';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
 import type { FilterQuery } from 'mongoose';
 
 export class MongooseSubscribedCourseViewRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<
-    MongooseSubscribedCourseView,
-    SubscribedCourseView
+  extends MongooseBaseRepositoryAdapter<
+    SubscribedCourseView,
+    MongooseSubscribedCourseView
   >
   implements SubscribedCourseViewRepositoryPort
 {

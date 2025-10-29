@@ -1,27 +1,30 @@
-import { authenticaionMiddleware } from 'src/api/http/middleware/authenticationMiddleware';
-import { UserDITokens } from '@core/domain/user/di/UserDITokens';
-import type { GetUserUseCase } from '@core/domain/user/usecase/GetUserUseCase';
-import type { UpdateUserUseCase } from '@core/domain/user/usecase/UpdateUserUseCase';
+import { UserDITokens } from '@application/user/di/UserDITokens';
 import Elysia from 'elysia';
 import { inject } from 'inversify';
 import httpStatus from 'http-status';
-import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
-import type { GetLearnerStatsUseCase } from '@core/application/learner-stats/usecase/GetLearnerStatsUseCase';
-import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
-import type { GetInstructorViewsUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewsUseCase';
-import type { GetInstructorViewUseCase } from '@core/application/views/instructor-view/usecase/GetInstructorViewUseCase';
-import { SubscribedCourseViewDITokens } from '@core/application/views/subscribed-course/di/SubscribedCourseViewDITokens';
-import type { GetSubscribedCourseViewsUseCase } from '@core/application/views/subscribed-course/usecase/GetSubscribedCourseViewsUseCase';
-import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
-import type { GetTaughtCourseViewsUseCase } from '@core/application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
+import { LearnerStatsDITokens } from '@application/learner-stats/di/LearnerStatsDITokens';
+import type { GetLearnerStatsUseCase } from '@application/learner-stats/usecase/GetLearnerStatsUseCase';
+import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
+import type { GetInstructorViewsUseCase } from '@application/views/instructor-view/usecase/GetInstructorViewsUseCase';
+import type { GetInstructorViewUseCase } from '@application/views/instructor-view/usecase/GetInstructorViewUseCase';
+import { SubscribedCourseViewDITokens } from '@application/views/subscribed-course/di/SubscribedCourseViewDITokens';
+import type { GetSubscribedCourseViewsUseCase } from '@application/views/subscribed-course/usecase/GetSubscribedCourseViewsUseCase';
+import { TaughtCourseViewDITokens } from '@application/views/taught-course/di/TaughtCourseViewDITokens';
+import type { GetTaughtCourseViewsUseCase } from '@application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
 import { getTaughtCourseSchema } from '@api/http/validators/getTaughtCoursesSchema';
 import { updateUserSchema } from '@api/http/validators/user';
 import { paginationSchema } from '@api/http/validators/paginationSchema';
 import { getSubscribedCoursesSchema } from '@api/http/validators/getSubscribedCoursesSchema';
-import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
-import { calculateOffset } from '@shared/utils/helper';
-import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
-import type { GetInstructorUseCase } from '@core/application/instructor/usecase/GetInstructorUseCase';
+import {
+  jsonApiResponse,
+  parseJsonApiQuery,
+} from '@eduflux-v2/shared/utils/jsonApi';
+import { calculateOffset } from '@eduflux-v2/shared/utils/helper';
+import { InstructorDITokens } from '@application/instructor/di/InstructorDITokens';
+import type { GetInstructorUseCase } from '@application/instructor/usecase/GetInstructorUseCase';
+import type { GetUserUseCase } from '@application/user/usecase/GetUserUseCase';
+import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
+import { authenticaionMiddleware } from '@api/http/middleware/authenticationMiddleware';
 
 export class UserController {
   constructor(

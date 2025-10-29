@@ -5,10 +5,10 @@ import type { CourseRepositoryPort } from '@core/application/course/port/persist
 import type { CreateLecturePort } from '@core/application/lecture/port/usecase/CreateLecturePort';
 import type { CreateLectureUseCase } from '@core/application/lecture/usecase/CreateLectureUseCase';
 import { Lecture } from '@core/domain/lecture/entity/Lecture';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { inject } from 'inversify';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 
 export class CreateLectureService implements CreateLectureUseCase {
   constructor(

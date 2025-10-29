@@ -1,4 +1,4 @@
-import { Role } from '@core/common/enums/Role';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 import { Document, model, Model } from 'mongoose';
 
 import { Schema } from 'mongoose';

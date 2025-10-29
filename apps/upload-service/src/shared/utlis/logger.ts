@@ -1,56 +1,14 @@
-import * as winston from 'winston';
-import { serverConfig } from '../config/server.config';
+import { UPLOAD_SERVICE } from '@/shared/constants/services';
+import { asyncLocalStorage } from '@/shared/utlis/async-store';
+import { envVariables } from '@/validators/envVariables';
+import { WinstonLoggerAdapter } from '@eduflux-v2/shared/adapters/logger/WinstonLoggerAdapter';
+import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
 
-const { combine, timestamp, printf, colorize } = winston.format;
+const config: LoggerConfig = {
+  environment: envVariables.NODE_ENV,
+  serviceName: UPLOAD_SERVICE,
+  asyncLocalStorage: asyncLocalStorage,
+  enableCorrelationId: true,
+};
 
-const customFormat = printf(
-  ({ level, message, timestamp, context, ...info }) => {
-    const meta = Object.keys(info).length ? JSON.stringify(info, null, 2) : '';
-    // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
-    return `[${timestamp}] [${context ?? 'App'}] ${level}: ${message} ${meta}`;
-  },
-);
-
-export class Logger {
-  private _logger: winston.Logger;
-  private _context: string;
-
-  constructor(context?: string) {
-    this._context = context as string;
-
-    this._logger = winston.createLogger({
-      level: serverConfig.NODE_ENV === 'development' ? 'debug' : 'info',
-      levels: winston.config.npm.levels,
-      format: combine(
-        colorize({ all: true }),
-        timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        winston.format((info) => {
-          info.context = this._context;
-          return info;
-        })(),
-        customFormat,
-      ),
-      transports: [new winston.transports.Console()],
-    });
-  }
-
-  info(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.info(message, meta);
-  }
-
-  error(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.error(message, meta);
-  }
-
-  warn(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.warn(message, meta);
-  }
-
-  debug(message: string, meta: Record<string, unknown> = {}) {
-    this._logger.debug(message, meta);
-  }
-
-  log(level: string, message: string, meta: Record<string, unknown> = {}) {
-    this._logger.log(level, message, meta);
-  }
-}
+export const logger = new WinstonLoggerAdapter(config);

@@ -1,15 +1,13 @@
-import { Logger } from '@/shared/utils/logger';
 import { Hono } from 'hono';
-import { httpLoggerMiddleware } from './middleware/http-logger.middleware';
-import { notFoundHandler } from './middleware/not-found-handler.middleware';
-import { errorHandler } from './middleware/error-handler.middleware';
-import { auth } from '@/lib/auth';
-import { serverConfig } from '@/shared/config/server.config';
+import { auth } from '@/lib/better-auth/auth';
+import { httpServerConfig } from '@/shared/config/httpServerConfig';
 import { AUTH_SERVICE } from '@/shared/constants/services';
+import { logger } from '@/shared/utils/logger';
+import { httpLoggerMiddleware } from '@/http/middleware/httpLoggerMiddleware';
+import { notFoundHandler } from '@/http/middleware/notFoundHandlerMiddleware';
+import { errorHandler } from '@/http/middleware/errorHandlerMiddleware';
 
 const app = new Hono();
-
-const logger = new Logger(AUTH_SERVICE);
 
 app.use(httpLoggerMiddleware);
 app.notFound(notFoundHandler);
@@ -27,8 +25,8 @@ app.on(['POST', 'GET'], '/api/auth/*', (c) => {
 export function startServer() {
   Bun.serve({
     fetch: app.fetch,
-    port: serverConfig.PORT,
+    port: httpServerConfig.PORT,
   });
 
-  logger.info(`[${AUTH_SERVICE}] listening on port ${serverConfig.PORT}`);
+  logger.info(`[${AUTH_SERVICE}] listening on port ${httpServerConfig.PORT}`);
 }

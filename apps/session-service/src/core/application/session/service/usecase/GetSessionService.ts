@@ -5,8 +5,8 @@ import type {
   GetSessionPort,
   GetSessionUseCase,
 } from '@core/application/session/usecase/GetSessionUseCase';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class GetSessionService implements GetSessionUseCase {

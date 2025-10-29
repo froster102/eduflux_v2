@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import { CourseLevel } from '@core/domain/course/enum/CourseLevel';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import type { CreateCoursePayload } from './types/CreateCoursePayload';

@@ -1,4 +1,4 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/message/kafka/KafkaEventBusProducerAdapter';
 import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';

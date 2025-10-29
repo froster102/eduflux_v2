@@ -6,11 +6,11 @@ import {
   NotificationModel,
   type MongooseNotification,
 } from '@infrastructure/adapter/persistence/mongoose/model/notification/MongooseNotification';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
-import { DatabaseException } from '@infrastructure/exceptions/DatabaseException';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { DatabaseException } from '@eduflux-v2/shared/exceptions/DatabaseException';
 
 export class MongooseNotificatoinRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseNotification, Notification>
+  extends MongooseBaseRepositoryAdapter<Notification, MongooseNotification>
   implements NotificationRepositoryPort
 {
   constructor() {

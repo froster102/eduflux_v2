@@ -1,10 +1,10 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import type { KafkaConnection } from '@infrastructure/adapter/kafka/KafkaConnection';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { CHAT_TOPIC } from '@shared/constants/topics';
-import { tryCatch } from '@shared/utils/try-catch';
 import { inject } from 'inversify';
 import type { Producer } from 'kafkajs';
 

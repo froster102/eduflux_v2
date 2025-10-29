@@ -1,4 +1,4 @@
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 import { parseTime } from '@internationalized/date';
 import { PaginationConfig } from '@shared/config/PaginationConfig';
 import { isValidTimeZone } from '@shared/utils/date';

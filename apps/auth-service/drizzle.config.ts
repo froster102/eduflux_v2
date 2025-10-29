@@ -1,4 +1,4 @@
-import { envVariables } from '@/shared/validation/env-variables';
+import { envVariables } from '@/shared/env/env-variables';
 import './src/shared/polyfills/compression-polyfill';
 import { defineConfig } from 'drizzle-kit';
 

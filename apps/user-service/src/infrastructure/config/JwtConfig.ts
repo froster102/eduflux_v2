@@ -1,4 +1,4 @@
-import { envVariables } from '@shared/validation/env-variables';
+import { envVariables } from '@shared/env/env-variables';
 
 export class JwtConfig {
   static JWT_ISS = envVariables.JWT_ISS;

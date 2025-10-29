@@ -1,4 +1,4 @@
-import type { InstructorView } from '@core/application/views/instructor-view/entity/InstructorView';
+import type { InstructorView } from '@application/views/instructor-view/entity/InstructorView';
 
 export type GetInstructorViewsResult = {
   instructors: InstructorView[];

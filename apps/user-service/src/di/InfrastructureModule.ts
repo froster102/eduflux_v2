@@ -1,8 +1,8 @@
 import { KafkaEventsConsumer } from 'src/api/consumers/KafkaEventsConsumer';
 import { GrpcUserServiceController } from 'src/api/grpc/controller/GrpcUserServiceController';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { EventBusPort } from '@core/common/message/EventBustPort';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { KafkaConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
 import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/message/kafka/KafkaEventBusProducerAdapter';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';

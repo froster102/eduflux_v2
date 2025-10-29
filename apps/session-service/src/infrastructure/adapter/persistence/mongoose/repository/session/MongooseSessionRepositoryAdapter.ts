@@ -2,13 +2,13 @@ import type { SessionRepositoryPort } from '@core/application/session/port/persi
 import type { SessionQueryParameters } from '@core/application/session/port/persistence/type/SessionQueryParameters';
 import type { SessionQueryResults } from '@core/application/session/port/persistence/type/SessionQueryResult';
 import type { Session } from '@core/domain/session/entity/Session';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseSessionMapper } from '@infrastructure/adapter/persistence/mongoose/model/session/mapper/MongooseSessionMapper';
 import {
   SessionModel,
   type MongooseSession,
 } from '@infrastructure/adapter/persistence/mongoose/model/session/MongooseSession';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { unmanaged } from 'inversify';
 import type { ClientSession, FilterQuery } from 'mongoose';
 

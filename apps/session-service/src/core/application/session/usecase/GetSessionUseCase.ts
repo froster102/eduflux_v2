@@ -1,5 +1,5 @@
 import type { SessionUseCaseDto } from '@core/application/session/usecase/dto/SessionUseCaseDto';
-import type { UseCase } from '@core/common/usecase/UseCase';
+import type { UseCase } from '@eduflux-v2/shared/usecase/UseCase';
 
 export interface GetSessionPort {
   sessionId: string;

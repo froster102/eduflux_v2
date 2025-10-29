@@ -1,4 +1,4 @@
-import { asyncLocalStorage } from '@shared/utils/store';
+import { asyncLocalStorage } from '@shared/utils/async-store';
 import type { Context, Next } from 'hono';
 import { v4 as uuidV4 } from 'uuid';
 

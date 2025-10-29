@@ -6,10 +6,10 @@ import type { GetCourseUseCase } from '@core/application/course/usecase/GetCours
 import type { GetCourseUseCaseResult } from '@core/application/course/usecase/types/GetCourseUseCaseResult';
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
-import { Role } from '@core/common/enums/Role';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import { EnrollmentStatus } from '@core/domain/enrollment/enum/EnrollmentStatus';
 import { inject } from 'inversify';

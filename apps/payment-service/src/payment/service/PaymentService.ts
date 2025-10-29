@@ -1,30 +1,31 @@
 import { inject } from 'inversify';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
-import type { ICourseService } from '@payment/interface/ICourseService';
-import type { ISessionService } from '@payment/interface/ISessionService';
 import type { IPaymentRepository } from '@payment/repository/PaymentRepository';
 import { PaymentStatus } from '@payment/entity/enum/PaymentStatus';
 import { PaymentType } from '@payment/entity/enum/PaymentType';
-import { BadRequestException } from '@shared/common/exception/BadRequestException';
 import { StripeService } from '@payment/service/StripeService';
 import { Payment } from '@payment/entity/Payment';
 import { PaymentFactory } from '@payment/factory/PaymentFactory';
 import { PrepareCheckout } from '@payment/service/PrepareCheckout';
-import type { Course } from '@shared/types/Course';
-import type { Session } from '@shared/types/Session';
 import type { GetPaymentsPayload } from '@payment/service/types/GetPaymentsPayload';
-import { Role } from '@shared/common/enums/Role';
-import { ForbiddenException } from '@shared/common/exception/ForbiddenException';
 import type { GetPaymentSummaryPayload } from '@payment/service/types/GetPaymentSummaryParams';
 import { PaymentSummaryGroup } from '@payment/repository/types/PaymentSummaryGroup';
+import type { CourseServicePort } from '@eduflux-v2/shared/ports/gateway/CourseServicePort';
+import type { SessionServicePort } from '@eduflux-v2/shared/ports/gateway/SessionServicePort';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { BadRequestException } from '@eduflux-v2/shared/exceptions/BadRequestException';
+import type { Course } from '@eduflux-v2/shared/types/course';
+import type { Session } from '@eduflux-v2/shared/ports/gateway/SessionServicePort';
+import type { Enrollment } from '@eduflux-v2/shared/types/enrollment';
 
 export class PaymentService {
   private readonly platformFeeRate = 0.3;
   constructor(
     @inject(PaymentDITokens.CourseService)
-    private readonly courseService: ICourseService,
+    private readonly courseService: CourseServicePort,
     @inject(PaymentDITokens.SessionService)
-    private readonly sessionService: ISessionService,
+    private readonly sessionService: SessionServicePort,
     @inject(PaymentDITokens.PaymentRepository)
     private readonly paymentRepository: IPaymentRepository,
     @inject(PaymentDITokens.StripeService)
@@ -154,24 +155,19 @@ export class PaymentService {
     userId: string,
     idempotencyKey: string,
   ) {
-    const entity =
-      paymentType === PaymentType.COURSE_PURCHASE
-        ? await this.courseService.getEnrollment(referenceId)
-        : await this.sessionService.getSession(referenceId);
-
     let amount: number = 0;
     let instructorId: string = '';
     let course: Course | null = null;
 
-    if (entity._class === 'enrollment') {
-      course = await this.courseService.getCourse(entity.courseId);
-      amount = course.price;
+    if (paymentType === PaymentType.COURSE_PURCHASE) {
+      const enrollment = await this.courseService.getEnrollment(referenceId);
+      course = await this.courseService.getCourse(enrollment.courseId);
+      amount = course.price || 0;
       instructorId = course.instructor.id;
-    }
-
-    if (entity._class === 'session') {
-      amount = entity.price;
-      instructorId = entity.instructorId;
+    } else {
+      const session = await this.sessionService.getSession(referenceId);
+      amount = session.price;
+      instructorId = session.instructorId;
     }
 
     const payment = PaymentFactory.create({
@@ -187,7 +183,10 @@ export class PaymentService {
     const stripePayload =
       paymentType === PaymentType.COURSE_PURCHASE && course
         ? PrepareCheckout.forCourse(payment, course)
-        : PrepareCheckout.forSession(payment, entity as Session);
+        : PrepareCheckout.forSession(
+            payment,
+            await this.sessionService.getSession(referenceId),
+          );
 
     await this.paymentRepository.save(payment);
 

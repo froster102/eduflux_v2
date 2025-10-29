@@ -1,5 +1,5 @@
-import { Code } from '@core/common/error/Code';
-import { Exception } from '@core/common/exception/Exception';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 export class EnrollmentAlreadyExistsException extends Exception<{
   enrollmentId: string;

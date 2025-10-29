@@ -1,5 +1,5 @@
 import type { MongooseSubscribedCourseView } from '@infrastructure/adapter/persistence/mongoose/models/subscribed-course/MongooseSubscribedCourseView';
-import { SubscribedCourseView } from '@core/application/views/subscribed-course/entity/SubscribedCourseView';
+import { SubscribedCourseView } from '@application/views/subscribed-course/entity/SubscribedCourseView';
 
 export class MongooseSubscribedCourseViewMapper {
   static toDomain(
@@ -24,7 +24,7 @@ export class MongooseSubscribedCourseViewMapper {
     domainEntity: SubscribedCourseView,
   ): Partial<MongooseSubscribedCourseView> {
     return {
-      _id: domainEntity.getId(),
+      _id: domainEntity.id,
       userId: domainEntity.userId,
       title: domainEntity.title,
       thumbnail: domainEntity.thumbnail,

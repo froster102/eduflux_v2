@@ -1,5 +1,7 @@
 export class InfrastructureDITokens {
   static readonly KafkaConnection: unique symbol = Symbol('KafkaConnection');
+  static readonly MongooseConnection: unique symbol =
+    Symbol('MongooseConnection');
 
   //Kafka consumer
   static readonly KafkaEventsConsumer: unique symbol = Symbol(

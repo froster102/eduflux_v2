@@ -1,4 +1,4 @@
-import type { Role } from '@core/common/enum/Role';
+import type { Role } from '@eduflux-v2/shared/constants/Role';
 import { Schema, model, Document } from 'mongoose';
 
 export interface MongooseUserChat extends Document {

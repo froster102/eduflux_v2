@@ -1,15 +1,15 @@
 import { inject } from 'inversify';
-import { LearnerStatsDITokens } from '@core/application/learner-stats/di/LearnerStatsDITokens';
-import type { LearnerStatsRepositoryPort } from '@core/application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
-import { InstructorDITokens } from '@core/application/instructor/di/InstructorDITokens';
-import type { InstructorRepositoryPort } from '@core/application/instructor/port/persistence/InstructorRepositoryPort';
-import type { SessionCompletedEventHandler } from '@core/application/learner-stats/handler/SessionCompletedEventHandler';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { InstructorStatsUpdatedEvent } from '@core/application/views/instructor-view/events/InstructorStatsUpdatedEvent';
-import { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
-import type { EventBusPort } from '@core/common/message/EventBustPort';
-import type { SessionCompletedEvent } from '@core/domain/learner-stats/events/SessionCompletedEvent';
+import { LearnerStatsDITokens } from '@application/learner-stats/di/LearnerStatsDITokens';
+import type { LearnerStatsRepositoryPort } from '@application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
+import { InstructorDITokens } from '@application/instructor/di/InstructorDITokens';
+import type { InstructorRepositoryPort } from '@application/instructor/port/persistence/InstructorRepositoryPort';
+import type { SessionCompletedEventHandler } from '@application/learner-stats/handler/SessionCompletedEventHandler';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { InstructorStatsUpdatedEvent } from '@application/views/instructor-view/events/InstructorStatsUpdatedEvent';
+import { InstructorEvents } from '@domain/instructor/events/InstructorEvents';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
 
 export class SessionCompletedEventHandlerService
   implements SessionCompletedEventHandler
@@ -43,7 +43,7 @@ export class SessionCompletedEventHandlerService
         sessionsConducted: instructor.getSessionsConducted(),
         totalCourses: instructor.getTotalCourses(),
         totalLearners: instructor.getTotalLearners(),
-        occuredAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       };
       await this.eventBus.sendEvent(instructorStatsUpdatedEvent);
     }

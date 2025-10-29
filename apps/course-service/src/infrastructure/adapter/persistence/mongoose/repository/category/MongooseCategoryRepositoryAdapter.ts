@@ -5,7 +5,7 @@ import {
   CategoryModel,
   type MongooseCategory,
 } from '@infrastructure/adapter/persistence/mongoose/model/category/MongooseCategory';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { unmanaged } from 'inversify';
 import type { ClientSession } from 'mongoose';
 
@@ -17,18 +17,18 @@ export class MongooseCategoryRepositoryAdapter
     @unmanaged()
     session?: ClientSession,
   ) {
-    super(CategoryModel, MongooseCategoryMapper, session);
+    super(CategoryModel, new MongooseCategoryMapper(), session);
   }
 
   async findAll(): Promise<Category[]> {
     const docs = await CategoryModel.find({});
-    return docs ? MongooseCategoryMapper.toDomainEntities(docs) : [];
+    return docs ? this.mapper.toDomainEntities(docs) : [];
   }
 
   async findByName(name: string): Promise<Category | null> {
     const doc = await CategoryModel.findOne({ name }, null, {
       session: this.session,
     });
-    return doc ? MongooseCategoryMapper.toDomainEntity(doc) : null;
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 }

@@ -5,16 +5,16 @@ import type { UserServiceGatewayPort } from '@core/application/course/port/gatew
 import type { CreateCoursePort } from '@core/application/course/port/usecase/CreateCoursePort';
 import type { CreateCourseUseCase } from '@core/application/course/usecase/CreateCourseUseCase';
 import { Course } from '@core/domain/course/entity/Course';
-import { Role } from '@core/common/enums/Role';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { inject } from 'inversify';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { slugify } from '@shared/utils/slugify';
-import { CourseEvents } from '@core/common/events/enum/CourseEvents';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { EventBusPort } from '@core/common/port/message/EventBustPort';
-import type { CourseCreatedEvent } from '@core/domain/course/events/CourseCreatedEvent';
+import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { CourseCreatedEvent } from '@eduflux-v2/shared/events/course/CourseCreatedEvent';
 
 export class CreateCourseService implements CreateCourseUseCase {
   constructor(

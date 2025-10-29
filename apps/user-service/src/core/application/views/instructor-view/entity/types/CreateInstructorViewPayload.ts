@@ -1,5 +1,5 @@
-import type { SessionPricingDetails } from '@core/application/views/instructor-view/entity/types/SessionPricingDetails';
-import type { UserProfile } from '@core/domain/user/events/types/UserProfile';
+import type { SessionPricingDetails } from '@application/views/instructor-view/entity/types/SessionPricingDetails';
+import type { UserProfile } from '@domain/user/events/types/UserProfile';
 
 export type CreateInstructorViewPayload = {
   id: string;

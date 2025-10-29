@@ -1,5 +1,5 @@
 import { paginationSchema } from '@api/http/validators/paginationSchema';
-import { SortOrder } from '@core/common/enums/SortOrder';
+import { SortOrder } from '@core/domain/common/enum/SortOrder';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import z from 'zod/v4';
 

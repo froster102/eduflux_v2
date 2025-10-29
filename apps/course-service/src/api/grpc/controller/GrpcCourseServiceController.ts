@@ -3,9 +3,9 @@ import type { GetCourseUseCase } from '@core/application/course/usecase/GetCours
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { GetEnrollmentUseCase } from '@core/application/enrollment/usecase/GetEnrollmentUseCase';
 import type { VerifyChatAccessUseCase } from '@core/application/enrollment/usecase/VerifyChatAccessUseCase';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { Exception } from '@core/common/exception/Exception';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import {
   status,
   type sendUnaryData,
@@ -19,7 +19,7 @@ import type {
   GetEnrollmentRequest,
   VerifyChatAccessRequest,
   VerifyChatAccessResponse,
-} from '@infrastructure/adapter/grpc/generated/course';
+} from '@eduflux-v2/shared/adapters/grpc/generated/course';
 import { getGrpcStatusCode } from '@shared/errors/error-code';
 import { inject } from 'inversify';
 

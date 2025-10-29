@@ -1,1 +1,1 @@
-export const PAYMENT_SERVICE = 'PAYMENT_SERVICE';
+export { PAYMENT_SERVICE } from '@eduflux-v2/shared/constants/service';

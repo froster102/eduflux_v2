@@ -1,21 +1,23 @@
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
 import type { SessionSettingsRepositoryPort } from '@core/application/session-settings/port/persistence/SessionSettingsPort';
-import type { UserServicePort } from '@core/application/session/port/gateway/UserServicePort';
 import type { BookSessionPort } from '@core/application/session/port/usecase/BookSessionPort';
 import type { BookSessionUseCase } from '@core/application/session/usecase/BookSessionUseCase';
 import type { BookSessionUseCaseResult } from '@core/application/session/usecase/types/BookSessionUseCaseResult';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { SessionBookingService } from '@core/domain/service/SessionBookingService';
 import type { Session } from '@core/domain/session/entity/Session';
 import type { Slot } from '@core/domain/slot/entity/Slot';
 import { envVariables } from '@shared/env/envVariables';
 import { inject } from 'inversify';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
+import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
+import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
 
 export class BookSessionService implements BookSessionUseCase {
   constructor(
@@ -26,6 +28,8 @@ export class BookSessionService implements BookSessionUseCase {
     @inject(CoreDITokens.UnitOfWork) private readonly uow: UnitOfWork,
     @inject(SessionSettingsDITokens.SessionSettingsRepository)
     private readonly sessionSettingsRepository: SessionSettingsRepositoryPort,
+    @inject(UserSessionDITokens.UserSessionRepository)
+    private readonly userSessionRepository: UserSessionRepositoryPort,
   ) {}
 
   async execute(payload: BookSessionPort): Promise<BookSessionUseCaseResult> {
@@ -41,9 +45,7 @@ export class BookSessionService implements BookSessionUseCase {
       );
     }
 
-    const instructorDetails = await this.userService.getUserDetails(
-      slot.instructorId,
-    );
+    const instructorDetails = await this.userService.getUser(slot.instructorId);
 
     if (!instructorDetails) {
       throw new NotFoundException('Instructor details not found.');

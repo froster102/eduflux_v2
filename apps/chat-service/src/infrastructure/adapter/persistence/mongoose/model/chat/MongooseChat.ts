@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-import { Role } from '@core/common/enum/Role';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 import type { ChatParticipant } from '@core/domain/chat/entity/Chat';
 
 export interface MongooseChat extends Document {

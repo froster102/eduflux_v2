@@ -1,5 +1,5 @@
-import type { BaseRepositoryPort } from '@core/common/port/BaseRepositoryPort';
-import type { Instructor } from '@core/domain/instructor/entity/Instructor';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
+import type { Instructor } from '@domain/instructor/entity/Instructor';
 
 export interface InstructorRepositoryPort
   extends BaseRepositoryPort<Instructor> {

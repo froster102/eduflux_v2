@@ -1,6 +1,6 @@
 import type { Payment } from '@payment/entity/Payment';
-import type { Course } from '@shared/types/Course';
-import type { Session } from '@shared/types/Session';
+import type { Course } from '@eduflux-v2/shared/types/course';
+import type { Session } from '@eduflux-v2/shared/ports/gateway/SessionServicePort';
 import { envVariables } from '@shared/env/env-variables';
 import type { CreateStripeCheckoutPayload } from '@payment/service/types/CreateStripeCheckoutPayload';
 
@@ -16,7 +16,7 @@ export class PrepareCheckout {
         images: [
           course.thumbnail || 'https://example.com/course-placeholder.jpg',
         ],
-        amount: Math.round(course.price * 100),
+        amount: Math.round((course.price || 0) * 100),
       },
       metadata: {
         payment_id: payment.id,

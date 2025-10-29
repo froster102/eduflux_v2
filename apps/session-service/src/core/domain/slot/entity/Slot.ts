@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import type { CreateSlotPayload } from '@core/domain/slot/entity/types/CreateSlotPayload';
 import type { NewSlotPayload } from '@core/domain/slot/entity/types/NewSlotPayload';
 import { SlotStatus } from '@core/domain/slot/enum/SlotStatus';

@@ -4,9 +4,10 @@ import { AccessType } from '@core/domain/asset/enum/AccessType';
 import { ResourceType } from '@core/domain/asset/enum/ResourceType';
 import { MediaStatus } from '@core/domain/asset/enum/MediaStatus';
 import type { MongooseAsset } from '@infrastructure/adapter/persistence/mongoose/model/asset/MongooseAsset';
+import type { Mapper } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/mapper/MongooseBaseMapper';
 
-export class MongooseAssetMapper {
-  static toDomainEntity(doc: MongooseAsset): Asset {
+export class MongooseAssetMapper implements Mapper<Asset, MongooseAsset> {
+  toDomain(doc: MongooseAsset): Asset {
     return Asset.new({
       id: doc._id,
       provider: doc.provider as StorageProvider,
@@ -21,11 +22,7 @@ export class MongooseAssetMapper {
     });
   }
 
-  static toDomainEntities(docs: MongooseAsset[]): Asset[] {
-    return docs.map((doc) => this.toDomainEntity(doc));
-  }
-
-  static toMongooseEntity(domain: Asset): Partial<MongooseAsset> {
+  toPersistence(domain: Asset): Partial<MongooseAsset> {
     return {
       _id: domain.id,
       provider: domain.provider,
@@ -38,5 +35,9 @@ export class MongooseAssetMapper {
       mediaSources: domain.mediaSources,
       additionalMetadata: domain.additionalMetadata,
     };
+  }
+
+  toDomainEntities(docs: MongooseAsset[]): Asset[] {
+    return docs.map((doc) => this.toDomain(doc));
   }
 }

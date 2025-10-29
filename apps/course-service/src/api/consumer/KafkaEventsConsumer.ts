@@ -1,16 +1,16 @@
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { EnrollmentPaymentSuccessfullEventHandler } from '@core/application/enrollment/handler/EnrollmentPaymentSuccessfullEventHandler';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import { EnrollmentEvents } from '@core/domain/enrollment/events/enum/EnrollmentEvents';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
 import type { KafkaEvent } from '@infrastructure/adapter/messaging/kafka/types/KafkaEvent';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { COURSE_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
 import { ENROLLMENT_TOPIC } from '@shared/constants/topics';
-import { tryCatch } from '@shared/utils/try-catch';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { inject } from 'inversify';
 import type { Consumer, EachMessagePayload } from 'kafkajs';
+import { EnrollmentEvents } from '@eduflux-v2/shared/events/course/enum/EnrollmentEvents';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;
@@ -64,7 +64,7 @@ export class KafkaEventsConsumer {
             );
 
             switch (event.type) {
-              case EnrollmentEvents.ENROLLMENT_PAYMENT_SUCCESS: {
+              case EnrollmentEvents.ENROLLMENT_PAYMENT_SUCCESSFULL: {
                 await this.enrollmentPaymentSuccessfullEventHandler.handle(
                   event,
                 );

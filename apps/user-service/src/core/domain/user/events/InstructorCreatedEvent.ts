@@ -1,6 +1,6 @@
-import type { Event } from '@core/common/events/Event';
-import type { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
-import type { UserProfile } from '@core/domain/user/events/types/UserProfile';
+import type { Event } from '@eduflux-v2/shared/events/Event';
+import type { InstructorEvents } from '@domain/instructor/events/InstructorEvents';
+import type { UserProfile } from '@domain/user/events/types/UserProfile';
 
 export interface InstructorCreatedEvent extends Event {
   readonly type: InstructorEvents.INSTRUCTOR_CREATED;

@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { CloudinaryConfig } from '@shared/config/CloudinaryConfig';
 import type {
   FileStorageGatewayPort,

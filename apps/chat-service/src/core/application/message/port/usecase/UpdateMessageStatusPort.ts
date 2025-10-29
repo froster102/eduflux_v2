@@ -1,4 +1,4 @@
-import type { MessageStatus } from '@core/common/enum/MessageStatus';
+import type { MessageStatus } from '@eduflux-v2/shared/constants/MessageStatus';
 
 export interface UpdateMessageStatusPort {
   chatId: string;

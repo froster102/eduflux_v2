@@ -1,16 +1,16 @@
 import type { EnableSessionPort } from '@core/application/session-settings/port/usecase/EnableSessionPort';
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
-import type { UserServicePort } from '@core/application/session/port/gateway/UserServicePort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
-import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import { SlotGenerationService } from '@core/domain/service/SlotGenerationService';
 import { SessionSettings } from '@core/domain/session-settings/entity/SessionSettings';
 import { SessionSettingsEvents } from '@core/domain/session-settings/events/enum/SessionSettingsEvents';
 import type { SessionSettingsUpdateEvent } from '@core/domain/session-settings/events/SessionSettingsUpdateEvent';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 
 export class EnableSessionService implements EnableSessionsUseCase {
   constructor(
@@ -24,7 +24,7 @@ export class EnableSessionService implements EnableSessionsUseCase {
     const { executorId, applyForWeeks, price, timeZone, weeklySchedules } =
       payload;
 
-    const user = await this.userServiceGateway.getUserDetails(executorId);
+    const user = await this.userServiceGateway.getUser(executorId);
 
     if (!user) {
       throw new NotFoundException(`User with ID:${executorId} not found.`);
@@ -60,7 +60,7 @@ export class EnableSessionService implements EnableSessionsUseCase {
         price: sessionSettings.price,
         timeZone: sessionSettings.timeZone,
         id: sessionSettings.id,
-        occuredAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
       };
 
       await this.eventBus.sendEvent({

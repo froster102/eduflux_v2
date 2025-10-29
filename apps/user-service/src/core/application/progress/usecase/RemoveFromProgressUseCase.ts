@@ -1,5 +1,5 @@
-import type { UseCase } from '@core/common/usecase/UseCase';
-import type { RemoveFromProgressPort } from '@core/application/progress/port/usecase/RemoveFromProgressPort';
+import type { UseCase } from '@eduflux-v2/shared/usecase/UseCase';
+import type { RemoveFromProgressPort } from '@application/progress/port/usecase/RemoveFromProgressPort';
 
 export interface RemoveFromProgressUseCase
   extends UseCase<RemoveFromProgressPort, void> {}

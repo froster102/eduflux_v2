@@ -3,9 +3,9 @@ import type { SessionRepositoryPort } from '@core/application/session/port/persi
 import type { HandleExpiredPendingPaymentsUseCase } from '@core/application/session/usecase/HandleExpiredPendingPaymentsUseCase';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import type { Session } from '@core/domain/session/entity/Session';
 import type { Slot } from '@core/domain/slot/entity/Slot';
 import { SlotStatus } from '@core/domain/slot/enum/SlotStatus';

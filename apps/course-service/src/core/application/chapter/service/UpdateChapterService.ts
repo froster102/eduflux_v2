@@ -5,9 +5,9 @@ import { ChapterUseCaseDto } from '@core/application/chapter/usecase/dto/Chapter
 import type { UpdateChapterUseCase } from '@core/application/chapter/usecase/UpdateChapterUseCase';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class UpdateChapterService implements UpdateChapterUseCase {

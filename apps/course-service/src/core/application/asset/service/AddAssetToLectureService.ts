@@ -7,8 +7,8 @@ import type { FileStorageGatewayPort } from '@core/application/course/port/gatew
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import { Asset } from '@core/domain/asset/entity/Asset';
 import { AccessType } from '@core/domain/asset/enum/AccessType';
 import { MediaStatus } from '@core/domain/asset/enum/MediaStatus';

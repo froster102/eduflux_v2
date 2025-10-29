@@ -3,12 +3,12 @@ import type { CourseQueryParameters } from '@core/application/course/port/persis
 import type { CourseQueryResult } from '@core/application/course/port/persistence/types/CourseQueryResult';
 import type { Course } from '@core/domain/course/entity/Course';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseCourseMapper } from '@infrastructure/adapter/persistence/mongoose/model/course/mapper/MongooseCourseMapper';
 import {
   CourseModel,
   type MongooseCourse,
 } from '@infrastructure/adapter/persistence/mongoose/model/course/MongooseCourse';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { DatabaseException } from '@infrastructure/exceptions/DatabaseException';
 import { unmanaged } from 'inversify';
 import type { ClientSession, FilterQuery } from 'mongoose';
@@ -21,7 +21,7 @@ export class MongooseCourseRepositoryAdapter
     @unmanaged()
     session?: ClientSession,
   ) {
-    super(CourseModel, MongooseCourseMapper, session);
+    super(CourseModel, new MongooseCourseMapper(), session);
   }
 
   async findCourseByInstructorId(
@@ -36,14 +36,14 @@ export class MongooseCourseRepositoryAdapter
       null,
       { session: this.session },
     );
-    return doc ? MongooseCourseMapper.toDomainEntity(doc) : null;
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 
   async findCourseByTitle(title: string): Promise<Course | null> {
     const doc = await CourseModel.findOne({ title }, null, {
       session: this.session,
     });
-    return doc ? MongooseCourseMapper.toDomainEntity(doc) : null;
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 
   async findAllInstructorCourses(
@@ -66,7 +66,7 @@ export class MongooseCourseRepositoryAdapter
 
     return {
       totalCount,
-      courses: MongooseCourseMapper.toDomainEntities(courses),
+      courses: this.mapper.toDomainEntities(courses),
     };
   }
 
@@ -89,13 +89,13 @@ export class MongooseCourseRepositoryAdapter
 
     return {
       totalCount,
-      courses: MongooseCourseMapper.toDomainEntities(courses),
+      courses: this.mapper.toDomainEntities(courses),
     };
   }
 
   async findBySlug(slug: string): Promise<Course | null> {
     const doc = await CourseModel.findOne({ slug });
-    return doc ? MongooseCourseMapper.toDomainEntity(doc) : null;
+    return doc ? this.mapper.toDomain(doc) : null;
   }
 
   async existsBySlug(slug: string): Promise<boolean> {
@@ -131,7 +131,7 @@ export class MongooseCourseRepositoryAdapter
       throw new DatabaseException();
     }
 
-    return MongooseCourseMapper.toDomainEntity(newDoc);
+    return this.mapper.toDomain(newDoc);
   }
 
   async swapContent(
@@ -145,7 +145,7 @@ export class MongooseCourseRepositoryAdapter
       throw new DatabaseException();
     }
 
-    const shadowDoc = MongooseCourseMapper.toMongooseEntity(shadowCourse);
+    const shadowDoc = this.mapper.toPersistence(shadowCourse);
 
     const updatePayload: Partial<MongooseCourse> = {
       title: shadowDoc.title,

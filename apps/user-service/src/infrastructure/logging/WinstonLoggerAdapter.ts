@@ -1,7 +1,7 @@
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { USER_SERVICE } from '@shared/constants/services';
-import { asyncLocalStorage } from '@shared/utils/store';
-import { envVariables } from '@shared/validation/env-variables';
+import { asyncLocalStorage } from '@shared/utils/async-store';
+import { envVariables } from '@shared/env/env-variables';
 import { unmanaged } from 'inversify';
 import winston from 'winston';
 

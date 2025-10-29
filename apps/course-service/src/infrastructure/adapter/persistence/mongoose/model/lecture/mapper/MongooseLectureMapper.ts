@@ -1,8 +1,9 @@
 import { Lecture } from '@core/domain/lecture/entity/Lecture';
+import type { Mapper } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/mapper/MongooseBaseMapper';
 import type { MongooseLecture } from '@infrastructure/adapter/persistence/mongoose/model/lecture/MongooseLecture';
 
-export class MongooseLectureMapper {
-  static toDomainEntity(doc: MongooseLecture): Lecture {
+export class MongooseLectureMapper implements Mapper<Lecture, MongooseLecture> {
+  toDomain(doc: MongooseLecture): Lecture {
     return Lecture.new({
       id: doc._id,
       courseId: doc.courseId,
@@ -15,11 +16,11 @@ export class MongooseLectureMapper {
     });
   }
 
-  static toDomainEntities(docs: MongooseLecture[]): Lecture[] {
-    return docs.map((doc) => this.toDomainEntity(doc));
+  toDomainEntities(docs: MongooseLecture[]): Lecture[] {
+    return docs.map((doc) => this.toDomain(doc));
   }
 
-  static toMongooseEntity(domain: Lecture): Partial<MongooseLecture> {
+  toPersistence(domain: Lecture): Partial<MongooseLecture> {
     return {
       _id: domain.id,
       courseId: domain.courseId,

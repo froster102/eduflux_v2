@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { startServer } from './http/server';
-import { tryCatch } from './shared/utils/try-catch';
-import { UserEventsConsumer } from './messaging/kafka/consumers/user-events.consumer';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
+import { startServer } from '@/http/server';
+import { UserEventsConsumer } from '@/messaging/kafka/consumers/UserEventsConsumer';
 
 async function boostrap(): Promise<void> {
   startServer();

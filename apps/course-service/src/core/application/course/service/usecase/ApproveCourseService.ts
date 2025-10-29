@@ -2,9 +2,9 @@ import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { ApproveCoursePort } from '@core/application/course/port/usecase/ApproveCoursePort';
 import type { ApproveCourseUseCase } from '@core/application/course/usecase/ApproveCourseUseCase';
-import { Role } from '@core/common/enums/Role';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import type { Course } from '@core/domain/course/entity/Course';
 import { inject } from 'inversify';
 

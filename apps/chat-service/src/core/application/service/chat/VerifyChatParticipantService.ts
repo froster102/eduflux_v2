@@ -4,7 +4,7 @@ import type { ChatRepositoryPort } from '@core/application/chat/port/persistence
 import type { VerifyChatParticipantPort } from '@core/application/chat/port/usecase/VerifyChatParticipantPort';
 import type { VerifyChatParticipantUseCaseResult } from '@core/application/chat/usecase/type/VerifyChatParticipantUseCaseResult';
 import type { VerifyChatParticipantUseCase } from '@core/application/chat/usecase/VerifyChatParticipantUseCase';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class VerifyChatParticipantService

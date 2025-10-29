@@ -1,15 +1,15 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
-import { Exception } from '@core/common/exception/Exception';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 import { getHttpErrorCode } from '@shared/errors/error-code';
-import { Code } from '@core/common/error/Code';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import { container } from '@di/RootModule';
 import type { Context } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import type { HTTPResponseError } from 'hono/types';
-import { createJsonApiError } from '@shared/utils/jsonApi';
+import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
 
 export const errorHandler = (error: Error | HTTPResponseError, c: Context) => {
   const logger = container

@@ -1,21 +1,21 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { Consumer, EachMessagePayload } from 'kafkajs';
 import { inject } from 'inversify';
 import { SESSION_TOPIC, USERS_TOPIC } from '@shared/constants/topics';
 import { SESSION_SERVICE_CONSUMER_GROUP } from '@shared/constants/consumer';
-import { tryCatch } from '@shared/utils/try-catch';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import type { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
 import type { ConfirmSessionEventHandler } from '@core/application/views/user-session/handler/ConfirmSessionHandler';
-import { SessionEvents } from '@core/domain/session/events/enum/SessionEvents';
 import type { KafkaEvent } from '@infrastructure/adapter/messaging/kafka/types/KafkaEvent';
 import type { UserSessionUpdatedEventHandler } from '@core/application/views/user-session/handler/UserSessionUpdatedEventHandler';
 import { UserEvents } from '@core/application/views/user-session/events/enum/UserEvents';
 import type { UserUpdatedEventHandler } from '@core/application/views/user-session/handler/UserUpdatedEventHandler';
 import type { SessionPaymentSuccessfullEventHandler } from '@core/application/session/handler/SessionPaymentSucessfullEventHandler';
+import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
 
 export class KafkaEventsConsumer {
   private consumer: Consumer;

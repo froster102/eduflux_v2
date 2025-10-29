@@ -2,15 +2,15 @@ import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
 import type { CourseRepositoryPort } from '@core/application/course/port/persistence/CourseRepositoryPort';
 import type { UpdateCoursePort } from '@core/application/course/port/usecase/UpdateCoursePort';
 import type { UpdateCourseUseCase } from '@core/application/course/usecase/UpdateCourseUseCase';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import type { Course } from '@core/domain/course/entity/Course';
 import { inject } from 'inversify';
-import { CourseEvents } from '@core/common/events/enum/CourseEvents';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { EventBusPort } from '@core/common/port/message/EventBustPort';
-import type { CourseUpdatedEvent } from '@core/domain/course/events/CourseUpdatedEvent';
+import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { CourseUpdatedEvent } from '@eduflux-v2/shared/events/course/CourseUpdatedEvent';
 
 export class UpdateCourseService implements UpdateCourseUseCase {
   constructor(

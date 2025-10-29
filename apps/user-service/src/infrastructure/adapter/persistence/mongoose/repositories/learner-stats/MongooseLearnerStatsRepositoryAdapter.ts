@@ -1,16 +1,16 @@
 import type { LearnerStats } from '@core/domain/learner-stats/entity/LearnerStats';
-import type { LearnerStatsRepositoryPort } from '@core/application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
+import type { LearnerStatsRepositoryPort } from '@application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
 import { LearnerStatsMapper } from '@infrastructure/adapter/persistence/mongoose/models/learner-stats/mapper/MongooseLearnerStatsMapper';
 import {
   LearnerStatsModel,
   type MongooseLearnerStats,
 } from '@infrastructure/adapter/persistence/mongoose/models/learner-stats/MongooseLearnerStats';
 
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
 import type { FilterQuery } from 'mongoose';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 
 export class MongooseLearnerStatsRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseLearnerStats, LearnerStats>
+  extends MongooseBaseRepositoryAdapter<LearnerStats, MongooseLearnerStats>
   implements LearnerStatsRepositoryPort
 {
   constructor() {

@@ -4,8 +4,8 @@ import {
   type MongoosePayment,
 } from '@infrastructure/database/mongoose/model/MongoosePayment';
 import { MongoosePaymentMapper } from '@infrastructure/database/mongoose/model/payment/mapper/MongoosePaymentMapper';
-import { MongooseBaseRepository } from '@infrastructure/database/repository/base/MongooseBaseRepository';
 import { PaymentStatus } from '@payment/entity/enum/PaymentStatus';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import type { Payment } from '@payment/entity/Payment';
 import type { IPaymentRepository } from '@payment/repository/PaymentRepository';
 import type { FindExistingPaymentQuery } from '@payment/repository/types/FindExistingPaymentQuery';
@@ -16,11 +16,11 @@ import { PaymentSummaryGroup } from '@payment/repository/types/PaymentSummaryGro
 import type { FilterQuery } from 'mongoose';
 
 export class MongoosePaymentRepository
-  extends MongooseBaseRepository<Payment, MongoosePayment>
+  extends MongooseBaseRepositoryAdapter<Payment, MongoosePayment>
   implements IPaymentRepository
 {
   constructor() {
-    super(PaymentModel, MongoosePaymentMapper);
+    super(PaymentModel, new MongoosePaymentMapper());
   }
 
   async findExistingPayment(
@@ -30,21 +30,21 @@ export class MongoosePaymentRepository
       userId: query.userId,
       referenceId: query.referenceId,
       type: query.paymentType,
-    }).lean();
+    });
 
-    return document ? MongoosePaymentMapper.toDomainEntity(document) : null;
+    return document ? this.mapper.toDomain(document) : null;
   }
 
   async findByTransactionId(id: string): Promise<Payment> {
     const document = await PaymentModel.findOne({
       gatewayTransactionId: id,
-    }).lean();
+    });
 
     if (!document) {
       throw new Error(`Payment with transaction id "${id}" not found`);
     }
 
-    return MongoosePaymentMapper.toDomainEntity(document);
+    return this.mapper.toDomain(document);
   }
 
   async delete(id: string): Promise<void> {
@@ -69,19 +69,15 @@ export class MongoosePaymentRepository
   }
 
   async findByUser(userId: string): Promise<Payment[]> {
-    const documents = await PaymentModel.find({ userId }).lean();
-    return MongoosePaymentMapper.toDomainEntities(
-      documents as MongoosePayment[],
-    );
+    const documents = await PaymentModel.find({ userId });
+    return this.mapper.toDomainEntities(documents);
   }
 
   async findByReceiver(receiverId: string): Promise<Payment[]> {
     const documents = await PaymentModel.find({
       instructorId: receiverId,
-    }).lean();
-    return MongoosePaymentMapper.toDomainEntities(
-      documents as MongoosePayment[],
-    );
+    });
+    return this.mapper.toDomainEntities(documents);
   }
 
   async findMany(query?: PaymentQueryParameters): Promise<PaymentQueryResult> {
@@ -118,7 +114,7 @@ export class MongoosePaymentRepository
 
     return {
       totalCount,
-      payments: MongoosePaymentMapper.toDomainEntities(docs),
+      payments: this.mapper.toDomainEntities(docs),
     };
   }
 

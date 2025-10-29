@@ -11,8 +11,8 @@ export class NotificationDITokens {
   );
 
   //handler
-  static readonly EnrollmentSuccessEventHandler: unique symbol = Symbol(
-    'EnrollmentSuccessEventHandler',
+  static readonly EnrollmentCompletedEventHandler: unique symbol = Symbol(
+    'EnrollmentCompletedEventHandler',
   );
   static readonly SessionConfirmedEventHandler: unique symbol = Symbol(
     'SessionConfirmedEventHandler',
@@ -22,6 +22,10 @@ export class NotificationDITokens {
   static readonly NotificationRepository: unique symbol = Symbol(
     'NotificationRepository',
   );
+
+  //External services
+  static readonly TemplateService: unique symbol = Symbol('TemplateService');
+  static readonly EmailService: unique symbol = Symbol('EmailService');
 
   //Controller
   static readonly NotificationController: unique symbol = Symbol(

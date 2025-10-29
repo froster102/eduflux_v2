@@ -1,5 +1,5 @@
-import type { CreateSubscribedCoursePayload } from '@core/application/views/subscribed-course/entity/types/CreateSubscribedCoursePayload';
-import { Entity } from '@core/common/entity/Entity';
+import type { CreateSubscribedCoursePayload } from '@application/views/subscribed-course/entity/types/CreateSubscribedCoursePayload';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 
 export class SubscribedCourseView extends Entity<string> {
   public readonly userId: string;
@@ -17,8 +17,7 @@ export class SubscribedCourseView extends Entity<string> {
   public readonly updatedAt: string;
 
   private constructor(payload: CreateSubscribedCoursePayload) {
-    super();
-    this.id = payload.id;
+    super(payload.id);
     this.userId = payload.userId;
     this.title = payload.title;
     this.description = payload.description;

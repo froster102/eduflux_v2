@@ -1,5 +1,5 @@
-import type { Event } from '@core/common/events/Event';
-import type { InstructorEvents } from '@core/domain/instructor/events/InstructorEvents';
+import type { Event } from '@eduflux-v2/shared/events/Event';
+import type { InstructorEvents } from '@domain/instructor/events/InstructorEvents';
 
 export interface InstructorStatsUpdatedEvent extends Event {
   id: string;

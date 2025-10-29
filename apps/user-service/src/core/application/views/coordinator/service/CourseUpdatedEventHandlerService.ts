@@ -1,9 +1,9 @@
-import type { CourseUpdatedEvent } from '@core/application/views/coordinator/events/CourseUpdatedEvent';
-import type { CourseUpdatedEventHandler } from '@core/application/views/coordinator/handler/CourseUpdateEventHandler';
-import { SubscribedCourseViewDITokens } from '@core/application/views/subscribed-course/di/SubscribedCourseViewDITokens';
-import type { SubscribedCourseViewRepositoryPort } from '@core/application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
-import { TaughtCourseViewDITokens } from '@core/application/views/taught-course/di/TaughtCourseViewDITokens';
-import type { TaughtCourseViewRepositoryPort } from '@core/application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
+import type { CourseUpdatedEvent } from '@application/views/coordinator/events/CourseUpdatedEvent';
+import type { CourseUpdatedEventHandler } from '@application/views/coordinator/handler/CourseUpdateEventHandler';
+import { SubscribedCourseViewDITokens } from '@application/views/subscribed-course/di/SubscribedCourseViewDITokens';
+import type { SubscribedCourseViewRepositoryPort } from '@application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
+import { TaughtCourseViewDITokens } from '@application/views/taught-course/di/TaughtCourseViewDITokens';
+import type { TaughtCourseViewRepositoryPort } from '@application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
 import { inject } from 'inversify';
 
 export class CourseUpdatedEventHandlerService

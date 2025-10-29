@@ -1,5 +1,6 @@
-import { UnauthorizedException } from '@core/common/exception/UnauthorizedException';
-import { validateToken } from '@shared/util/jwt.util';
+import { UnauthorizedException } from '@eduflux-v2/shared/exceptions/UnauthorizedException';
+import { validateToken } from '@eduflux-v2/shared/utils/jwtUtil';
+import { JwtConfig } from '@shared/config/JwtConfig';
 import Elysia from 'elysia';
 
 export const authenticaionMiddleware = new Elysia().derive(
@@ -9,7 +10,7 @@ export const authenticaionMiddleware = new Elysia().derive(
     if (!token) {
       throw new UnauthorizedException('Authentication Token Not Found');
     }
-    const payload = await validateToken(token).catch(() => {
+    const payload = await validateToken(token, JwtConfig).catch(() => {
       throw new UnauthorizedException(
         'Invalid token or token has been expired',
       );

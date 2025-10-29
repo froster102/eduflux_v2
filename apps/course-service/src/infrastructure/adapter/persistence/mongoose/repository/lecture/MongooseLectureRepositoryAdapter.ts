@@ -1,11 +1,11 @@
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
 import type { Lecture } from '@core/domain/lecture/entity/Lecture';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseLectureMapper } from '@infrastructure/adapter/persistence/mongoose/model/lecture/mapper/MongooseLectureMapper';
 import {
   LectureModel,
   type MongooseLecture,
 } from '@infrastructure/adapter/persistence/mongoose/model/lecture/MongooseLecture';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { nanoid } from '@shared/utils/nanoid';
 import { unmanaged } from 'inversify';
 import type { ClientSession } from 'mongoose';
@@ -18,14 +18,14 @@ export class MongooseLectureRepositoryAdapter
     @unmanaged()
     session?: ClientSession,
   ) {
-    super(LectureModel, MongooseLectureMapper, session);
+    super(LectureModel, new MongooseLectureMapper(), session);
   }
 
   async findByCourseId(courseId: string): Promise<Lecture[]> {
     const docs = await LectureModel.find({ courseId }, null, {
       session: this.session,
     }).sort({ objectIndex: 1 });
-    return MongooseLectureMapper.toDomainEntities(docs);
+    return this.mapper.toDomainEntities(docs);
   }
 
   async getMaxObjectIndex(courseId: string): Promise<number> {
@@ -41,7 +41,7 @@ export class MongooseLectureRepositoryAdapter
     const bulkOps = lectures.map((lecture) => ({
       updateOne: {
         filter: { _id: lecture.id },
-        update: MongooseLectureMapper.toMongooseEntity(lecture),
+        update: this.mapper.toPersistence(lecture),
       },
     }));
     await LectureModel.bulkWrite(bulkOps, { session: this.session });
@@ -66,6 +66,6 @@ export class MongooseLectureRepositoryAdapter
 
     await LectureModel.insertMany(clonedDocs, { session: this.session });
 
-    return MongooseLectureMapper.toDomainEntities(clonedDocs);
+    return this.mapper.toDomainEntities(clonedDocs);
   }
 }

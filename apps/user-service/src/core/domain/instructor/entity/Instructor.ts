@@ -1,6 +1,6 @@
-import { Entity } from '@core/common/entity/Entity';
-import type { CreateInstructorPayload } from '@core/domain/instructor/entity/type/CreateInstructorPayload';
-import type { NewInstructorPayload } from '@core/domain/instructor/entity/type/NewInstructorPayload';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
+import type { CreateInstructorPayload } from '@domain/instructor/entity/types/CreateInstructorPayload';
+import type { NewInstructorPayload } from '@domain/instructor/entity/types/NewInstructorPayload';
 
 export class Instructor extends Entity<string> {
   private sessionsConducted: number;
@@ -11,8 +11,7 @@ export class Instructor extends Entity<string> {
   private updatedAt: Date;
 
   constructor(payload: NewInstructorPayload) {
-    super();
-    this.id = payload.id;
+    super(payload.id);
     this.sessionsConducted = payload.sessionsConducted;
     this.isSessionEnabled = payload.isSessionEnabled;
     this.totalCourses = payload.totalCourses;

@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import type { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import type { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 
 export interface MongooseSession extends Document {
   _id: string;

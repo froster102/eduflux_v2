@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import type { CreateSessionSettingsPayload } from '@core/domain/session-settings/entity/types/CreateSessionSettingsPayload';
 import type { DailyAvailabilityConfig } from '@core/domain/session-settings/entity/types/DailyAvailabilityConfig';
 import type { NewSessionSettingsPayload } from '@core/domain/session-settings/entity/types/NewSessionSettingsPayload';

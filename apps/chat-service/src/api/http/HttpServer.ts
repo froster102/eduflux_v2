@@ -1,10 +1,10 @@
 import type { ChatController } from '@api/http/controller/ChatController';
 import { SocketIOServer } from '@api/websocket/io';
 import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
-import { HttpServerConfig } from '@shared/HttpServerConfig';
+import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { Hono } from 'hono';
 import type { Server as HTTPServer } from 'node:http';
 import { serve } from '@hono/node-server';

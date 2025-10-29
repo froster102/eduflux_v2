@@ -4,11 +4,11 @@ import type { UpdateInstructorSessionSettingsPort } from '@core/application/sess
 import type { UpdateInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/UpdateInstructorSessionSettingsUseCase';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
-import type { EventBusPort } from '@core/common/port/message/EventBusPort';
-import type { UnitOfWork } from '@core/common/unit-of-work/UnitOfWork';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import { SlotGenerationService } from '@core/domain/service/SlotGenerationService';
 import { SessionSettingsEvents } from '@core/domain/session-settings/events/enum/SessionSettingsEvents';
 import { type SessionSettingsUpdateEvent } from '@core/domain/session-settings/events/SessionSettingsUpdateEvent';
@@ -84,7 +84,7 @@ export class UpdateInstructorSessionSettingsService
       price: foundSessionSettings.price,
       timeZone: foundSessionSettings.timeZone,
       id: foundSessionSettings.id,
-      occuredAt: new Date().toISOString(),
+      timestamp: new Date().toISOString(),
     };
 
     if (shouldRegenrateSlots) {
@@ -155,7 +155,7 @@ export class UpdateInstructorSessionSettingsService
           price: foundSessionSettings.price,
           timeZone: foundSessionSettings.timeZone,
           id: foundSessionSettings.id,
-          occuredAt: new Date().toISOString(),
+          timestamp: new Date().toISOString(),
         };
 
         await this.eventBus.sendEvent({

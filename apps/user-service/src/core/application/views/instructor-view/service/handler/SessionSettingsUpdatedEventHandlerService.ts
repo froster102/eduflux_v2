@@ -1,10 +1,10 @@
-import { InstructorViewDITokens } from '@core/application/views/instructor-view/di/InstructorViewDITokens';
-import type { SessionSettingsUpdateEvent } from '@core/application/views/instructor-view/events/SessionSettingsEvent';
-import type { SessionSettingsUpdatedEventHandler } from '@core/application/views/instructor-view/handler/SessionSettingsUpdatedEventHandler';
+import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
+import type { SessionSettingsUpdateEvent } from '@application/views/instructor-view/events/SessionSettingsEvent';
+import type { SessionSettingsUpdatedEventHandler } from '@application/views/instructor-view/handler/SessionSettingsUpdatedEventHandler';
 import type {
   InstructorViewRepositoryPort,
   UpsertPayload,
-} from '@core/application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
+} from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
 import { inject } from 'inversify';
 
 export class SessionSettingsUpdatedEventHandlerService

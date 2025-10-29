@@ -1,17 +1,6 @@
-import {
-  CreateUserRequest,
-  GetUserRequest,
-  UpdateUserRequest,
-  UserResponse,
-  type UserServiceServer,
-} from 'src/api/grpc/generated/user';
-import { Role } from '@core/common/enums/Role';
-import { Exception } from '@core/common/errors/Exception';
-import { UserDITokens } from '@core/domain/user/di/UserDITokens';
-import type { CreateUserPort } from '@core/domain/user/port/usecase/CreateUserPort';
-import type { CreateUserUseCase } from '@core/domain/user/usecase/CreateUserUseCase';
-import type { GetUserUseCase } from '@core/domain/user/usecase/GetUserUseCase';
-import type { UpdateUserUseCase } from '@core/domain/user/usecase/UpdateUserUseCase';
+import { Role } from '@eduflux-v2/shared/constants/Role';
+import { UserDITokens } from '@application/user/di/UserDITokens';
+import type { CreateUserPort } from '@application/user/port/usecase/CreateUserPort';
 import {
   type sendUnaryData,
   type ServerUnaryCall,
@@ -19,6 +8,17 @@ import {
 } from '@grpc/grpc-js';
 import { getGrpcStatusCode } from '@shared/errors/error-code';
 import { inject } from 'inversify';
+import type {
+  CreateUserRequest,
+  GetUserRequest,
+  UpdateUserRequest,
+  UserResponse,
+  UserServiceServer,
+} from '@eduflux-v2/shared/adapters/grpc/generated/user';
+import type { GetUserUseCase } from '@application/user/usecase/GetUserUseCase';
+import type { CreateUserUseCase } from '@application/user/usecase/CreateUserUseCase';
+import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 export class GrpcUserServiceController implements UserServiceServer {
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents

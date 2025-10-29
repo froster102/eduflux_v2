@@ -1,6 +1,6 @@
 import type { CourseQueryParameters } from '@core/application/course/port/persistence/types/CourseQueryParameters';
 import type { CourseQueryResult } from '@core/application/course/port/persistence/types/CourseQueryResult';
-import type { BaseRepositoryPort } from '@core/common/port/persistence/BaseRepositoryPort';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 import type { Course } from '@core/domain/course/entity/Course';
 
 export interface CourseRepositoryPort extends BaseRepositoryPort<Course> {

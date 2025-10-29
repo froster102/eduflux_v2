@@ -1,8 +1,8 @@
-import { ConflictException } from '@core/common/exception/ConflictException';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
-import { UnauthorizedException } from '@core/common/exception/UnauthorizedException';
+import { ConflictException } from '@eduflux-v2/shared/exceptions/ConflictException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
+import { UnauthorizedException } from '@eduflux-v2/shared/exceptions/UnauthorizedException';
 import { Session } from '@core/domain/session/entity/Session';
-import { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 import type { Slot } from '@core/domain/slot/entity/Slot';
 import { SlotStatus } from '@core/domain/slot/enum/SlotStatus';
 

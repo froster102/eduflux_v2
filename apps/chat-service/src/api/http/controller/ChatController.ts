@@ -18,8 +18,11 @@ import {
 import { getUserChatsSchema } from '@api/validation/getUserChatsSchema';
 import { UserChatDITokens } from '@core/application/views/user-chat/di/UserChatDITokens';
 import type { GetUserChatsUseCase } from '@core/application/views/user-chat/usecase/GetUserChatsUseCase';
-import { calculateOffset } from '@shared/utils/helper';
-import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
+import { calculateOffset } from '@eduflux-v2/shared/utils/helper';
+import {
+  jsonApiResponse,
+  parseJsonApiQuery,
+} from '@eduflux-v2/shared/utils/jsonApi';
 import httpStatus from 'http-status';
 
 export class ChatController {

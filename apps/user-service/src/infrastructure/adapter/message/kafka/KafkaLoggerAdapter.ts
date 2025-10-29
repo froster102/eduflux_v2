@@ -1,6 +1,6 @@
 import { type LogEntry, logLevel } from 'kafkajs';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 
 function getLogger() {

@@ -1,1 +1,1 @@
-export * as uploadService from './upload.service';
+export * as uploadService from './uploadService';

@@ -1,4 +1,4 @@
-import { Entity } from '@core/common/entity/Entity';
+import { Entity } from '@eduflux-v2/shared/entities/Entity';
 import type { CreateLearnerStatsPayload } from '@core/domain/learner-stats/entity/types/CreateLearnerStatsPayload';
 import type { NewLearnerStatsPayload } from '@core/domain/learner-stats/entity/types/NewLearnerStatsPayload';
 
@@ -10,8 +10,7 @@ export class LearnerStats extends Entity<string> {
   private updatedAt: Date;
 
   constructor(payload: NewLearnerStatsPayload) {
-    super();
-    this.id = payload.id;
+    super(payload.id);
     this.completedCourses = payload.completedCourses;
     this.completedSessions = payload.completedSessions;
     this.enrolledCourses = payload.enrolledCourses;

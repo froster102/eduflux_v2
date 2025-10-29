@@ -1,5 +1,5 @@
 import { paginationSchema } from '@api/validation/paginationSchema';
-import { Role } from '@core/common/enum/Role';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 import { z } from 'zod/v4';
 
 export const getChatsSchema = paginationSchema.extend({

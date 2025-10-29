@@ -1,6 +1,6 @@
-import { InstructorView } from '@core/application/views/instructor-view/entity/InstructorView';
-import type { SessionPricingDetails } from '@core/application/views/instructor-view/entity/types/SessionPricingDetails';
-import type { UserProfile } from '@core/domain/user/events/types/UserProfile';
+import { InstructorView } from '@application/views/instructor-view/entity/InstructorView';
+import type { SessionPricingDetails } from '@application/views/instructor-view/entity/types/SessionPricingDetails';
+import type { UserProfile } from '@domain/user/events/types/UserProfile';
 import type { MongooseInstructorView } from '@infrastructure/adapter/persistence/mongoose/models/instructor-view/MongooseInstructorView';
 
 export class MongooseInstructorViewMapper {
@@ -33,7 +33,7 @@ export class MongooseInstructorViewMapper {
     entity: InstructorView,
   ): Partial<MongooseInstructorView> {
     return {
-      _id: entity.getId(),
+      _id: entity.id,
       profile: {
         name: entity.profile.name,
         image: entity.profile.image,

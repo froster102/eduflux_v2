@@ -5,9 +5,9 @@ import type {
 } from '@api/grpc/generated/session';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { GetSessionUseCase } from '@core/application/session/usecase/GetSessionUseCase';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { Exception } from '@core/common/exception/Exception';
-import type { LoggerPort } from '@core/common/port/logger/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import {
   status,
   type sendUnaryData,

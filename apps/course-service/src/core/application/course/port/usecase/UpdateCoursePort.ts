@@ -1,4 +1,4 @@
-import type { AuthenticatedUserDto } from '@core/common/dto/AuthenticatedUserDto';
+import type { AuthenticatedUserDto } from '@eduflux-v2/shared/dto/AuthenticatedUserDto';
 import type { UpdateCourseDetailsPayload } from '@core/domain/course/entity/types/UpdateCourseDetailsPayload';
 
 export interface UpdateCoursePort {

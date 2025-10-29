@@ -1,4 +1,4 @@
-import type { TaughtCourseView } from '@core/application/views/taught-course/entity/TaughtCourseView';
+import type { TaughtCourseView } from '@application/views/taught-course/entity/TaughtCourseView';
 
 export type TaughtCourseViewQueryResult = {
   totalCount: number;

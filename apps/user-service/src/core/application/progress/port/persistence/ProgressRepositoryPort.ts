@@ -1,4 +1,4 @@
-import type { BaseRepositoryPort } from '@core/common/port/BaseRepositoryPort';
+import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/BaseRepositoryPort';
 import { Progress } from '@core/domain/progress/entity/Progress';
 
 export interface ProgressRepositoryPort extends BaseRepositoryPort<Progress> {

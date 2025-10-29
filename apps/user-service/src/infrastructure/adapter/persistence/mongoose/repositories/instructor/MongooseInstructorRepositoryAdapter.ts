@@ -1,14 +1,14 @@
-import type { Instructor } from '@core/domain/instructor/entity/Instructor';
-import type { InstructorRepositoryPort } from '@core/application/instructor/port/persistence/InstructorRepositoryPort';
+import type { Instructor } from '@domain/instructor/entity/Instructor';
+import type { InstructorRepositoryPort } from '@application/instructor/port/persistence/InstructorRepositoryPort';
 import { InstructorMapper } from '@infrastructure/adapter/persistence/mongoose/models/instructor/mapper/MongooseInstructorMapper';
 import {
   InstructorModel,
   type MongooseInstructor,
 } from '@infrastructure/adapter/persistence/mongoose/models/instructor/MongooseInstructor';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 
 export class MongooseInstructorRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseInstructor, Instructor>
+  extends MongooseBaseRepositoryAdapter<Instructor, MongooseInstructor>
   implements InstructorRepositoryPort
 {
   constructor() {

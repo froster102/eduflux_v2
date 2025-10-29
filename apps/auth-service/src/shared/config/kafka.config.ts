@@ -1,5 +1,5 @@
 import { AUTH_SERVICE } from '../constants/services';
-import { envVariables } from '../validation/env-variables';
+import { envVariables } from '../env/env-variables';
 
 export const kafkaConfig = {
   CLIENT_ID: AUTH_SERVICE,

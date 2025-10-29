@@ -1,5 +1,5 @@
-import type { UseCase } from '@core/common/usecase/UseCase';
-import type { CreateProgressPort } from '@core/application/progress/port/usecase/CreateProgressPort';
+import type { UseCase } from '@eduflux-v2/shared/usecase/UseCase';
+import type { CreateProgressPort } from '@application/progress/port/usecase/CreateProgressPort';
 
 export interface CreateProgressUseCase
   extends UseCase<CreateProgressPort, void> {}

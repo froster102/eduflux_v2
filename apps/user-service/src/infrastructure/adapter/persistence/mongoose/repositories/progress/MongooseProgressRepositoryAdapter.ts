@@ -1,14 +1,11 @@
 import { Progress } from '@core/domain/progress/entity/Progress';
-import type { ProgressRepositoryPort } from '@core/application/progress/port/persistence/ProgressRepositoryPort';
+import type { ProgressRepositoryPort } from '@application/progress/port/persistence/ProgressRepositoryPort';
 import { MongooseProgressMapper } from '@infrastructure/adapter/persistence/mongoose/models/progress/mapper/MongooseProgressMapper';
-import {
-  type IMongooseProgress,
-  MongooseProgress,
-} from '@infrastructure/adapter/persistence/mongoose/models/progress/MongooseProgress';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/repositories/MongooseBaseRepositoryAdpater';
+import { MongooseProgress } from '@infrastructure/adapter/persistence/mongoose/models/progress/MongooseProgress';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 
 export class MongooseProgressRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<IMongooseProgress, Progress>
+  extends MongooseBaseRepositoryAdapter<Progress, MongooseProgress>
   implements ProgressRepositoryPort
 {
   constructor() {

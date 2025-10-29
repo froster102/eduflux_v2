@@ -20,8 +20,11 @@ import { rejectCourseSchema } from '@api/http/validators/rejectCourseSchema';
 import { reorderCurriculumSchema } from '@api/http/validators/reorderCurriculumSchema';
 import type { ReorderCurriculumUseCase } from '@core/application/course/usecase/ReorderCurriculumUseCase';
 import type { GetCourseCurriculumUseCase } from '@core/application/course/usecase/GetCourseCurriculumUseCase';
-import { jsonApiResponse, parseJsonApiQuery } from '@shared/utils/jsonApi';
-import { calculateOffset } from '@shared/utils/helper';
+import {
+  jsonApiResponse,
+  parseJsonApiQuery,
+} from '@eduflux-v2/shared/utils/jsonApi';
+import { calculateOffset } from '@eduflux-v2/shared/utils/helper';
 import httpStatus from 'http-status';
 
 export class CourseController {

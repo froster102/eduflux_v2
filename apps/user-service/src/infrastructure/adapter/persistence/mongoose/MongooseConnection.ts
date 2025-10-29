@@ -1,11 +1,10 @@
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
-import { Code } from '@core/common/errors/Code';
-import { Exception } from '@core/common/errors/Exception';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import { DatabaseConfig } from '@infrastructure/config/DatabaseConfig';
-import { tryCatch } from '@shared/utils/try-catch';
+import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import mongoose from 'mongoose';
+import { DatabaseException } from '@eduflux-v2/shared/exceptions/DatabaseException';
 
 export class MongooseConnection {
   private static readonly logger = container
@@ -28,7 +27,7 @@ export class MongooseConnection {
         `Failed to eshtablish connection with database: ${(error as Record<string, any>).message}`,
         error as Record<string, any>,
       );
-      throw Exception.new({ code: Code.INTERNAL_ERROR });
+      throw new DatabaseException();
     }
 
     this.logger.info(`Eshtablished connection to database`);

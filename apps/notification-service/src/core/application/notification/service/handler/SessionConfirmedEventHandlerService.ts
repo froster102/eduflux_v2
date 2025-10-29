@@ -2,15 +2,15 @@ import { NotificationDITokens } from '@core/application/notification/di/Notifica
 import type { SessionConfirmedEventHandler } from '@core/application/notification/handler/SessionConfirmedEventHandler';
 import type { EmailServicePort } from '@core/application/notification/port/gateway/EmailServicePort';
 import type { TemplateServicePort } from '@core/application/notification/port/gateway/TemplateServicePort';
-import type { UserServicePort } from '@core/application/notification/port/gateway/UserServicePort';
+import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
 import { NotificationUseCaseDto } from '@core/application/notification/usecase/dto/NotificationUseCaseDto';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { eventEmitter } from '@core/common/util/event/eventEmitter';
 import { Notification } from '@core/domain/notification/entiy/Notification';
 import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
 import { ServerEvents } from '@shared/enum/ServerEvents';
-import type { SessionConfimedEvent } from '@shared/events/SessionConfirmedEvent';
+import type { SessionConfirmedEvent } from '@eduflux-v2/shared/events/session/SessionConfirmedEvent';
 import type { ServerEvent } from '@shared/types/ServerEvent';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
@@ -23,13 +23,13 @@ export class SessionConfirmedEventHandlerService
     private readonly notificationRepository: NotificationRepositoryPort,
     @inject(CoreDITokens.UserService)
     private readonly userService: UserServicePort,
-    @inject(CoreDITokens.TemplateService)
+    @inject(NotificationDITokens.TemplateService)
     private readonly templateService: TemplateServicePort,
-    @inject(CoreDITokens.EmailService)
+    @inject(NotificationDITokens.EmailService)
     private readonly emailService: EmailServicePort,
   ) {}
 
-  async handle(event: SessionConfimedEvent): Promise<void> {
+  async handle(event: SessionConfirmedEvent): Promise<void> {
     const { instructorId, learnerId, path, joinLink, startTime } = event;
 
     const instructor = await this.userService.getUser(instructorId);

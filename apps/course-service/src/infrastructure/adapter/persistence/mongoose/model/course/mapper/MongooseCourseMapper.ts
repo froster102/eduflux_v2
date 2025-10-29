@@ -1,62 +1,61 @@
 import { Course } from '@core/domain/course/entity/Course';
-import { CourseLevel } from '@core/domain/course/enum/CourseLevel';
-import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
+import type { CourseLevel } from '@core/domain/course/enum/CourseLevel';
+import type { CourseStatus } from '@core/domain/course/enum/CourseStatus';
+import type { Mapper } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/mapper/MongooseBaseMapper';
 import type { MongooseCourse } from '@infrastructure/adapter/persistence/mongoose/model/course/MongooseCourse';
 
-export class MongooseCourseMapper {
-  static toDomainEntity(doc: MongooseCourse): Course {
+export class MongooseCourseMapper implements Mapper<Course, MongooseCourse> {
+  toDomain(raw: MongooseCourse): Course {
     return Course.new({
-      id: doc._id,
-      title: doc.title,
-      description: doc.description,
-      thumbnail: doc.thumbnail,
-      level: doc.level as CourseLevel | null,
-      categoryId: doc.categoryId,
-      price: doc.price,
-      isFree: doc.isFree,
-      status: doc.status as CourseStatus,
-      feedback: doc.feedback,
-      slug: doc.slug,
+      id: raw._id,
+      title: raw.title,
+      description: raw.description,
+      thumbnail: raw.thumbnail,
+      level: raw.level as CourseLevel | null,
+      categoryId: raw.categoryId,
+      price: raw.price,
+      isFree: raw.isFree,
+      status: raw.status as CourseStatus,
+      feedback: raw.feedback,
+      slug: raw.slug,
       instructor: {
-        id: doc.instructor.id,
-        name: doc.instructor.name,
+        id: raw.instructor.id,
+        name: raw.instructor.name,
       },
-      averageRating: doc.averageRating,
-      ratingCount: doc.ratingCount,
-      enrollmentCount: doc.enrollmentCount,
-      createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
-      publishedAt: doc.publishedAt,
+      averageRating: raw.averageRating,
+      ratingCount: raw.ratingCount,
+      enrollmentCount: raw.enrollmentCount,
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+      publishedAt: raw.publishedAt,
     });
   }
-
-  static toDomainEntities(docs: MongooseCourse[]): Course[] {
-    return docs.map((doc) => this.toDomainEntity(doc));
-  }
-
-  static toMongooseEntity(domain: Course): Partial<MongooseCourse> {
+  toPersistence(raw: Course): Partial<MongooseCourse> {
     return {
-      _id: domain.id,
-      title: domain.title,
-      description: domain.description,
-      thumbnail: domain.thumbnail,
-      level: domain.level,
-      categoryId: domain.categoryId,
-      price: domain.price,
-      isFree: domain.isFree,
-      slug: domain.slug,
-      status: domain.status,
-      feedback: domain.feedback,
+      _id: raw.id,
+      title: raw.title,
+      description: raw.description,
+      thumbnail: raw.thumbnail,
+      level: raw.level,
+      categoryId: raw.categoryId,
+      price: raw.price,
+      isFree: raw.isFree,
+      slug: raw.slug,
+      status: raw.status,
+      feedback: raw.feedback,
       instructor: {
-        id: domain.instructor.id,
-        name: domain.instructor.name,
+        id: raw.instructor.id,
+        name: raw.instructor.name,
       },
-      averageRating: domain.averageRating,
-      ratingCount: domain.ratingCount,
-      enrollmentCount: domain.enrollmentCount,
-      createdAt: domain.createdAt,
-      updatedAt: domain.updatedAt,
-      publishedAt: domain.publishedAt,
+      averageRating: raw.averageRating,
+      ratingCount: raw.ratingCount,
+      enrollmentCount: raw.enrollmentCount,
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+      publishedAt: raw.publishedAt,
     };
+  }
+  toDomainEntities(raw: MongooseCourse[]): Course[] {
+    return raw.map((raw) => this.toDomain(raw));
   }
 }

@@ -9,9 +9,9 @@ import type { LectureRepositoryPort } from '@core/application/lecture/port/persi
 import type { AssetRepositoryPort } from '@core/application/asset/port/persistence/AssetRepositoryPort';
 import type { UserServiceGatewayPort } from '@core/application/course/port/gateway/UserServiceGatewayPort';
 import { Course } from '@core/domain/course/entity/Course';
-import { NotFoundException } from '@core/common/exception/NotFoundException';
-import { ForbiddenException } from '@core/common/exception/ForbiddenException';
-import { InvalidInputException } from '@core/common/exception/InvalidInputException';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
+import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import { MediaStatus } from '@core/domain/asset/enum/MediaStatus';
 import type { SubmitCourseForReviewUseCase } from '@core/application/course/usecase/SubmitCourseForReviewUseCase';

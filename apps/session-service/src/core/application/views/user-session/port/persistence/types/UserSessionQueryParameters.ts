@@ -1,5 +1,5 @@
-import type { QueryParameters } from '@core/common/port/persistence/type/QueryParameters';
-import type { SessionStatus } from '@core/domain/session/enum/SessionStatus';
+import type { PaginationQueryParams as QueryParameters } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
+import type { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 
 export interface UserSessionQueryParameters extends QueryParameters {
   status?: SessionStatus;

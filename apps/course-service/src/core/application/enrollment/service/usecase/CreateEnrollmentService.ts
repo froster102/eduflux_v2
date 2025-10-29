@@ -5,7 +5,7 @@ import { UserNotFoundException } from '@core/application/enrollment/exception/Us
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
 import type { CreateEnrollmentPort } from '@core/application/enrollment/port/usecase/CreateEnrollmentPort';
 import type { CreateEnrollmentUseCaseResult } from '@core/application/enrollment/port/usecase/type/CreateEnrollmentUseCaseResult';
-import { CoreAssert } from '@core/common/util/assert/CoreAssert';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { v4 as uuidV4 } from 'uuid';
 import { inject } from 'inversify';
 import { Enrollment } from '@core/domain/enrollment/entity/Enrollment';

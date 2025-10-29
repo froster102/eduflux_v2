@@ -1,15 +1,18 @@
 import 'reflect-metadata';
 import { HttpServer } from '@api/http/HttpServer';
-import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
 import { container } from '@di/RootModule';
 import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/kafka/KafkaEventBusProducerAdapter';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import { MongooseConnection } from '@eduflux-v2/shared/infrastructure/database/mongoose/MongooseConnection';
 
 async function bootstrap() {
   //database
-  await MongooseConnection.connect();
+  const mongooseConnection = container.get<MongooseConnection>(
+    InfrastructureDITokens.MongooseConnection,
+  );
+  await mongooseConnection.connect();
 
   //kafka producer
   const kafkaProducer = container.get<KafkaEventBusProducerAdapter>(
@@ -22,7 +25,6 @@ async function bootstrap() {
     InfrastructureDITokens.KafkaEventsConsumer,
   );
   await kafkaConsumer.run();
-
   //http
   const server = new HttpServer();
   server.start();

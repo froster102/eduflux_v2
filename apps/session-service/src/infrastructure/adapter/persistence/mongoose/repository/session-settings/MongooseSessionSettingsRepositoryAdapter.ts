@@ -5,7 +5,7 @@ import {
   SessionSettingsModel,
   type MongooseSessionSettings,
 } from '@infrastructure/adapter/persistence/mongoose/model/session-settings/MongooseSessionSettings';
-import { MongooseBaseRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { unmanaged } from 'inversify';
 import type { ClientSession } from 'mongoose';
 

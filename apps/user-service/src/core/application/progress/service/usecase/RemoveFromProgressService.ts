@@ -1,10 +1,9 @@
-import { Code } from '@core/common/errors/Code';
-import { Exception } from '@core/common/errors/Exception';
-import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
-import type { ProgressRepositoryPort } from '@core/application/progress/port/persistence/ProgressRepositoryPort';
-import type { RemoveFromProgressPort } from '@core/application/progress/port/usecase/RemoveFromProgressPort';
-import type { RemoveFromProgressUseCase } from '@core/application/progress/usecase/RemoveFromProgressUseCase';
-import { CoreAssert } from '@core/util/assert/CoreAssert';
+import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
+import { ProgressDITokens } from '@application/progress/di/ProgressDITokens';
+import type { ProgressRepositoryPort } from '@application/progress/port/persistence/ProgressRepositoryPort';
+import type { RemoveFromProgressPort } from '@application/progress/port/usecase/RemoveFromProgressPort';
+import type { RemoveFromProgressUseCase } from '@application/progress/usecase/RemoveFromProgressUseCase';
+import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
 
 export class RemoveFromProgressService implements RemoveFromProgressUseCase {
@@ -18,11 +17,11 @@ export class RemoveFromProgressService implements RemoveFromProgressUseCase {
 
     const progress = CoreAssert.notEmpty(
       await this.progressRepository.findByUserIdAndCourseId(userId, courseId),
-      Exception.new({ code: Code.ENTITY_NOT_FOUND_ERROR }),
+      new NotFoundException(),
     );
 
     progress.removeLecture(lectureId);
 
-    await this.progressRepository.update(progress.getId(), progress);
+    await this.progressRepository.update(progress.id, progress);
   }
 }

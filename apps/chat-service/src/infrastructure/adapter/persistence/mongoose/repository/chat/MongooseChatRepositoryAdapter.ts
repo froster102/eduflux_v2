@@ -1,18 +1,18 @@
 import type { ChatRepositoryPort } from '@core/application/chat/port/persistence/ChatRepositoryPort';
 import type { ChatQueryResult } from '@core/application/chat/port/persistence/type/ChatQueryResult';
-import type { Role } from '@core/common/enum/Role';
-import type { PaginationQueryParams } from '@core/common/port/persistence/type/QueryParameters';
+import type { Role } from '@eduflux-v2/shared/constants/Role';
 import type { Chat } from '@core/domain/chat/entity/Chat';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseChatMapper } from '@infrastructure/adapter/persistence/mongoose/model/chat/mapper/MongooseChatMapper';
 import {
   ChatModel,
   type MongooseChat,
 } from '@infrastructure/adapter/persistence/mongoose/model/chat/MongooseChat';
 import type { FilterQuery } from 'mongoose';
+import type { PaginationQueryParams } from '@eduflux-v2/shared/ports/persistence/types/PaginationQueryParameters';
 
 export class MongooseChatRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseChat, Chat>
+  extends MongooseBaseRepositoryAdapter<Chat, MongooseChat>
   implements ChatRepositoryPort
 {
   constructor() {

@@ -2,7 +2,7 @@ import type { MessageRepositoryPort } from '@core/application/message/port/persi
 import type { MessageQueryParameters } from '@core/application/message/port/persistence/type/MessageQueryParameters';
 import type { MessageQueryResult } from '@core/application/message/port/persistence/type/MessageQueryResult';
 import { Message } from '@core/domain/message/entity/Message';
-import { MongooseBaseRepositoryAdpater } from '@infrastructure/adapter/persistence/mongoose/base/MongooseBaseRepositoryAdapter';
+import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import { MongooseMessageMapper } from '@infrastructure/adapter/persistence/mongoose/model/message/mapper/MongooseMessageMapper';
 import {
   MessageModel,
@@ -11,7 +11,7 @@ import {
 import type { FilterQuery } from 'mongoose';
 
 export class MongooseMessageRepositoryAdapter
-  extends MongooseBaseRepositoryAdpater<MongooseMessage, Message>
+  extends MongooseBaseRepositoryAdapter<Message, MongooseMessage>
   implements MessageRepositoryPort
 {
   constructor() {

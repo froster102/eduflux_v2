@@ -1,12 +1,12 @@
 import { Server, ServerCredentials } from '@grpc/grpc-js';
-import { UserServiceService } from 'src/api/grpc/generated/user';
-import { createServerLoggingInterceptor } from 'src/api/grpc/interceptors/createServerLoggingInterceptor';
-import type { LoggerPort } from '@core/common/port/LoggerPort';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { GrpcServerConfig } from '@infrastructure/config/GrpcServerConfig';
-import { CoreDITokens } from '@core/common/di/CoreDITokens';
+import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { GrpcUserServiceController } from 'src/api/grpc/controller/GrpcUserServiceController';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { container } from '@di/RootModule';
+import { createServerLoggingInterceptor } from '@eduflux-v2/shared/adapters/grpc/interceptors/serverLoggingInterceptor';
+import { UserServiceService } from '@eduflux-v2/shared/adapters/grpc/generated/user';
 
 export class GrpcServer {
   private readonly port = GrpcServerConfig.PORT;

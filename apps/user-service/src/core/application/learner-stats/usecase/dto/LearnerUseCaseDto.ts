@@ -9,7 +9,7 @@ export class LearnerUseCaseDto {
   public readonly updatedAt: Date;
 
   private constructor(stats: LearnerStats) {
-    this.id = stats.getId();
+    this.id = stats.id;
     this.completedCourses = stats.getCompletedCourses();
     this.completedSessions = stats.getCompletedSessions();
     this.enrolledCourses = stats.getEnrolledCourses();

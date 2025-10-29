@@ -1,5 +1,5 @@
+import { logger } from '@/shared/utlis/logger';
 import httpStatus from 'http-status';
-import { Logger } from '../utlis/logger';
 
 export enum AppErrorCode {
   INVALID_INPUT = 'INVALID_INPUT',
@@ -25,9 +25,9 @@ export const getHttpErrorCode = (code: AppErrorCode | string): number => {
     }
   }
 
-  const logger = new Logger('ERROR_HANDLER');
+  const errorLogger = logger.fromContext('ERROR_HANDLER');
 
-  logger.warn(
+  errorLogger.warn(
     `[ERROR_HANDLER] Unknown application error code '${code}'. Defaulting to 500.`,
   );
   return httpStatus.INTERNAL_SERVER_ERROR;
