@@ -2,14 +2,13 @@ import { errorHandler } from '@api/http/middlewares/errorHandlerMiddleware';
 import { httpLoggerMiddleware } from '@api/http/middlewares/httpLoggerMiddleware';
 import { SessionSettingsDITokens } from '@core/application/session-settings/di/SessionSettingsDITokens';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import { SESSION_SERVICE } from '@shared/constants/services';
 import Elysia from 'elysia';
 import type { SessionController } from '@api/http/controller/SessionController';
 import { SessionSettingsController } from '@api/http/controller/SessionSettingsController';
-import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { correlationIdSetupMiddleware } from '@api/http/middlewares/correlationIdMiddleware';
 
 export class HttpServer {
@@ -19,11 +18,11 @@ export class HttpServer {
   private readonly scheduleController: SessionController;
   private readonly sessionSettingsController: SessionSettingsController;
 
-  constructor() {
+  constructor(port: number) {
     this.app = new Elysia();
-    this.port = HttpServerConfig.PORT;
+    this.port = port;
     this.logger = container
-      .get<LoggerPort>(CoreDITokens.Logger)
+      .get<LoggerPort>(SharedCoreDITokens.Logger)
       .fromContext('HTTP_SERVER');
     this.scheduleController = container.get<SessionController>(
       SessionDITokens.SessionController,

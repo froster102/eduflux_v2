@@ -3,7 +3,7 @@ import type { SessionRepositoryPort } from '@core/application/session/port/persi
 import type { HandleExpiredPendingPaymentsUseCase } from '@core/application/session/usecase/HandleExpiredPendingPaymentsUseCase';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import type { Session } from '@core/domain/session/entity/Session';
@@ -15,12 +15,12 @@ export class HandleExpiredPendingPaymentsService
   implements HandleExpiredPendingPaymentsUseCase
 {
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
     @inject(SessionDITokens.SessionRepository)
     private readonly sessionRepository: SessionRepositoryPort,
     @inject(SlotDITokens.SlotRepository)
     private readonly slotRepository: SlotRepositoryPort,
-    @inject(CoreDITokens.UnitOfWork)
+    @inject(SharedCoreDITokens.UnitOfWork)
     private readonly uow: UnitOfWork,
   ) {
     this.logger = logger.fromContext(HandleExpiredPendingPaymentsService.name);

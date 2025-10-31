@@ -7,19 +7,20 @@ import {
   type VerifyChatAccessRequest,
 } from '@shared/adapters/grpc/generated/course';
 import { createClientLoggingInterceptor } from '@shared/adapters/grpc/interceptors/clientLoggingInterceptor';
-import { CoreDITokens } from '@shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@shared/di/SharedCoreDITokens';
 import { inject } from 'inversify';
 import type { Course } from '@shared/types/course';
 import type { Enrollment } from '@shared/types/enrollment';
 import type { GrpcCourseServiceConfig } from '@shared/config/GrpcCourseServiceConfig';
+import { SharedConfigDITokens } from '@shared/di/SharedConfigDITokens';
 
 export class GrpcCourseServiceAdapter implements CourseServicePort {
   private client: CourseServiceClient;
   private address: string;
 
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
-    @inject(CoreDITokens.GrpcCourseServiceConfig)
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedConfigDITokens.GrpcCourseServiceConfig)
     private readonly config: GrpcCourseServiceConfig,
   ) {
     this.logger = logger.fromContext(GrpcCourseServiceAdapter.name);

@@ -1,9 +1,15 @@
-import type { CourseEvents } from '@shared/events/course/enum/CourseEvents';
-import type { Event } from '@shared/events/Event';
+import { Event } from '@shared/events/Event';
+import { CourseEvents } from '@shared/events/course/enum/CourseEvents';
 
-export interface CoursePublishedEvent extends Event {
+export interface CoursePublishedEventPayload {
   readonly id: string;
-  readonly type: CourseEvents.COURSE_PUBLISHED;
   readonly instructorId: string;
-  readonly occurredAt: string;
+}
+
+export class CoursePublishedEvent extends Event<CoursePublishedEventPayload> {
+  static readonly EVENT_NAME = CourseEvents.COURSE_PUBLISHED;
+
+  constructor(id: string, payload: CoursePublishedEventPayload) {
+    super({ id, name: CourseEvents.COURSE_PUBLISHED }, payload);
+  }
 }

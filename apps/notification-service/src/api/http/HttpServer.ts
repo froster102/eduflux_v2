@@ -3,23 +3,22 @@ import { correlationIdSetupMiddleware } from '@api/http/middlewares/correlationI
 import { errorHandler } from '@api/http/middlewares/errorHandlerMiddleware';
 import { httpLoggerMiddleware } from '@api/http/middlewares/httpLoggerMiddleware';
 import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
-import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import Elysia from 'elysia';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 export class HttpServer {
   private app: Elysia;
   private port: number;
   private logger = container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext(HttpServer.name);
   private notificationController: NotificationController;
 
-  constructor() {
+  constructor(port: number) {
     this.app = new Elysia();
-    this.port = HttpServerConfig.PORT;
+    this.port = port;
     this.notificationController = container.get<NotificationController>(
       NotificationDITokens.NotificationController,
     );

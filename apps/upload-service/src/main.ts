@@ -6,7 +6,7 @@ import { logger } from '@/shared/utlis/logger';
 import { uploadSchema } from '@/validators/upload.schema';
 import { Elysia } from 'elysia';
 
-const app = new Elysia().get('/api/uploads/health', () => ({ ok: true }));
+const app = new Elysia().get('/health', () => ({ ok: true }));
 
 app.use(httpLoggerMiddleware);
 app.use(errorHandler);

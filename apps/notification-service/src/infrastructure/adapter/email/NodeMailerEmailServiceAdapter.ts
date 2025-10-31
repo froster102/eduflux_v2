@@ -1,6 +1,6 @@
 import { inject } from 'inversify';
 import nodemailer from 'nodemailer';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { EmailServicePort } from '@core/application/notification/port/gateway/EmailServicePort';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { NodeMailerConfig } from '@shared/config/NodeMailerConfig';
@@ -13,7 +13,7 @@ export class NodeMailerEmailServiceAdapter implements EmailServicePort {
   private SMTP_PASS = NodeMailerConfig.SMTP_PASS;
 
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
   ) {
     this.transporter = nodemailer.createTransport({
       host: this.SMTP_HOST,

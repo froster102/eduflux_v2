@@ -1,7 +1,7 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { CompleteSessionOnFinishUseCase } from '@core/application/session/usecase/CompleteSessionOnFinishUseCase';
 import type { StartSessionOnJoinUseCase } from '@core/application/session/usecase/StartSessionOnJoinUseCase';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { inject } from 'inversify';
 import type { WebhookEvent } from 'livekit-server-sdk';
@@ -13,7 +13,7 @@ export class LiveKitWebhookHandler {
     private readonly startSessionOnJoinUseCase: StartSessionOnJoinUseCase,
     @inject(SessionDITokens.CompleteSessionOnFinishUseCase)
     private readonly completeSessionOnFinishUseCase: CompleteSessionOnFinishUseCase,
-    @inject(CoreDITokens.Logger)
+    @inject(SharedCoreDITokens.Logger)
     logger: LoggerPort,
   ) {
     this.logger = logger.fromContext(LiveKitWebhookHandler.name);

@@ -7,18 +7,18 @@ export class InstructorViewDITokens {
     'GetInstructorViewUseCase',
   );
 
-  //Hanlders
-  static readonly InstructorStatsUpdatedEventHandler: unique symbol = Symbol(
-    'InstructorStatsUpdatedEventHandler',
+  //Subscribers
+  static readonly InstructorStatsUpdatedEventSubscriber: unique symbol = Symbol(
+    'InstructorStatsUpdatedEventSubscriber',
   );
-  static readonly SessionSettingsUpdatedEventHandler: unique symbol = Symbol(
-    'SessionSettingsUpdatedEventHandler',
+  static readonly SessionSettingsUpdatedEventSubscriber: unique symbol = Symbol(
+    'SessionSettingsUpdatedEventSubscriber',
   );
-  static readonly InstructorCreatedEventHandler: unique symbol = Symbol(
-    'InstructorCreatedEventHandler',
+  static readonly InstructorCreatedEventSubscriber: unique symbol = Symbol(
+    'InstructorCreatedEventSubscriber',
   );
-  static readonly UserUpdatedEventHandler: unique symbol = Symbol(
-    'UserUpdatedEventHandler',
+  static readonly UserUpdatedEventSubscriber: unique symbol = Symbol(
+    'UserUpdatedEventSubscriber',
   );
 
   //Repository

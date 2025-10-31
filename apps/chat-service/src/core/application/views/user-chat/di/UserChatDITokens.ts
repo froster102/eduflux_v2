@@ -4,12 +4,12 @@ export class UserChatDITokens {
     'GetUserChatsUserCase',
   );
 
-  //Handler
-  static readonly UserChatCreatedEventHandler: unique symbol = Symbol(
-    'UserChatCreatedEventHandler',
+  //Subscribers
+  static readonly UserChatCreatedEventSubscriber: unique symbol = Symbol(
+    'UserChatCreatedEventSubscriber',
   );
-  static readonly UserUpdatedEventHandler: unique symbol = Symbol(
-    'UserUpdatedEventHandler',
+  static readonly UserUpdatedEventSubscriber: unique symbol = Symbol(
+    'UserUpdatedEventSubscriber',
   );
 
   //Repository

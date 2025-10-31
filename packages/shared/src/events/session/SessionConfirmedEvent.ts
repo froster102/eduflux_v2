@@ -1,10 +1,8 @@
 import type { SessionStatus } from '@shared/constants/SessionStatus';
-import type { Event } from '@shared/events/Event';
-import type { SessionEvents } from '@shared/events/session/enum/SessionEvents';
+import { Event } from '@shared/events/Event';
+import { SessionEvents } from '@shared/events/session/enum/SessionEvents';
 
-export interface SessionConfirmedEvent extends Event {
-  readonly type: SessionEvents.SESSION_CONFIRMED;
-  readonly id: string;
+export interface SessionConfirmedEventPayload {
   readonly sessionId: string;
   readonly learnerId: string;
   readonly instructorId: string;
@@ -13,4 +11,12 @@ export interface SessionConfirmedEvent extends Event {
   readonly endTime: string;
   readonly path: string;
   readonly joinLink: string;
+}
+
+export class SessionConfirmedEvent extends Event<SessionConfirmedEventPayload> {
+  static readonly EVENT_NAME: string = SessionEvents.SESSION_CONFIRMED;
+
+  constructor(id: string, payload: SessionConfirmedEventPayload) {
+    super({ id, name: SessionEvents.SESSION_CONFIRMED }, payload);
+  }
 }

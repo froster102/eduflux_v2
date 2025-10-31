@@ -4,13 +4,13 @@ import httpStatus from 'http-status';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 import { getHttpErrorCode } from '@shared/errors/error-code';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
 
 const logger = container
-  .get<LoggerPort>(CoreDITokens.Logger)
+  .get<LoggerPort>(SharedCoreDITokens.Logger)
   .fromContext('HTTP');
 
 export const errorHandler = new Elysia()

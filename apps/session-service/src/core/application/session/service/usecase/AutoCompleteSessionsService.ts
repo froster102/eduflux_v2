@@ -4,11 +4,11 @@ import type { SessionRepositoryPort } from '@core/application/session/port/persi
 import type { MeetingServicePort } from '@core/application/session/port/gateway/MeetingServicePort';
 import type { AutoCompleteSessionsUseCase } from '@core/application/session/usecase/AutoCompleteSessionsUseCase';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
-import type { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
+import { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
 import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
 
 export class AutoCompleteSessionsService
@@ -20,8 +20,9 @@ export class AutoCompleteSessionsService
     private readonly sessionRepository: SessionRepositoryPort,
     @inject(SessionDITokens.MeetingService)
     private readonly meetingService: MeetingServicePort,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
-    @inject(CoreDITokens.Logger)
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
+    @inject(SharedCoreDITokens.Logger)
     logger: LoggerPort,
   ) {
     this.logger = logger.fromContext(AutoCompleteSessionsService.name);
@@ -55,9 +56,7 @@ export class AutoCompleteSessionsService
         this.meetingService.deleteRoom(session.id),
       );
 
-      const sessionUpdatedEvent: SessionCompletedEvent = {
-        id: session.id,
-        type: SessionEvents.SESSION_COMPLETED,
+      const sessionUpdatedEvent = new SessionCompletedEvent(session.id, {
         sessionId: session.id,
         learnerId: session.learnerId,
         instructorId: session.instructorId,
@@ -66,9 +65,8 @@ export class AutoCompleteSessionsService
         endTime: session.endTime.toISOString(),
         createdAt: session.createdAt.toISOString(),
         updatedAt: session.updatedAt.toISOString(),
-        timestamp: new Date().toISOString(),
-      };
-      await this.eventBus.sendEvent(sessionUpdatedEvent);
+      });
+      await this.messageBroker.publish(sessionUpdatedEvent);
 
       if (error) {
         this.logger.error(

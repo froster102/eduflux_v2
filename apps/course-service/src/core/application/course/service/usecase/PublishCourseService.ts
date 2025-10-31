@@ -9,18 +9,16 @@ import type { PublishCoursePort } from '@core/application/course/port/usecase/Pu
 import type { PublishCourseUseCase } from '@core/application/course/usecase/PublishCourseUseCase';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { LectureRepositoryPort } from '@core/application/lecture/port/persistence/LectureRepositoryPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
-import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
 import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
 import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
 import { MediaStatus } from '@core/domain/asset/enum/MediaStatus';
 import type { Course } from '@core/domain/course/entity/Course';
-import type { CoursePublishedEvent } from '@eduflux-v2/shared/events/course/CoursePublishedEvent';
+import { CoursePublishedEvent } from '@eduflux-v2/shared/events/course/CoursePublishedEvent';
 import { contentLimits } from '@shared/config/content-limits.config';
 import { inject } from 'inversify';
-
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 const COURSE_MIN_LECTURES_REQUIRED = contentLimits.COURSE_MIN_LECTURES_REQUIRED;
 
 export class PublishCourseService implements PublishCourseUseCase {
@@ -35,7 +33,8 @@ export class PublishCourseService implements PublishCourseUseCase {
     private readonly assetRepository: AssetRepositoryPort,
     @inject(CourseDITokens.UserServiceGateway)
     private readonly userServiceGateway: UserServiceGatewayPort,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: PublishCoursePort): Promise<Course> {
@@ -138,14 +137,11 @@ export class PublishCourseService implements PublishCourseUseCase {
     await this.courseRepository.update(courseId, course);
 
     //send event to update the instructor views
-    const coursePublishedEvent: CoursePublishedEvent = {
+    const coursePublishedEvent = new CoursePublishedEvent(course.id, {
       id: course.id,
-      type: CourseEvents.COURSE_PUBLISHED,
       instructorId: course.instructor.id,
-      occurredAt: new Date().toISOString(),
-      timestamp: new Date().toISOString(),
-    };
-    await this.eventBus.sendEvent(coursePublishedEvent);
+    });
+    await this.messageBroker.publish(coursePublishedEvent);
 
     return course;
   }

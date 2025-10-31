@@ -1,7 +1,6 @@
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { GrpcServerConfig } from '@infrastructure/config/GrpcServerConfig';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { GrpcUserServiceController } from 'src/api/grpc/controller/GrpcUserServiceController';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { container } from '@di/RootModule';
@@ -9,14 +8,15 @@ import { createServerLoggingInterceptor } from '@eduflux-v2/shared/adapters/grpc
 import { UserServiceService } from '@eduflux-v2/shared/adapters/grpc/generated/user';
 
 export class GrpcServer {
-  private readonly port = GrpcServerConfig.PORT;
+  private readonly port: number;
 
   private server: Server;
   private logger: LoggerPort;
 
-  constructor() {
+  constructor(port: number) {
+    this.port = port;
     this.logger = container
-      .get<LoggerPort>(CoreDITokens.Logger)
+      .get<LoggerPort>(SharedCoreDITokens.Logger)
       .fromContext('GRPC_SERVER');
     this.server = new Server({
       interceptors: [createServerLoggingInterceptor(this.logger)],

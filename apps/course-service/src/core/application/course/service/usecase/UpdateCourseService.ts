@@ -7,17 +7,16 @@ import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundExcepti
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import type { Course } from '@core/domain/course/entity/Course';
 import { inject } from 'inversify';
-import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
-import type { CourseUpdatedEvent } from '@eduflux-v2/shared/events/course/CourseUpdatedEvent';
+import { CourseUpdatedEvent } from '@eduflux-v2/shared/events/course/CourseUpdatedEvent';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class UpdateCourseService implements UpdateCourseUseCase {
   constructor(
     @inject(CourseDITokens.CourseRepository)
     private readonly courseRepository: CourseRepositoryPort,
-    @inject(CoreDITokens.EventBus)
-    private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: UpdateCoursePort): Promise<Course> {
@@ -38,22 +37,19 @@ export class UpdateCourseService implements UpdateCourseUseCase {
 
     await this.courseRepository.update(course.id, updates);
 
-    await this.eventBus.sendEvent<CourseUpdatedEvent>({
-      type: CourseEvents.COURSE_UPDATED,
+    const courseUpdatedEvent = new CourseUpdatedEvent(course.id, {
       id: course.id,
       instructorId: course.instructor.id,
-      courseMetadata: {
-        title: course.title,
-        thumbnail: course.thumbnail,
-        level: course.level,
-        status: course.status,
-        enrollmentCount: course.enrollmentCount,
-        averageRating: course.averageRating,
-        description: course.description,
-        id: course.id,
-      },
-      occurredAt: new Date().toISOString(),
+      courseId: course.id,
+      title: course.title,
+      thumbnail: course.thumbnail,
+      level: course.level,
+      status: course.status,
+      enrollmentCount: course.enrollmentCount,
+      averageRating: course.averageRating,
+      description: course.description,
     });
+    await this.messageBroker.publish(courseUpdatedEvent);
     return course;
   }
 }

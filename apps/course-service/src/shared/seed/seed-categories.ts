@@ -1,9 +1,9 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import { CategoryModel } from '@infrastructure/adapter/persistence/mongoose/model/category/MongooseCategory';
-import { DatabaseConfig } from '@shared/config/DatabaseConfig';
+import { MongooseConnectionConfig } from '@shared/config/MongooseConnectionConfig';
 import mongoose from 'mongoose';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 const categories = [
   {
@@ -75,10 +75,10 @@ const categories = [
 
 async function seedCategories() {
   const logger = container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext(seedCategories.name);
   try {
-    await mongoose.connect(DatabaseConfig.MONGO_URI);
+    await mongoose.connect(MongooseConnectionConfig.MONGO_URI);
     logger.info('Connected to database for seeding');
     await CategoryModel.insertMany(categories);
     logger.info('Categories seeded sucessfully.');

@@ -1,5 +1,5 @@
 import { inject } from 'inversify';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { JoinSessionUseCase } from '@core/application/session/usecase/JoinSessionUseCase';
 import type { JoinSessionUseCaseResult } from '@core/application/session/usecase/types/JoinSessionUseCaseResult';
@@ -17,7 +17,7 @@ export class JoinSessionService implements JoinSessionUseCase {
   constructor(
     @inject(SessionDITokens.SessionRepository)
     private readonly sessionRepository: SessionRepositoryPort,
-    @inject(CoreDITokens.UserService)
+    @inject(SharedCoreDITokens.UserService)
     private readonly userService: UserServicePort,
     @inject(SessionDITokens.MeetingService)
     private readonly meetingService: MeetingServicePort,

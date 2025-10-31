@@ -1,13 +1,13 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { Role } from '@eduflux-v2/shared/constants/Role';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/src/ports/message/MessageBrokerPort';
 import { InstructorDITokens } from '@application/instructor/di/InstructorDITokens';
 import { Instructor } from '@domain/instructor/entity/Instructor';
 import { InstructorEvents } from '@domain/instructor/events/InstructorEvents';
 import type { InstructorRepositoryPort } from '@application/instructor/port/persistence/InstructorRepositoryPort';
 import { UserDITokens } from '@application/user/di/UserDITokens';
-import type { InstructorCreatedEvent } from '@domain/user/events/InstructorCreatedEvent';
+import { InstructorCreatedEvent } from '@application/views/instructor-view/events/InstructorCreatedEvent';
 import { UserEvents } from '@domain/user/events/UserEvents';
 import type { UserRepositoryPort } from '@application/user/port/persistence/UserRepositoryPort';
 import type { UpdateUserPort } from '@application/user/port/usecase/UpdateUserPort';
@@ -15,7 +15,7 @@ import { UserUseCaseDto } from '@application/user/usecase/dto/UserUseCaseDto';
 import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { inject } from 'inversify';
-import type { UserUpdatedEvent } from '@eduflux-v2/shared/events/user/UserUpdatedEvents';
+import { UserUpdatedEvent } from '@eduflux-v2/shared/events/user/UserUpdatedEvents';
 
 export class UpdateUserService implements UpdateUserUseCase {
   constructor(
@@ -23,8 +23,8 @@ export class UpdateUserService implements UpdateUserUseCase {
     private readonly userRepository: UserRepositoryPort,
     @inject(InstructorDITokens.InstructorRepository)
     private readonly instructorRepository: InstructorRepositoryPort,
-    @inject(CoreDITokens.EventBus)
-    private readonly eventBusPort: EventBusPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: UpdateUserPort): Promise<UserUseCaseDto> {
@@ -47,9 +47,7 @@ export class UpdateUserService implements UpdateUserUseCase {
       });
       await this.instructorRepository.save(newInstructor);
 
-      const instructorCreatedEvent: InstructorCreatedEvent = {
-        id: newInstructor.id,
-        type: InstructorEvents.INSTRUCTOR_CREATED,
+      const instructorCreatedEvent = new InstructorCreatedEvent(newInstructor.id, {
         profile: {
           name: user.getFullName(),
           bio: user.getBio(),
@@ -58,10 +56,9 @@ export class UpdateUserService implements UpdateUserUseCase {
         sessionsConducted: 0,
         totalCourses: 0,
         totalLearners: 0,
-        timestamp: new Date().toISOString(),
-      };
+      });
 
-      await this.eventBusPort.sendEvent(instructorCreatedEvent);
+      await this.messageBroker.publish(instructorCreatedEvent);
     }
 
     user.update(payload);
@@ -71,16 +68,13 @@ export class UpdateUserService implements UpdateUserUseCase {
     const updatedUser = await this.userRepository.update(payload.id, user);
 
     if (updatedUser) {
-      const userUpdatedEvent: UserUpdatedEvent = {
+      const userUpdatedEvent = new UserUpdatedEvent(user.id, {
         id: user.id,
-        type: UserEvents.USER_UPDATED,
         image: user.getImage(),
         name: user.getFullName(),
         bio: user.getBio(),
-        timestamp: new Date().toISOString(),
-        occuredAt: new Date().toISOString(),
-      };
-      await this.eventBusPort.sendEvent(userUpdatedEvent);
+      });
+      await this.messageBroker.publish(userUpdatedEvent);
     }
 
     return UserUseCaseDto.fromEntity(user);

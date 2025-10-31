@@ -1,4 +1,4 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
@@ -13,7 +13,7 @@ import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
 
 export const errorHandler = (error: Error | HTTPResponseError, c: Context) => {
   const logger = container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext('HttpErrorHandler');
 
   logger.error(error?.message, error as Record<string, any>);

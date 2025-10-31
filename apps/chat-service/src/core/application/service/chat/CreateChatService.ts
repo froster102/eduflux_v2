@@ -9,9 +9,9 @@ import type { ChatRepositoryPort } from '@core/application/chat/port/persistence
 import type { CreateChatPort } from '@core/application/chat/port/usecase/CreateChatPort';
 import type { CreateChatUseCase } from '@core/application/chat/usecase/CreateChatUseCase';
 import { ChatUseCaseDto } from '@core/application/chat/usecase/dto/ChatUseCaseDto';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { Role } from '@eduflux-v2/shared/constants/Role';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 import { Chat } from '@core/domain/chat/entity/Chat';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
@@ -21,13 +21,14 @@ import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 
 export class CreateChatService implements CreateChatUseCase {
   constructor(
-    @inject(CoreDITokens.CourseService)
+    @inject(SharedCoreDITokens.CourseService)
     private readonly courseService: CourseServicePort,
-    @inject(CoreDITokens.UserService)
+    @inject(SharedCoreDITokens.UserService)
     private readonly userService: UserServicePort,
     @inject(ChatDITokens.ChatRepository)
     private readonly chatRepository: ChatRepositoryPort,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: CreateChatPort): Promise<ChatUseCaseDto> {
@@ -78,15 +79,15 @@ export class CreateChatService implements CreateChatUseCase {
     const chatUseCaseDto = ChatUseCaseDto.fromEntity(chat);
 
     const userChatCreatedEvent: UserChatCreatedEvent = {
-      type: ChatEvents.USER_CHAT_CREATED,
+      name: ChatEvents.USER_CHAT_CREATED,
       ...chatUseCaseDto,
       createdAt: chatUseCaseDto.createdAt.toISOString(),
       lastMessageAt: chatUseCaseDto.lastMessageAt.toISOString(),
       updatedAt: chatUseCaseDto.updatedAt.toISOString(),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
     };
 
-    await this.eventBus.sendEvent(userChatCreatedEvent);
+    await this.messageBroker.publish(userChatCreatedEvent);
 
     return chatUseCaseDto;
   }

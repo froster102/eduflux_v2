@@ -8,17 +8,18 @@ import {
   UserResponse,
   UserServiceClient,
 } from '@shared/adapters/grpc/generated/user';
-import { CoreDITokens } from '@shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@shared/di/SharedCoreDITokens';
 import { inject } from 'inversify';
 import type { GrpcUserServiceConfig } from '@shared/config/GrpcUserServiceConfig';
+import { SharedConfigDITokens } from '@shared/di/SharedConfigDITokens';
 
 export class GrpcUserServiceAdapter implements UserServicePort {
   private client: UserServiceClient;
   private address: string;
 
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
-    @inject(CoreDITokens.GrpcUserServiceConfig)
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedConfigDITokens.GrpcUserServiceConfig)
     private readonly config: GrpcUserServiceConfig,
   ) {
     this.logger = logger.fromContext(GrpcUserServiceAdapter.name);

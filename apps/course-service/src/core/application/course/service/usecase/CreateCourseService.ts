@@ -11,10 +11,9 @@ import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundExcepti
 import { inject } from 'inversify';
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { slugify } from '@shared/utils/slugify';
-import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
-import type { CourseCreatedEvent } from '@eduflux-v2/shared/events/course/CourseCreatedEvent';
+import { CourseCreatedEvent } from '@eduflux-v2/shared/events/course/CourseCreatedEvent';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class CreateCourseService implements CreateCourseUseCase {
   constructor(
@@ -24,8 +23,8 @@ export class CreateCourseService implements CreateCourseUseCase {
     private readonly courseRepository: CourseRepositoryPort,
     @inject(CourseDITokens.CategoryRepository)
     private readonly categoryRepository: CategoryRepositoryPort,
-    @inject(CoreDITokens.EventBus)
-    private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: CreateCoursePort): Promise<Course> {
@@ -80,21 +79,17 @@ export class CreateCourseService implements CreateCourseUseCase {
     });
 
     const savedCourse = await this.courseRepository.save(course);
-    await this.eventBus.sendEvent<CourseCreatedEvent>({
-      type: CourseEvents.COURSE_CREATED,
+    const courseCreatedEvent = new CourseCreatedEvent(savedCourse.id, {
       instructorId: savedCourse.instructor.id,
-      courseMetadata: {
-        id: savedCourse.id,
-        title: savedCourse.title,
-        thumbnail: savedCourse.thumbnail,
-        level: savedCourse.level,
-        status: savedCourse.status,
-        enrollmentCount: savedCourse.enrollmentCount,
-        averageRating: savedCourse.averageRating,
-      },
-      timestamp: new Date().toISOString(),
       id: savedCourse.id,
+      title: savedCourse.title,
+      thumbnail: savedCourse.thumbnail,
+      level: savedCourse.level,
+      status: savedCourse.status,
+      enrollmentCount: savedCourse.enrollmentCount,
+      averageRating: savedCourse.averageRating,
     });
+    await this.messageBroker.publish(courseCreatedEvent);
     return savedCourse;
   }
 }

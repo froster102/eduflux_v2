@@ -1,19 +1,20 @@
 import 'reflect-metadata';
-import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
-import { startServer } from '@/http/server';
-import { UserEventsConsumer } from '@/messaging/kafka/consumers/UserEventsConsumer';
+import { AuthService } from '@/AuthService';
+import { logger } from '@/shared/utils/logger';
 
-async function boostrap(): Promise<void> {
-  startServer();
-
-  const userEventsConsumer = new UserEventsConsumer();
-  const { error: userEventsConsumerError } = await tryCatch(
-    userEventsConsumer.connect(),
-  );
-
-  if (userEventsConsumerError) {
+try {
+  new AuthService().start().catch((error: Error) => {
+    logger.error(`Error starting AuthService: ${error?.message}`);
     process.exit(1);
-  }
+  });
+} catch (error) {
+  handleError(error as Error);
 }
 
-void boostrap();
+function handleError(error: Error) {
+  logger.error(`Error starting AuthService: ${error?.message}`);
+  process.exit(1);
+}
+
+process.on('uncaughtException', handleError);
+process.on('unhandledRejection', handleError);

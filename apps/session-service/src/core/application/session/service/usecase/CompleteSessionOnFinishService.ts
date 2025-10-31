@@ -10,11 +10,10 @@ import type {
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
-import type { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
-import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class CompleteSessionOnFinishService
   implements CompleteSessionOnFinishUseCase
@@ -25,8 +24,9 @@ export class CompleteSessionOnFinishService
     private readonly sessionRepository: SessionRepositoryPort,
     @inject(SessionDITokens.MeetingService)
     private readonly meetingService: MeetingServicePort,
-    @inject(CoreDITokens.Logger) logger: LoggerPort,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.Logger) logger: LoggerPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {
     this.logger = logger.fromContext(CompleteSessionOnFinishService.name);
   }
@@ -45,9 +45,7 @@ export class CompleteSessionOnFinishService
       session.markAsCompleted();
       await this.sessionRepository.update(session.id, session);
 
-      const sessionCompletedEvent: SessionCompletedEvent = {
-        id: session.id,
-        type: SessionEvents.SESSION_COMPLETED,
+      const sessionCompletedEvent = new SessionCompletedEvent(session.id, {
         sessionId: session.id,
         learnerId: session.learnerId,
         instructorId: session.instructorId,
@@ -56,10 +54,9 @@ export class CompleteSessionOnFinishService
         endTime: session.endTime.toISOString(),
         createdAt: session.createdAt.toISOString(),
         updatedAt: session.updatedAt.toISOString(),
-        timestamp: new Date().toISOString(),
-      };
+      });
 
-      await this.eventBus.sendEvent(sessionCompletedEvent);
+      await this.messageBroker.publish(sessionCompletedEvent);
     } else {
       return;
     }

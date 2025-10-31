@@ -1,16 +1,16 @@
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { AutoCompleteSessionsUseCase } from '@core/application/session/usecase/AutoCompleteSessionsUseCase';
 import type { HandleExpiredPendingPaymentsUseCase } from '@core/application/session/usecase/HandleExpiredPendingPaymentsUseCase';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
 import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { inject } from 'inversify';
 import nodeCron from 'node-cron';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 export class CronServices implements ICronServices {
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
     @inject(SessionDITokens.HandleExpiredPendingPaymentsUseCase)
     private readonly handleExpiredPendingPaymentsUseCase: HandleExpiredPendingPaymentsUseCase,
     @inject(SessionDITokens.AutoCompleteSessionsUseCase)

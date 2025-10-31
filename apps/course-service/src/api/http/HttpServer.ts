@@ -1,10 +1,8 @@
 import { errorHandler } from '@api/http/middlewares/errorHandlerMiddleware';
 import { httpLoggerMiddleware } from '@api/http/middlewares/httpLoggerMiddleware';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import Elysia from 'elysia';
-import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { correlationIdSetupMiddleware } from '@api/http/middlewares/correlationIdMiddleware';
 import type { CourseController } from '@api/http/controller/CourseController';
 import { CourseDITokens } from '@core/application/course/di/CourseDITokens';
@@ -15,6 +13,7 @@ import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
 import type { EnrollmentController } from '@api/http/controller/EnrollmentController';
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 export class HttpServer {
   private app: Elysia;
@@ -25,11 +24,11 @@ export class HttpServer {
   private readonly lectureController: LectureController;
   private readonly enrollmentController: EnrollmentController;
 
-  constructor() {
+  constructor(port: number) {
     this.app = new Elysia();
-    this.port = HttpServerConfig.PORT;
+    this.port = port;
     this.logger = container
-      .get<LoggerPort>(CoreDITokens.Logger)
+      .get<LoggerPort>(SharedCoreDITokens.Logger)
       .fromContext('HTTP_SERVER');
     this.courseController = container.get<CourseController>(
       CourseDITokens.CourseController,

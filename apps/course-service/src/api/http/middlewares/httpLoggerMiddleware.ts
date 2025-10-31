@@ -1,11 +1,11 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import type { Elysia } from 'elysia';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 export const httpLoggerMiddleware = (app: Elysia) => {
   const logger = container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext('HTTP');
 
   const start = Date.now();

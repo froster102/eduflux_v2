@@ -2,12 +2,12 @@ import { status as grpcStatus } from '@grpc/grpc-js';
 import httpStatus from 'http-status';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { container } from '@di/RootModule';
 
 function getLogger() {
   return container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext('ERROR_CODE');
 }
 

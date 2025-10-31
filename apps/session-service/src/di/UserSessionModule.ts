@@ -1,11 +1,11 @@
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
-import type { ConfirmSessionEventHandler } from '@core/application/views/user-session/handler/ConfirmSessionHandler';
-import type { UserSessionUpdatedEventHandler } from '@core/application/views/user-session/handler/UserSessionUpdatedEventHandler';
-import type { UserUpdatedEventHandler } from '@core/application/views/user-session/handler/UserUpdatedEventHandler';
+import type { SessionConfirmedEventSubscriber } from '@core/application/views/user-session/subscriber/SessionConfirmedEventSubscriber';
+import type { UserSessionUpdatedEventSubscriber } from '@core/application/views/user-session/subscriber/UserSessionUpdatedEventSubscriber';
+import type { UserUpdatedEventSubscriber } from '@core/application/views/user-session/subscriber/UserUpdatedEventSubscriber';
 import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
-import { ConfirmSessionEventHandlerService } from '@core/application/views/user-session/service/handler/ConfirmSessionEventHandlerService';
-import { UserSessionUpdatedEventHandlerService } from '@core/application/views/user-session/service/handler/UserSessionUpdateEventHandlerService';
-import { UserUpdatedEventHandlerService } from '@core/application/views/user-session/service/handler/UserUpdatedEventHandlerService';
+import { SessionConfirmedEventSubscriberService } from '@core/application/views/user-session/service/subscriber/SessionConfirmedEventSubscriberService';
+import { UserSessionUpdatedEventSubscriberService } from '@core/application/views/user-session/service/subscriber/UserSessionUpdatedEventSubscriberService';
+import { UserUpdatedEventSubscriberService } from '@core/application/views/user-session/service/subscriber/UserUpdatedEventSubscriberService';
 import { GetUserSessionService } from '@core/application/views/user-session/service/usecase/GetUserSessionsService';
 import type { GetUserSessionsUseCase } from '@core/application/views/user-session/usecase/GetUserSessionsUseCase';
 import { MongooseUserSessionRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/user-session/MongooseUserSessionRepositoryAdapter';
@@ -18,22 +18,22 @@ export const UserSessionModule: ContainerModule = new ContainerModule(
       .bind<GetUserSessionsUseCase>(UserSessionDITokens.GetUserSessionsUseCase)
       .to(GetUserSessionService);
 
-    //Handlers
+    //Subscribers
     options
-      .bind<ConfirmSessionEventHandler>(
-        UserSessionDITokens.ConfirmSessionEventHandler,
+      .bind<SessionConfirmedEventSubscriber>(
+        UserSessionDITokens.SessionConfirmedEventSubscriber,
       )
-      .to(ConfirmSessionEventHandlerService);
+      .to(SessionConfirmedEventSubscriberService);
     options
-      .bind<UserSessionUpdatedEventHandler>(
-        UserSessionDITokens.UserSessionUpdatedEventHandler,
+      .bind<UserSessionUpdatedEventSubscriber>(
+        UserSessionDITokens.UserSessionUpdatedEventSubscriber,
       )
-      .to(UserSessionUpdatedEventHandlerService);
+      .to(UserSessionUpdatedEventSubscriberService);
     options
-      .bind<UserUpdatedEventHandler>(
-        UserSessionDITokens.UserUpdatedEventHandler,
+      .bind<UserUpdatedEventSubscriber>(
+        UserSessionDITokens.UserUpdatedEventSubscriber,
       )
-      .to(UserUpdatedEventHandlerService);
+      .to(UserUpdatedEventSubscriberService);
 
     //Repository
     options

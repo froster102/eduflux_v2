@@ -1,10 +1,9 @@
 import type { ChatController } from '@api/http/controller/ChatController';
 import { SocketIOServer } from '@api/websocket/io';
 import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
-import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { Hono } from 'hono';
 import type { Server as HTTPServer } from 'node:http';
 import { serve } from '@hono/node-server';
@@ -19,16 +18,16 @@ export class HttpServer {
   private app: Hono;
   private port: number;
   private logger = container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext('HTTP_SERVER');
   private chatController: ChatController;
 
-  constructor() {
+  constructor(port: number) {
     this.app = new Hono();
-    this.port = HttpServerConfig.PORT;
     this.chatController = container.get<ChatController>(
       ChatDITokens.ChatController,
     );
+    this.port = port;
   }
 
   private setupMiddlewares(): void {

@@ -1,4 +1,4 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import Elysia from 'elysia';
 import { ZodError } from 'zod/v4';
@@ -9,7 +9,7 @@ import { container } from '@di/RootModule';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 const logger = container
-  .get<LoggerPort>(CoreDITokens.Logger)
+  .get<LoggerPort>(SharedCoreDITokens.Logger)
   .fromContext('HTTP');
 
 export const errorHandler = new Elysia()

@@ -17,8 +17,6 @@ import { AutoCompleteSessionsService } from '@core/application/session/service/u
 import type { AutoCompleteSessionsUseCase } from '@core/application/session/usecase/AutoCompleteSessionsUseCase';
 import { GrpcSessionServiceController } from '@api/grpc/controller/GrpcSessionServiceController';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
-import { SessionPaymentSuccessfullEventHandlerService } from '@core/application/session/service/handler/SessionPaymentSuccessfullEventHandlerService';
-import type { SessionPaymentSuccessfullEventHandler } from '@core/application/session/handler/SessionPaymentSucessfullEventHandler';
 import { GetSessionService } from '@core/application/session/service/usecase/GetSessionService';
 import type { GetSessionUseCase } from '@core/application/session/usecase/GetSessionUseCase';
 
@@ -52,12 +50,7 @@ export const SessionModule: ContainerModule = new ContainerModule((options) => {
     )
     .to(AutoCompleteSessionsService);
 
-  //Handlers
-  options
-    .bind<SessionPaymentSuccessfullEventHandler>(
-      SessionDITokens.SessionPaymentSuccessfullEventHandler,
-    )
-    .to(SessionPaymentSuccessfullEventHandlerService);
+  //Subscribers
 
   //Repository
   options

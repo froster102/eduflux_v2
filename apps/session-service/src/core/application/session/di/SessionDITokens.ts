@@ -22,9 +22,9 @@ export class SessionDITokens {
     'AutoCompleteSessionsUseCase',
   );
 
-  //Handler
-  static readonly SessionPaymentSuccessfullEventHandler: unique symbol = Symbol(
-    'SessionPaymentSuccessfullEventHandler',
+  //Subscriber
+  static readonly SessionPaymentSuccessfullEventSubscriber: unique symbol = Symbol(
+    'SessionPaymentSuccessfullEventSubscriber',
   );
 
   //External Service

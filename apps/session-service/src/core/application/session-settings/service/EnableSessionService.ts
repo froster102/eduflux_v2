@@ -1,23 +1,25 @@
 import type { EnableSessionPort } from '@core/application/session-settings/port/usecase/EnableSessionPort';
 import type { EnableSessionsUseCase } from '@core/application/session-settings/usecase/EnableSessionsUseCase';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
 import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import { SlotGenerationService } from '@core/domain/service/SlotGenerationService';
 import { SessionSettings } from '@core/domain/session-settings/entity/SessionSettings';
-import { SessionSettingsEvents } from '@core/domain/session-settings/events/enum/SessionSettingsEvents';
-import type { SessionSettingsUpdateEvent } from '@core/domain/session-settings/events/SessionSettingsUpdateEvent';
+import { SessionSettingsUpdateEvent } from '@eduflux-v2/shared/events/session/SessionSettingsUpdateEvent';
+import { SessionSettingsEvents } from '@eduflux-v2/shared/events/session/enum/SessionSettingsEvents';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
 import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class EnableSessionService implements EnableSessionsUseCase {
   constructor(
-    @inject(CoreDITokens.UserService)
+    @inject(SharedCoreDITokens.UserService)
     private readonly userServiceGateway: UserServicePort,
-    @inject(CoreDITokens.UnitOfWork) private readonly uow: UnitOfWork,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.UnitOfWork)
+    private readonly uow: UnitOfWork,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: EnableSessionPort): Promise<void> {
@@ -51,22 +53,19 @@ export class EnableSessionService implements EnableSessionsUseCase {
       await trx.slotRepository.saveMany(generatedSlots);
       await trx.sessionSettingsRepository.save(sessionSettings);
 
-      const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
-        type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
-        currency: sessionSettings.currency,
-        duration: sessionSettings.duration,
-        instructorId: sessionSettings.instructorId,
-        isSchedulingEnabled: true,
-        price: sessionSettings.price,
-        timeZone: sessionSettings.timeZone,
-        id: sessionSettings.id,
-        timestamp: new Date().toISOString(),
-      };
+      const sessionSettingsUpdateEvent = new SessionSettingsUpdateEvent(
+        sessionSettings.id,
+        {
+          instructorId: sessionSettings.instructorId,
+          price: sessionSettings.price,
+          currency: sessionSettings.currency,
+          duration: sessionSettings.duration,
+          timeZone: sessionSettings.timeZone,
+          isSchedulingEnabled: true,
+        },
+      );
 
-      await this.eventBus.sendEvent({
-        ...sessionSettingsUpdateEvent,
-        id: sessionSettings.id,
-      });
+      await this.messageBroker.publish(sessionSettingsUpdateEvent);
     });
 
     return;

@@ -1,9 +1,8 @@
 import type { PaymentType } from '@shared/constants/PaymentType';
-import type { Event } from '@shared/events/Event';
-import type { EnrollmentEvents } from '@shared/events/course/enum/EnrollmentEvents';
-export interface EnrollmentCreatedEvent extends Event {
-  readonly id: string;
-  readonly type: EnrollmentEvents.ENROLLMENT_CREATED;
+import { EnrollmentEvents } from '@shared/events/course/enum/EnrollmentEvents';
+import { Event } from '@shared/events/Event';
+
+export interface EnrollmentCreatedEventPayload {
   readonly paymentType: PaymentType;
   readonly paymentId: string;
   readonly enrollmentId: string;
@@ -12,5 +11,12 @@ export interface EnrollmentCreatedEvent extends Event {
   readonly platformFee: number;
   readonly instructorRevenue: number;
   readonly currency: 'USD';
-  readonly timestamp: string;
+}
+
+export class EnrollmentCreatedEvent extends Event<EnrollmentCreatedEventPayload> {
+  static readonly EVENT_NAME = EnrollmentEvents.ENROLLMENT_CREATED;
+
+  constructor(id: string, payload: EnrollmentCreatedEventPayload) {
+    super({ id, name: EnrollmentEvents.ENROLLMENT_CREATED }, payload);
+  }
 }

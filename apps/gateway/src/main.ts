@@ -33,6 +33,7 @@ const SERVICES: Record<string, string> = {
   courses: envVariables.COURSE_SERVICE_BASE_URL,
   sessions: envVariables.SESSION_SERVICE_BASE_URL,
   notifications: envVariables.NOTIFICATION_SERVICE_BASE_URL,
+  uploads: envVariables.UPLOAD_SERVICE_BASE_URL,
 };
 
 for (const [name, target] of Object.entries(SERVICES)) {

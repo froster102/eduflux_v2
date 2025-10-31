@@ -8,7 +8,7 @@ import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
 import type { VerifyChatParticipantUseCase } from '@core/application/chat/usecase/VerifyChatParticipantUseCase';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { CreateMessageUseCase } from '@core/application/message/usecase/CreateMessageUseCase';
 import { MessageDITokens } from '@core/application/message/di/MessageDITokens';
 import type { UpdateMessageStatusUseCase } from '@core/application/message/usecase/UpdateMessageStatusUseCase';
@@ -39,7 +39,7 @@ export class SocketIOServer {
 
   constructor(httpServer: HTTPServer) {
     this.logger = container
-      .get<LoggerPort>(CoreDITokens.Logger)
+      .get<LoggerPort>(SharedCoreDITokens.Logger)
       .fromContext(SocketIOServer.name);
     this.createMessageUseCase = container.get<CreateMessageUseCase>(
       MessageDITokens.CreateMessageUseCase,

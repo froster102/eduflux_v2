@@ -1,18 +1,23 @@
-import { KafkaEventsConsumer } from 'src/api/consumers/KafkaEventsConsumer';
-import { GrpcUserServiceController } from 'src/api/grpc/controller/GrpcUserServiceController';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/src/ports/message/MessageBrokerPort';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { KafkaConnection } from '@infrastructure/adapter/message/kafka/KafkaConnection';
-import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/message/kafka/KafkaEventBusProducerAdapter';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { WinstonLogger } from '@infrastructure/logging/WinstonLoggerAdapter';
 import { ContainerModule } from 'inversify';
+import { RabbitMQConfig } from '@shared/config/RabbitMQConfig';
+import { RabbitMqConnection } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQConnection';
+import { SharedConfigDITokens } from '@eduflux-v2/shared/di/SharedConfigDITokens';
+import { SharedInfrastructureDITokens } from '@eduflux-v2/shared/di/SharedInfrastructureDITokens';
+import { RabbitMQMessageBrokerAdapter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMqMessageBrokerAdapter';
+import { RabbitMQqueueFormatter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQqueueFormatter';
+import { MongooseConnection } from '@eduflux-v2/shared/infrastructure/database/mongoose/MongooseConnection';
+import { GrpcUserServiceController } from '@api/grpc/controller/GrpcUserServiceController';
+import { MongooseConnectionConfig } from '@infrastructure/config/MongooseConnectionConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
     //Logger
-    options.bind<LoggerPort>(CoreDITokens.Logger).to(WinstonLogger);
+    options.bind<LoggerPort>(SharedCoreDITokens.Logger).to(WinstonLogger);
 
     //Controller
     options
@@ -21,21 +26,46 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       )
       .to(GrpcUserServiceController);
 
-    //Kafka Connection
+    //Database connection
     options
-      .bind<KafkaConnection>(InfrastructureDITokens.KafkaConnection)
-      .to(KafkaConnection)
+      .bind<MongooseConnection>(SharedInfrastructureDITokens.MongooseConnection)
+      .to(MongooseConnection)
       .inSingletonScope();
 
-    //Kafka Producer
+    //RabbitMQ connection
     options
-      .bind<EventBusPort>(CoreDITokens.EventBus)
-      .to(KafkaEventBusProducerAdapter)
+      .bind<RabbitMqConnection>(SharedInfrastructureDITokens.RabbitMQConnection)
+      .to(RabbitMqConnection)
       .inSingletonScope();
 
-    //Kafka Consumer
+    //Message Broker
     options
-      .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
-      .to(KafkaEventsConsumer);
+      .bind<MessageBrokerPort>(SharedCoreDITokens.MessageBroker)
+      .toDynamicValue((context) => {
+        const connection = context.get<RabbitMqConnection>(
+          SharedInfrastructureDITokens.RabbitMQConnection,
+        );
+        const config = context.get<RabbitMQConfig>(
+          SharedConfigDITokens.RabbitMQConnectionConfig,
+        );
+
+        const params = {
+          connection: connection,
+          exchange: 'application-events',
+          queueNameFormatter: new RabbitMQqueueFormatter('user-service'),
+          maxRetries: config.maxRetries,
+        };
+
+        return new RabbitMQMessageBrokerAdapter(params);
+      })
+      .inSingletonScope();
+
+    //Configs
+    options
+      .bind(SharedConfigDITokens.RabbitMQConnectionConfig)
+      .toConstantValue(new RabbitMQConfig());
+    options
+      .bind(SharedConfigDITokens.MongooseConnectionConfig)
+      .toConstantValue(MongooseConnectionConfig);
   },
 );

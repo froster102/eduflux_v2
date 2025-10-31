@@ -1,9 +1,9 @@
-import type { CourseCreatedEventHandler } from '@application/views/coordinator/handler/CourseCreatedEventHandler';
-import type { CoursePublishedEventHandler } from '@application/views/coordinator/handler/CoursePublishedEventHandler';
-import type { CourseUpdatedEventHandler } from '@application/views/coordinator/handler/CourseUpdateEventHandler';
-import { CourseCreatedEventHandlerService } from '@application/views/coordinator/service/CourseCreatedEventHandlerService';
-import { CoursePublishedEventHandlerService } from '@application/views/coordinator/service/CoursePublishedEventHandlerService';
-import { CourseUpdatedEventHandlerService } from '@application/views/coordinator/service/CourseUpdatedEventHandlerService';
+import type { CourseCreatedEventSubscriber } from '@application/views/coordinator/subscriber/CourseCreatedEventSubscriber';
+import type { CoursePublishedEventSubscriber } from '@application/views/coordinator/subscriber/CoursePublishedEventSubscriber';
+import type { CourseUpdatedEventSubscriber } from '@application/views/coordinator/subscriber/CourseUpdatedEventSubscriber';
+import { CourseCreatedEventSubscriberService } from '@application/views/coordinator/service/subscriber/CourseCreatedEventSubscriberService';
+import { CoursePublishedEventSubscriberService } from '@application/views/coordinator/service/subscriber/CoursePublishedEventSubscriberService';
+import { CourseUpdatedEventSubscriberService } from '@application/views/coordinator/service/subscriber/CourseUpdatedEventSubscriberService';
 import { TaughtCourseViewDITokens } from '@application/views/taught-course/di/TaughtCourseViewDITokens';
 import type { TaughtCourseViewRepositoryPort } from '@application/views/taught-course/port/persistence/TaughtCourseViewRepositoryPort';
 import { GetTaughtCourseViewsService } from '@application/views/taught-course/service/usecase/GetTaughtCourseViewsService';
@@ -15,28 +15,27 @@ export const TaughtCourseViewModule: ContainerModule = new ContainerModule(
   (options) => {
     //Use-cases
     options
-      .bind<CourseCreatedEventHandler>(
-        TaughtCourseViewDITokens.CourseCreatedEventHandler,
-      )
-      .to(CourseCreatedEventHandlerService);
-    options
       .bind<GetTaughtCourseViewsUseCase>(
         TaughtCourseViewDITokens.GetTaughtCourseViewUseCase,
       )
       .to(GetTaughtCourseViewsService);
 
-    //Handler
+    //Subscribers
     options
-      .bind<CourseUpdatedEventHandler>(
-        TaughtCourseViewDITokens.CourseUpdatedEventHandler,
+      .bind<CourseCreatedEventSubscriber>(
+        TaughtCourseViewDITokens.CourseCreatedEventSubscriber,
       )
-      .to(CourseUpdatedEventHandlerService);
-
+      .to(CourseCreatedEventSubscriberService);
     options
-      .bind<CoursePublishedEventHandler>(
-        TaughtCourseViewDITokens.CoursePublishedEventHandler,
+      .bind<CourseUpdatedEventSubscriber>(
+        TaughtCourseViewDITokens.CourseUpdatedEventSubscriber,
       )
-      .to(CoursePublishedEventHandlerService);
+      .to(CourseUpdatedEventSubscriberService);
+    options
+      .bind<CoursePublishedEventSubscriber>(
+        TaughtCourseViewDITokens.CoursePublishedEventSubscriber,
+      )
+      .to(CoursePublishedEventSubscriberService);
 
     //Repository
     options

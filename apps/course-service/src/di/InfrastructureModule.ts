@@ -7,12 +7,7 @@ import { MongooseCategoryRepositoryAdapter } from '@infrastructure/adapter/persi
 import { CloudinaryFileStorageAdapter } from '@infrastructure/adapter/storage/CloudinaryFileStorageAdapter';
 import { ContainerModule } from 'inversify';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
-import { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
-import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
-import { KafkaConnection } from '@infrastructure/adapter/messaging/kafka/KafkaConnection';
-import { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/messaging/kafka/KafkaEventBusProducer';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { GrpcUserServiceAdapter } from '@eduflux-v2/shared/adapters/grpc/GrpcUserServiceAdapter';
 import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
 import { envVariables } from '@shared/env/env-variables';
@@ -20,9 +15,24 @@ import { COURSE_SERVICE } from '@shared/constants/services';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { WinstonLoggerAdapter } from '@eduflux-v2/shared/adapters/logger/WinstonLoggerAdapter';
 import { GrpcUserServiceConfig } from '@shared/config/GrpcUserServiceConfig';
+import { SharedConfigDITokens } from '@eduflux-v2/shared/di/SharedConfigDITokens';
+import { RabbitMqConnection } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQConnection';
+import { SharedInfrastructureDITokens } from '@eduflux-v2/shared/di/SharedInfrastructureDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
+import { RabbitMQConfig } from '@shared/config/RabbitMQConfig';
+import { RabbitMQqueueFormatter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQqueueFormatter';
+import { RabbitMQMessageBrokerAdapter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMqMessageBrokerAdapter';
+import { MongooseConnection } from '@eduflux-v2/shared/infrastructure/database/mongoose/MongooseConnection';
+import { MongooseConnectionConfig } from '@shared/config/MongooseConnectionConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
+    //Database connection
+    options
+      .bind<MongooseConnection>(SharedInfrastructureDITokens.MongooseConnection)
+      .to(MongooseConnection)
+      .inSingletonScope();
+
     //Logger
     const config: LoggerConfig = {
       environment: envVariables.NODE_ENV,
@@ -31,7 +41,7 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       enableCorrelationId: true,
     };
     options
-      .bind<LoggerPort>(CoreDITokens.Logger)
+      .bind<LoggerPort>(SharedCoreDITokens.Logger)
       .toConstantValue(new WinstonLoggerAdapter(config));
 
     // Repository
@@ -39,14 +49,32 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       .bind<CategoryRepositoryPort>(CourseDITokens.CategoryRepository)
       .to(MongooseCategoryRepositoryAdapter);
 
-    //Kafka consumer
+    //RabbitMQ connection
     options
-      .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
-      .to(KafkaEventsConsumer)
+      .bind<RabbitMqConnection>(SharedInfrastructureDITokens.RabbitMQConnection)
+      .to(RabbitMqConnection)
       .inSingletonScope();
+
+    //Message broker
     options
-      .bind<KafkaConnection>(InfrastructureDITokens.KafkaConnection)
-      .to(KafkaConnection)
+      .bind<MessageBrokerPort>(SharedCoreDITokens.MessageBroker)
+      .toDynamicValue((context) => {
+        const connection = context.get<RabbitMqConnection>(
+          SharedInfrastructureDITokens.RabbitMQConnection,
+        );
+        const config = context.get<RabbitMQConfig>(
+          SharedConfigDITokens.RabbitMQConnectionConfig,
+        );
+
+        const params = {
+          connection: connection,
+          exchange: 'application-events',
+          queueNameFormatter: new RabbitMQqueueFormatter('chat-service'),
+          maxRetries: config.maxRetries,
+        };
+
+        return new RabbitMQMessageBrokerAdapter(params);
+      })
       .inSingletonScope();
 
     // Gateway bindings
@@ -62,15 +90,17 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       .bind<FileStorageGatewayPort>(AssetDITokens.FileStorageGateway)
       .to(CloudinaryFileStorageAdapter);
 
-    //Grpc config
+    //Config
     options
-      .bind(CoreDITokens.GrpcUserServiceConfig)
+      .bind(SharedConfigDITokens.GrpcUserServiceConfig)
       .toConstantValue(GrpcUserServiceConfig);
-
-    // Producer
     options
-      .bind<EventBusPort>(CoreDITokens.EventBus)
-      .to(KafkaEventBusProducerAdapter)
-      .inSingletonScope();
+      .bind<RabbitMQConfig>(SharedConfigDITokens.RabbitMQConnectionConfig)
+      .toConstantValue(new RabbitMQConfig());
+    options
+      .bind<MongooseConnectionConfig>(
+        SharedConfigDITokens.MongooseConnectionConfig,
+      )
+      .toConstantValue(MongooseConnectionConfig);
   },
 );

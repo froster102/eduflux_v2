@@ -4,15 +4,15 @@ export class TaughtCourseViewDITokens {
     'GetTaughtCourseViewUseCase',
   );
 
-  //Handler
-  static readonly CoursePublishedEventHandler: unique symbol = Symbol(
-    'CoursePublishedEventHandler',
+  //Subscribers
+  static readonly CoursePublishedEventSubscriber: unique symbol = Symbol(
+    'CoursePublishedEventSubscriber',
   );
-  static readonly CourseCreatedEventHandler: unique symbol = Symbol(
-    'CourseCreatedEventHandler',
+  static readonly CourseCreatedEventSubscriber: unique symbol = Symbol(
+    'CourseCreatedEventSubscriber',
   );
-  static readonly CourseUpdatedEventHandler: unique symbol = Symbol(
-    'CourseUpdatedEventHandler',
+  static readonly CourseUpdatedEventSubscriber: unique symbol = Symbol(
+    'CourseUpdatedEventSubscriber',
   );
 
   //Repository

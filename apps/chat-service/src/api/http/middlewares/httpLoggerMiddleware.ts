@@ -1,4 +1,4 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { Context, Next } from 'hono';
 import { container } from 'src/di/RootModule';
@@ -6,7 +6,7 @@ import { getConnInfo } from '@hono/node-server/conninfo';
 
 export const httpLoggerMiddleware = async (c: Context, next: Next) => {
   const logger = container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext('HTTP');
 
   const start = Date.now();

@@ -6,18 +6,19 @@ import {
   type CreatePaymentResponse,
 } from '@shared/adapters/grpc/generated/payment';
 import { createClientLoggingInterceptor } from '@shared/adapters/grpc/interceptors/clientLoggingInterceptor';
-import { CoreDITokens } from '@shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@shared/di/SharedCoreDITokens';
 import { inject } from 'inversify';
 import type { PaymentServicePort } from '@shared/ports/gateway/PaymentServicePort';
 import type { GrpcPaymentServiceConfig } from '@shared/config/GrpcPaymentServiceConfig';
+import { SharedConfigDITokens } from '@shared/di/SharedConfigDITokens';
 
 export class GrpcPaymentServiceAdapter implements PaymentServicePort {
   private readonly client: PaymentServiceClient;
   private readonly address: string;
 
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
-    @inject(CoreDITokens.GrpcPaymentServiceConfig)
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedConfigDITokens.GrpcPaymentServiceConfig)
     private readonly config: GrpcPaymentServiceConfig,
   ) {
     this.logger = logger.fromContext(GrpcPaymentServiceAdapter.name);

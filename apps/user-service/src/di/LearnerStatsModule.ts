@@ -1,9 +1,9 @@
 import { LearnerStatsDITokens } from '@application/learner-stats/di/LearnerStatsDITokens';
-import type { EnrollmentCompletedEventHandler } from '@application/learner-stats/handler/EnrollmentCompletedEventHandler';
-import type { SessionCompletedEventHandler } from '@application/learner-stats/handler/SessionCompletedEventHandler';
+import type { EnrollmentCompletedEventSubscriber } from '@application/learner-stats/subscriber/EnrollmentCompletedEventSubscriber';
+import type { SessionCompletedEventSubscriber } from '@application/learner-stats/subscriber/SessionCompletedEventSubscriber';
 import type { LearnerStatsRepositoryPort } from '@application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
-import { EnrollmentCompletedEventHandlerService } from '@application/learner-stats/service/handler/EnrollmentCompletedEventHandlerService';
-import { SessionCompletedEventHandlerService } from '@application/learner-stats/service/handler/SessionCompletedEventHandlerService';
+import { EnrollmentCompletedEventSubscriberService } from '@application/learner-stats/service/subscriber/EnrollmentCompletedEventSubscriberService';
+import { SessionCompletedEventSubscriberService } from '@application/learner-stats/service/subscriber/SessionCompletedEventSubscriberService';
 import { GetLearnerStatsUseCaseService } from '@application/learner-stats/service/usecase/GetLearnerStatsService';
 import type { GetLearnerStatsUseCase } from '@application/learner-stats/usecase/GetLearnerStatsUseCase';
 import { MongooseLearnerStatsRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repositories/learner-stats/MongooseLearnerStatsRepositoryAdapter';
@@ -16,17 +16,17 @@ export const LearnerStatsModule: ContainerModule = new ContainerModule(
       .bind<GetLearnerStatsUseCase>(LearnerStatsDITokens.GetLearnerStatsUseCase)
       .to(GetLearnerStatsUseCaseService);
 
-    //handler
+    //Subscribers
     options
-      .bind<SessionCompletedEventHandler>(
-        LearnerStatsDITokens.SessionCompletedEventHandler,
+      .bind<SessionCompletedEventSubscriber>(
+        LearnerStatsDITokens.SessionCompletedEventSubscriber,
       )
-      .to(SessionCompletedEventHandlerService);
+      .to(SessionCompletedEventSubscriberService);
     options
-      .bind<EnrollmentCompletedEventHandler>(
-        LearnerStatsDITokens.EnrollmentCompletedEventHandler,
+      .bind<EnrollmentCompletedEventSubscriber>(
+        LearnerStatsDITokens.EnrollmentCompletedEventSubscriber,
       )
-      .to(EnrollmentCompletedEventHandlerService);
+      .to(EnrollmentCompletedEventSubscriberService);
 
     //Repository
     options

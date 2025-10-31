@@ -1,33 +1,19 @@
 import 'reflect-metadata';
-import { HttpServer } from '@api/http/HttpServer';
-import { container } from '@di/RootModule';
-import type { KafkaEventBusProducerAdapter } from '@infrastructure/adapter/kafka/KafkaEventBusProducerAdapter';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
-import type { KafkaEventsConsumer } from '@api/consumer/KafkaEventsConsumer';
-import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
-import { MongooseConnection } from '@eduflux-v2/shared/infrastructure/database/mongoose/MongooseConnection';
+import { ChatService } from 'src/ChatService';
 
-async function bootstrap() {
-  //database
-  const mongooseConnection = container.get<MongooseConnection>(
-    InfrastructureDITokens.MongooseConnection,
-  );
-  await mongooseConnection.connect();
-
-  //kafka producer
-  const kafkaProducer = container.get<KafkaEventBusProducerAdapter>(
-    CoreDITokens.EventBus,
-  );
-  await kafkaProducer.connect();
-
-  //kafka consumer
-  const kafkaConsumer = container.get<KafkaEventsConsumer>(
-    InfrastructureDITokens.KafkaEventsConsumer,
-  );
-  await kafkaConsumer.run();
-  //http
-  const server = new HttpServer();
-  server.start();
+try {
+  new ChatService().start().catch((error: Error) => {
+    console.error(`Error starting ChatService: ${error?.message}`);
+    process.exit(1);
+  });
+} catch (error) {
+  handleError(error as Error);
 }
 
-void bootstrap();
+function handleError(error: Error) {
+  console.error(`Error starting ChatService: ${error?.message}`);
+  process.exit(1);
+}
+
+process.on('uncaughtException', handleError);
+process.on('unhandledRejection', handleError);

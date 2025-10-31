@@ -4,15 +4,15 @@ export class UserSessionDITokens {
     'GetUserSessionsUseCase',
   );
 
-  //Handler
-  static readonly ConfirmSessionEventHandler: unique symbol = Symbol(
-    'ConfirmSessionEventHandler',
+  //Subscribers
+  static readonly SessionConfirmedEventSubscriber: unique symbol = Symbol(
+    'SessionConfirmedEventSubscriber',
   );
-  static readonly UserSessionUpdatedEventHandler: unique symbol = Symbol(
-    'UserSessionUpdatedEventHandler',
+  static readonly UserSessionUpdatedEventSubscriber: unique symbol = Symbol(
+    'UserSessionUpdatedEventSubscriber',
   );
-  static readonly UserUpdatedEventHandler: unique symbol = Symbol(
-    'UserUpdatedEventHandler',
+  static readonly UserUpdatedEventSubscriber: unique symbol = Symbol(
+    'UserUpdatedEventSubscriber',
   );
 
   //Repository

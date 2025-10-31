@@ -5,7 +5,7 @@ import type { BookSessionUseCase } from '@core/application/session/usecase/BookS
 import type { BookSessionUseCaseResult } from '@core/application/session/usecase/types/BookSessionUseCaseResult';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { InvalidInputException } from '@eduflux-v2/shared/exceptions/InvalidInputException';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
@@ -18,14 +18,18 @@ import { inject } from 'inversify';
 import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
 import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class BookSessionService implements BookSessionUseCase {
   constructor(
-    @inject(CoreDITokens.UserService)
+    @inject(SharedCoreDITokens.UserService)
     private readonly userService: UserServicePort,
     @inject(SlotDITokens.SlotRepository)
     private readonly slotRepository: SlotRepositoryPort,
-    @inject(CoreDITokens.UnitOfWork) private readonly uow: UnitOfWork,
+    @inject(SharedCoreDITokens.UnitOfWork)
+    private readonly unitOfWork: UnitOfWork,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
     @inject(SessionSettingsDITokens.SessionSettingsRepository)
     private readonly sessionSettingsRepository: SessionSettingsRepositoryPort,
     @inject(UserSessionDITokens.UserSessionRepository)
@@ -64,7 +68,7 @@ export class BookSessionService implements BookSessionUseCase {
     const { newSession, updatedSlot } =
       SessionBookingService.createPendingSession(slot, userId, price, 'USD');
 
-    await this.uow.runTransaction(async (trx) => {
+    await this.unitOfWork.runTransaction(async (trx) => {
       await trx.sessionRepository.save(newSession);
       await trx.slotRepository.update(updatedSlot.id, updatedSlot);
     });

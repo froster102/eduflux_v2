@@ -1,13 +1,13 @@
 import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
-import type { InstructorCreatedEventHandler } from '@application/views/instructor-view/handler/InstructorCreatedEventHandler';
-import type { InstructorStatsUpdatedEventHandler } from '@application/views/instructor-view/handler/InstructorStatsUpdatedEventHandler';
-import type { SessionSettingsUpdatedEventHandler } from '@application/views/instructor-view/handler/SessionSettingsUpdatedEventHandler';
-import type { UserUpdatedEventHandler } from '@application/views/coordinator/handler/UserUpdatedEventHandler';
+import type { InstructorCreatedEventSubscriber } from '@application/views/instructor-view/subscriber/InstructorCreatedEventSubscriber';
+import type { InstructorStatsUpdatedEventSubscriber } from '@application/views/instructor-view/subscriber/InstructorStatsUpdatedEventSubscriber';
+import type { SessionSettingsUpdatedEventSubscriber } from '@application/views/instructor-view/subscriber/SessionSettingsUpdatedEventSubscriber';
+import type { UserUpdatedEventSubscriber } from '@application/views/coordinator/subscriber/UserUpdatedEventSubscriber';
 import type { InstructorViewRepositoryPort } from '@application/views/instructor-view/port/persistence/InstructorViewRepositoryPort';
-import { InstructorCreatedEventHandlerService } from '@application/views/instructor-view/service/handler/InstructorCreatedEventHandlerService';
-import { InstructorStatsUpdatedEventHandlerService } from '@application/views/instructor-view/service/handler/InstructorStatsUpdatedEventHandlerService';
-import { SessionSettingsUpdatedEventHandlerService } from '@application/views/instructor-view/service/handler/SessionSettingsUpdatedEventHandlerService';
-import { UserUpdatedEventHandlerService } from '@application/views/coordinator/service/UserUpdatedEventHandlerService';
+import { InstructorCreatedEventSubscriberService } from '@application/views/instructor-view/service/subscriber/InstructorCreatedEventSubscriberService';
+import { InstructorStatsUpdatedEventSubscriberService } from '@application/views/instructor-view/service/subscriber/InstructorStatsUpdatedEventSubscriberService';
+import { SessionSettingsUpdatedEventSubscriberService } from '@application/views/instructor-view/service/subscriber/SessionSettingsUpdatedEventSubscriberService';
+import { UserUpdatedEventSubscriberService } from '@application/views/coordinator/service/subscriber/UserUpdatedEventSubscriberService';
 import { GetInstructorViewService } from '@application/views/instructor-view/service/usecase/GetInstructorViewService';
 import { GetInstructorViewsService } from '@application/views/instructor-view/service/usecase/GetInstructorViewsService';
 import type { GetInstructorViewsUseCase } from '@application/views/instructor-view/usecase/GetInstructorViewsUseCase';
@@ -37,28 +37,28 @@ export const InstructorViewModule: ContainerModule = new ContainerModule(
       .to(MongooseInstructorRepositoryViewAdapter)
       .inSingletonScope();
 
-    //Hanlders
+    //Subscribers
     options
-      .bind<InstructorStatsUpdatedEventHandler>(
-        InstructorViewDITokens.InstructorStatsUpdatedEventHandler,
+      .bind<InstructorStatsUpdatedEventSubscriber>(
+        InstructorViewDITokens.InstructorStatsUpdatedEventSubscriber,
       )
-      .to(InstructorStatsUpdatedEventHandlerService)
+      .to(InstructorStatsUpdatedEventSubscriberService)
       .inSingletonScope();
     options
-      .bind<SessionSettingsUpdatedEventHandler>(
-        InstructorViewDITokens.SessionSettingsUpdatedEventHandler,
+      .bind<SessionSettingsUpdatedEventSubscriber>(
+        InstructorViewDITokens.SessionSettingsUpdatedEventSubscriber,
       )
-      .to(SessionSettingsUpdatedEventHandlerService)
+      .to(SessionSettingsUpdatedEventSubscriberService)
       .inSingletonScope();
     options
-      .bind<InstructorCreatedEventHandler>(
-        InstructorViewDITokens.InstructorCreatedEventHandler,
+      .bind<InstructorCreatedEventSubscriber>(
+        InstructorViewDITokens.InstructorCreatedEventSubscriber,
       )
-      .to(InstructorCreatedEventHandlerService);
+      .to(InstructorCreatedEventSubscriberService);
     options
-      .bind<UserUpdatedEventHandler>(
-        InstructorViewDITokens.UserUpdatedEventHandler,
+      .bind<UserUpdatedEventSubscriber>(
+        InstructorViewDITokens.UserUpdatedEventSubscriber,
       )
-      .to(UserUpdatedEventHandlerService);
+      .to(UserUpdatedEventSubscriberService);
   },
 );

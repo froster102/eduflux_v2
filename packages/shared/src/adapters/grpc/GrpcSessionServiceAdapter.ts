@@ -8,21 +8,22 @@ import type {
 import type { LoggerPort } from '@shared/ports/logger/LoggerPort';
 
 import { createClientLoggingInterceptor } from '@shared/adapters/grpc/interceptors/clientLoggingInterceptor';
-import { CoreDITokens } from '@shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@shared/di/SharedCoreDITokens';
 import { inject } from 'inversify';
 import type { GrpcSessionServiceConfig } from '@shared/config/GrpcSessionServiceConfig';
 import {
   GetSessionRequest,
   SessionServiceClient,
 } from '@shared/adapters/grpc/generated/session';
+import { SharedConfigDITokens } from '@shared/di/SharedConfigDITokens';
 
 export class GrpcSessionServiceAdapter implements SessionServicePort {
   private client: SessionServiceClient;
   private address: string;
 
   constructor(
-    @inject(CoreDITokens.Logger) private readonly logger: LoggerPort,
-    @inject(CoreDITokens.GrpcSessionServiceConfig)
+    @inject(SharedCoreDITokens.Logger) private readonly logger: LoggerPort,
+    @inject(SharedConfigDITokens.GrpcSessionServiceConfig)
     private readonly config: GrpcSessionServiceConfig,
   ) {
     this.logger = logger.fromContext(GrpcSessionServiceAdapter.name);

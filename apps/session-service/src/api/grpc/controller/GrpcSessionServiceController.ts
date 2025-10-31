@@ -5,7 +5,7 @@ import type {
 } from '@api/grpc/generated/session';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { GetSessionUseCase } from '@core/application/session/usecase/GetSessionUseCase';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import {
@@ -24,7 +24,7 @@ export class GrpcSessionServiceController implements SessionServiceServer {
   [name: string]: import('@grpc/grpc-js').UntypedHandleCall | any;
 
   constructor(
-    @inject(CoreDITokens.Logger) logger: LoggerPort,
+    @inject(SharedCoreDITokens.Logger) logger: LoggerPort,
     @inject(SessionDITokens.GetSessionUseCase)
     private readonly getSessionUseCase: GetSessionUseCase,
   ) {

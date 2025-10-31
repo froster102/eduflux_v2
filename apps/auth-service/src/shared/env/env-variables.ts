@@ -35,7 +35,15 @@ const envSchema = z.object({
   SMTP_PASS: z.string({ error: 'SMTP_PASS is required' }),
   SMTP_HOST: z.string({ error: 'SMTP_HOST is required' }),
 
-  KAKFA_BROKER_URL: z.string({ error: 'KAKFA_BROKER_URL is required' }),
+  RABBITMQ_USER: z.string({ error: 'RABBITMQ_USER is required' }),
+  RABBITMQ_PASSWORD: z.string({ error: 'RABBITMQ_PASSWORD is required' }),
+  RABBITMQ_VHOST: z.string({ error: 'RABBITMQ_VHOST is required' }),
+  RABBITMQ_HOST: z.string({ error: 'RABBITMQ_HOST is required' }),
+  RABBITMQ_PORT: z.coerce.number({ error: 'RABBITMQ_PORT is required' }),
+  RABBITMQ_SECURE: z.string({ error: 'RABBITMQ_SECURE is required' }),
+  RABBITMQ_MAX_RETRIES: z.coerce.number({
+    error: 'RABBITMQ_MAX_RETRIES is required',
+  }),
 
   GRPC_USER_SERVICE_URL: z.string({
     error: 'GRPC_USER_SERVICE_URL is required',

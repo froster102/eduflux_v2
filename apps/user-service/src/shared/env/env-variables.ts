@@ -19,7 +19,15 @@ const envSchema = z.object({
     error: 'DATABASE_URL must be a valid URL',
   }),
 
-  KAKFA_BROKER_URL: z.string({ error: 'KAKFA_BROKER_URL is required' }),
+  RABBITMQ_USER: z.string({ error: 'RABBITMQ_USER is required' }),
+  RABBITMQ_PASSWORD: z.string({ error: 'RABBITMQ_PASSWORD is required' }),
+  RABBITMQ_VHOST: z.string({ error: 'RABBITMQ_VHOST is required' }),
+  RABBITMQ_HOST: z.string({ error: 'RABBITMQ_HOST is required' }),
+  RABBITMQ_PORT: z.coerce.number({ error: 'RABBITMQ_PORT is required' }),
+  RABBITMQ_SECURE: z.string({ error: 'RABBITMQ_SECURE is required' }),
+  RABBITMQ_MAX_RETRIES: z.coerce.number({
+    error: 'RABBITMQ_MAX_RETRIES is required',
+  }),
 
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),

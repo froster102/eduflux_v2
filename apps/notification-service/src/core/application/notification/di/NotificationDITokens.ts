@@ -10,12 +10,12 @@ export class NotificationDITokens {
     'GetNotificationsUseCase',
   );
 
-  //handler
-  static readonly EnrollmentCompletedEventHandler: unique symbol = Symbol(
-    'EnrollmentCompletedEventHandler',
+  //Subscribers
+  static readonly EnrollmentCompletedEventSubscriber: unique symbol = Symbol(
+    'EnrollmentCompletedEventSubscriber',
   );
-  static readonly SessionConfirmedEventHandler: unique symbol = Symbol(
-    'SessionConfirmedEventHandler',
+  static readonly SessionConfirmedEventSubscriber: unique symbol = Symbol(
+    'SessionConfirmedEventSubscriber',
   );
 
   //respository

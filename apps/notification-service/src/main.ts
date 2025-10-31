@@ -1,22 +1,19 @@
-import type { KafkaEventsConsumer } from '@api/consumers/KafkaEventsConsumer';
-import { HttpServer } from '@api/http/HttpServer';
-import { container } from '@di/RootModule';
-import { MongooseConnection } from '@infrastructure/adapter/persistence/mongoose/MongooseConnection';
-import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
+import 'reflect-metadata';
+import { NotificationService } from 'src/NotificationService';
 
-async function bootstrap() {
-  //database
-  await MongooseConnection.connect();
-
-  //kafka consumer
-  const kafkaConsumer = container.get<KafkaEventsConsumer>(
-    InfrastructureDITokens.KafkaEventsConsumer,
-  );
-  await kafkaConsumer.run();
-
-  //http
-  const server = new HttpServer();
-  server.start();
+try {
+  new NotificationService().start().catch((error: Error) => {
+    console.error(`Error starting NotificationService: ${error?.message}`);
+    process.exit(1);
+  });
+} catch (error) {
+  handleError(error as Error);
 }
 
-void bootstrap();
+function handleError(error: Error) {
+  console.error(`Error starting NotificationService: ${error?.message}`);
+  process.exit(1);
+}
+
+process.on('uncaughtException', handleError);
+process.on('unhandledRejection', handleError);

@@ -4,20 +4,20 @@ import type {
   StartSessionOnJoinUseCase,
   StartSessionOnPort,
 } from '@core/application/session/usecase/StartSessionOnJoinUseCase';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';
-import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
-import type { SessionUpdatedEvent } from '@eduflux-v2/shared/events/session/SessionUpdatedEvent';
+import { SessionUpdatedEvent } from '@eduflux-v2/shared/events/session/SessionUpdatedEvent';
 import { inject } from 'inversify';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class StartSessionOnJoinService implements StartSessionOnJoinUseCase {
   constructor(
     @inject(SessionDITokens.SessionRepository)
     private readonly sessionRepository: SessionRepositoryPort,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: StartSessionOnPort): Promise<void> {
@@ -35,9 +35,7 @@ export class StartSessionOnJoinService implements StartSessionOnJoinUseCase {
 
       await this.sessionRepository.update(session.id, session);
 
-      const sessionUpdatedEvent: SessionUpdatedEvent = {
-        id: session.id,
-        type: SessionEvents.SESSION_UPDATED,
+      const sessionUpdatedEvent = new SessionUpdatedEvent(session.id, {
         sessionId: session.id,
         learnerId: session.learnerId,
         instructorId: session.instructorId,
@@ -46,10 +44,9 @@ export class StartSessionOnJoinService implements StartSessionOnJoinUseCase {
         endTime: session.endTime.toISOString(),
         createdAt: session.createdAt.toISOString(),
         updatedAt: session.updatedAt.toISOString(),
-        timestamp: new Date().toISOString(),
-      };
+      });
 
-      await this.eventBus.sendEvent(sessionUpdatedEvent);
+      await this.messageBroker.publish(sessionUpdatedEvent);
     }
   }
 }

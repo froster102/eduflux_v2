@@ -14,5 +14,4 @@ void (async () => {
     UserChatModule,
   );
 })();
-
 export { container };

@@ -1,8 +1,7 @@
 import { EnrollmentController } from '@api/http/controller/EnrollmentController';
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
-import type { EnrollmentPaymentSuccessfullEventHandler } from '@core/application/enrollment/handler/EnrollmentPaymentSuccessfullEventHandler';
+import type { EnrollmentPaymentSuccessfullEventSubscriber } from '@core/application/enrollment/subscriber/EnrollmentPaymentSuccessfullEventSubscriber';
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
-import { EnrollmentPaymentSuccessfullEventHandlerService } from '@core/application/enrollment/service/handler/EnrollmentPaymentSuccessfullEventHandlerService';
 import { CreateEnrollmentService } from '@core/application/enrollment/service/usecase/CreateEnrollmentService';
 import { GetEnrollmentService } from '@core/application/enrollment/service/usecase/GetEnrollmentService';
 import { VerifyChatAccessService } from '@core/application/enrollment/service/usecase/VerifyChatAccessService';
@@ -29,12 +28,7 @@ export const EnrollmentModule = new ContainerModule((options) => {
     .bind<GetEnrollmentUseCase>(EnrollmentDITokens.GetEnrollmentUseCase)
     .to(GetEnrollmentService);
 
-  //Handler
-  options
-    .bind<EnrollmentPaymentSuccessfullEventHandler>(
-      EnrollmentDITokens.EnrollmentPaymentSuccessfullEventHandler,
-    )
-    .to(EnrollmentPaymentSuccessfullEventHandlerService);
+  //Subscriber
 
   //Controller
   options

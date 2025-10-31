@@ -4,28 +4,28 @@ import type { UpdateInstructorSessionSettingsPort } from '@core/application/sess
 import type { UpdateInstructorSessionSettingsUseCase } from '@core/application/session-settings/usecase/UpdateInstructorSessionSettingsUseCase';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import type { EventBusPort } from '@eduflux-v2/shared/ports/message/EventBusPort';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/src/ports/message/MessageBrokerPort';
 import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import { SlotGenerationService } from '@core/domain/service/SlotGenerationService';
-import { SessionSettingsEvents } from '@core/domain/session-settings/events/enum/SessionSettingsEvents';
-import { type SessionSettingsUpdateEvent } from '@core/domain/session-settings/events/SessionSettingsUpdateEvent';
+import { SessionSettingsUpdateEvent } from '@eduflux-v2/shared/events/session/SessionSettingsUpdateEvent';
 import { inject } from 'inversify';
 
 export class UpdateInstructorSessionSettingsService
   implements UpdateInstructorSessionSettingsUseCase
 {
   constructor(
-    @inject(CoreDITokens.Logger)
+    @inject(SharedCoreDITokens.Logger)
     private readonly logger: LoggerPort,
     @inject(SessionSettingsDITokens.SessionSettingsRepository)
     private readonly sessionSettingsRepository: SessionSettingsRepositoryPort,
     @inject(SlotDITokens.SlotRepository)
     private readonly slotRepository: SlotRepositoryPort,
-    @inject(CoreDITokens.UnitOfWork) private readonly uow: UnitOfWork,
-    @inject(CoreDITokens.EventBus) private readonly eventBus: EventBusPort,
+    @inject(SharedCoreDITokens.UnitOfWork) private readonly uow: UnitOfWork,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {
     this.logger = logger.fromContext(
       UpdateInstructorSessionSettingsService.name,
@@ -75,17 +75,17 @@ export class UpdateInstructorSessionSettingsService
       isApplyForWeekendUpdated ||
       isTimeZoneUpdated;
 
-    const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
-      type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
-      currency: foundSessionSettings.currency,
-      duration: foundSessionSettings.duration,
-      instructorId: foundSessionSettings.instructorId,
-      isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
-      price: foundSessionSettings.price,
-      timeZone: foundSessionSettings.timeZone,
-      id: foundSessionSettings.id,
-      timestamp: new Date().toISOString(),
-    };
+    const sessionSettingsUpdateEvent = new SessionSettingsUpdateEvent(
+      foundSessionSettings.id,
+      {
+        instructorId: foundSessionSettings.instructorId,
+        price: foundSessionSettings.price,
+        currency: foundSessionSettings.currency,
+        duration: foundSessionSettings.duration,
+        timeZone: foundSessionSettings.timeZone,
+        isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
+      },
+    );
 
     if (shouldRegenrateSlots) {
       this.logger.info(
@@ -146,29 +146,23 @@ export class UpdateInstructorSessionSettingsService
           foundSessionSettings,
         );
 
-        const sessionSettingsUpdateEvent: SessionSettingsUpdateEvent = {
-          type: SessionSettingsEvents.SESSION_SETTINGS_UPDATED,
-          currency: foundSessionSettings.currency,
-          duration: foundSessionSettings.duration,
-          instructorId: foundSessionSettings.instructorId,
-          isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
-          price: foundSessionSettings.price,
-          timeZone: foundSessionSettings.timeZone,
-          id: foundSessionSettings.id,
-          timestamp: new Date().toISOString(),
-        };
+        const sessionSettingsUpdateEvent = new SessionSettingsUpdateEvent(
+          foundSessionSettings.id,
+          {
+            instructorId: foundSessionSettings.instructorId,
+            price: foundSessionSettings.price,
+            currency: foundSessionSettings.currency,
+            duration: foundSessionSettings.duration,
+            timeZone: foundSessionSettings.timeZone,
+            isSchedulingEnabled: foundSessionSettings.isSessionEnabled,
+          },
+        );
 
-        await this.eventBus.sendEvent({
-          ...sessionSettingsUpdateEvent,
-          id: foundSessionSettings.id,
-        });
+        await this.messageBroker.publish(sessionSettingsUpdateEvent);
         this.logger.info("Updated instructor's session settings.");
       });
     } else {
-      await this.eventBus.sendEvent({
-        ...sessionSettingsUpdateEvent,
-        id: foundSessionSettings.id,
-      });
+      await this.messageBroker.publish(sessionSettingsUpdateEvent);
       await this.sessionSettingsRepository.update(
         foundSessionSettings.id,
         foundSessionSettings,

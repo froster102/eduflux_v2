@@ -15,9 +15,9 @@ export class EnrollmentDITokens {
     'EnrollmentRepository',
   );
 
-  //Handlers
-  static readonly EnrollmentPaymentSuccessfullEventHandler: unique symbol =
-    Symbol('EnrollmentPaymentSuccessfullEventHandler');
+  //Subscribers
+  static readonly EnrollmentPaymentSuccessfullEventSubscriber: unique symbol =
+    Symbol('EnrollmentPaymentSuccessfullEventSubscriber');
 
   //Controller
   static readonly EnrollmentController: unique symbol = Symbol(

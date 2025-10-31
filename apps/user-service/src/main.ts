@@ -1,9 +1,19 @@
 import 'reflect-metadata';
-import { ServerApplication } from 'src/app/ServerApplication';
+import { UserService } from 'src/UserService';
 
-async function runApplication(): Promise<void> {
-  const serverApplication = ServerApplication.new();
-  await serverApplication.run();
+try {
+  new UserService().start().catch((error: Error) => {
+    handleError(error);
+    process.exit(1);
+  });
+} catch (error) {
+  handleError(error as Error);
 }
 
-void runApplication();
+function handleError(error: Error) {
+  console.error(`Error starting UserService: ${error?.message}`, error);
+  process.exit(1);
+}
+
+process.on('uncaughtException', handleError);
+process.on('unhandledRejection', handleError);
