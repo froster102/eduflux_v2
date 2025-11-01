@@ -17,3 +17,4 @@ export class RabbitMQConfig implements RabbitMQConnectionSettings {
   maxRetries: number = envVariables.RABBITMQ_MAX_RETRIES;
 }
 
+

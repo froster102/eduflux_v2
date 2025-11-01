@@ -4,3 +4,4 @@ import type { SessionConfirmedEvent } from '@eduflux-v2/shared/events/session/Se
 export interface SessionConfirmedEventSubscriber
   extends EventSubscriberPort<SessionConfirmedEvent> {}
 
+

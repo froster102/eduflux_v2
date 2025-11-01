@@ -4,3 +4,4 @@ import { CourseUpdatedEvent } from '@eduflux-v2/shared/events/course/CourseUpdat
 export interface CourseUpdatedEventSubscriber
   extends EventSubscriberPort<CourseUpdatedEvent> {}
 
+

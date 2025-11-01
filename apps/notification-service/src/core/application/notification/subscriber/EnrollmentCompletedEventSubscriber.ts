@@ -3,4 +3,3 @@ import type { EnrollmentCompletedEvent } from '@eduflux-v2/shared/events/course/
 
 export interface EnrollmentCompletedEventSubscriber
   extends EventSubscriberPort<EnrollmentCompletedEvent> {}
-

@@ -4,3 +4,4 @@ import type { InstructorCreatedEvent } from '@application/views/instructor-view/
 export interface InstructorCreatedEventSubscriber
   extends EventSubscriberPort<InstructorCreatedEvent> {}
 
+

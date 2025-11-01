@@ -4,3 +4,4 @@ import type { InstructorStatsUpdatedEvent } from '@application/views/instructor-
 export interface InstructorStatsUpdatedEventSubscriber
   extends EventSubscriberPort<InstructorStatsUpdatedEvent> {}
 
+
