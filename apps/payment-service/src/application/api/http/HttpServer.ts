@@ -2,11 +2,10 @@ import { correlationIdSetupMiddleware } from '@application/api/http/middleware/c
 import { errorHandler } from '@application/api/http/middleware/errorHandlerMiddleware';
 import { httpLoggerMiddleware } from '@application/api/http/middleware/httpLoggerMiddleware';
 import { container } from '@application/di/RootModule';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { PaymentController } from '@payment/controller/PaymentController';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
-import { HttpServerConfig } from '@shared/config/HttpServerConfig';
 import { PAYMENT_SERVICE } from '@shared/constants/service';
 import Elysia from 'elysia';
 
@@ -16,11 +15,11 @@ export class HttpServer {
   private logger: LoggerPort;
   private readonly paymentController: PaymentController;
 
-  constructor() {
+  constructor(port: number) {
     this.app = new Elysia();
-    this.port = HttpServerConfig.HTTP_SERVER_PORT;
+    this.port = port;
     this.logger = container
-      .get<LoggerPort>(CoreDITokens.Logger)
+      .get<LoggerPort>(SharedCoreDITokens.Logger)
       .fromContext('HTTP_SERVER');
     this.paymentController = container.get<PaymentController>(
       PaymentDITokens.PaymentController,

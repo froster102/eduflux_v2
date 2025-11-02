@@ -7,8 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun --watch src/main.ts",
     "build": "bun build --compile --minify-whitespace --minify-syntax --target bun --outfile ./build/server ./src/main.ts",
-    "seed-categories": "bun src/shared/seed/seed-categories.ts",
-    "proto:gen": "grpc_tools_node_protoc  --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto  --ts_proto_out=./src/infrastructure/adapter/grpc/generated  --ts_proto_opt=outputServices=grpc-js  --proto_path=./src/infrastructure/adapter/grpc/proto  ./src/infrastructure/adapter/grpc/proto/course.proto"
+    "seed-categories": "bun src/shared/seed/seed-categories.ts"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",

@@ -18,12 +18,12 @@ export class CourseService {
   private grpcServer?: GrpcServer;
 
   async start(): Promise<void> {
-    this.httpServer = new HttpServer(HttpServerConfig.PORT);
-    this.grpcServer = new GrpcServer(GrpcServerConfig.GRPC_SERVER_PORT);
     await this.configureDatabase();
     await this.configureMessagaseBroker();
-    this.httpServer.start();
+    this.grpcServer = new GrpcServer(GrpcServerConfig.GRPC_SERVER_PORT);
+    this.httpServer = new HttpServer(HttpServerConfig.PORT);
     this.grpcServer.start();
+    this.httpServer.start();
   }
 
   private async configureDatabase(): Promise<void> {

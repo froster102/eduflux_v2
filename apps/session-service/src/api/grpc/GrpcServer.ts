@@ -2,10 +2,10 @@ import { Server, ServerCredentials } from '@grpc/grpc-js';
 import { container } from '@di/RootModule';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
-import { createServerLoggingInterceptor } from '@api/grpc/interceptors/createServerLoggingInterceptor';
 import type { GrpcSessionServiceController } from '@api/grpc/controller/GrpcSessionServiceController';
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
-import { SessionServiceService } from '@api/grpc/generated/session';
+import { SessionServiceService } from '@eduflux-v2/shared/adapters/grpc/generated/session';
+import { createServerLoggingInterceptor } from '@eduflux-v2/shared/adapters/grpc/interceptors/serverLoggingInterceptor';
 
 export class GrpcServer {
   private readonly port: number;

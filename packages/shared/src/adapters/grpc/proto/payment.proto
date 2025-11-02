@@ -11,7 +11,7 @@ message CreatePaymentRequest {
   double total_amount = 2;
   string instructor_id = 3;
   double platform_fee = 4;
-  string instructor_revenue = 5;
+  double instructor_revenue = 5;
   string currency = 6;
   string type = 7;
   string reference_id = 8;
@@ -22,7 +22,6 @@ message CreatePaymentRequest {
 
 message Item {
   string title = 1;
-  double amount = 4;
 }
 
 message CreatePaymentResponse {

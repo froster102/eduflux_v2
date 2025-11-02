@@ -11,6 +11,11 @@ export class PaymentDITokens {
   static readonly PaymentController: unique symbol =
     Symbol('PaymentController');
 
+  //gRPC Controller
+  static readonly GrpcPaymentServiceController: unique symbol = Symbol(
+    'GrpcPaymentServiceController',
+  );
+
   //External service
   static readonly CourseService: unique symbol = Symbol('CourseService');
   static readonly SessionService: unique symbol = Symbol('SessionService');

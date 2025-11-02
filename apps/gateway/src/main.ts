@@ -34,6 +34,7 @@ const SERVICES: Record<string, string> = {
   sessions: envVariables.SESSION_SERVICE_BASE_URL,
   notifications: envVariables.NOTIFICATION_SERVICE_BASE_URL,
   uploads: envVariables.UPLOAD_SERVICE_BASE_URL,
+  checkout: envVariables.CHECKOUT_SERVICE_BASE_URL,
 };
 
 for (const [name, target] of Object.entries(SERVICES)) {
@@ -42,7 +43,6 @@ for (const [name, target] of Object.entries(SERVICES)) {
     createProxyMiddleware({
       target: `${target}/api/${name}`,
       changeOrigin: true,
-      ws: true,
     }),
   );
 }

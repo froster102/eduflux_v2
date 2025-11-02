@@ -1,4 +1,4 @@
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { PaymentController } from '@payment/controller/PaymentController';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
 import { PAYMENT_SERVICE } from '@shared/constants/service';
@@ -7,23 +7,35 @@ import { asyncLocalStorage } from '@shared/utils/async-store';
 import { ContainerModule } from 'inversify';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { WinstonLoggerAdapter } from '@eduflux-v2/shared/adapters/logger/WinstonLoggerAdapter';
-import type { CourseServicePort } from '@eduflux-v2/shared/ports/gateway/CourseServicePort';
-import { GrpcCourseServiceAdapter } from '@eduflux-v2/shared/adapters/grpc/GrpcCourseServiceAdapter';
-import type { SessionServicePort } from '@eduflux-v2/shared/ports/gateway/SessionServicePort';
-import { GrpcSessionServiceAdapter } from '@eduflux-v2/shared/adapters/grpc/GrpcSessionServiceAdapter';
-import { GrpcCourseServiceConfig } from '@shared/config/GrpcCourseServiceConfig';
-import { GrpcSessionServiceConfig } from '@shared/config/GrpcSessionServiceConfig';
+import { RabbitMQConfig } from '@shared/config/RabbitMQConfig';
+import { RabbitMqConnection } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQConnection';
+import { SharedConfigDITokens } from '@eduflux-v2/shared/di/SharedConfigDITokens';
+import { SharedInfrastructureDITokens } from '@eduflux-v2/shared/di/SharedInfrastructureDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
+import { RabbitMQqueueFormatter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQqueueFormatter';
+import { RabbitMQMessageBrokerAdapter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMqMessageBrokerAdapter';
+import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
+import { MongooseConnection } from '@eduflux-v2/shared/infrastructure/database/mongoose/MongooseConnection';
+import { MongooseConfig } from '@shared/config/MongooseConfig';
+import { GrpcPaymentServiceController } from '@application/api/grpc/controller/GrpcPaymentServiceController';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
+    //Database connection
+    options
+      .bind<MongooseConnection>(SharedInfrastructureDITokens.MongooseConnection)
+      .to(MongooseConnection)
+      .inSingletonScope();
+
     //Logger
-    const loggerConfig = {
+    const loggerConfig: LoggerConfig = {
       serviceName: PAYMENT_SERVICE,
       environment: envVariables.NODE_ENV,
       asyncLocalStorage,
+      enableCorrelationId: true,
     };
     options
-      .bind<LoggerPort>(CoreDITokens.Logger)
+      .bind<LoggerPort>(SharedCoreDITokens.Logger)
       .toConstantValue(new WinstonLoggerAdapter(loggerConfig));
 
     //Controller
@@ -31,40 +43,48 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
       .bind<PaymentController>(PaymentDITokens.PaymentController)
       .to(PaymentController);
 
-    // //Kafka Connection
-    // options
-    //   .bind<KafkaConnection>(InfrastructureDITokens.KafkaConnection)
-    //   .to(KafkaConnection)
-    //   .inSingletonScope();
-
-    // //Kafka Producer
-    // options
-    //   .bind<EventBusPort>(CoreDITokens.EventBus)
-    //   .to(KafkaEventBusProducerAdapter)
-    //   .inSingletonScope();
-
-    // //Kafka Consumer
-    // options
-    //   .bind<KafkaEventsConsumer>(InfrastructureDITokens.KafkaEventsConsumer)
-    //   .to(KafkaEventsConsumer);
-
-    //Grpc config
-
+    //gRPC Controller
     options
-      .bind(CoreDITokens.GrpcCourseServiceConfig)
-      .toConstantValue(GrpcCourseServiceConfig);
-    options
-      .bind(CoreDITokens.GrpcSessionServiceConfig)
-      .toConstantValue(GrpcSessionServiceConfig);
-
-    //external service
-    options
-      .bind<CourseServicePort>(PaymentDITokens.CourseService)
-      .to(GrpcCourseServiceAdapter)
+      .bind<GrpcPaymentServiceController>(
+        PaymentDITokens.GrpcPaymentServiceController,
+      )
+      .to(GrpcPaymentServiceController)
       .inSingletonScope();
+
+    //RabbitMQ connection
     options
-      .bind<SessionServicePort>(PaymentDITokens.SessionService)
-      .to(GrpcSessionServiceAdapter)
+      .bind<RabbitMqConnection>(SharedInfrastructureDITokens.RabbitMQConnection)
+      .to(RabbitMqConnection)
       .inSingletonScope();
+
+    //Message Broker
+    options
+      .bind<MessageBrokerPort>(SharedCoreDITokens.MessageBroker)
+      .toDynamicValue((context) => {
+        const connection = context.get<RabbitMqConnection>(
+          SharedInfrastructureDITokens.RabbitMQConnection,
+        );
+        const config = context.get<RabbitMQConfig>(
+          SharedConfigDITokens.RabbitMQConnectionConfig,
+        );
+
+        const params = {
+          connection: connection,
+          exchange: 'application-events',
+          queueNameFormatter: new RabbitMQqueueFormatter('payment-service'),
+          maxRetries: config.maxRetries,
+        };
+
+        return new RabbitMQMessageBrokerAdapter(params);
+      })
+      .inSingletonScope();
+
+    //config
+    options
+      .bind(SharedConfigDITokens.RabbitMQConnectionConfig)
+      .toConstantValue(new RabbitMQConfig());
+    options
+      .bind(SharedConfigDITokens.MongooseConnectionConfig)
+      .toConstantValue(MongooseConfig);
   },
 );

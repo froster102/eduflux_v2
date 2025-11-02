@@ -1,8 +1,3 @@
-import type {
-  GetSessionRequest,
-  Session,
-  SessionServiceServer,
-} from '@api/grpc/generated/session';
 import { SessionDITokens } from '@core/application/session/di/SessionDITokens';
 import type { GetSessionUseCase } from '@core/application/session/usecase/GetSessionUseCase';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
@@ -16,6 +11,16 @@ import {
 
 import { getGrpcStatusCode } from '@shared/errors/error-code';
 import { inject } from 'inversify';
+import type {
+  BookSessionRequest,
+  BookSessionResponse,
+  SessionServiceServer,
+} from '@eduflux-v2/shared/adapters/grpc/generated/session';
+import type {
+  GetSessionRequest,
+  Session,
+} from '@eduflux-v2/shared/adapters/grpc/generated/session';
+import type { BookSessionUseCase } from '@core/application/session/usecase/BookSessionUseCase';
 
 export class GrpcSessionServiceController implements SessionServiceServer {
   private logger: LoggerPort;
@@ -27,6 +32,8 @@ export class GrpcSessionServiceController implements SessionServiceServer {
     @inject(SharedCoreDITokens.Logger) logger: LoggerPort,
     @inject(SessionDITokens.GetSessionUseCase)
     private readonly getSessionUseCase: GetSessionUseCase,
+    @inject(SessionDITokens.BookSessionUseCase)
+    private readonly bookSessionUseCase: BookSessionUseCase,
   ) {
     this.logger = logger.fromContext(GrpcSessionServiceController.name);
   }
@@ -49,6 +56,21 @@ export class GrpcSessionServiceController implements SessionServiceServer {
             result.pendingPaymentExpiryTime?.toISOString() ?? '',
         };
         callback(null, response);
+      })
+      .catch((error: Error) => {
+        this.logger.error(`Error processing request: ${error.message}`);
+        this.handleError(error, callback);
+      });
+  }
+
+  bookSession(
+    call: ServerUnaryCall<BookSessionRequest, BookSessionResponse>,
+    callback: sendUnaryData<BookSessionResponse>,
+  ): void {
+    this.bookSessionUseCase
+      .execute({ slotId: call.request.slotId, userId: call.request.userId })
+      .then((result) => {
+        callback(null, result);
       })
       .catch((error: Error) => {
         this.logger.error(`Error processing request: ${error.message}`);

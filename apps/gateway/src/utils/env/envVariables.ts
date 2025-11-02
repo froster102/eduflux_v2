@@ -35,6 +35,9 @@ const envSchema = z.object({
   UPLOAD_SERVICE_BASE_URL: z.string({
     error: 'UPLOAD_SERVICE_BASE_URL is required',
   }),
+  CHECKOUT_SERVICE_BASE_URL: z.string({
+    error: 'CHECKOUT_SERVICE_BASE_URL is required',
+  }),
   CLIENT_ORIGINS: z.string({
     error: 'CLIENT_ORIGINS is required',
   }),

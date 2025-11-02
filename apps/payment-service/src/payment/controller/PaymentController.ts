@@ -91,14 +91,6 @@ export class PaymentController {
             user,
           });
           return jsonApiResponse({ data: summary });
-        })
-        .post('/checkout/:type/:referenceId', async ({ user, params }) => {
-          const response = await this.paymentService.handleCheckout(
-            params.type as 'course' | 'session',
-            params.referenceId,
-            user.id,
-          );
-          return jsonApiResponse({ data: response });
         }),
     );
   }

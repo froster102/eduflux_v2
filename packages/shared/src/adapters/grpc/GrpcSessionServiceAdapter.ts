@@ -1,10 +1,4 @@
 import { credentials, type ServiceError } from '@grpc/grpc-js';
-import type {
-  SessionServicePort,
-  Session,
-  BookSessionRequest,
-  BookSessionResponse,
-} from '@shared/ports/gateway/SessionServicePort';
 import type { LoggerPort } from '@shared/ports/logger/LoggerPort';
 
 import { createClientLoggingInterceptor } from '@shared/adapters/grpc/interceptors/clientLoggingInterceptor';
@@ -12,10 +6,14 @@ import { SharedCoreDITokens } from '@shared/di/SharedCoreDITokens';
 import { inject } from 'inversify';
 import type { GrpcSessionServiceConfig } from '@shared/config/GrpcSessionServiceConfig';
 import {
+  BookSessionRequest,
+  BookSessionResponse,
   GetSessionRequest,
+  Session,
   SessionServiceClient,
 } from '@shared/adapters/grpc/generated/session';
 import { SharedConfigDITokens } from '@shared/di/SharedConfigDITokens';
+import type { SessionServicePort } from '@shared/ports/gateway/SessionServicePort';
 
 export class GrpcSessionServiceAdapter implements SessionServicePort {
   private client: SessionServiceClient;
@@ -62,11 +60,26 @@ export class GrpcSessionServiceAdapter implements SessionServicePort {
   }
 
   async bookSession(request: BookSessionRequest): Promise<BookSessionResponse> {
-    // Note: The session service doesn't have a bookSession gRPC method yet
-    // This would need to be added to the session service's gRPC interface
-    // For now, we'll throw an error indicating this needs to be implemented
-    throw new Error(
-      'bookSession method not yet implemented in session service gRPC interface',
-    );
+    const bookSessionRequest: BookSessionRequest = {
+      slotId: request.slotId,
+      userId: request.userId,
+    };
+
+    return new Promise((resolve, reject) => {
+      this.client.bookSession(
+        bookSessionRequest,
+        (error: ServiceError | null, response: BookSessionResponse | null) => {
+          if (error) {
+            this.logger.error(
+              `Error fetching session details: ${error.message}`,
+            );
+            reject(new Error(error.message));
+          }
+          if (response) {
+            resolve(response);
+          }
+        },
+      );
+    });
   }
 }

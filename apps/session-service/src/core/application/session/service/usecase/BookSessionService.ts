@@ -94,13 +94,7 @@ export class BookSessionService implements BookSessionUseCase {
     // Send notifications
 
     return {
-      item: {
-        amount: newSession.price,
-        title: `A  Session with instructor${instructorDetails.firstName + ' ' + instructorDetails.lastName}`,
-        image: instructorDetails.image,
-      },
-      itemType: 'session',
-      referenceId: newSession.id,
+      id: newSession.id,
     };
   }
 

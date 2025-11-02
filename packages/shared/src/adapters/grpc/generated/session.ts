@@ -21,6 +21,15 @@ import {
 
 export const protobufPackage = "session";
 
+export interface BookSessionRequest {
+  slotId: string;
+  userId: string;
+}
+
+export interface BookSessionResponse {
+  id: string;
+}
+
 export interface GetSessionRequest {
   id: string;
 }
@@ -40,6 +49,140 @@ export interface Session {
   createdAt: string;
   updatedAt: string;
 }
+
+function createBaseBookSessionRequest(): BookSessionRequest {
+  return { slotId: "", userId: "" };
+}
+
+export const BookSessionRequest: MessageFns<BookSessionRequest> = {
+  encode(message: BookSessionRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.slotId !== "") {
+      writer.uint32(10).string(message.slotId);
+    }
+    if (message.userId !== "") {
+      writer.uint32(18).string(message.userId);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): BookSessionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseBookSessionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.slotId = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.userId = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): BookSessionRequest {
+    return {
+      slotId: isSet(object.slotId) ? globalThis.String(object.slotId) : "",
+      userId: isSet(object.userId) ? globalThis.String(object.userId) : "",
+    };
+  },
+
+  toJSON(message: BookSessionRequest): unknown {
+    const obj: any = {};
+    if (message.slotId !== "") {
+      obj.slotId = message.slotId;
+    }
+    if (message.userId !== "") {
+      obj.userId = message.userId;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<BookSessionRequest>, I>>(base?: I): BookSessionRequest {
+    return BookSessionRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<BookSessionRequest>, I>>(object: I): BookSessionRequest {
+    const message = createBaseBookSessionRequest();
+    message.slotId = object.slotId ?? "";
+    message.userId = object.userId ?? "";
+    return message;
+  },
+};
+
+function createBaseBookSessionResponse(): BookSessionResponse {
+  return { id: "" };
+}
+
+export const BookSessionResponse: MessageFns<BookSessionResponse> = {
+  encode(message: BookSessionResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): BookSessionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseBookSessionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): BookSessionResponse {
+    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
+  },
+
+  toJSON(message: BookSessionResponse): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<BookSessionResponse>, I>>(base?: I): BookSessionResponse {
+    return BookSessionResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<BookSessionResponse>, I>>(object: I): BookSessionResponse {
+    const message = createBaseBookSessionResponse();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
 
 function createBaseGetSessionRequest(): GetSessionRequest {
   return { id: "" };
@@ -378,10 +521,20 @@ export const SessionServiceService = {
     responseSerialize: (value: Session): Buffer => Buffer.from(Session.encode(value).finish()),
     responseDeserialize: (value: Buffer): Session => Session.decode(value),
   },
+  bookSession: {
+    path: "/session.SessionService/BookSession",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: BookSessionRequest): Buffer => Buffer.from(BookSessionRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): BookSessionRequest => BookSessionRequest.decode(value),
+    responseSerialize: (value: BookSessionResponse): Buffer => Buffer.from(BookSessionResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): BookSessionResponse => BookSessionResponse.decode(value),
+  },
 } as const;
 
 export interface SessionServiceServer extends UntypedServiceImplementation {
   getSession: handleUnaryCall<GetSessionRequest, Session>;
+  bookSession: handleUnaryCall<BookSessionRequest, BookSessionResponse>;
 }
 
 export interface SessionServiceClient extends Client {
@@ -399,6 +552,21 @@ export interface SessionServiceClient extends Client {
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: Session) => void,
+  ): ClientUnaryCall;
+  bookSession(
+    request: BookSessionRequest,
+    callback: (error: ServiceError | null, response: BookSessionResponse) => void,
+  ): ClientUnaryCall;
+  bookSession(
+    request: BookSessionRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: BookSessionResponse) => void,
+  ): ClientUnaryCall;
+  bookSession(
+    request: BookSessionRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: BookSessionResponse) => void,
   ): ClientUnaryCall;
 }
 

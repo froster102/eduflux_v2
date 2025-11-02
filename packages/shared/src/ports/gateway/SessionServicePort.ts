@@ -20,13 +20,7 @@ export interface BookSessionRequest {
 }
 
 export interface BookSessionResponse {
-  item: {
-    amount: number;
-    title: string;
-    image: string;
-  };
-  itemType: 'session';
-  referenceId: string;
+  id: string;
 }
 
 export interface SessionServicePort {

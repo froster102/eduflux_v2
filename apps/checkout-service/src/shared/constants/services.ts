@@ -1,0 +1,2 @@
+export const CHECKOUT_SERVICE = 'CHECKOUT_SERVICE';
+

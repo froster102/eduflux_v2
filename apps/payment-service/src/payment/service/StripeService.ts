@@ -7,17 +7,12 @@ import { inject } from 'inversify';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
 import { StripeWebhookException } from '@payment/exceptions/StripeWebhookException';
 import type { PaymentSuccessMetadata } from '@payment/service/types/PaymentSuccessMetadata';
-import { producer } from '@infrastructure/kafka/setup';
 import { PaymentType } from '@payment/entity/enum/PaymentType';
-import { ENROLLMENT_TOPIC, SESSION_TOPIC } from '@shared/constants/topics';
 import { BadRequestException } from '@eduflux-v2/shared/exceptions/BadRequestException';
 import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
-import type { EnrollmentPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/course/EnrollmentPaymentSuccessfullEvent';
-import { CourseEvents } from '@eduflux-v2/shared/events/course/enum/CourseEvents';
-import type { SessionPaymentSuccessfullEvent } from '@eduflux-v2/shared/events/session/SessionPaymentSuccessfullEvent';
-import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
-import type { Event } from '@eduflux-v2/shared/events/Event';
-import { EnrollmentEvents } from '@eduflux-v2/shared/events/course/enum/EnrollmentEvents';
+import { PaymentSuccessfullEvent } from '@eduflux-v2/shared/events/payment/PaymentSuccessfullEvent';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class StripeService {
   private readonly stripe: Stripe;
@@ -25,6 +20,8 @@ export class StripeService {
   constructor(
     @inject(PaymentDITokens.PaymentRepository)
     private readonly paymentRepository: IPaymentRepository,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {
     this.stripe = new Stripe(StripeConfig.STRIPE_API_SECRET, {
       apiVersion: '2025-08-27.basil',
@@ -108,65 +105,22 @@ export class StripeService {
     }
 
     if (type === 'payment_intent.succeeded') {
-      if (payment.type === PaymentType.COURSE_PURCHASE) {
-        const enrollmentPaymentSuccessfullEvent: EnrollmentPaymentSuccessfullEvent =
-          {
-            id: payment.id,
-            type: EnrollmentEvents.ENROLLMENT_PAYMENT_SUCCESSFULL,
-            paymentType: payment.type,
-            paymentId: payment.id,
-            enrollmentId: payment.referenceId,
-            instructorId: payment.instructorId,
-            totalAmount: payment.totalAmount,
-            platformFee: payment.platformFee,
-            instructorRevenue: payment.instructorRevenue,
-            currency: 'USD',
-            timestamp: new Date().toISOString(),
-          };
-        await producer.send({
-          topic: ENROLLMENT_TOPIC,
-          messages: [
-            {
-              key: enrollmentPaymentSuccessfullEvent.id,
-              value: JSON.stringify(enrollmentPaymentSuccessfullEvent),
-              headers: {
-                //attach correlation id from async store
-                'x-correlation-id': '',
-              },
-            },
-          ],
-        });
-      } else if (payment.type === PaymentType.SESSION_BOOKING) {
-        const sessionPaymentSuccessfullEvent: SessionPaymentSuccessfullEvent = {
-          id: payment.referenceId,
-          type: SessionEvents.SESSION_PAYMENT_SUCCESSFULL,
-          paymentType: PaymentType.SESSION_BOOKING,
-          paymentId: payment.id,
-          sessionId: payment.referenceId,
-          instructorId: payment.instructorId,
-          totalAmount: payment.totalAmount,
-          platformFee: payment.platformFee,
-          instructorRevenue: payment.instructorRevenue,
-          currency: 'USD',
-          timestamp: new Date().toISOString(),
-        };
-        await producer.send({
-          topic: SESSION_TOPIC,
-          messages: [
-            {
-              key: sessionPaymentSuccessfullEvent.id,
-              value: JSON.stringify(sessionPaymentSuccessfullEvent),
-              headers: {
-                //attach correlation id from async store
-                'x-correlation-id': '',
-              },
-            },
-          ],
-        });
-      }
       payment.status = PaymentStatus.COMPLETED;
       payment.updatedAt = new Date();
       await this.paymentRepository.update(payment.id, payment);
+
+      // Publish PaymentSuccessfullEvent via RabbitMQ
+      const paymentSuccessfullEvent = new PaymentSuccessfullEvent(payment.id, {
+        paymentType: payment.type,
+        paymentId: payment.id,
+        payerId: payment.userId,
+        recieverId: payment.instructorId,
+        itemId: payment.referenceId,
+        itemType:
+          payment.type === PaymentType.COURSE_PURCHASE ? 'course' : 'session',
+      });
+
+      await this.messageBroker.publish(paymentSuccessfullEvent);
     }
   }
 }

@@ -26,7 +26,7 @@ export interface CreatePaymentRequest {
   totalAmount: number;
   instructorId: string;
   platformFee: number;
-  instructorRevenue: string;
+  instructorRevenue: number;
   currency: string;
   type: string;
   referenceId: string;
@@ -37,7 +37,6 @@ export interface CreatePaymentRequest {
 
 export interface Item {
   title: string;
-  amount: number;
 }
 
 export interface CreatePaymentResponse {
@@ -50,7 +49,7 @@ function createBaseCreatePaymentRequest(): CreatePaymentRequest {
     totalAmount: 0,
     instructorId: "",
     platformFee: 0,
-    instructorRevenue: "",
+    instructorRevenue: 0,
     currency: "",
     type: "",
     referenceId: "",
@@ -74,8 +73,8 @@ export const CreatePaymentRequest: MessageFns<CreatePaymentRequest> = {
     if (message.platformFee !== 0) {
       writer.uint32(33).double(message.platformFee);
     }
-    if (message.instructorRevenue !== "") {
-      writer.uint32(42).string(message.instructorRevenue);
+    if (message.instructorRevenue !== 0) {
+      writer.uint32(41).double(message.instructorRevenue);
     }
     if (message.currency !== "") {
       writer.uint32(50).string(message.currency);
@@ -138,11 +137,11 @@ export const CreatePaymentRequest: MessageFns<CreatePaymentRequest> = {
           continue;
         }
         case 5: {
-          if (tag !== 42) {
+          if (tag !== 41) {
             break;
           }
 
-          message.instructorRevenue = reader.string();
+          message.instructorRevenue = reader.double();
           continue;
         }
         case 6: {
@@ -208,7 +207,7 @@ export const CreatePaymentRequest: MessageFns<CreatePaymentRequest> = {
       totalAmount: isSet(object.totalAmount) ? globalThis.Number(object.totalAmount) : 0,
       instructorId: isSet(object.instructorId) ? globalThis.String(object.instructorId) : "",
       platformFee: isSet(object.platformFee) ? globalThis.Number(object.platformFee) : 0,
-      instructorRevenue: isSet(object.instructorRevenue) ? globalThis.String(object.instructorRevenue) : "",
+      instructorRevenue: isSet(object.instructorRevenue) ? globalThis.Number(object.instructorRevenue) : 0,
       currency: isSet(object.currency) ? globalThis.String(object.currency) : "",
       type: isSet(object.type) ? globalThis.String(object.type) : "",
       referenceId: isSet(object.referenceId) ? globalThis.String(object.referenceId) : "",
@@ -232,7 +231,7 @@ export const CreatePaymentRequest: MessageFns<CreatePaymentRequest> = {
     if (message.platformFee !== 0) {
       obj.platformFee = message.platformFee;
     }
-    if (message.instructorRevenue !== "") {
+    if (message.instructorRevenue !== 0) {
       obj.instructorRevenue = message.instructorRevenue;
     }
     if (message.currency !== "") {
@@ -265,7 +264,7 @@ export const CreatePaymentRequest: MessageFns<CreatePaymentRequest> = {
     message.totalAmount = object.totalAmount ?? 0;
     message.instructorId = object.instructorId ?? "";
     message.platformFee = object.platformFee ?? 0;
-    message.instructorRevenue = object.instructorRevenue ?? "";
+    message.instructorRevenue = object.instructorRevenue ?? 0;
     message.currency = object.currency ?? "";
     message.type = object.type ?? "";
     message.referenceId = object.referenceId ?? "";
@@ -277,16 +276,13 @@ export const CreatePaymentRequest: MessageFns<CreatePaymentRequest> = {
 };
 
 function createBaseItem(): Item {
-  return { title: "", amount: 0 };
+  return { title: "" };
 }
 
 export const Item: MessageFns<Item> = {
   encode(message: Item, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
-    }
-    if (message.amount !== 0) {
-      writer.uint32(33).double(message.amount);
     }
     return writer;
   },
@@ -306,14 +302,6 @@ export const Item: MessageFns<Item> = {
           message.title = reader.string();
           continue;
         }
-        case 4: {
-          if (tag !== 33) {
-            break;
-          }
-
-          message.amount = reader.double();
-          continue;
-        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -324,19 +312,13 @@ export const Item: MessageFns<Item> = {
   },
 
   fromJSON(object: any): Item {
-    return {
-      title: isSet(object.title) ? globalThis.String(object.title) : "",
-      amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
-    };
+    return { title: isSet(object.title) ? globalThis.String(object.title) : "" };
   },
 
   toJSON(message: Item): unknown {
     const obj: any = {};
     if (message.title !== "") {
       obj.title = message.title;
-    }
-    if (message.amount !== 0) {
-      obj.amount = message.amount;
     }
     return obj;
   },
@@ -347,7 +329,6 @@ export const Item: MessageFns<Item> = {
   fromPartial<I extends Exact<DeepPartial<Item>, I>>(object: I): Item {
     const message = createBaseItem();
     message.title = object.title ?? "";
-    message.amount = object.amount ?? 0;
     return message;
   },
 };

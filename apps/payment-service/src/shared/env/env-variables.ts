@@ -10,6 +10,11 @@ const envSchema = z.object({
     .min(1000)
     .max(65535, 'HTTP_SERVER_PORT must be between 1000 and 65535'),
 
+  GRPC_SERVER_PORT: z.coerce
+    .number()
+    .min(1000)
+    .max(65535, 'GRPC_SERVER_PORT must be between 1000 and 65535'),
+
   GRPC_COURSE_SERVICE_URL: z.string({
     error: 'GRPC_COURSE_SERVICE_URL is required ',
   }),
@@ -26,8 +31,8 @@ const envSchema = z.object({
     error: 'PAYMENT_CANCEL_URL is required.',
   }),
 
-  DATABASE_URL: z.string({
-    error: 'DATABASE_URL must be a valid URL',
+  MONGO_URI: z.string({
+    error: 'MONGO_URI must be a valid URL',
   }),
 
   STRIPE_API_SECRET: z.string({ error: 'STRIPE_API_SECRET is required' }),
@@ -35,7 +40,15 @@ const envSchema = z.object({
     error: 'STRIPE_WEBHOOK_SECRET is required.',
   }),
 
-  KAKFA_BROKER_URL: z.string({ error: 'KAKFA_BROKER_URL is required' }),
+  RABBITMQ_USER: z.string({ error: 'RABBITMQ_USER is required' }),
+  RABBITMQ_PASSWORD: z.string({ error: 'RABBITMQ_PASSWORD is required' }),
+  RABBITMQ_VHOST: z.string({ error: 'RABBITMQ_VHOST is required' }),
+  RABBITMQ_HOST: z.string({ error: 'RABBITMQ_HOST is required' }),
+  RABBITMQ_PORT: z.coerce.number({ error: 'RABBITMQ_PORT is required' }),
+  RABBITMQ_SECURE: z.string({ error: 'RABBITMQ_SECURE is required' }),
+  RABBITMQ_MAX_RETRIES: z.coerce.number({
+    error: 'RABBITMQ_MAX_RETRIES is required',
+  }),
 
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),

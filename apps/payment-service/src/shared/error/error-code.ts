@@ -1,13 +1,13 @@
 import { container } from '@application/di/RootModule';
 import { status as grpcStatus } from '@grpc/grpc-js';
-import { CoreDITokens } from '@eduflux-v2/shared/di/CoreDITokens';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import httpStatus from 'http-status';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 function getLogger() {
   return container
-    .get<LoggerPort>(CoreDITokens.Logger)
+    .get<LoggerPort>(SharedCoreDITokens.Logger)
     .fromContext('ERROR_CODE');
 }
 

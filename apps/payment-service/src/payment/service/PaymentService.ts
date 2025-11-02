@@ -4,44 +4,55 @@ import type { IPaymentRepository } from '@payment/repository/PaymentRepository';
 import { PaymentStatus } from '@payment/entity/enum/PaymentStatus';
 import { PaymentType } from '@payment/entity/enum/PaymentType';
 import { StripeService } from '@payment/service/StripeService';
-import { Payment } from '@payment/entity/Payment';
 import { PaymentFactory } from '@payment/factory/PaymentFactory';
 import { PrepareCheckout } from '@payment/service/PrepareCheckout';
+import type { CreateStripeCheckoutPayload } from '@payment/service/types/CreateStripeCheckoutPayload';
 import type { GetPaymentsPayload } from '@payment/service/types/GetPaymentsPayload';
 import type { GetPaymentSummaryPayload } from '@payment/service/types/GetPaymentSummaryParams';
 import { PaymentSummaryGroup } from '@payment/repository/types/PaymentSummaryGroup';
-import type { CourseServicePort } from '@eduflux-v2/shared/ports/gateway/CourseServicePort';
-import type { SessionServicePort } from '@eduflux-v2/shared/ports/gateway/SessionServicePort';
 import { Role } from '@eduflux-v2/shared/constants/Role';
 import { ForbiddenException } from '@eduflux-v2/shared/exceptions/ForbiddenException';
 import { BadRequestException } from '@eduflux-v2/shared/exceptions/BadRequestException';
-import type { Course } from '@eduflux-v2/shared/types/course';
-import type { Session } from '@eduflux-v2/shared/ports/gateway/SessionServicePort';
-import type { Enrollment } from '@eduflux-v2/shared/types/enrollment';
+import type {
+  CreatePaymentRequest,
+  CreatePaymentResponse,
+} from '@eduflux-v2/shared/adapters/grpc/generated/payment';
 
 export class PaymentService {
-  private readonly platformFeeRate = 0.3;
   constructor(
-    @inject(PaymentDITokens.CourseService)
-    private readonly courseService: CourseServicePort,
-    @inject(PaymentDITokens.SessionService)
-    private readonly sessionService: SessionServicePort,
     @inject(PaymentDITokens.PaymentRepository)
     private readonly paymentRepository: IPaymentRepository,
     @inject(PaymentDITokens.StripeService)
     private readonly stripeService: StripeService,
   ) {}
 
-  async handleCheckout(
-    type: 'course' | 'session',
-    referenceId: string,
-    userId: string,
-  ) {
+  async createPayment(
+    request: CreatePaymentRequest,
+  ): Promise<CreatePaymentResponse> {
+    const {
+      userId,
+      totalAmount,
+      instructorId,
+      platformFee,
+      currency,
+      type,
+      referenceId,
+      successUrl,
+      cancelUrl,
+      item,
+    } = request;
+
+    if (!userId || !totalAmount || !instructorId || !referenceId) {
+      throw new BadRequestException('Missing required payment fields');
+    }
+
     const paymentType =
       type === 'course'
         ? PaymentType.COURSE_PURCHASE
         : PaymentType.SESSION_BOOKING;
-    const idempotencyKey = `${paymentType}_${referenceId}_${userId}_${crypto.randomUUID()}`;
+
+    // Check for existing payment (idempotency)
+    const idempotencyKey = `${paymentType}_${referenceId}_${userId}_${Date.now()}`;
 
     const existingPayment = await this.paymentRepository.findExistingPayment({
       userId,
@@ -51,10 +62,79 @@ export class PaymentService {
     });
 
     if (existingPayment) {
-      return this.handleExisting(existingPayment, idempotencyKey);
+      if (existingPayment.status === PaymentStatus.COMPLETED) {
+        throw new BadRequestException(
+          'Payment already completed for this item',
+        );
+      }
+
+      // If existing payment has an active Stripe session, return it
+      if (existingPayment.gatewayTransactionId) {
+        try {
+          const stripeSession =
+            await this.stripeService.retrieveCheckoutSession(
+              existingPayment.gatewayTransactionId,
+            );
+          if (
+            stripeSession.status === 'open' &&
+            stripeSession.expires_at > Math.floor(Date.now() / 1000)
+          ) {
+            return {
+              transactionId: stripeSession.id,
+            };
+          }
+        } catch {
+          // Session expired or invalid, create new one
+        }
+      }
     }
 
-    return this.createNew(paymentType, referenceId, userId, idempotencyKey);
+    // Create new payment entity
+    // Use provided platformFee and instructorRevenue, but calculate rate for factory
+    const calculatedPlatformFeeRate =
+      totalAmount > 0 ? platformFee / totalAmount : 0.3;
+
+    const payment = PaymentFactory.create({
+      userId,
+      instructorId,
+      amount: totalAmount,
+      paymentType,
+      referenceId,
+      idempotencyKey,
+      currency,
+      platformFeeRate: calculatedPlatformFeeRate,
+    });
+
+    // Prepare Stripe checkout payload
+    const itemTitle = item?.title ?? 'Payment';
+    const stripePayload: CreateStripeCheckoutPayload =
+      PrepareCheckout.fromRequest(
+        payment,
+        {
+          title: itemTitle,
+          amount: totalAmount,
+        },
+        {
+          successUrl,
+          cancelUrl,
+        },
+      );
+
+    await this.paymentRepository.save(payment);
+
+    try {
+      const checkoutSession =
+        await this.stripeService.createCheckoutSession(stripePayload);
+      payment.setTransactionId(checkoutSession.id);
+      await this.paymentRepository.update(payment.id, payment);
+
+      return {
+        transactionId: checkoutSession.id,
+      };
+    } catch (e) {
+      await this.paymentRepository.delete(payment.id);
+      throw e;
+    }
   }
 
   async getPayments(payload: GetPaymentsPayload) {
@@ -111,99 +191,5 @@ export class PaymentService {
       totalPlatformRevenue,
       summary,
     };
-  }
-
-  private async handleExisting(
-    existingPayment: Payment,
-    newIdempotencyKey: string,
-  ) {
-    if (existingPayment.status === PaymentStatus.COMPLETED) {
-      throw new BadRequestException('Payment already completed for this item');
-    }
-
-    if (existingPayment.gatewayTransactionId) {
-      try {
-        const sessionId = existingPayment.gatewayTransactionId;
-        const stripeSession =
-          await this.stripeService.retrieveCheckoutSession(sessionId);
-        if (
-          stripeSession.status === 'open' &&
-          stripeSession.expires_at > Math.floor(Date.now() / 1000)
-        ) {
-          return {
-            checkoutSessionId: stripeSession.id,
-            clientSecret: stripeSession.client_secret || '',
-            checkoutUrl: stripeSession.url!,
-          };
-        }
-      } catch (e) {
-        console.warn(`Session retrieval failed: ${(e as Error).message}`);
-      }
-    }
-
-    return this.createNew(
-      existingPayment.type,
-      existingPayment.referenceId,
-      existingPayment.userId,
-      newIdempotencyKey,
-    );
-  }
-
-  private async createNew(
-    paymentType: PaymentType,
-    referenceId: string,
-    userId: string,
-    idempotencyKey: string,
-  ) {
-    let amount: number = 0;
-    let instructorId: string = '';
-    let course: Course | null = null;
-
-    if (paymentType === PaymentType.COURSE_PURCHASE) {
-      const enrollment = await this.courseService.getEnrollment(referenceId);
-      course = await this.courseService.getCourse(enrollment.courseId);
-      amount = course.price || 0;
-      instructorId = course.instructor.id;
-    } else {
-      const session = await this.sessionService.getSession(referenceId);
-      amount = session.price;
-      instructorId = session.instructorId;
-    }
-
-    const payment = PaymentFactory.create({
-      userId,
-      instructorId,
-      amount,
-      paymentType,
-      referenceId,
-      idempotencyKey,
-      platformFeeRate: this.platformFeeRate,
-    });
-
-    const stripePayload =
-      paymentType === PaymentType.COURSE_PURCHASE && course
-        ? PrepareCheckout.forCourse(payment, course)
-        : PrepareCheckout.forSession(
-            payment,
-            await this.sessionService.getSession(referenceId),
-          );
-
-    await this.paymentRepository.save(payment);
-
-    try {
-      const checkoutSession =
-        await this.stripeService.createCheckoutSession(stripePayload);
-      payment.setTransactionId(checkoutSession.id);
-      await this.paymentRepository.update(payment.id, payment);
-
-      return {
-        checkoutSessionId: checkoutSession.id,
-        clientSecret: checkoutSession.client_secret!,
-        checkoutUrl: checkoutSession.url!,
-      };
-    } catch (e) {
-      await this.paymentRepository.delete(payment.id);
-      throw e;
-    }
   }
 }
