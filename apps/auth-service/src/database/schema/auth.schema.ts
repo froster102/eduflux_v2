@@ -1,4 +1,4 @@
-import { Role } from '@/shared/constants/role';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 export const user = pgTable('user', {

@@ -3,5 +3,3 @@ import type { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/Se
 
 export interface SessionCompletedEventSubscriber
   extends EventSubscriberPort<SessionCompletedEvent> {}
-
-

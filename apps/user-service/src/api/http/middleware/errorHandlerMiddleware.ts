@@ -1,12 +1,13 @@
-import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
-import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import Elysia from 'elysia';
-import { ZodError } from 'zod/v4';
+import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
-import { Code } from '@eduflux-v2/shared/exceptions/Code';
-import { getHttpErrorCode } from '@shared/errors/error-code';
-import { container } from '@di/RootModule';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
+import { getHttpErrorCode } from '@shared/errors/error-code';
+import { Code } from '@eduflux-v2/shared/exceptions/Code';
+import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
+import { container } from '@di/RootModule';
+import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 const logger = container
   .get<LoggerPort>(SharedCoreDITokens.Logger)
@@ -20,34 +21,34 @@ export const errorHandler = new Elysia()
     // external client response use generic error messages
     if (error instanceof ZodError) {
       set.status = httpStatus.BAD_REQUEST;
-      return {
-        message: Code.VALIDATION_ERROR.message,
-        code: Code.VALIDATION_ERROR.code,
-        error: error.issues,
-      };
-    }
-
-    if (error instanceof Exception) {
-      set.status = getHttpErrorCode(error.code);
-      return {
-        message: error.message,
-        code: error.code,
-      };
+      return createJsonApiError(
+        httpStatus.BAD_REQUEST,
+        Code.VALIDATION_ERROR.code,
+        Code.VALIDATION_ERROR.message,
+        JSON.stringify(z.treeifyError(error)),
+      );
     }
 
     if (code === 'NOT_FOUND') {
       set.status = httpStatus.NOT_FOUND;
-      return {
-        message: Code.NOT_FOUND_ERROR.message,
-        code: Code.NOT_FOUND_ERROR.code,
-      };
+      return createJsonApiError(
+        httpStatus.NOT_FOUND,
+        Code.NOT_FOUND_ERROR.code,
+        Code.NOT_FOUND_ERROR.message,
+      );
     }
 
-    set.status = httpStatus.INTERNAL_SERVER_ERROR;
+    if (error instanceof Exception) {
+      const statusCode = getHttpErrorCode(error.code);
+      set.status = statusCode;
+      return createJsonApiError(statusCode, error.code, error.message);
+    }
 
-    return {
-      message: Code.INTERNAL_ERROR.message,
-      code: Code.INTERNAL_ERROR.code,
-    };
+    const statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+    return createJsonApiError(
+      statusCode,
+      Code.INTERNAL_ERROR.code,
+      Code.INTERNAL_ERROR.message,
+    );
   })
   .as('global');

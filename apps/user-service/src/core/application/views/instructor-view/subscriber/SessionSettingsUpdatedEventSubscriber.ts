@@ -3,4 +3,3 @@ import { SessionSettingsUpdateEvent } from '@eduflux-v2/shared/events/session/Se
 
 export interface SessionSettingsUpdatedEventSubscriber
   extends EventSubscriberPort<SessionSettingsUpdateEvent> {}
-

@@ -1,6 +1,6 @@
 import { addToast } from '@heroui/toast';
 import { useMutation } from '@tanstack/react-query';
-import { useLocation, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 
 import { useAuthStore } from '@/store/auth-store';
 import { auth } from '@/lib/better-auth/auth';
@@ -8,24 +8,38 @@ import { Role } from '@/shared/enums/Role';
 
 import { signIn } from '../services/auth';
 
+const getRoleBasedRoute = (user: User): string => {
+  if (user.roles?.includes(Role.ADMIN)) {
+    return '/admin';
+  }
+  if (user.roles?.includes(Role.LEARNER)) {
+    return '/home';
+  }
+  if (user.roles?.includes(Role.INSTRUCTOR)) {
+    return '/instructor';
+  }
+
+  return '/home';
+};
+
 export function useSignIn() {
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
-  const { search } = useLocation();
+  // const { search } = useLocation();
 
-  const redirectTo = (search as Record<string, any>)?.redirect;
+  // const redirectPath = (search as Record<string, any>)?.redirect;
 
   return useMutation({
     mutationFn: signIn,
     onSuccess: async (data) => {
-      setUser(data.user as unknown as User);
+      const user = data.user as unknown as User;
+
+      setUser(user);
+
+      const destination = getRoleBasedRoute(user);
 
       navigate({
-        to:
-          (redirectTo ??
-          (data.user as unknown as User)?.roles[0] === Role.ADMIN)
-            ? '/admin'
-            : '/home',
+        to: destination,
       });
     },
 

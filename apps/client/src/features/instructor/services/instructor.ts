@@ -1,4 +1,4 @@
-import api from '@/lib/axios';
+import api, { refreshToken } from '@/lib/axios';
 import { buildJsonApiQueryString } from '@/utils/helpers';
 
 export async function getInstructorProfile(
@@ -10,9 +10,9 @@ export async function getInstructorProfile(
 }
 
 export async function becomeAInstructor() {
-  const response = await api.post(`/auth/users/me/roles`, {
-    role: 'INSTRUCTOR',
-  });
+  const response = await api.post(`/users/me/become-instructor`);
+
+  await refreshToken();
 
   return response.data;
 }

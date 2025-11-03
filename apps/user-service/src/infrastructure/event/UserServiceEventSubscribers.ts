@@ -15,21 +15,24 @@ import type { Container } from 'inversify';
 
 export class UserServiceEventSubscribers extends EventSubscribers {
   static from(container: Container): UserServiceEventSubscribers {
-    const enrollmentCompleted = container.get<EnrollmentCompletedEventSubscriber>(
-      LearnerStatsDITokens.EnrollmentCompletedEventSubscriber,
-    );
+    const enrollmentCompleted =
+      container.get<EnrollmentCompletedEventSubscriber>(
+        LearnerStatsDITokens.EnrollmentCompletedEventSubscriber,
+      );
     const sessionCompleted = container.get<SessionCompletedEventSubscriber>(
       LearnerStatsDITokens.SessionCompletedEventSubscriber,
     );
     const instructorCreated = container.get<InstructorCreatedEventSubscriber>(
       InstructorViewDITokens.InstructorCreatedEventSubscriber,
     );
-    const sessionSettingsUpdated = container.get<SessionSettingsUpdatedEventSubscriber>(
-      InstructorViewDITokens.SessionSettingsUpdatedEventSubscriber,
-    );
-    const instructorStatsUpdated = container.get<InstructorStatsUpdatedEventSubscriber>(
-      InstructorViewDITokens.InstructorStatsUpdatedEventSubscriber,
-    );
+    const sessionSettingsUpdated =
+      container.get<SessionSettingsUpdatedEventSubscriber>(
+        InstructorViewDITokens.SessionSettingsUpdatedEventSubscriber,
+      );
+    const instructorStatsUpdated =
+      container.get<InstructorStatsUpdatedEventSubscriber>(
+        InstructorViewDITokens.InstructorStatsUpdatedEventSubscriber,
+      );
     const userUpdated = container.get<UserUpdatedEventSubscriber>(
       InstructorViewDITokens.UserUpdatedEventSubscriber,
     );
@@ -56,5 +59,3 @@ export class UserServiceEventSubscribers extends EventSubscribers {
     ]);
   }
 }
-
-

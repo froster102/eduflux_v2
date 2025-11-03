@@ -5,12 +5,14 @@ import { CreateUserService } from '@application/user/service/CreateUserService';
 import { GetUsersService } from '@application/user/service/GetUsersService';
 import { GetUserService } from '@application/user/service/GetUserService';
 import { UpdateUserService } from '@application/user/service/UpdateUserService';
+import { BecomeInstructorService } from '@application/user/service/BecomeInstructorService';
 import { MongooseUserRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repositories/user/MongooseUserRepositoryAdapter';
 import { ContainerModule } from 'inversify';
 import type { CreateUserUseCase } from '@application/user/usecase/CreateUserUseCase';
 import type { GetUsersUseCase } from '@application/user/usecase/GetUsersUseCase';
 import type { GetUserUseCase } from '@application/user/usecase/GetUserUseCase';
 import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
+import type { BecomeInstructorUseCase } from '@application/user/usecase/BecomeInstructorUseCase';
 
 export const UserModule: ContainerModule = new ContainerModule((options) => {
   options
@@ -23,6 +25,9 @@ export const UserModule: ContainerModule = new ContainerModule((options) => {
   options
     .bind<UpdateUserUseCase>(UserDITokens.UpdateUserUseCase)
     .to(UpdateUserService);
+  options
+    .bind<BecomeInstructorUseCase>(UserDITokens.BecomeInstructorUseCase)
+    .to(BecomeInstructorService);
   options
     .bind<UserRepositoryPort>(UserDITokens.UserRepository)
     .to(MongooseUserRepositoryAdapter);

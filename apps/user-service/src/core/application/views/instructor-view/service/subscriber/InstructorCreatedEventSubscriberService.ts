@@ -33,4 +33,3 @@ export class InstructorCreatedEventSubscriberService
     return [InstructorCreatedEvent];
   }
 }
-

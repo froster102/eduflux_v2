@@ -43,4 +43,3 @@ export class CourseUpdatedEventSubscriberService
     return [CourseUpdatedEvent];
   }
 }
-

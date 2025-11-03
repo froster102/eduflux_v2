@@ -29,4 +29,3 @@ export class InstructorStatsUpdatedEventSubscriberService
     return [InstructorStatsUpdatedEvent];
   }
 }
-

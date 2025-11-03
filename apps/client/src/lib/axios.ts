@@ -80,4 +80,18 @@ api.interceptors.response.use(
   },
 );
 
+export const refreshToken = async () => {
+  const { data, error } = await auth.token();
+
+  if (error) {
+    window.location.replace('/auth/sign-in');
+  }
+
+  if (!data) {
+    window.location.replace('/auth/sign-in');
+  }
+
+  return data;
+};
+
 export default api;

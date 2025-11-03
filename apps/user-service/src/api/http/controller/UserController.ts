@@ -24,6 +24,7 @@ import { InstructorDITokens } from '@application/instructor/di/InstructorDIToken
 import type { GetInstructorUseCase } from '@application/instructor/usecase/GetInstructorUseCase';
 import type { GetUserUseCase } from '@application/user/usecase/GetUserUseCase';
 import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
+import type { BecomeInstructorUseCase } from '@application/user/usecase/BecomeInstructorUseCase';
 import { authenticaionMiddleware } from '@api/http/middleware/authenticationMiddleware';
 
 export class UserController {
@@ -32,6 +33,8 @@ export class UserController {
     private readonly getUserUseCase: GetUserUseCase,
     @inject(UserDITokens.UpdateUserUseCase)
     private readonly updateUserUseCase: UpdateUserUseCase,
+    @inject(UserDITokens.BecomeInstructorUseCase)
+    private readonly becomeInstructorUseCase: BecomeInstructorUseCase,
     @inject(LearnerStatsDITokens.GetLearnerStatsUseCase)
     private readonly getLearnerStatsUseCase: GetLearnerStatsUseCase,
     @inject(InstructorViewDITokens.GetInstructorViewsUseCase)
@@ -68,6 +71,13 @@ export class UserController {
             image,
             socialLinks,
           });
+          return jsonApiResponse({ data: updatedUser });
+        })
+        .post('/me/become-instructor', async ({ user, set }) => {
+          const updatedUser = await this.becomeInstructorUseCase.execute({
+            userId: user.id,
+          });
+          set.status = httpStatus.OK;
           return jsonApiResponse({ data: updatedUser });
         })
         .get('/learners/me', async ({ user }) => {

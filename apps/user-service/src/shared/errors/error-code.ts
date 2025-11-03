@@ -15,6 +15,7 @@ export const errorCodeToHttpStatusCode: Record<string, number> = {
   [Code.UNAUTHORIZED_ERROR.code]: httpStatus.UNAUTHORIZED,
   [Code.INTERNAL_ERROR.code]: httpStatus.INTERNAL_SERVER_ERROR,
   [Code.CONFLICT_ERROR.code]: httpStatus.CONFLICT,
+  [Code.NOT_FOUND_ERROR.code]: httpStatus.NOT_FOUND,
 };
 
 export const getHttpErrorCode = (code: string): number => {

@@ -1,7 +1,6 @@
 import * as schema from '@/database/schema';
 import { betterAuthConfig } from '@/shared/config/betterAuthConfig';
 import { googleOAuthConfig } from '@/shared/config/googleOAuthConfig';
-import { Role } from '@/shared/constants/role';
 import { db } from '@/database/db';
 import { signUpSchema } from '@/http/validators/signUpSchema';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
@@ -14,6 +13,7 @@ import type { GenericEndpointContext, User } from 'better-auth';
 import { emailOTP, jwt, admin } from 'better-auth/plugins';
 import { getJwtToken } from 'better-auth/plugins';
 import { userService } from '@/grpc/grpcUserServiceAdapter';
+import { Role } from '@eduflux-v2/shared/constants/Role';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,

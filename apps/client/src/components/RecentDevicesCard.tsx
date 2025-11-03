@@ -40,7 +40,7 @@ export default function RecentDevicesCard({
           <p className="font-medium">Recent Devices</p>
         </CardHeader>
         <Divider orientation="horizontal" />
-        <CardBody>
+        <CardBody className="overflow-x-scroll max-h-[520px] scrollbar-hide">
           {sessions.map((session) => {
             const deviceInfo = getDeviceName(session.userAgent!);
 

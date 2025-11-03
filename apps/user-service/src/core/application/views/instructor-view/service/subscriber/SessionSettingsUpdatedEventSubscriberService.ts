@@ -22,7 +22,7 @@ export class SessionSettingsUpdatedEventSubscriberService
       currency,
       duration,
       timeZone,
-      // isSchedulingEnabled,
+      isSchedulingEnabled,
     } = event.payload;
 
     const updatePayload: UpsertPayload = {
@@ -30,7 +30,7 @@ export class SessionSettingsUpdatedEventSubscriberService
       'pricing.currency': currency,
       'pricing.duration': duration,
       'pricing.timeZone': timeZone,
-      // 'pricing.isSchedulingEnabled': isSchedulingEnabled,
+      'pricing.isSchedulingEnabled': isSchedulingEnabled,
     };
 
     await this.instructorViewRepository.upsert(instructorId, updatePayload);
@@ -40,4 +40,3 @@ export class SessionSettingsUpdatedEventSubscriberService
     return [SessionSettingsUpdateEvent];
   }
 }
-

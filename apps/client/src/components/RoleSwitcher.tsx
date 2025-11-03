@@ -9,11 +9,15 @@ import { useBecomeAInstructor } from '@/features/instructor/hooks/useBecomeAInst
 import AcademicIcon from '@/components/icons/AcademicIcon';
 import LearnerIcon from '@/components/icons/LearnerIcon';
 import { useChatStore } from '@/store/useChatStore';
+import { Role } from '@/shared/enums/Role';
 
 import ConfirmationModal from './ConfirmationModal';
+import ErrorModal from './ErrorModal';
 
 export default function RoleSwitcher() {
   const location = useLocation();
+  const [errors, setErrors] = React.useState<string[]>([]);
+  const [showErrorModal, setShowErrorModal] = React.useState<boolean>(false);
   const currentRole = location.pathname.startsWith('/instructor')
     ? new Set(['INSTRUCTOR'])
     : new Set(['LEARNER']);
@@ -24,7 +28,15 @@ export default function RoleSwitcher() {
     React.useState(false);
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const becomeAInstructor = useBecomeAInstructor();
+  const becomeAInstructor = useBecomeAInstructor({
+    onError: (error: string) => {
+      setShowErrorModal(true);
+      const parsedErrors = JSON.parse(error) as { errors: string[] };
+
+      console.log(parsedErrors.errors);
+      setErrors(parsedErrors.errors || ['An unknown error occurred']);
+    },
+  });
   const { resetSelectedChat } = useChatStore();
 
   const roles: Array<{ key: string; label: string; icon: React.ReactNode }> = [
@@ -42,7 +54,7 @@ export default function RoleSwitcher() {
 
   function handleSelectionChange(value: string) {
     if (value === 'INSTRUCTOR' && user) {
-      if (!user.roles.includes('INSTRUCTOR')) {
+      if (!user.roles.includes(Role.INSTRUCTOR)) {
         setOpenConfirmationModal(true);
       } else {
         setRole(new Set(['INSTRUCTOR']));
@@ -96,6 +108,12 @@ export default function RoleSwitcher() {
           becomeAInstructor.mutate();
           setOpenConfirmationModal(false);
         }}
+      />
+      <ErrorModal
+        errors={errors}
+        isOpen={showErrorModal}
+        title="Please complete the requirements to become an instructor"
+        onClose={() => setShowErrorModal(false)}
       />
     </>
   );

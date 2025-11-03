@@ -8,6 +8,9 @@
     "dev": "bun --watch src/main.ts",
     "build": "bun build --compile --minify-whitespace --minify-syntax --target bun --outfile ./build/server ./src/main.ts ",
     "start": "bun src/main.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "better-auth:generate": "bunx @better-auth/cli@latest generate --config ./src/lib/better-auth/auth.ts --output ./src/database/schema/authSchema.ts",
     "lint": "eslint ./src --ext .ts --fix"
   },
   "keywords": [],
