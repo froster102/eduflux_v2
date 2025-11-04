@@ -8,7 +8,7 @@ import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 import { UserChat } from '@core/application/views/user-chat/entity/UserChat';
-import { UserChatCreatedEvent } from '@core/application/chat/events/UserChatCreatedEvent';
+import { UserChatCreatedEvent } from '@core/application/views/user-chat/events/UserChatCreatedEvent';
 
 export class UserChatCreatedEventSubscriberService
   implements UserChatCreatedEventSubscriber
@@ -28,7 +28,7 @@ export class UserChatCreatedEventSubscriberService
   }
 
   async on(event: UserChatCreatedEvent): Promise<void> {
-    const { id, participants, lastMessageAt, createdAt } = event;
+    const { id, participants, lastMessageAt, createdAt } = event.payload;
     try {
       const participantsData = await Promise.all(
         participants.map(async (participant) => {

@@ -1,6 +1,5 @@
 import { ChatDITokens } from '@core/application/chat/di/ChatDITokens';
-import { ChatEvents } from '@core/application/chat/events/enum/ChatEvents';
-import type { UserChatCreatedEvent } from '@core/application/chat/events/UserChatCreatedEvent';
+import { UserChatCreatedEvent } from '@core/application/views/user-chat/events/UserChatCreatedEvent';
 import { ChatAlreadyExistsException } from '@core/application/chat/exceptions/ChatAlreadyExistsException';
 import { InstructorNotFoundException } from '@core/application/chat/exceptions/InstructorNotFoundException';
 import { NoInstructorRoleException } from '@core/application/chat/exceptions/NoInstructorRoleException';
@@ -78,14 +77,17 @@ export class CreateChatService implements CreateChatUseCase {
 
     const chatUseCaseDto = ChatUseCaseDto.fromEntity(chat);
 
-    const userChatCreatedEvent: UserChatCreatedEvent = {
-      name: ChatEvents.USER_CHAT_CREATED,
-      ...chatUseCaseDto,
-      createdAt: chatUseCaseDto.createdAt.toISOString(),
-      lastMessageAt: chatUseCaseDto.lastMessageAt.toISOString(),
-      updatedAt: chatUseCaseDto.updatedAt.toISOString(),
-      timestamp: new Date(),
-    };
+    const userChatCreatedEvent: UserChatCreatedEvent = new UserChatCreatedEvent(
+      {
+        ...chatUseCaseDto,
+        createdAt: chatUseCaseDto.createdAt.toISOString(),
+        lastMessageAt: chatUseCaseDto.lastMessageAt.toISOString(),
+        updatedAt: chatUseCaseDto.updatedAt.toISOString(),
+        timestamp: new Date(),
+        name: '',
+        payload: undefined,
+      },
+    );
 
     await this.messageBroker.publish(userChatCreatedEvent);
 

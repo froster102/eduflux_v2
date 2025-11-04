@@ -20,14 +20,4 @@ export class UserChat extends Entity<string> {
   static new(payload: CreateUserChatPayload): UserChat {
     return new UserChat(payload);
   }
-
-  toJSON() {
-    return {
-      id: this._id,
-      lastMessageAt: this.lastMessageAt,
-      lastMessagePreview: this.lastMessagePreview,
-      createdAt: this.createdAt,
-      participants: this.participants.map((p) => ({ ...p })),
-    };
-  }
 }
