@@ -3,13 +3,13 @@ import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
-import { getHttpErrorCode } from '@shared/errors/error-code';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import { container } from '@di/RootModule';
 import type { Context } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import type { HTTPResponseError } from 'hono/types';
 import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
+import { getHttpErrorCode } from '@eduflux-v2/shared/errors/error-code';
 
 export const errorHandler = (error: Error | HTTPResponseError, c: Context) => {
   const logger = container

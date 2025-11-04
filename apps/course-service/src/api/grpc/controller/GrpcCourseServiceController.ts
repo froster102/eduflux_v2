@@ -19,7 +19,7 @@ import type {
   VerifyChatAccessRequest,
   VerifyChatAccessResponse,
 } from '@eduflux-v2/shared/adapters/grpc/generated/course';
-import { getGrpcStatusCode } from '@shared/errors/error-code';
+import { getGrpcStatusCode } from '@eduflux-v2/shared/errors/error-code';
 import { inject } from 'inversify';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 

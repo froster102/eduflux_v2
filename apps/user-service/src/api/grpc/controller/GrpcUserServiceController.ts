@@ -6,7 +6,7 @@ import {
   type ServerUnaryCall,
   status,
 } from '@grpc/grpc-js';
-import { getGrpcStatusCode } from '@shared/errors/error-code';
+import { getGrpcStatusCode } from '@eduflux-v2/shared/errors/error-code';
 import { inject } from 'inversify';
 import type {
   CreateUserRequest,

@@ -1,6 +1,6 @@
 import { status as grpcStatus } from '@grpc/grpc-js';
+import { Code } from '@shared/exceptions/Code';
 import httpStatus from 'http-status';
-import { Code } from '@eduflux-v2/shared/exceptions/Code';
 
 //Http status code mapping
 export const errorCodeToHttpStatusCode: Record<string, number> = {

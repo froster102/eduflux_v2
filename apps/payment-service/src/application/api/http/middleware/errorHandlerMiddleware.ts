@@ -4,7 +4,7 @@ import httpStatus from 'http-status';
 import { container } from '@application/di/RootModule';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
-import { getHttpErrorCode } from '@shared/error/error-code';
+import { getHttpErrorCode } from '@eduflux-v2/shared/errors/error-code';
 import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';

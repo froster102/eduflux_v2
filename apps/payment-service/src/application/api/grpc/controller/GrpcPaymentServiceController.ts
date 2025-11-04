@@ -14,7 +14,7 @@ import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { PaymentDITokens } from '@payment/di/PaymentDITokens';
 import type { PaymentService } from '@payment/service/PaymentService';
-import { getGrpcStatusCode } from '@shared/error/error-code';
+import { getGrpcStatusCode } from '@eduflux-v2/shared/errors/error-code';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 export class GrpcPaymentServiceController implements PaymentServiceServer {

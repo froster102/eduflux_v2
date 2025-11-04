@@ -2,12 +2,12 @@ import Elysia from 'elysia';
 import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
-import { getHttpErrorCode } from '@shared/errors/error-code';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { container } from '@di/RootModule';
 import { createJsonApiError } from '@eduflux-v2/shared/utils/jsonApi';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import { getHttpErrorCode } from '@eduflux-v2/shared/errors/error-code';
 
 const logger = container
   .get<LoggerPort>(SharedCoreDITokens.Logger)

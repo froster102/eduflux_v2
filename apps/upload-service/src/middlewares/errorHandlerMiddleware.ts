@@ -2,8 +2,8 @@ import { Elysia } from 'elysia';
 import httpStatus from 'http-status';
 import { ZodError, z } from 'zod/v4';
 import { httpServerConfig } from '@/shared/config/httpServerConfig';
-import { AppError } from '@/shared/error/app-error';
-import { getHttpErrorCode } from '@/shared/error/error-code';
+import { getHttpErrorCode } from '@eduflux-v2/shared/errors/error-code';
+import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 
 export const errorHandler = new Elysia()
   .onError(({ code, set, error }) => {
@@ -16,7 +16,7 @@ export const errorHandler = new Elysia()
       };
     }
 
-    if (error instanceof AppError) {
+    if (error instanceof Exception) {
       set.status = getHttpErrorCode(error.code);
       return {
         message: error.message,

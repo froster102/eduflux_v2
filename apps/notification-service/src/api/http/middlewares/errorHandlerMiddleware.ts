@@ -3,7 +3,7 @@ import { container } from 'src/di/RootModule';
 import { z, ZodError } from 'zod/v4';
 import httpStatus from 'http-status';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
-import { getHttpErrorCode } from '@shared/errors/error-code';
+import { getHttpErrorCode } from '@eduflux-v2/shared/errors/error-code';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
