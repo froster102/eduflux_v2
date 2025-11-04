@@ -267,7 +267,7 @@ export class Course extends Entity<string> {
 
   toJSON() {
     return {
-      id: this._id,
+      id: this.id,
       title: this._title,
       description: this._description,
       thumbnail: this._thumbnail,

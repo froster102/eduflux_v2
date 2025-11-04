@@ -101,7 +101,7 @@ export class Lecture extends Entity<string> {
   toJSON() {
     return {
       _class: this._class,
-      id: this._id,
+      id: this.id,
       courseId: this.courseId,
       title: this.title,
       description: this.description,

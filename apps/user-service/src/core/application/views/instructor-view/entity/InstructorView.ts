@@ -32,15 +32,4 @@ export class InstructorView extends Entity<string> {
   public static new(payload: CreateInstructorViewPayload): InstructorView {
     return new InstructorView(payload);
   }
-
-  public toJSON() {
-    return {
-      id: this._id,
-      profile: this.profile,
-      sessionsConducted: this.sessionsConducted,
-      totalCourses: this.totalCourses,
-      totalLearners: this.totalLearners,
-      pricing: this.pricing,
-    };
-  }
 }

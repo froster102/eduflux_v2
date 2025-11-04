@@ -34,7 +34,7 @@ export class UserSession extends Entity<string> {
 
   toJSON() {
     return {
-      id: this._id,
+      id: this.id,
       startTime: this.startTime,
       endTime: this.endTime,
       status: this.status,
