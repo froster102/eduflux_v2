@@ -8,6 +8,7 @@ import type {
 } from '@core/application/checkout/usecase/HandleCheckoutUseCase';
 import type { CheckoutItemDetails } from '@core/application/checkout/usecase/types/CheckoutItemDetails';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { AuthenticatedUserDto } from '@eduflux-v2/shared/dto/AuthenticatedUserDto';
 import { BadRequestException } from '@eduflux-v2/shared/exceptions/BadRequestException';
 import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundException';
 import type { CourseServicePort } from '@eduflux-v2/shared/ports/gateway/CourseServicePort';
@@ -34,15 +35,11 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
   async execute(
     payload: HandleCheckoutPort,
   ): Promise<HandleCheckoutUseCaseResult> {
-    const { userId, item } = payload;
+    const { executor, item } = payload;
 
-    const user = CoreAssert.notEmpty(
-      await this.userService.getUser(userId),
-      new NotFoundException('User not found.'),
-    );
-    const itemDetails = await this.getItemDetails(item);
+    const itemDetails = await this.getItemDetails(item, executor);
     const paymentResponse = await this.paymentService.createPayment({
-      userId,
+      userId: executor.id,
       totalAmount: itemDetails.amount,
       instructorId: itemDetails.instructorId,
       platformFee: itemDetails.amount * this.plattformFeeRate,
@@ -65,6 +62,7 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
 
   private async getItemDetails(
     item: CheckoutItem,
+    user: AuthenticatedUserDto,
   ): Promise<CheckoutItemDetails> {
     if (item.type === 'course') {
       const course = CoreAssert.notEmpty(
@@ -81,21 +79,21 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
       };
     }
     if (item.type === 'session') {
-      const session = CoreAssert.notEmpty(
-        await this.sessionService.getSession(item.itemId),
-        new NotFoundException('Item not found.'),
-      );
+      const session = await this.sessionService.bookSession({
+        slotId: item.itemId,
+        userId: user.id,
+      });
       const instructor = CoreAssert.notEmpty(
         await this.userService.getUser(session.instructorId),
         new NotFoundException('Instructor not found.'),
       );
       return {
         amount: session.price,
-        title: `A session with instructor`,
+        title: `A session with instructor ${instructor.firstName + ' ' + instructor.lastName}`,
         image: instructor.image,
         instructorId: session.instructorId,
-        successUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}/${session.id}?success=true`,
-        cancelUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}/${session.id}?success=false`,
+        successUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}/${session.id}?success=true&sessionId=${session.id}&instructor=${instructor.firstName + ' ' + instructor.lastName}&learner=${user.name}&startTime=${session.startTime}&endTime=${session.endTime}`,
+        cancelUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}/${session.id}?success=false&sessionId=${session.id}&instructor=${instructor.firstName + ' ' + instructor.lastName}&learner=${user.name}&startTime=${session.startTime}&endTime=${session.endTime}`,
       };
     }
     throw new BadRequestException('Invalid item type.');

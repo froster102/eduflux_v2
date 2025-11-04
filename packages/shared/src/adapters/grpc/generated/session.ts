@@ -26,10 +26,6 @@ export interface BookSessionRequest {
   userId: string;
 }
 
-export interface BookSessionResponse {
-  id: string;
-}
-
 export interface GetSessionRequest {
   id: string;
 }
@@ -122,64 +118,6 @@ export const BookSessionRequest: MessageFns<BookSessionRequest> = {
     const message = createBaseBookSessionRequest();
     message.slotId = object.slotId ?? "";
     message.userId = object.userId ?? "";
-    return message;
-  },
-};
-
-function createBaseBookSessionResponse(): BookSessionResponse {
-  return { id: "" };
-}
-
-export const BookSessionResponse: MessageFns<BookSessionResponse> = {
-  encode(message: BookSessionResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): BookSessionResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBookSessionResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.id = reader.string();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): BookSessionResponse {
-    return { id: isSet(object.id) ? globalThis.String(object.id) : "" };
-  },
-
-  toJSON(message: BookSessionResponse): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<BookSessionResponse>, I>>(base?: I): BookSessionResponse {
-    return BookSessionResponse.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<BookSessionResponse>, I>>(object: I): BookSessionResponse {
-    const message = createBaseBookSessionResponse();
-    message.id = object.id ?? "";
     return message;
   },
 };
@@ -527,14 +465,14 @@ export const SessionServiceService = {
     responseStream: false,
     requestSerialize: (value: BookSessionRequest): Buffer => Buffer.from(BookSessionRequest.encode(value).finish()),
     requestDeserialize: (value: Buffer): BookSessionRequest => BookSessionRequest.decode(value),
-    responseSerialize: (value: BookSessionResponse): Buffer => Buffer.from(BookSessionResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): BookSessionResponse => BookSessionResponse.decode(value),
+    responseSerialize: (value: Session): Buffer => Buffer.from(Session.encode(value).finish()),
+    responseDeserialize: (value: Buffer): Session => Session.decode(value),
   },
 } as const;
 
 export interface SessionServiceServer extends UntypedServiceImplementation {
   getSession: handleUnaryCall<GetSessionRequest, Session>;
-  bookSession: handleUnaryCall<BookSessionRequest, BookSessionResponse>;
+  bookSession: handleUnaryCall<BookSessionRequest, Session>;
 }
 
 export interface SessionServiceClient extends Client {
@@ -555,18 +493,18 @@ export interface SessionServiceClient extends Client {
   ): ClientUnaryCall;
   bookSession(
     request: BookSessionRequest,
-    callback: (error: ServiceError | null, response: BookSessionResponse) => void,
+    callback: (error: ServiceError | null, response: Session) => void,
   ): ClientUnaryCall;
   bookSession(
     request: BookSessionRequest,
     metadata: Metadata,
-    callback: (error: ServiceError | null, response: BookSessionResponse) => void,
+    callback: (error: ServiceError | null, response: Session) => void,
   ): ClientUnaryCall;
   bookSession(
     request: BookSessionRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: BookSessionResponse) => void,
+    callback: (error: ServiceError | null, response: Session) => void,
   ): ClientUnaryCall;
 }
 

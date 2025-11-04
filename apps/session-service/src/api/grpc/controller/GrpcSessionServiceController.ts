@@ -13,7 +13,6 @@ import { getGrpcStatusCode } from '@shared/errors/error-code';
 import { inject } from 'inversify';
 import type {
   BookSessionRequest,
-  BookSessionResponse,
   SessionServiceServer,
 } from '@eduflux-v2/shared/adapters/grpc/generated/session';
 import type {
@@ -64,13 +63,22 @@ export class GrpcSessionServiceController implements SessionServiceServer {
   }
 
   bookSession(
-    call: ServerUnaryCall<BookSessionRequest, BookSessionResponse>,
-    callback: sendUnaryData<BookSessionResponse>,
+    call: ServerUnaryCall<BookSessionRequest, Session>,
+    callback: sendUnaryData<Session>,
   ): void {
     this.bookSessionUseCase
       .execute({ slotId: call.request.slotId, userId: call.request.userId })
       .then((result) => {
-        callback(null, result);
+        callback(null, {
+          ...result,
+          endTime: result.endTime.toISOString(),
+          startTime: result.endTime.toISOString(),
+          paymentId: result.paymentId === null ? '' : result.paymentId,
+          pendingPaymentExpiryTime:
+            result.pendingPaymentExpiryTime?.toISOString() || '',
+          createdAt: result.createdAt.toISOString(),
+          updatedAt: result.updatedAt.toISOString(),
+        });
       })
       .catch((error: Error) => {
         this.logger.error(`Error processing request: ${error.message}`);

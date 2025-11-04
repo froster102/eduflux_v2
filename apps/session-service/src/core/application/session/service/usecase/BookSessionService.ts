@@ -2,7 +2,6 @@ import { SessionSettingsDITokens } from '@core/application/session-settings/di/S
 import type { SessionSettingsRepositoryPort } from '@core/application/session-settings/port/persistence/SessionSettingsPort';
 import type { BookSessionPort } from '@core/application/session/port/usecase/BookSessionPort';
 import type { BookSessionUseCase } from '@core/application/session/usecase/BookSessionUseCase';
-import type { BookSessionUseCaseResult } from '@core/application/session/usecase/types/BookSessionUseCaseResult';
 import { SlotDITokens } from '@core/application/slot/di/SlotDITokens';
 import type { SlotRepositoryPort } from '@core/application/slot/port/persistence/SlotRepositoryPort';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
@@ -11,14 +10,9 @@ import { NotFoundException } from '@eduflux-v2/shared/exceptions/NotFoundExcepti
 import type { UnitOfWork } from '@core/common/port/persistence/UnitOfWorkPort';
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 import { SessionBookingService } from '@core/domain/service/SessionBookingService';
-import type { Session } from '@core/domain/session/entity/Session';
-import type { Slot } from '@core/domain/slot/entity/Slot';
-import { envVariables } from '@shared/env/envVariables';
 import { inject } from 'inversify';
 import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
-import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
-import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
-import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
+import { SessionUseCaseDto } from '@core/application/session/usecase/dto/SessionUseCaseDto';
 
 export class BookSessionService implements BookSessionUseCase {
   constructor(
@@ -28,15 +22,11 @@ export class BookSessionService implements BookSessionUseCase {
     private readonly slotRepository: SlotRepositoryPort,
     @inject(SharedCoreDITokens.UnitOfWork)
     private readonly unitOfWork: UnitOfWork,
-    @inject(SharedCoreDITokens.MessageBroker)
-    private readonly messageBroker: MessageBrokerPort,
     @inject(SessionSettingsDITokens.SessionSettingsRepository)
     private readonly sessionSettingsRepository: SessionSettingsRepositoryPort,
-    @inject(UserSessionDITokens.UserSessionRepository)
-    private readonly userSessionRepository: UserSessionRepositoryPort,
   ) {}
 
-  async execute(payload: BookSessionPort): Promise<BookSessionUseCaseResult> {
+  async execute(payload: BookSessionPort): Promise<SessionUseCaseDto> {
     const { userId, slotId } = payload;
     const slot = CoreAssert.notEmpty(
       await this.slotRepository.findById(slotId),
@@ -93,25 +83,6 @@ export class BookSessionService implements BookSessionUseCase {
 
     // Send notifications
 
-    return {
-      id: newSession.id,
-    };
-  }
-
-  private createBookingSucessUrl(
-    session: Session,
-    instructor: string,
-    user: string,
-    slot: Slot,
-  ): string {
-    const baseUrl = envVariables.PAYMENT_SUCCESS_URL;
-    const queryParams = `success=true&sessionId=${session.id}&instructor=${instructor}&user=${user}&startTime=${slot.startTime.toISOString()}&endTime=${slot.endTime.toISOString()}`;
-    return `${baseUrl}?${queryParams}`;
-  }
-
-  private createBookingCancelUrl(): string {
-    const baseUrl = envVariables.PAYMENT_SUCCESS_URL;
-    const queryParams = `success=false`;
-    return `${baseUrl}?${queryParams}`;
+    return SessionUseCaseDto.fromEntity(newSession);
   }
 }

@@ -4,15 +4,12 @@ package session;
 
 service SessionService {
     rpc GetSession(GetSessionRequest) returns (Session);
-    rpc BookSession(BookSessionRequest) returns (BookSessionResponse);
+    rpc BookSession(BookSessionRequest) returns (Session);
 
 }
 message BookSessionRequest {
     string slotId = 1;
     string userId = 2;
-}
-message BookSessionResponse {
-    string id = 1;
 }
 
 message GetSessionRequest {

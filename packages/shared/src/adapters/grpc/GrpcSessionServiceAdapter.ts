@@ -7,7 +7,6 @@ import { inject } from 'inversify';
 import type { GrpcSessionServiceConfig } from '@shared/config/GrpcSessionServiceConfig';
 import {
   BookSessionRequest,
-  BookSessionResponse,
   GetSessionRequest,
   Session,
   SessionServiceClient,
@@ -59,7 +58,7 @@ export class GrpcSessionServiceAdapter implements SessionServicePort {
     });
   }
 
-  async bookSession(request: BookSessionRequest): Promise<BookSessionResponse> {
+  async bookSession(request: BookSessionRequest): Promise<Session> {
     const bookSessionRequest: BookSessionRequest = {
       slotId: request.slotId,
       userId: request.userId,
@@ -68,7 +67,7 @@ export class GrpcSessionServiceAdapter implements SessionServicePort {
     return new Promise((resolve, reject) => {
       this.client.bookSession(
         bookSessionRequest,
-        (error: ServiceError | null, response: BookSessionResponse | null) => {
+        (error: ServiceError | null, response: Session | null) => {
           if (error) {
             this.logger.error(
               `Error fetching session details: ${error.message}`,

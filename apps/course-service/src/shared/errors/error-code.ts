@@ -1,15 +1,6 @@
 import { status as grpcStatus } from '@grpc/grpc-js';
 import httpStatus from 'http-status';
 import { Code } from '@eduflux-v2/shared/exceptions/Code';
-import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
-import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
-import { container } from '@di/RootModule';
-
-function getLogger() {
-  return container
-    .get<LoggerPort>(SharedCoreDITokens.Logger)
-    .fromContext('ERROR_CODE');
-}
 
 //Http status code mapping
 export const errorCodeToHttpStatusCode: Record<string, number> = {
@@ -26,9 +17,6 @@ export const getHttpErrorCode = (code: string): number => {
     return errorCodeToHttpStatusCode[code];
   }
 
-  getLogger().warn(
-    `[ERROR_HANDLER] Unknown application error code '${code}'. Defaulting to 500.`,
-  );
   return httpStatus.INTERNAL_SERVER_ERROR;
 };
 
@@ -45,6 +33,5 @@ export const getGrpcStatusCode = (code: string): number => {
     return errorCodeToGrpcStatusCode[code];
   }
 
-  getLogger().warn(`[ERROR_HANDLER] Unknown application error code '${code}'`);
   return grpcStatus.INTERNAL;
 };
