@@ -33,7 +33,11 @@ declare global {
     meta: Pagination;
   };
 
-  export type GetInstructorsQueryParameters = {} & PaginationQueryParameters;
+  export type GetInstructorsQueryParameters = {
+    filter: {
+      isSchedulingEnabled: boolean;
+    };
+  } & PaginationQueryParameters;
 
   export type AvailabilitySlotQueryParameters = {
     filter: {

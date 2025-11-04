@@ -50,6 +50,13 @@ export class MongooseInstructorRepositoryViewAdapter
       filterQuery._id = { $ne: excludeId };
     }
 
+    if (queryParameters.filter) {
+      if (queryParameters.filter.isSchedulingEnabled) {
+        filterQuery['pricing.isSchedulingEnabled'] =
+          queryParameters.filter.isSchedulingEnabled;
+      }
+    }
+
     const totalCount = await InstructorViewModel.countDocuments(filterQuery);
 
     const documents = await InstructorViewModel.find(filterQuery)

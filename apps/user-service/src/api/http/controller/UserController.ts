@@ -26,6 +26,7 @@ import type { GetUserUseCase } from '@application/user/usecase/GetUserUseCase';
 import type { UpdateUserUseCase } from '@application/user/usecase/UpdateUserUseCase';
 import type { BecomeInstructorUseCase } from '@application/user/usecase/BecomeInstructorUseCase';
 import { authenticaionMiddleware } from '@api/http/middleware/authenticationMiddleware';
+import { getInstructorsSchema } from '@api/http/validators/getInstructorsSchema';
 
 export class UserController {
   constructor(
@@ -88,7 +89,7 @@ export class UserController {
         })
         .get('/instructors', async ({ query, user }) => {
           const jsonApiQuery = parseJsonApiQuery(query);
-          const parsedQuery = paginationSchema.parse(jsonApiQuery);
+          const parsedQuery = getInstructorsSchema.parse(jsonApiQuery);
           const { totalCount, instructors } =
             await this.getInstructorViewsUseCase.execute({
               executorId: user.id,
@@ -98,6 +99,7 @@ export class UserController {
                   number: parsedQuery.page.number,
                   size: parsedQuery.page.size,
                 }),
+                filter: parsedQuery.filter,
               },
             });
           return jsonApiResponse({

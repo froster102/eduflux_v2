@@ -17,6 +17,9 @@ function RouteComponent() {
     page: {
       number: page,
     },
+    filter: {
+      isSchedulingEnabled: true,
+    },
   });
 
   return (
