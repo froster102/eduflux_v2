@@ -1,19 +1,6 @@
 name: eduflux
 
 services:
-
-  ngrok:
-    image: ngrok/ngrok:latest
-    container_name: ngrok
-    environment:
-      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
-    command: [ "http", "kong:8000", "--domain=${NGROK_STATIC_DOMAIN}", "--log=stdout" ]
-    ports:
-      - "4040:4040"
-    networks:
-      - eduflux-network
-    restart: "no"
-
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:4.1.4-management
