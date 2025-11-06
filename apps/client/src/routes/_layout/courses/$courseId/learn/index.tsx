@@ -5,7 +5,6 @@ import { Progress } from '@heroui/progress';
 import { Accordion, AccordionItem } from '@heroui/accordion';
 import React from 'react';
 import { Checkbox } from '@heroui/checkbox';
-import { Spinner } from '@heroui/spinner';
 
 import HLSPlayer from '@/components/HLSPlayer';
 import { useGetCourseInfo } from '@/features/course/hooks/useGetCourseInfo';
@@ -73,6 +72,18 @@ function RouteComponent() {
     return 0;
   }, [courseProgress, totalModulesWithoutChapter]);
 
+  const hlsOptions = React.useMemo(() => {
+    if (!itemContent || itemContent.data._class !== 'lecture') return null;
+
+    return {
+      sources: itemContent.data.asset?.mediaSources ?? [],
+      autoplay: true,
+      controls: true,
+      responsive: true,
+      fluid: true,
+    };
+  }, [itemContent]);
+
   function findChapterItems(
     curriculumItems: CurriculumItems,
     chapterIndex: number,
@@ -113,26 +124,21 @@ function RouteComponent() {
     <div className="flex flex-col lg:flex-row gap-4 w-full h-full pt-2">
       <Card className="w-full h-fit overflow-hidden">
         <CardBody className="p-0 border border-default-200">
-          {isItemContentLoading ? (
-            <Spinner />
-          ) : itemContent && itemContent!.data._class === 'lecture' ? (
+          {!isItemContentLoading &&
+          itemContent?.data._class === 'lecture' &&
+          hlsOptions ? (
             <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
               <div className="absolute top-0 left-0 w-full h-full">
-                <HLSPlayer
-                  options={{
-                    sources: itemContent!.data.asset?.mediaSources!,
-                    autoplay: true,
-                    controls: true,
-                    responsive: true,
-                    fluid: true,
-                  }}
-                />
+                <HLSPlayer options={hlsOptions} />
               </div>
             </div>
           ) : null}
         </CardBody>
       </Card>
-      <Card className="lg:max-w-md border border-default-200 bg-background w-full">
+      <Card
+        className="lg:max-w-md border border-default-300 bg-background w-full"
+        shadow="none"
+      >
         <CardHeader className="flex flex-col">
           {isCourseInfoLoading ? (
             <Skeleton className="rounded-md h-[5vh] w-full">
@@ -167,7 +173,10 @@ function RouteComponent() {
                     <AccordionItem
                       key={item.id}
                       aria-label={`Chapter ${item.objectIndex} : ${item.title}`}
-                      className="bg-background border border-default-200"
+                      className="bg-background border border-default-300"
+                      classNames={{
+                        base: 'shadow-none',
+                      }}
                       startContent={
                         <div className="flex items-center justify-center bg-primary text-black h-6 w-6 text-sm rounded-full flex-shrink-0">
                           {item.objectIndex}
@@ -185,6 +194,7 @@ function RouteComponent() {
                               <Card
                                 isPressable
                                 className="w-full"
+                                shadow="none"
                                 onPress={() =>
                                   setSelectedCurriculumItem(chapterItem)
                                 }
