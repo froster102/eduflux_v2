@@ -65,6 +65,17 @@ declare global {
     totalPlatformRevenue: number;
     summary: PaymentSummaryAggregation[];
   }>;
+
+  export type CheckoutData = {
+    item: {
+      itemType: 'course' | 'session';
+      itemId: string;
+    };
+  };
+
+  export type CheckoutResponse = {
+    checkoutUrl: string;
+  };
 }
 
 export {};

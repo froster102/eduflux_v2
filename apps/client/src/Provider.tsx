@@ -15,7 +15,9 @@ const queryClient = new QueryClient({
       onError: (error: AxiosError<JsonApiErrorResponse> | Error) => {
         if (error instanceof AxiosError) {
           addToast({
-            description: error.response?.data.message || DEFAULT_ERROR_MESSAGE,
+            description:
+              (error.response?.data as JsonApiErrorResponse).errors[0].title ||
+              DEFAULT_ERROR_MESSAGE,
             color: 'danger',
           });
         } else if (error instanceof Error) {

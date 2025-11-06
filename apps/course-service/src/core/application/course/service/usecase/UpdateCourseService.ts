@@ -35,7 +35,7 @@ export class UpdateCourseService implements UpdateCourseUseCase {
 
     course.updateDetails(updates);
 
-    await this.courseRepository.update(course.id, updates);
+    await this.courseRepository.update(course.id, course);
 
     const courseUpdatedEvent = new CourseUpdatedEvent(course.id, {
       id: course.id,

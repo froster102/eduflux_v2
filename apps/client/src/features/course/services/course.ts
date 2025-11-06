@@ -51,7 +51,7 @@ export async function createCourse(data: CreateCourseFormData) {
 
 export async function createChapter(
   data: ChapterFormData & { courseId: string },
-) {
+): Promise<JsonApiResponse<Chapter>> {
   const response = await api.post(`/courses/${data.courseId}/chapters`, data);
 
   return response.data;

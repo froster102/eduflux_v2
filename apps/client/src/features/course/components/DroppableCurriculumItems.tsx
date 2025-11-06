@@ -14,6 +14,7 @@ import {
 import React from 'react';
 import { Button } from '@heroui/button';
 import { Card, CardBody } from '@heroui/card';
+import { addToast } from '@heroui/toast';
 
 import { useCurriculumStore } from '@/store/curriculum-store';
 import FormModal from '@/components/FormModal';
@@ -71,6 +72,7 @@ export default function DroppableCurriculumItems({
     openFileUploadModal,
     setOpenFileUploadModal,
   } = useCurriculumStore();
+
   const createLecture = useCreateLecture();
   const updateLecture = useUpdateLecture();
   const deleteLecture = useDeleteLecture();
@@ -78,6 +80,7 @@ export default function DroppableCurriculumItems({
   const updateChapter = useUpdateChapter();
   const deleteChapter = useDeleteChapter();
   const addContentToLecture = useAddContentToLecture();
+  const updateCurriculumItems = useUpdateCurriculumItems();
 
   React.useEffect(() => {
     if (initialCurriculumItems) {
@@ -85,13 +88,9 @@ export default function DroppableCurriculumItems({
     }
   }, [initialCurriculumItems]);
 
-  const updateCurriculumItems = useUpdateCurriculumItems();
-
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
+      activationConstraint: { distance: 5 },
     }),
   );
 
@@ -119,11 +118,27 @@ export default function DroppableCurriculumItems({
 
     setActiveId(null);
 
-    if (active.id !== over?.id) {
-      reArrangeCurriculumItems(active.id.toString(), over?.id.toString());
-      reOrderCurriculumItems();
-      syncCurriculumOrder();
+    if (!over || active.id === over.id) return;
+
+    const activeItem = curriculumItems.find((i) => i.id === active.id);
+    const overItem = curriculumItems.find((i) => i.id === over.id);
+
+    if (activeItem?._class === 'lecture' && overItem?._class === 'chapter') {
+      const firstChapter = curriculumItems.find((i) => i._class === 'chapter');
+
+      if (overItem.id === firstChapter?.id) {
+        addToast({
+          description: 'Cannot move lecture before the first chapter',
+          color: 'warning',
+        });
+
+        return;
+      }
     }
+
+    reArrangeCurriculumItems(active.id.toString(), over.id.toString());
+    reOrderCurriculumItems();
+    syncCurriculumOrder();
   }
 
   async function lectureOnSubmitHandler(data: LectureFormData) {
@@ -132,13 +147,13 @@ export default function DroppableCurriculumItems({
         createLecture.mutateAsync({ ...data, courseId }),
       );
 
-      if (newLecture && selectedIndex) {
+      if (newLecture && selectedIndex !== undefined) {
         insertCurriculumItem(newLecture.data, selectedIndex);
         reOrderCurriculumItems();
         syncCurriculumOrder();
       }
     } else if (openLectureFormModal.mode === 'edit') {
-      if (selectedLecture && selectedIndex) {
+      if (selectedLecture && selectedIndex !== undefined) {
         const { error } = await tryCatch(
           updateLecture.mutateAsync({
             ...data,
@@ -148,9 +163,7 @@ export default function DroppableCurriculumItems({
         );
 
         if (!error) {
-          if (selectedLecture._class === 'lecture') {
-            updateLectureItem({ ...selectedLecture, ...data }, selectedIndex);
-          }
+          updateLectureItem({ ...selectedLecture, ...data }, selectedIndex);
         }
       }
     }
@@ -159,19 +172,17 @@ export default function DroppableCurriculumItems({
 
   async function chapterFormSubmitHandler(data: ChapterFormData) {
     if (openChapterFormModal.mode === 'create') {
-      const { data: chapter } = await tryCatch(
+      const { data: response } = await tryCatch(
         createChapter.mutateAsync({ ...data, courseId }),
       );
 
-      if (data) {
-        if (selectedIndex) {
-          insertCurriculumItem(chapter, selectedIndex);
-          reOrderCurriculumItems();
-          syncCurriculumOrder();
-        }
+      if (response && selectedIndex !== undefined) {
+        insertCurriculumItem(response.data, selectedIndex);
+        reOrderCurriculumItems();
+        syncCurriculumOrder();
       }
     } else if (openChapterFormModal.mode === 'edit') {
-      if (selectedChapter && selectedIndex) {
+      if (selectedChapter && selectedIndex !== undefined) {
         await tryCatch(
           updateChapter.mutateAsync({
             courseId,
@@ -185,18 +196,15 @@ export default function DroppableCurriculumItems({
     setOpenChapterFormModal({ ...openChapterFormModal, isOpen: false });
   }
 
-  function handleEditLecture(lecture: Lecture, index: number) {
-    setSelectedLecture(lecture);
-    setSelectedIndex(index);
-    setOpenLectureFormModal({
-      mode: 'edit',
-      isOpen: true,
-    });
-  }
-
   function handleCreateLecture(selectedIndex: number) {
     setSelectedIndex(selectedIndex);
     setOpenLectureFormModal({ mode: 'create', isOpen: true });
+  }
+
+  function handleEditLecture(lecture: Lecture, index: number) {
+    setSelectedLecture(lecture);
+    setSelectedIndex(index);
+    setOpenLectureFormModal({ mode: 'edit', isOpen: true });
   }
 
   async function handleDeleteLecture(lectureId: string) {
@@ -214,10 +222,26 @@ export default function DroppableCurriculumItems({
   function handleEditChapter(chapter: Chapter, index: number) {
     setSelectedChapter(chapter);
     setSelectedIndex(index);
-    setOpenChapterFormModal({
-      mode: 'edit',
-      isOpen: true,
-    });
+    setOpenChapterFormModal({ mode: 'edit', isOpen: true });
+  }
+
+  function getInsertIndexAfterLastLecture(
+    chapterId: string,
+    items: CurriculumItem[],
+  ) {
+    const chapterIndex = items.findIndex((i) => i.id === chapterId);
+
+    if (chapterIndex === -1) return items.length;
+
+    const nextChapterIndex = items
+      .slice(chapterIndex + 1)
+      .findIndex((i) => i._class === 'chapter');
+
+    if (nextChapterIndex === -1) {
+      return items.length;
+    }
+
+    return chapterIndex + 1 + nextChapterIndex;
   }
 
   async function handleDeleteChapter(chapterId: string) {
@@ -230,6 +254,11 @@ export default function DroppableCurriculumItems({
       reOrderCurriculumItems();
       syncCurriculumOrder();
     }
+  }
+
+  function handleLectureContentUpload(lecture: Lecture) {
+    setOpenFileUploadModal(true);
+    setSelectedLecture(lecture);
   }
 
   function onContentUploadSuccessHandler(
@@ -249,10 +278,21 @@ export default function DroppableCurriculumItems({
     }
   }
 
-  function handleLectureContentUpload(lecture: Lecture) {
-    setOpenFileUploadModal(true);
-    setSelectedLecture(lecture);
-  }
+  const groupedItems = React.useMemo(() => {
+    const groups: { chapter: Chapter; lectures: Lecture[] }[] = [];
+    let currentChapter: Chapter | null = null;
+
+    for (const item of curriculumItems) {
+      if (item._class === 'chapter') {
+        currentChapter = item as Chapter;
+        groups.push({ chapter: currentChapter, lectures: [] });
+      } else if (currentChapter) {
+        groups[groups.length - 1].lectures.push(item as Lecture);
+      }
+    }
+
+    return groups;
+  }, [curriculumItems]);
 
   return (
     <>
@@ -267,69 +307,63 @@ export default function DroppableCurriculumItems({
             strategy={verticalListSortingStrategy}
           >
             <div className="w-full">
-              {curriculumItems.map((item, i) => {
-                const isLastItem = i === curriculumItems.length - 1;
-                const nextItemIsChapter =
-                  !isLastItem && curriculumItems[i + 1]?._class === 'chapter';
-                const isChapter = item._class === 'chapter';
-                // Check if the current item is the last lecture in a chapter
-                const isLastItemInChapter =
-                  !isChapter && (nextItemIsChapter || isLastItem);
-
-                return (
-                  <React.Fragment key={item.id}>
-                    {/* <div className="py-2">
-                    <Button
-                    color="secondary"
-                    size="sm"
-                    onPress={() =>
-                    isChapter
-                    ? setOpenCreateSectionModal(true)
-                    : setOpenCreateLectureModal(true)
-                    }
+              {groupedItems.map(({ chapter, lectures }) => (
+                <React.Fragment key={chapter.id}>
+                  {/* Chapter */}
+                  <SortableItem id={chapter.id}>
+                    <Card
+                      className="mt-4 rounded-t-lg rounded-b-none"
+                      shadow="none"
                     >
-                    {isChapter ? "Add Section" : "Add Lecture"}
-                    </Button>
-                    </div> */}
+                      <SortableChapterItem
+                        chapter={chapter}
+                        index={curriculumItems.indexOf(chapter)}
+                        isFirstItem={false}
+                        onDelete={handleDeleteChapter}
+                        onEdit={handleEditChapter}
+                      />
+                    </Card>
+                  </SortableItem>
 
-                    <SortableItem id={item.id}>
+                  {lectures.map((lecture, i) => (
+                    <SortableItem key={lecture.id} id={lecture.id}>
                       <Card
-                        className={` ${
-                          i !== 0 && isChapter ? 'mt-4' : ''
-                        } ${isChapter ? 'rounded-t-lg rounded-b-none' : 'rounded-none'} ${
-                          isLastItemInChapter ? 'rounded-b-lg' : ''
+                        className={`rounded-none ${
+                          i === lectures.length - 1 ? 'rounded-b-lg' : ''
                         }`}
                         shadow="none"
                       >
-                        <div className="flex items-center group">
-                          <div className="flex-1">
-                            {isChapter ? (
-                              <SortableChapterItem
-                                chapter={item}
-                                index={i}
-                                isFirstItem={i === 0}
-                                onDelete={handleDeleteChapter}
-                                onEdit={handleEditChapter}
-                              />
-                            ) : (
-                              <SortableLectureItem
-                                index={i}
-                                isLastItemInChapter={isLastItemInChapter}
-                                lecture={item}
-                                onAddContent={handleLectureContentUpload}
-                                onAddLecture={handleCreateLecture}
-                                onDelete={handleDeleteLecture}
-                                onEdit={handleEditLecture}
-                              />
-                            )}
-                          </div>
-                        </div>
+                        <SortableLectureItem
+                          index={curriculumItems.indexOf(lecture)}
+                          lecture={lecture}
+                          onAddContent={handleLectureContentUpload}
+                          onDelete={handleDeleteLecture}
+                          onEdit={handleEditLecture}
+                        />
                       </Card>
                     </SortableItem>
-                  </React.Fragment>
-                );
-              })}
+                  ))}
 
+                  <div className="pl-12 py-3">
+                    <Button
+                      color="primary"
+                      size="sm"
+                      onPress={() => {
+                        const index = getInsertIndexAfterLastLecture(
+                          chapter.id,
+                          curriculumItems,
+                        );
+
+                        handleCreateLecture(index);
+                      }}
+                    >
+                      Add Lecture
+                    </Button>
+                  </div>
+                </React.Fragment>
+              ))}
+
+              {/* Add new chapter */}
               <div className="pt-4">
                 <Button
                   color="primary"
@@ -344,6 +378,7 @@ export default function DroppableCurriculumItems({
               </div>
             </div>
           </SortableContext>
+
           <DragOverlay>
             {activeId && activeItem ? (
               <Card shadow="md">
@@ -361,30 +396,27 @@ export default function DroppableCurriculumItems({
         </DndContext>
       </div>
 
+      {/* Lecture Form Modal */}
       <FormModal
         form={
           <LectureForm
-            initialValue={selectedLecture ? selectedLecture : undefined}
+            initialValue={selectedLecture ?? undefined}
             isPending={
               openLectureFormModal.mode === 'create'
                 ? createLecture.isPending
                 : updateLecture.isPending
             }
             mode={openLectureFormModal.mode}
-            previewContent={
-              selectedLecture && selectedLecture.asset ? true : false
-            }
+            previewContent={!!(selectedLecture && selectedLecture.asset)}
             previewContentSrc={
-              selectedLecture && selectedLecture.asset
+              selectedLecture?.asset
                 ? {
                     type: selectedLecture.asset.mediaSources[0].type,
                     src: selectedLecture.asset.mediaSources[0].src,
                   }
                 : null
             }
-            showFileUploader={
-              selectedLecture && selectedLecture.assetId ? true : false
-            }
+            showFileUploader={!!selectedLecture?.assetId}
             onCancel={() => {
               setOpenLectureFormModal({
                 ...openLectureFormModal,
@@ -404,22 +436,19 @@ export default function DroppableCurriculumItems({
         }}
       />
 
+      {/* Chapter Form Modal */}
       <FormModal
         form={
           <ChapterForm
-            initialValue={selectedChapter ? selectedChapter : undefined}
-            isPending={
-              openChapterFormModal.mode === 'create'
-                ? createChapter.isPending
-                : createChapter.isPending
-            }
+            initialValue={selectedChapter ?? undefined}
+            isPending={createChapter.isPending}
             mode={openChapterFormModal.mode}
-            onCancel={() => {
+            onCancel={() =>
               setOpenChapterFormModal({
                 ...openChapterFormModal,
                 isOpen: false,
-              });
-            }}
+              })
+            }
             onSubmitHandler={chapterFormSubmitHandler}
           />
         }
@@ -430,11 +459,10 @@ export default function DroppableCurriculumItems({
         }
       />
 
+      {/* File Upload Modal */}
       <FileUploadModal
         isOpen={openFileUploadModal}
-        onClose={() => {
-          setOpenFileUploadModal(false);
-        }}
+        onClose={() => setOpenFileUploadModal(false)}
         onSuccess={onContentUploadSuccessHandler}
       />
     </>

@@ -40,62 +40,57 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
     payload: GetCourseCurriculumPort,
   ): Promise<CurriculumItemWithAsset[]> {
     const { id, executor } = payload;
+
     const course = CoreAssert.notEmpty(
       await this.courseRepository.findById(id),
       new NotFoundException(`Course with ID:${id} not found.`),
     );
 
-    let includeMediaSources = true;
-
-    let enrollmentStatus = false;
-
-    if (executor) {
-      const enrollment = await this.enrollmentRepository.findByUserAndCourseId(
-        executor.id,
-        course.id,
-      );
-      if (enrollment) {
-        enrollmentStatus =
-          enrollment.status === EnrollmentStatus.COMPLETED ? true : false;
-      }
-    }
-
-    if (executor) {
-      const isInstructor = executor.id === course.instructor.id;
-      const isAdmin = executor.hasRole(Role.ADMIN);
-      if (isInstructor || isAdmin) {
-        includeMediaSources = true;
-        return this.buildCourseCurriculum(id, includeMediaSources);
-      }
-    }
-
-    if (course.status !== CourseStatus.PUBLISHED) {
+    if (course.status !== CourseStatus.PUBLISHED && !executor) {
       throw new ForbiddenException(
         'You are not authorized to view this course.',
       );
     }
 
-    if (executor && enrollmentStatus) {
-      includeMediaSources = true;
-      return this.buildCourseCurriculum(id, includeMediaSources);
+    const isInstructor = executor && executor.id === course.instructor.id;
+    const isAdmin = executor && executor.hasRole(Role.ADMIN);
+
+    let isEnrolled = false;
+    if (executor) {
+      const enrollment = await this.enrollmentRepository.findByUserAndCourseId(
+        executor.id,
+        course.id,
+      );
+      isEnrolled =
+        !!enrollment && enrollment.status === EnrollmentStatus.COMPLETED;
     }
 
-    includeMediaSources = false;
-    return this.buildCourseCurriculum(id, includeMediaSources);
+    const canViewAllAssets = Boolean(isInstructor || isAdmin);
+    const canViewPreviewsOnly = Boolean(
+      !canViewAllAssets && (executor || isEnrolled),
+    );
+
+    return this.buildCourseCurriculum(
+      id,
+      canViewAllAssets,
+      canViewPreviewsOnly,
+    );
   }
 
   private async buildCourseCurriculum(
     id: string,
-    includeMediaSources: boolean,
+    canViewAllAssets: boolean,
+    canViewPreviewsOnly: boolean,
   ): Promise<CurriculumItemWithAsset[]> {
     const chapters = await this.chapterRepository.findByCourseId(id);
     const lectures = await this.lectureRepository.findByCourseId(id);
 
     const assetIdsToFetch = lectures
-      .filter((lecture) => lecture.preview && lecture.assetId)
+      .filter((lecture) => lecture.assetId)
       .map((lecture) => lecture.assetId!);
 
     const assetMap = new Map<string, Asset>();
+
     if (assetIdsToFetch.length > 0) {
       const fetchedAssets =
         await this.assetRepository.findByIds(assetIdsToFetch);
@@ -106,28 +101,33 @@ export class GetCourseCurriculumService implements GetCourseCurriculumUseCase {
       ...ChapterUseCaseDto.fromEntities(chapters),
     ];
 
-    lectures.forEach((lecture) => {
+    for (const lecture of lectures) {
       const lectureWithAsset: Lecture & { asset?: Partial<Asset> } = {
         ...lecture.toJSON(),
       } as unknown as Lecture;
 
-      if (lecture.preview && lecture.assetId && assetMap.has(lecture.assetId)) {
-        const asset = assetMap.get(lecture.assetId)!;
-        lectureWithAsset.asset = {
-          id: asset.id,
-          provider: asset.provider,
-          providerSpecificId: asset.providerSpecificId,
-          resourceType: asset.resourceType,
-          accessType: asset.accessType,
-          originalFileName: asset.originalFileName,
-          duration: asset.duration,
-          status: asset.status,
-          mediaSources: includeMediaSources ? asset.mediaSources : [],
-        };
+      const asset = lecture.assetId ? assetMap.get(lecture.assetId) : null;
+
+      if (asset) {
+        const includeAsset =
+          canViewAllAssets || (canViewPreviewsOnly && lecture.preview);
+        if (includeAsset) {
+          lectureWithAsset.asset = {
+            id: asset.id,
+            provider: asset.provider,
+            providerSpecificId: asset.providerSpecificId,
+            resourceType: asset.resourceType,
+            accessType: asset.accessType,
+            originalFileName: asset.originalFileName,
+            duration: asset.duration,
+            status: asset.status,
+            mediaSources: includeAsset ? asset.mediaSources : [],
+          };
+        }
       }
 
       curriculumItems.push(lectureWithAsset);
-    });
+    }
 
     curriculumItems.sort((a, b) => a.sortOrder - b.sortOrder);
     return curriculumItems;

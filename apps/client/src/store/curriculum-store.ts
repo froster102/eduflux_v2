@@ -10,7 +10,7 @@ interface InitialState {
   openLectureFormModal: FormModalState;
   activeId: string | null;
   activeItem: CurriculumItem | null;
-  selectedIndex: number | null;
+  selectedIndex: number;
   selectedLecture: Lecture | null;
   selectedChapter: Chapter | null;
   openFileUploadModal: boolean;
@@ -48,7 +48,7 @@ const initialState: InitialState = {
   openLectureFormModal: { isOpen: false, mode: 'create' },
   openFileUploadModal: false,
   activeId: null,
-  selectedIndex: null,
+  selectedIndex: 0,
   activeItem: null,
   selectedChapter: null,
   selectedLecture: null,

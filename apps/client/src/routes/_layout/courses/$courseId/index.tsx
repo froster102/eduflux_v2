@@ -17,9 +17,8 @@ import NoteIcon from '@/components/icons/NoteIcon';
 import MessageIcon from '@/components/icons/MessageIcon';
 import { useGetCourseInfo } from '@/features/course/hooks/useGetCourseInfo';
 import { useGetPublishedCourseCurriculum } from '@/features/course/hooks/useGetPublishedCourseCurriculum';
-import { useEnrollForCourse } from '@/features/enrollment/hooks/useEnrollForCourse';
 import { useGetInstructorProfile } from '@/features/instructor/hooks/useGetInstructorProfile';
-import { useCreateStripeCheckoutSession } from '@/features/payment/hooks/useCreateStripeCheckoutSession';
+import { useCheckout } from '@/features/payment/hooks/useCheckout';
 
 export const Route = createFileRoute('/_layout/courses/$courseId/')({
   component: RouteComponent,
@@ -37,8 +36,7 @@ function RouteComponent() {
   const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
   const [selectedPreviewLecture, setSelectedPreviewLecture] =
     React.useState<Lecture | null>(null);
-  const enrollForCourse = useEnrollForCourse();
-  const createStripeCheckout = useCreateStripeCheckoutSession();
+  const checkout = useCheckout();
 
   const descriptionHtml = {
     __html: Dompurify.sanitize(
@@ -84,22 +82,13 @@ function RouteComponent() {
     setOpenPreviewModal(true);
   }
 
-  async function handleEnrollForCourse() {
-    const { data: enrollmentReponse } = await tryCatch(
-      enrollForCourse.mutateAsync(courseId),
+  async function handleCheckout() {
+    const { data: checkoutReponse } = await tryCatch(
+      checkout.mutateAsync({ item: { itemId: courseId, itemType: 'course' } }),
     );
 
-    if (enrollmentReponse) {
-      const { data: checkoutReponse } = await tryCatch(
-        createStripeCheckout.mutateAsync({
-          type: enrollmentReponse.data.itemType,
-          referenceId: enrollmentReponse.data.referenceId,
-        }),
-      );
-
-      if (checkoutReponse) {
-        window.location.assign(checkoutReponse.data.checkoutUrl);
-      }
+    if (checkoutReponse) {
+      window.location.replace(checkoutReponse.data.checkoutUrl);
     }
   }
 
@@ -155,8 +144,8 @@ function RouteComponent() {
                     color="primary"
                     isLoading={
                       isCourseInfoLoading ||
-                      enrollForCourse.isPending ||
-                      createStripeCheckout.isPending
+                      checkout.isPending ||
+                      checkout.isPending
                     }
                     onPress={
                       courseInfo?.data && courseInfo.data.isEnrolled
@@ -164,7 +153,7 @@ function RouteComponent() {
                             navigate({
                               to: `/courses/${courseId}/learn`,
                             })
-                        : handleEnrollForCourse
+                        : handleCheckout
                     }
                   >
                     {courseInfo?.data && courseInfo.data.isEnrolled

@@ -11,7 +11,6 @@ import SessionScheduler from '@/features/session/components/SessionScheduler';
 import InstructorPageSkeleton from '@/features/instructor/components/InstructorPageSkeleton';
 import { IMAGE_BASE_URL } from '@/config/image';
 import BoltIcon from '@/components/icons/BoltIcon';
-import { useBookSession } from '@/features/session/hooks/useBookSession';
 import { tryCatch } from '@/utils/try-catch';
 import { getInstructorProfileOptions } from '@/features/instructor/hooks/useGetInstructorProfile';
 import { useGetInstructorAvailableSlots } from '@/features/instructor/hooks/useGetInstructorAvailableSlots';
@@ -19,7 +18,7 @@ import { useCreateChat } from '@/features/chat/hooks/useCreateChat';
 import StartChatButton from '@/features/chat/components/StartChatButton';
 import { useChatStore } from '@/store/useChatStore';
 import { useGetChatWithInstructor } from '@/features/chat/hooks/useGetChatWithInstructor';
-import { useCreateStripeCheckoutSession } from '@/features/payment/hooks/useCreateStripeCheckoutSession';
+import { useCheckout } from '@/features/payment/hooks/useCheckout';
 
 export const Route = createFileRoute('/_layout/instructors/$instructorId/')({
   loader: ({ context: { queryClient }, params: { instructorId } }) => {
@@ -61,9 +60,8 @@ function RouteComponent() {
   const navigte = useNavigate();
   const { setSelectedChat } = useChatStore();
 
-  const bookSession = useBookSession();
+  const checkout = useCheckout();
   const createChat = useCreateChat();
-  const createStripeCheckout = useCreateStripeCheckoutSession();
 
   async function chatWithInstructorHandler() {
     if (existingChat && existingChat.data) {
@@ -105,20 +103,11 @@ function RouteComponent() {
     }
   }
 
-  async function bookSessionHandler(data: { slotId: string }) {
-    const { data: response } = await tryCatch(bookSession.mutateAsync(data));
+  async function checkoutHandler(data: CheckoutData) {
+    const { data: response } = await tryCatch(checkout.mutateAsync(data));
 
     if (response) {
-      const { data: checkoutReponse } = await tryCatch(
-        createStripeCheckout.mutateAsync({
-          type: response.data.itemType,
-          referenceId: response.data.referenceId,
-        }),
-      );
-
-      if (checkoutReponse) {
-        window.location.assign(checkoutReponse.data.checkoutUrl);
-      }
+      window.location.replace(response.data.checkoutUrl);
     }
   }
 
@@ -175,14 +164,12 @@ function RouteComponent() {
       <SessionScheduler
         availableSlots={availableSlots?.data!}
         instructor={instructor.data}
-        isConfirmBookingPending={
-          bookSession.isPending || createStripeCheckout.isPending
-        }
+        isConfirmBookingPending={checkout.isPending}
         isOpen={openScheduler}
         isSlotsLoading={isAvailableSlotsLoading}
         selectedDate={selectedDate}
         selectedSlot={selectedSlot}
-        onConfirmBooking={bookSessionHandler}
+        onConfirmBooking={checkoutHandler}
         onOpenChange={(isOpen) => {
           setOpenScheduler(isOpen);
         }}

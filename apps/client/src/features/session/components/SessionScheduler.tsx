@@ -21,7 +21,7 @@ interface SessionSchedulerProps {
   selectedSlot: AvailableSlots | null;
   selectedDate: string;
   onSelectedDateChange: (date: string) => void;
-  onConfirmBooking: (data: { slotId: string }) => void;
+  onConfirmBooking: (data: CheckoutData) => void;
   isConfirmBookingPending: boolean;
 }
 
@@ -168,7 +168,12 @@ export default function SessionScheduler({
                                     }
                                     isLoading={isConfirmBookingPending}
                                     onPress={() =>
-                                      onConfirmBooking({ slotId: slot.id })
+                                      onConfirmBooking({
+                                        item: {
+                                          itemId: slot.id,
+                                          itemType: 'session',
+                                        },
+                                      })
                                     }
                                   >
                                     Confirm

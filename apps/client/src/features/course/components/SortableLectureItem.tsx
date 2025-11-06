@@ -8,11 +8,9 @@ import DeleteIcon from '@/components/icons/DeleteIcon';
 
 interface SortableLectureItemProps {
   lecture: CurriculumItem;
-  isLastItemInChapter: boolean;
   index: number;
   onEdit: (lecture: Lecture, index: number) => void;
   onDelete: (id: string) => void;
-  onAddLecture: (index: number) => void;
   onAddContent: (lecture: Lecture) => void;
 }
 
@@ -20,10 +18,8 @@ export default function SortableLectureItem({
   lecture,
   onDelete,
   onEdit,
-  onAddLecture,
   onAddContent,
   index,
-  isLastItemInChapter,
 }: SortableLectureItemProps) {
   return (
     <>
@@ -82,19 +78,6 @@ export default function SortableLectureItem({
             </div>
           </div>
         </CardBody>
-        <div className="py-2">
-          {isLastItemInChapter && (
-            <Button
-              color="primary"
-              size="sm"
-              onPress={() => {
-                onAddLecture(index);
-              }}
-            >
-              Curriculum item
-            </Button>
-          )}
-        </div>
       </div>
     </>
   );
