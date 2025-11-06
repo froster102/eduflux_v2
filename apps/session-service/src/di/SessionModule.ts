@@ -19,6 +19,8 @@ import { GrpcSessionServiceController } from '@api/grpc/controller/GrpcSessionSe
 import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 import { GetSessionService } from '@core/application/session/service/usecase/GetSessionService';
 import type { GetSessionUseCase } from '@core/application/session/usecase/GetSessionUseCase';
+import type { SessionBookingConfirmEventSubscriber } from '@core/application/views/user-session/subscriber/SessionBookingConfirmEventSubscriber';
+import { SessionBookingConfirmEventSubscriberService } from '@core/application/views/user-session/service/subscriber/SessionBookingConfirmEventSubsciberService';
 
 export const SessionModule: ContainerModule = new ContainerModule((options) => {
   //Use-case
@@ -51,6 +53,11 @@ export const SessionModule: ContainerModule = new ContainerModule((options) => {
     .to(AutoCompleteSessionsService);
 
   //Subscribers
+  options
+    .bind<SessionBookingConfirmEventSubscriber>(
+      SessionDITokens.SessionBookingConfirmEventSubscriber,
+    )
+    .to(SessionBookingConfirmEventSubscriberService);
 
   //Repository
   options

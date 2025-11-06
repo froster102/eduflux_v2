@@ -1,26 +1,25 @@
 import { NotificationDITokens } from '@core/application/notification/di/NotificationDITokens';
-import type { EnrollmentCompletedEventSubscriber } from '@core/application/notification/subscriber/EnrollmentCompletedEventSubscriber';
+import type { EnrollmentCreatedEventSubscriber } from '@core/application/notification/subscriber/EnrollmentCreatedEventSubscriber';
 import type { NotificationRepositoryPort } from '@core/application/notification/port/persistence/NotificationRepositoryPort';
 import { NotificationUseCaseDto } from '@core/application/notification/usecase/dto/NotificationUseCaseDto';
 import { eventEmitter } from '@core/common/util/event/eventEmitter';
 import { Notification } from '@core/domain/notification/entiy/Notification';
 import { NotificationStatus } from '@core/domain/notification/enum/NotificationStatus';
 import { ServerEvents } from '@shared/enum/ServerEvents';
-import type { EnrollmentCompletedEvent } from '@eduflux-v2/shared/events/course/EnrollmentCompletedEvent';
 import type { ServerEvent } from '@shared/types/ServerEvent';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
-import { EnrollmentCompletedEvent as EnrollmentCompletedEventClass } from '@eduflux-v2/shared/events/course/EnrollmentCompletedEvent';
+import { EnrollmentCreatedEvent } from '@eduflux-v2/shared/events/course/EnrollmentCreatedEvent';
 
-export class EnrollmentCompletedEventSubscriberService
-  implements EnrollmentCompletedEventSubscriber
+export class EnrollmentCreatedEventSubscriberService
+  implements EnrollmentCreatedEventSubscriber
 {
   constructor(
     @inject(NotificationDITokens.NotificationRepository)
     private readonly notificationRepository: NotificationRepositoryPort,
   ) {}
 
-  async on(event: EnrollmentCompletedEvent): Promise<void> {
+  async on(event: EnrollmentCreatedEvent): Promise<void> {
     const { title, path, userId } = event.payload;
 
     const notification = Notification.create({
@@ -49,6 +48,6 @@ export class EnrollmentCompletedEventSubscriberService
   }
 
   subscribedTo() {
-    return [EnrollmentCompletedEventClass];
+    return [EnrollmentCreatedEvent];
   }
 }

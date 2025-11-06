@@ -11,8 +11,6 @@ import type { ChapterController } from '@api/http/controller/ChapterController';
 import type { LectureController } from '@api/http/controller/LectureController';
 import { ChapterDITokens } from '@core/application/chapter/di/ChapterDITokens';
 import { LectureDITokens } from '@core/application/lecture/di/LectureDITokens';
-import type { EnrollmentController } from '@api/http/controller/EnrollmentController';
-import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 
 export class HttpServer {
@@ -22,7 +20,6 @@ export class HttpServer {
   private readonly courseController: CourseController;
   private readonly chapterController: ChapterController;
   private readonly lectureController: LectureController;
-  private readonly enrollmentController: EnrollmentController;
 
   constructor(port: number) {
     this.app = new Elysia();
@@ -39,9 +36,6 @@ export class HttpServer {
     this.lectureController = container.get<LectureController>(
       LectureDITokens.LectureController,
     );
-    this.enrollmentController = container.get<EnrollmentController>(
-      EnrollmentDITokens.EnrollmentController,
-    );
   }
 
   private setupMiddlewares(): void {
@@ -57,7 +51,6 @@ export class HttpServer {
     this.app.use(this.courseController.register());
     this.app.use(this.chapterController.register());
     this.app.use(this.lectureController.register());
-    this.app.use(this.enrollmentController.register());
   }
 
   start(): void {

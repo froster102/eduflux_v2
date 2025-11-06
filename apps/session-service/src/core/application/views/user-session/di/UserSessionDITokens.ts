@@ -5,9 +5,6 @@ export class UserSessionDITokens {
   );
 
   //Subscribers
-  static readonly SessionConfirmedEventSubscriber: unique symbol = Symbol(
-    'SessionConfirmedEventSubscriber',
-  );
   static readonly UserSessionUpdatedEventSubscriber: unique symbol = Symbol(
     'UserSessionUpdatedEventSubscriber',
   );

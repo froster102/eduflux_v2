@@ -6,7 +6,6 @@ import type { AutoCompleteSessionsUseCase } from '@core/application/session/usec
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
-import { SessionEvents } from '@eduflux-v2/shared/events/session/enum/SessionEvents';
 import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 import { SessionCompletedEvent } from '@eduflux-v2/shared/events/session/SessionCompletedEvent';
 import { SessionStatus } from '@eduflux-v2/shared/constants/SessionStatus';

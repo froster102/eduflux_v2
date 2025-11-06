@@ -28,7 +28,7 @@ export class StartSessionOnJoinService implements StartSessionOnJoinUseCase {
       new NotFoundException('Session not found.'),
     );
 
-    const isPreStartStatus = session.status === SessionStatus.BOOKED;
+    const isPreStartStatus = session.status === SessionStatus.CONFIRMED;
 
     if (isPreStartStatus) {
       session.markAsProgress();

@@ -2,7 +2,7 @@ import { EventSubscribers } from '@eduflux-v2/shared/infrastructure/messaging/Ev
 import { LearnerStatsDITokens } from '@application/learner-stats/di/LearnerStatsDITokens';
 import { InstructorViewDITokens } from '@application/views/instructor-view/di/InstructorViewDITokens';
 import { TaughtCourseViewDITokens } from '@application/views/taught-course/di/TaughtCourseViewDITokens';
-import type { EnrollmentCompletedEventSubscriber } from '@application/learner-stats/subscriber/EnrollmentCompletedEventSubscriber';
+import type { EnrollmentCreatedEventSubscriber } from '@core/application/learner-stats/subscriber/EnrollmentCreatedEventSubscriber';
 import type { SessionCompletedEventSubscriber } from '@application/learner-stats/subscriber/SessionCompletedEventSubscriber';
 import type { InstructorCreatedEventSubscriber } from '@application/views/instructor-view/subscriber/InstructorCreatedEventSubscriber';
 import type { SessionSettingsUpdatedEventSubscriber } from '@application/views/instructor-view/subscriber/SessionSettingsUpdatedEventSubscriber';
@@ -15,10 +15,9 @@ import type { Container } from 'inversify';
 
 export class UserServiceEventSubscribers extends EventSubscribers {
   static from(container: Container): UserServiceEventSubscribers {
-    const enrollmentCompleted =
-      container.get<EnrollmentCompletedEventSubscriber>(
-        LearnerStatsDITokens.EnrollmentCompletedEventSubscriber,
-      );
+    const enrollmentCreated = container.get<EnrollmentCreatedEventSubscriber>(
+      LearnerStatsDITokens.EnrollmentCreatedEventSubscriber,
+    );
     const sessionCompleted = container.get<SessionCompletedEventSubscriber>(
       LearnerStatsDITokens.SessionCompletedEventSubscriber,
     );
@@ -47,7 +46,7 @@ export class UserServiceEventSubscribers extends EventSubscribers {
     );
 
     return new UserServiceEventSubscribers([
-      enrollmentCompleted,
+      enrollmentCreated,
       sessionCompleted,
       instructorCreated,
       sessionSettingsUpdated,

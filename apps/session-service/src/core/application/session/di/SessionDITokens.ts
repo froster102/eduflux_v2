@@ -23,8 +23,8 @@ export class SessionDITokens {
   );
 
   //Subscriber
-  static readonly SessionPaymentSuccessfullEventSubscriber: unique symbol = Symbol(
-    'SessionPaymentSuccessfullEventSubscriber',
+  static readonly SessionBookingConfirmEventSubscriber: unique symbol = Symbol(
+    'SessionBookingConfirmEventSubscriber',
   );
 
   //External Service

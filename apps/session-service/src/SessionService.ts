@@ -10,15 +10,30 @@ import type { MongooseConnection } from '@eduflux-v2/shared/infrastructure/datab
 import { SharedInfrastructureDITokens } from '@eduflux-v2/shared/di/SharedInfrastructureDITokens';
 import { SessionServiceEventSubscribers } from '@infrastructure/event/SessionServiceEventSubscribers';
 import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
+import { GrpcServer } from '@api/grpc/GrpcServer';
+import { GrpcServerConfig } from '@shared/config/GrpcServerConfig';
+import type { ICronServices } from '@infrastructure/cron/interface/cron-services.interface';
+import { InfrastructureDITokens } from '@infrastructure/di/InfrastructureDITokens';
 
 export class SessionService {
-  private server?: HttpServer;
+  private httpServer?: HttpServer;
+  private grpcServer?: GrpcServer;
 
   async start(): Promise<void> {
-    this.server = new HttpServer(HttpServerConfig.PORT);
+    this.httpServer = new HttpServer(HttpServerConfig.PORT);
+    this.grpcServer = new GrpcServer(GrpcServerConfig.GRPC_SERVER_PORT);
     await this.configureDatabase();
     await this.configureMessagaseBroker();
-    this.server.start();
+    this.startCronServices();
+    this.httpServer.start();
+    this.grpcServer.start();
+  }
+
+  private startCronServices() {
+    const cronServices = container.get<ICronServices>(
+      InfrastructureDITokens.CronServices,
+    );
+    cronServices.register();
   }
 
   private async configureDatabase(): Promise<void> {

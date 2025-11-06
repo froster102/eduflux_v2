@@ -4,9 +4,11 @@ import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import { Exception } from '@eduflux-v2/shared/exceptions/Exception';
 import type { LoggerPort } from '@eduflux-v2/shared/ports/logger/LoggerPort';
 import {
+  Metadata,
   status,
   type sendUnaryData,
   type ServerUnaryCall,
+  type ServiceError,
 } from '@grpc/grpc-js';
 
 import { getGrpcStatusCode } from '@eduflux-v2/shared/errors/error-code';
@@ -94,12 +96,16 @@ export class GrpcSessionServiceController implements SessionServiceServer {
         message: error.message,
       };
       callback(serviceError, null);
+      return;
     }
-    const serviceError = {
+    const serviceError: ServiceError = {
       name: error.name,
       code: status.INTERNAL,
-      message: 'Failed to process request',
+      message: 'An unexpected internal server error occurred.',
+      details: error.message,
+      metadata: new Metadata(),
     };
+
     callback(serviceError, null);
   }
 }

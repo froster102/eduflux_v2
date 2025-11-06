@@ -74,10 +74,7 @@ export class StripeService {
     });
   }
 
-  async handleWebhook(
-    rawBuffer: Buffer<ArrayBuffer>,
-    signature: string,
-  ): Promise<void> {
+  async handleWebhook(rawBuffer: Buffer, signature: string): Promise<void> {
     const { data: event, error } = await tryCatch(
       this.stripe.webhooks.constructEventAsync(
         rawBuffer,
@@ -103,7 +100,6 @@ export class StripeService {
     if (!payment || payment.status === PaymentStatus.COMPLETED) {
       return;
     }
-
     if (type === 'payment_intent.succeeded') {
       payment.status = PaymentStatus.COMPLETED;
       payment.updatedAt = new Date();
@@ -119,7 +115,6 @@ export class StripeService {
         itemType:
           payment.type === PaymentType.COURSE_PURCHASE ? 'course' : 'session',
       });
-
       await this.messageBroker.publish(paymentSuccessfullEvent);
     }
   }

@@ -46,8 +46,8 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
       instructorRevenue:
         itemDetails.amount - itemDetails.amount * this.plattformFeeRate,
       currency: 'USD',
-      type: item.type,
-      referenceId: item.itemId,
+      type: item.itemType,
+      referenceId: itemDetails.itemId,
       cancelUrl: itemDetails.cancelUrl,
       successUrl: itemDetails.successUrl,
       item: {
@@ -56,7 +56,7 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
     });
 
     return {
-      transactionId: paymentResponse.transactionId,
+      checkoutUrl: paymentResponse.checkoutUrl,
     };
   }
 
@@ -64,12 +64,13 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
     item: CheckoutItem,
     user: AuthenticatedUserDto,
   ): Promise<CheckoutItemDetails> {
-    if (item.type === 'course') {
+    if (item.itemType === 'course') {
       const course = CoreAssert.notEmpty(
         await this.courseService.getCourse(item.itemId),
         new NotFoundException('Item not found.'),
       );
       return {
+        itemId: course.id,
         amount: course.price,
         title: course.title,
         image: course.thumbnail,
@@ -78,7 +79,7 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
         cancelUrl: `${envVariables.COURSE_PAYMENT_SUCCESS_URL}/${course.id}?success=false`,
       };
     }
-    if (item.type === 'session') {
+    if (item.itemType === 'session') {
       const session = await this.sessionService.bookSession({
         slotId: item.itemId,
         userId: user.id,
@@ -88,12 +89,13 @@ export class HandleCheckoutService implements HandleCheckoutUseCase {
         new NotFoundException('Instructor not found.'),
       );
       return {
+        itemId: session.id,
         amount: session.price,
         title: `A session with instructor ${instructor.firstName + ' ' + instructor.lastName}`,
         image: instructor.image,
         instructorId: session.instructorId,
-        successUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}/${session.id}?success=true&sessionId=${session.id}&instructor=${instructor.firstName + ' ' + instructor.lastName}&learner=${user.name}&startTime=${session.startTime}&endTime=${session.endTime}`,
-        cancelUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}/${session.id}?success=false&sessionId=${session.id}&instructor=${instructor.firstName + ' ' + instructor.lastName}&learner=${user.name}&startTime=${session.startTime}&endTime=${session.endTime}`,
+        successUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}?success=true&sessionId=${session.id}&instructor=${instructor.firstName + ' ' + instructor.lastName}&learner=${user.name}&startTime=${session.startTime}&endTime=${session.endTime}`,
+        cancelUrl: `${envVariables.SESSION_PAYMENT_SUCCESS_URL}?success=false&sessionId=${session.id}&instructor=${instructor.firstName + ' ' + instructor.lastName}&learner=${user.name}&startTime=${session.startTime}&endTime=${session.endTime}`,
       };
     }
     throw new BadRequestException('Invalid item type.');

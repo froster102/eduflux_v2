@@ -1,9 +1,7 @@
 import { UserSessionDITokens } from '@core/application/views/user-session/di/UserSessionDITokens';
-import type { SessionConfirmedEventSubscriber } from '@core/application/views/user-session/subscriber/SessionConfirmedEventSubscriber';
 import type { UserSessionUpdatedEventSubscriber } from '@core/application/views/user-session/subscriber/UserSessionUpdatedEventSubscriber';
 import type { UserUpdatedEventSubscriber } from '@core/application/views/user-session/subscriber/UserUpdatedEventSubscriber';
 import type { UserSessionRepositoryPort } from '@core/application/views/user-session/port/persistence/UserSessionRepositoryPort';
-import { SessionConfirmedEventSubscriberService } from '@core/application/views/user-session/service/subscriber/SessionConfirmedEventSubscriberService';
 import { UserSessionUpdatedEventSubscriberService } from '@core/application/views/user-session/service/subscriber/UserSessionUpdatedEventSubscriberService';
 import { UserUpdatedEventSubscriberService } from '@core/application/views/user-session/service/subscriber/UserUpdatedEventSubscriberService';
 import { GetUserSessionService } from '@core/application/views/user-session/service/usecase/GetUserSessionsService';
@@ -19,11 +17,6 @@ export const UserSessionModule: ContainerModule = new ContainerModule(
       .to(GetUserSessionService);
 
     //Subscribers
-    options
-      .bind<SessionConfirmedEventSubscriber>(
-        UserSessionDITokens.SessionConfirmedEventSubscriber,
-      )
-      .to(SessionConfirmedEventSubscriberService);
     options
       .bind<UserSessionUpdatedEventSubscriber>(
         UserSessionDITokens.UserSessionUpdatedEventSubscriber,

@@ -1,10 +1,9 @@
-import { EnrollmentController } from '@api/http/controller/EnrollmentController';
 import { EnrollmentDITokens } from '@core/application/enrollment/di/EnrollmentDITokens';
 import type { EnrollmentRepositoryPort } from '@core/application/enrollment/port/persistence/EnrollmentRepositoryPort';
-import { CreateEnrollmentService } from '@core/application/enrollment/service/usecase/CreateEnrollmentService';
+import { CreateEnrollmentSubsciberService } from '@core/application/enrollment/service/subscriber/CreateEnrollmentSubscriberService';
 import { GetEnrollmentService } from '@core/application/enrollment/service/usecase/GetEnrollmentService';
 import { VerifyChatAccessService } from '@core/application/enrollment/service/usecase/VerifyChatAccessService';
-import type { CreateEnrollmentUseCase } from '@core/application/enrollment/usecase/CreateEnrollmentUseCase';
+import type { CreateEnrollmentSubscriber } from '@core/application/enrollment/subscriber/CreateEnrollmentSubscriber';
 import type { GetEnrollmentUseCase } from '@core/application/enrollment/usecase/GetEnrollmentUseCase';
 import type { VerifyChatAccessUseCase } from '@core/application/enrollment/usecase/VerifyChatAccessUseCase';
 import { MongooseEnrollmentRepositoryAdapter } from '@infrastructure/adapter/persistence/mongoose/repository/enrollment/MongooseEnrollmentRepositoryAdapter';
@@ -18,9 +17,6 @@ export const EnrollmentModule = new ContainerModule((options) => {
 
   //Use-cases
   options
-    .bind<CreateEnrollmentUseCase>(EnrollmentDITokens.CreateEnrollmentUseCase)
-    .to(CreateEnrollmentService);
-  options
     .bind<VerifyChatAccessUseCase>(EnrollmentDITokens.VerifyChatAccessUseCase)
     .to(VerifyChatAccessService);
   options
@@ -28,9 +24,9 @@ export const EnrollmentModule = new ContainerModule((options) => {
     .to(GetEnrollmentService);
 
   //Subscriber
-
-  //Controller
   options
-    .bind<EnrollmentController>(EnrollmentDITokens.EnrollmentController)
-    .to(EnrollmentController);
+    .bind<CreateEnrollmentSubscriber>(
+      EnrollmentDITokens.CreateEnrollmentSubsciber,
+    )
+    .to(CreateEnrollmentSubsciberService);
 });

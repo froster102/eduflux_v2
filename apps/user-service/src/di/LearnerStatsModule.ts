@@ -1,8 +1,8 @@
 import { LearnerStatsDITokens } from '@application/learner-stats/di/LearnerStatsDITokens';
-import type { EnrollmentCompletedEventSubscriber } from '@application/learner-stats/subscriber/EnrollmentCompletedEventSubscriber';
+import type { EnrollmentCreatedEventSubscriber } from '@core/application/learner-stats/subscriber/EnrollmentCreatedEventSubscriber';
 import type { SessionCompletedEventSubscriber } from '@application/learner-stats/subscriber/SessionCompletedEventSubscriber';
 import type { LearnerStatsRepositoryPort } from '@application/learner-stats/port/persistence/LearnerStatsRepositoryPort';
-import { EnrollmentCompletedEventSubscriberService } from '@application/learner-stats/service/subscriber/EnrollmentCompletedEventSubscriberService';
+import { EnrollmentCreatedEventSubscriberService } from '@core/application/learner-stats/service/subscriber/EnrollmentCreatedEventSubscriberService';
 import { SessionCompletedEventSubscriberService } from '@application/learner-stats/service/subscriber/SessionCompletedEventSubscriberService';
 import { GetLearnerStatsUseCaseService } from '@application/learner-stats/service/usecase/GetLearnerStatsService';
 import type { GetLearnerStatsUseCase } from '@application/learner-stats/usecase/GetLearnerStatsUseCase';
@@ -23,10 +23,10 @@ export const LearnerStatsModule: ContainerModule = new ContainerModule(
       )
       .to(SessionCompletedEventSubscriberService);
     options
-      .bind<EnrollmentCompletedEventSubscriber>(
-        LearnerStatsDITokens.EnrollmentCompletedEventSubscriber,
+      .bind<EnrollmentCreatedEventSubscriber>(
+        LearnerStatsDITokens.EnrollmentCreatedEventSubscriber,
       )
-      .to(EnrollmentCompletedEventSubscriberService);
+      .to(EnrollmentCreatedEventSubscriberService);
 
     //Repository
     options

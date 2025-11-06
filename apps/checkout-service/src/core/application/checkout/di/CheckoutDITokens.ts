@@ -10,7 +10,6 @@ export class CheckoutDITokens {
   );
 
   //Controller
-  static readonly CheckoutController: unique symbol = Symbol.for(
-    'CheckoutController',
-  );
+  static readonly CheckoutController: unique symbol =
+    Symbol.for('CheckoutController');
 }

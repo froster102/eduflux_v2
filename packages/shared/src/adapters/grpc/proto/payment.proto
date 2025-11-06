@@ -25,5 +25,5 @@ message Item {
 }
 
 message CreatePaymentResponse {
-  string transaction_id = 1;
+  string checkout_url = 1;
 }

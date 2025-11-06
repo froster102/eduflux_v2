@@ -69,7 +69,7 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
         const params = {
           connection: connection,
           exchange: 'application-events',
-          queueNameFormatter: new RabbitMQqueueFormatter('chat-service'),
+          queueNameFormatter: new RabbitMQqueueFormatter('course-service'),
           maxRetries: config.maxRetries,
         };
 

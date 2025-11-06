@@ -6,14 +6,16 @@ import type { InstructorRepositoryPort } from '@application/instructor/port/pers
 import { SubscribedCourseViewDITokens } from '@application/views/subscribed-course/di/SubscribedCourseViewDITokens';
 import type { SubscribedCourseViewRepositoryPort } from '@application/views/subscribed-course/port/SubscribedCourseViewRepositoryPort';
 import { SubscribedCourseView } from '@application/views/subscribed-course/entity/SubscribedCourseView';
-import type { EnrollmentCompletedEventSubscriber } from '@application/learner-stats/subscriber/EnrollmentCompletedEventSubscriber';
-import { EnrollmentCompletedEvent } from '@eduflux-v2/shared/events/course/EnrollmentCompletedEvent';
+import type { EnrollmentCreatedEventSubscriber } from '@core/application/learner-stats/subscriber/EnrollmentCreatedEventSubscriber';
 import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
 import type { MessageBrokerPort } from '@eduflux-v2/shared/src/ports/message/MessageBrokerPort';
 import { InstructorStatsUpdatedEvent } from '@application/views/instructor-view/events/InstructorStatsUpdatedEvent';
+import { EnrollmentCreatedEvent } from '@eduflux-v2/shared/events/course/EnrollmentCreatedEvent';
+import { ProgressDITokens } from '@core/application/progress/di/ProgressDITokens';
+import type { CreateProgressUseCase } from '@core/application/progress/usecase/CreateProgressUseCase';
 
-export class EnrollmentCompletedEventSubscriberService
-  implements EnrollmentCompletedEventSubscriber
+export class EnrollmentCreatedEventSubscriberService
+  implements EnrollmentCreatedEventSubscriber
 {
   constructor(
     @inject(SharedCoreDITokens.MessageBroker)
@@ -24,9 +26,11 @@ export class EnrollmentCompletedEventSubscriberService
     private readonly instructorRepository: InstructorRepositoryPort,
     @inject(SubscribedCourseViewDITokens.SubscribedCourseViewRepository)
     private readonly subscribedCourseViewRepository: SubscribedCourseViewRepositoryPort,
+    @inject(ProgressDITokens.CreateProgressUseCase)
+    private readonly createProgressUseCase: CreateProgressUseCase,
   ) {}
 
-  async on(event: EnrollmentCompletedEvent): Promise<void> {
+  async on(event: EnrollmentCreatedEvent): Promise<void> {
     const {
       userId,
       instructorId,
@@ -54,8 +58,11 @@ export class EnrollmentCompletedEventSubscriberService
       instructor,
       level,
       averageRating,
-      enrollmentCount: 0, // EnrollmentCompletedEvent doesn't include enrollmentCount, using default
+      enrollmentCount: 0, // EnrollmentCompletedEvent doesn't include enrollmentCount, use default
     });
+
+    //Create progress for the enrollment user
+    await this.createProgressUseCase.execute({ courseId, userId });
 
     //send event to update the instructor views
     if (updatedInstructor) {
@@ -75,6 +82,6 @@ export class EnrollmentCompletedEventSubscriberService
   }
 
   subscribedTo() {
-    return [EnrollmentCompletedEvent];
+    return [EnrollmentCreatedEvent];
   }
 }

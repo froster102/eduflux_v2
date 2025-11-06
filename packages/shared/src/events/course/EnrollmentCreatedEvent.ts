@@ -1,16 +1,22 @@
-import type { PaymentType } from '@shared/constants/PaymentType';
 import { EnrollmentEvents } from '@shared/events/course/enum/EnrollmentEvents';
 import { Event } from '@shared/events/Event';
 
 export interface EnrollmentCreatedEventPayload {
-  readonly paymentType: PaymentType;
-  readonly paymentId: string;
+  readonly courseId: string;
+  readonly title: string;
+  readonly description: string;
+  readonly thumbnail: string;
+  readonly instructor: {
+    readonly id: string;
+    readonly name: string;
+  };
+  readonly level: string;
+  readonly averageRating: number;
+  readonly enrolledAt: string;
   readonly enrollmentId: string;
   readonly instructorId: string;
-  readonly totalAmount: number;
-  readonly platformFee: number;
-  readonly instructorRevenue: number;
-  readonly currency: 'USD';
+  readonly userId: string;
+  readonly path: string;
 }
 
 export class EnrollmentCreatedEvent extends Event<EnrollmentCreatedEventPayload> {

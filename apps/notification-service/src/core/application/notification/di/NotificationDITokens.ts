@@ -11,8 +11,8 @@ export class NotificationDITokens {
   );
 
   //Subscribers
-  static readonly EnrollmentCompletedEventSubscriber: unique symbol = Symbol(
-    'EnrollmentCompletedEventSubscriber',
+  static readonly EnrollmentCreatedEventSubscriber: unique symbol = Symbol(
+    'EnrollmentCreatedEventSubscriber',
   );
   static readonly SessionConfirmedEventSubscriber: unique symbol = Symbol(
     'SessionConfirmedEventSubscriber',

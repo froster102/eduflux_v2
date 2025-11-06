@@ -30,7 +30,6 @@ export class PaymentSuccessfullEventSubscriberService
         itemId,
         itemType,
       });
-
       await this.messageBroker.publish(createEnrollmentEvent);
     } else if (paymentType === PaymentType.SESSION_BOOKING) {
       const confirmedSessionEvent = new SessionBookingConfirmEvent(paymentId, {

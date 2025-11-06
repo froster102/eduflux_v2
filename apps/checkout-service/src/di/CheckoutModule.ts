@@ -6,22 +6,23 @@ import { PaymentSuccessfullEventSubscriberService } from '@core/application/chec
 import { CheckoutController } from '@api/http/controller/CheckoutController';
 import { ContainerModule } from 'inversify';
 
-export const CheckoutModule: ContainerModule = new ContainerModule((options) => {
-  //Use-cases
-  options
-    .bind<HandleCheckoutUseCase>(CheckoutDITokens.HandleCheckoutUseCase)
-    .to(HandleCheckoutService);
+export const CheckoutModule: ContainerModule = new ContainerModule(
+  (options) => {
+    //Use-cases
+    options
+      .bind<HandleCheckoutUseCase>(CheckoutDITokens.HandleCheckoutUseCase)
+      .to(HandleCheckoutService);
 
-  //Subscribers
-  options
-    .bind<PaymentSuccessfullEventSubscriber>(
-      CheckoutDITokens.PaymentSuccessfullEventSubscriber,
-    )
-    .to(PaymentSuccessfullEventSubscriberService);
+    //Subscribers
+    options
+      .bind<PaymentSuccessfullEventSubscriber>(
+        CheckoutDITokens.PaymentSuccessfullEventSubscriber,
+      )
+      .to(PaymentSuccessfullEventSubscriberService);
 
-  //Controllers
-  options
-    .bind<CheckoutController>(CheckoutDITokens.CheckoutController)
-    .to(CheckoutController);
-});
-
+    //Controllers
+    options
+      .bind<CheckoutController>(CheckoutDITokens.CheckoutController)
+      .to(CheckoutController);
+  },
+);

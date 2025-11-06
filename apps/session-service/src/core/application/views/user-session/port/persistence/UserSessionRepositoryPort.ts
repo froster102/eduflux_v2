@@ -7,6 +7,7 @@ import type { BaseRepositoryPort } from '@eduflux-v2/shared/ports/persistence/Ba
 
 export interface UserSessionRepositoryPort
   extends BaseRepositoryPort<UserSession> {
+  upsert(session: UserSession): Promise<void>;
   listUserSessions(
     userId: string,
     preferedRole: Role,

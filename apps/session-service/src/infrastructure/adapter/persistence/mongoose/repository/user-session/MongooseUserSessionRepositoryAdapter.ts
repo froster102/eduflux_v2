@@ -19,6 +19,17 @@ export class MongooseUserSessionRepositoryAdapter
     super(UserSessionModel, MongooseUserSessionMapper);
   }
 
+  async upsert(session: UserSession): Promise<void> {
+    await UserSessionModel.findOneAndUpdate(
+      { _id: session.id },
+      { $set: session },
+      {
+        upsert: true,
+        new: true,
+      },
+    );
+  }
+
   async listUserSessions(
     userId: string,
     preferedRole: Role,

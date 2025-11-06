@@ -40,7 +40,7 @@ export interface Item {
 }
 
 export interface CreatePaymentResponse {
-  transactionId: string;
+  checkoutUrl: string;
 }
 
 function createBaseCreatePaymentRequest(): CreatePaymentRequest {
@@ -334,13 +334,13 @@ export const Item: MessageFns<Item> = {
 };
 
 function createBaseCreatePaymentResponse(): CreatePaymentResponse {
-  return { transactionId: "" };
+  return { checkoutUrl: "" };
 }
 
 export const CreatePaymentResponse: MessageFns<CreatePaymentResponse> = {
   encode(message: CreatePaymentResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.transactionId !== "") {
-      writer.uint32(10).string(message.transactionId);
+    if (message.checkoutUrl !== "") {
+      writer.uint32(10).string(message.checkoutUrl);
     }
     return writer;
   },
@@ -357,7 +357,7 @@ export const CreatePaymentResponse: MessageFns<CreatePaymentResponse> = {
             break;
           }
 
-          message.transactionId = reader.string();
+          message.checkoutUrl = reader.string();
           continue;
         }
       }
@@ -370,13 +370,13 @@ export const CreatePaymentResponse: MessageFns<CreatePaymentResponse> = {
   },
 
   fromJSON(object: any): CreatePaymentResponse {
-    return { transactionId: isSet(object.transactionId) ? globalThis.String(object.transactionId) : "" };
+    return { checkoutUrl: isSet(object.checkoutUrl) ? globalThis.String(object.checkoutUrl) : "" };
   },
 
   toJSON(message: CreatePaymentResponse): unknown {
     const obj: any = {};
-    if (message.transactionId !== "") {
-      obj.transactionId = message.transactionId;
+    if (message.checkoutUrl !== "") {
+      obj.checkoutUrl = message.checkoutUrl;
     }
     return obj;
   },
@@ -386,7 +386,7 @@ export const CreatePaymentResponse: MessageFns<CreatePaymentResponse> = {
   },
   fromPartial<I extends Exact<DeepPartial<CreatePaymentResponse>, I>>(object: I): CreatePaymentResponse {
     const message = createBaseCreatePaymentResponse();
-    message.transactionId = object.transactionId ?? "";
+    message.checkoutUrl = object.checkoutUrl ?? "";
     return message;
   },
 };

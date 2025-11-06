@@ -80,7 +80,7 @@ export class PaymentService {
             stripeSession.expires_at > Math.floor(Date.now() / 1000)
           ) {
             return {
-              transactionId: stripeSession.id,
+              checkoutUrl: stripeSession.url as string,
             };
           }
         } catch {
@@ -129,7 +129,7 @@ export class PaymentService {
       await this.paymentRepository.update(payment.id, payment);
 
       return {
-        transactionId: checkoutSession.id,
+        checkoutUrl: checkoutSession.url as string,
       };
     } catch (e) {
       await this.paymentRepository.delete(payment.id);

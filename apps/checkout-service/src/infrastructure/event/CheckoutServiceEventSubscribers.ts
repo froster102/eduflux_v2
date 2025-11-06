@@ -11,4 +11,3 @@ export class CheckoutServiceEventSubscribers extends EventSubscribers {
     return new CheckoutServiceEventSubscribers([paymentSuccessfull]);
   }
 }
-

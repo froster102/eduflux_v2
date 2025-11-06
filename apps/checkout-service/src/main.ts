@@ -17,4 +17,3 @@ function handleError(error: Error) {
 
 process.on('uncaughtException', handleError);
 process.on('unhandledRejection', handleError);
-

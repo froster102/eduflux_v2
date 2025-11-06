@@ -2,7 +2,7 @@ import type { HandleCheckoutPort } from '@core/application/checkout/port/usecase
 import type { UseCase } from '@eduflux-v2/shared/usecase/UseCase';
 
 export interface HandleCheckoutUseCaseResult {
-  transactionId: string;
+  checkoutUrl: string;
 }
 
 export interface HandleCheckoutUseCase

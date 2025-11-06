@@ -1,8 +1,4 @@
 export class EnrollmentDITokens {
-  //Use-cases
-  static readonly CreateEnrollmentUseCase: unique symbol = Symbol(
-    'CreateEnrollmentUseCase',
-  );
   static readonly VerifyChatAccessUseCase: unique symbol = Symbol(
     'VerifyChatAccessUseCase',
   );
@@ -16,11 +12,7 @@ export class EnrollmentDITokens {
   );
 
   //Subscribers
-  static readonly EnrollmentPaymentSuccessfullEventSubscriber: unique symbol =
-    Symbol('EnrollmentPaymentSuccessfullEventSubscriber');
-
-  //Controller
-  static readonly EnrollmentController: unique symbol = Symbol(
-    'EnrollmentController',
+  static readonly CreateEnrollmentSubsciber: unique symbol = Symbol(
+    'CreateEnrollmentSubsciber',
   );
 }

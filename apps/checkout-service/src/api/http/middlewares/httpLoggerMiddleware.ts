@@ -29,4 +29,3 @@ export const httpLoggerMiddleware = (app: Elysia) => {
 
   return app;
 };
-
