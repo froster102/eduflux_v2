@@ -31,7 +31,8 @@ export class SessionConfirmedEventSubscriberService
   ) {}
 
   async on(event: SessionConfirmedEvent): Promise<void> {
-    const { instructorId, learnerId, path, joinLink, startTime } = event.payload;
+    const { instructorId, learnerId, path, joinLink, startTime } =
+      event.payload;
 
     const instructor = await this.userService.getUser(instructorId);
     const learner = await this.userService.getUser(learnerId);
@@ -122,4 +123,3 @@ export class SessionConfirmedEventSubscriberService
     return [SessionConfirmedEventClass];
   }
 }
-
