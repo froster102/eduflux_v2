@@ -9,7 +9,7 @@ import { tryCatch } from '@eduflux-v2/shared/utils/tryCatch';
 import { envVariables } from '@/shared/env/env-variables';
 import { betterAuth } from 'better-auth';
 import { createAuthMiddleware, APIError } from 'better-auth/api';
-import type { GenericEndpointContext, User } from 'better-auth';
+import type { GenericEndpointContext } from 'better-auth';
 import { emailOTP, jwt, admin } from 'better-auth/plugins';
 import { getJwtToken } from 'better-auth/plugins';
 import { userService } from '@/grpc/grpcUserServiceAdapter';
@@ -119,29 +119,6 @@ export const auth = betterAuth({
           maxAge: 0,
         });
       }
-      if (ctx.path === '/sign-up/email') {
-        const user = (ctx.context.returned as Record<string, any>).user as User;
-        if (user) {
-          const [firstName, lastName] = user.name.split(' ');
-
-          const { error } = await tryCatch(
-            userService.createUser({
-              id: user.id,
-              firstName,
-              lastName,
-              email: user.email,
-              roles: [Role.LEARNER],
-            }),
-          );
-
-          if (error) {
-            await ctx.context.internalAdapter.deleteUser(user.id);
-            throw new APIError('INTERNAL_SERVER_ERROR', {
-              message: 'Internal server error',
-            });
-          }
-        }
-      }
       if (ctx.path === '/token') {
         const token = (ctx.context.returned as { token: string }).token;
         if (token) {
@@ -154,6 +131,36 @@ export const auth = betterAuth({
         }
       }
     }),
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user, context) => {
+          if (user) {
+            const [firstName, lastName] = user.name.split(' ');
+
+            const { error } = await tryCatch(
+              userService.createUser({
+                id: user.id,
+                firstName,
+                lastName,
+                email: user.email,
+                roles: [Role.LEARNER],
+              }),
+            );
+
+            if (error) {
+              if (context) {
+                await context.context.internalAdapter.deleteUser(user.id);
+                throw new APIError('INTERNAL_SERVER_ERROR', {
+                  message: 'Internal server error',
+                });
+              }
+            }
+          }
+        },
+      },
+    },
   },
   trustedOrigins: ['http://localhost:5173'],
   plugins: [
