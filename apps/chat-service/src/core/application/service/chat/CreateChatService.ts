@@ -3,7 +3,6 @@ import { UserChatCreatedEvent } from '@core/application/views/user-chat/events/U
 import { ChatAlreadyExistsException } from '@core/application/chat/exceptions/ChatAlreadyExistsException';
 import { InstructorNotFoundException } from '@core/application/chat/exceptions/InstructorNotFoundException';
 import { NoInstructorRoleException } from '@core/application/chat/exceptions/NoInstructorRoleException';
-import { NoUserEnrollmentException } from '@core/application/chat/exceptions/NoUserEnrollmentException';
 import type { ChatRepositoryPort } from '@core/application/chat/port/persistence/ChatRepositoryPort';
 import type { CreateChatPort } from '@core/application/chat/port/usecase/CreateChatPort';
 import type { CreateChatUseCase } from '@core/application/chat/usecase/CreateChatUseCase';
@@ -14,14 +13,11 @@ import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/Message
 import { Chat } from '@core/domain/chat/entity/Chat';
 import { inject } from 'inversify';
 import { v4 as uuidV4 } from 'uuid';
-import type { CourseServicePort } from '@eduflux-v2/shared/ports/gateway/CourseServicePort';
 import type { UserServicePort } from '@eduflux-v2/shared/ports/gateway/UserServicePort';
 import { CoreAssert } from '@eduflux-v2/shared/utils/CoreAssert';
 
 export class CreateChatService implements CreateChatUseCase {
   constructor(
-    @inject(SharedCoreDITokens.CourseService)
-    private readonly courseService: CourseServicePort,
     @inject(SharedCoreDITokens.UserService)
     private readonly userService: UserServicePort,
     @inject(ChatDITokens.ChatRepository)
@@ -32,15 +28,6 @@ export class CreateChatService implements CreateChatUseCase {
 
   async execute(payload: CreateChatPort): Promise<ChatUseCaseDto> {
     const { userId, instructorId } = payload;
-
-    const { hasAccess } = await this.courseService.verifyChatAccess(
-      instructorId,
-      userId,
-    );
-
-    if (!hasAccess) {
-      throw new NoUserEnrollmentException(userId, instructorId);
-    }
 
     const instructor = CoreAssert.notEmpty(
       await this.userService.getUser(instructorId),
@@ -78,14 +65,12 @@ export class CreateChatService implements CreateChatUseCase {
     const chatUseCaseDto = ChatUseCaseDto.fromEntity(chat);
 
     const userChatCreatedEvent: UserChatCreatedEvent = new UserChatCreatedEvent(
+      chat.id,
       {
         ...chatUseCaseDto,
         createdAt: chatUseCaseDto.createdAt.toISOString(),
         lastMessageAt: chatUseCaseDto.lastMessageAt.toISOString(),
         updatedAt: chatUseCaseDto.updatedAt.toISOString(),
-        timestamp: new Date(),
-        name: '',
-        payload: undefined,
       },
     );
 
