@@ -40,4 +40,12 @@ export class Category extends Entity<string> {
   static new(payload: NewCategoryPayload): Category {
     return new Category(payload);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      title: this._title,
+      titleCleaned: this._titleCleaned,
+    };
+  }
 }

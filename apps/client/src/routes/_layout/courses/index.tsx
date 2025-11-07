@@ -2,31 +2,32 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { Spinner } from '@heroui/spinner';
 import { Tab, Tabs } from '@heroui/tabs';
+import debounce from 'lodash.debounce';
 
 import CoursesList from '@/features/course/components/CoursesList';
 import { useGetSubsribedCourses } from '@/features/course/hooks/useGetSubsribedCourses';
 import { useGetCourses } from '@/features/course/hooks/useGetCourses';
+import SearchBox from '@/components/SearchBox';
 
 export const Route = createFileRoute('/_layout/courses/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_searchQuery] = React.useState('');
+  const [search, setSearch] = React.useState('');
   const [page, setPage] = React.useState(1);
-  const [limit] = React.useState(8);
-  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = React.useState<
     'all-courses' | 'my-courses'
   >('all-courses');
+
+  const navigate = useNavigate();
 
   const { data: subscribedCourses, isLoading: isSubscribedCoursesLoading } =
     useGetSubsribedCourses({
       paginationQueryParams: {
         page: {
           number: page,
-          size: limit,
+          size: 8,
         },
       },
       enabled: currentTab === 'my-courses',
@@ -35,7 +36,10 @@ function RouteComponent() {
   const { data: allCourses, isLoading: isAllCoursesLoading } = useGetCourses({
     page: {
       number: page,
-      size: limit,
+      size: 8,
+    },
+    filter: {
+      instructor: search,
     },
   });
 
@@ -52,6 +56,15 @@ function RouteComponent() {
     navigate({ to: `/courses/${course.id}` });
   };
 
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce((query: string) => {
+        setPage(1);
+        setSearch(query);
+      }, 300),
+    [setSearch, setPage],
+  );
+
   return (
     <div className="w-full">
       <div>
@@ -64,20 +77,31 @@ function RouteComponent() {
           }}
         >
           <Tab key="all-courses" title="All course">
-            <div className="w-full h-full pt-4">
+            <div className="w-full h-full pt-2">
               {isAllCoursesLoading ? (
                 <div className="w-full h-full flex justify-center items-center">
                   <Spinner />
                 </div>
               ) : (
-                <CoursesList
-                  courses={allCourses!.data}
-                  currentPage={page}
-                  totalPages={totalPages}
-                  type="all-course"
-                  onCoursePress={onPressHanlder}
-                  onPageChange={(page) => setPage(page)}
-                />
+                <>
+                  <div className="flex flex-col w-full gap-4">
+                    <div className="flex items-center gap-2">
+                      <SearchBox
+                        placeholder="Search by course title, instructor name"
+                        value={search}
+                        onValueChange={debouncedSearch}
+                      />
+                    </div>
+                    <CoursesList
+                      courses={allCourses!.data}
+                      currentPage={page}
+                      totalPages={totalPages}
+                      type="all-course"
+                      onCoursePress={onPressHanlder}
+                      onPageChange={(page) => setPage(page)}
+                    />
+                  </div>
+                </>
               )}
             </div>
           </Tab>

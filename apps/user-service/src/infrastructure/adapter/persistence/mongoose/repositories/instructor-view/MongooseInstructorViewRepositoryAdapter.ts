@@ -51,9 +51,13 @@ export class MongooseInstructorRepositoryViewAdapter
     }
 
     if (queryParameters.filter) {
-      if (queryParameters.filter.isSchedulingEnabled) {
+      const { name, isSchedulingEnabled } = queryParameters.filter;
+      if (isSchedulingEnabled) {
         filterQuery['pricing.isSchedulingEnabled'] =
           queryParameters.filter.isSchedulingEnabled;
+      }
+      if (name) {
+        filterQuery.$text = { $search: name };
       }
     }
 

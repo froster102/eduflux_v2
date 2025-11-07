@@ -14,11 +14,10 @@ export class GetUserSessionService implements GetUserSessionsUseCase {
   async execute(
     payload: GetUserSessionsPort,
   ): Promise<GetUserSessionsUseCaseResult> {
-    const { userId, preferedRole, queryParameters } = payload;
+    const { userId, queryParameters } = payload;
 
     const result = await this.userSessionRepository.listUserSessions(
       userId,
-      preferedRole,
       queryParameters,
     );
 

@@ -3,5 +3,6 @@ import type { PaginationQueryParams } from '@eduflux-v2/shared/ports/persistence
 export type InstructorViewQueryParameters = {
   filter: {
     isSchedulingEnabled: boolean;
+    name?: string;
   };
 } & PaginationQueryParams;

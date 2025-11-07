@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+import { SessionStatus } from '@/shared/enums/SessionStatus';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -39,3 +41,21 @@ export function encodePassphrase(passphrase: string) {
 export function decodePassphrase(base64String: string) {
   return decodeURIComponent(base64String);
 }
+
+const sessionSuccessState = ['BOOKED', 'CONFIRMED', 'COMPLETED'];
+const sessionWarnStates = ['IN_PROGRESS', 'PENDING_PAYMENT'];
+const sessionFailureStates = ['PAYMENT_EXPIRED'];
+
+export const getSessionStatusColor = (status: SessionStatus) => {
+  if (sessionSuccessState.includes(status)) {
+    return 'success';
+  }
+  if (sessionWarnStates.includes(status)) {
+    return 'warning';
+  }
+  if (sessionFailureStates.includes(status)) {
+    return 'danger';
+  }
+
+  return 'success';
+};

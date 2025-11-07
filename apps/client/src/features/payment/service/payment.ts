@@ -47,3 +47,11 @@ export async function checkoutItem(
 
   return response.data;
 }
+
+export async function getInstructorTotalEarnings() {
+  const response = await api.get<JsonApiResponse<{ earnings: number }>>(
+    '/payments/instructor-earnings',
+  );
+
+  return response.data;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   PaymentModel,
@@ -152,7 +153,6 @@ export class MongoosePaymentRepository
 
     pipeline.push({
       $group: {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         _id: groupId,
         instructorRevenue: { $sum: '$instructorRevenue' },
         platformFee: { $sum: '$platformFee' },
@@ -191,5 +191,27 @@ export class MongoosePaymentRepository
       totalAmount: r.totalAmount,
       completedPayments: r.completedPayments,
     }));
+  }
+
+  async getInstructorEarning(
+    instructorId: string,
+  ): Promise<{ earnings: number }> {
+    const match: FilterQuery<MongoosePayment> = {
+      status: PaymentStatus.COMPLETED,
+      instructorId,
+    };
+    const result = await PaymentModel.aggregate([
+      { $match: match },
+      {
+        $group: {
+          _id: null,
+          totalEarning: { $sum: '$instructorRevenue' },
+        },
+      },
+    ]);
+
+    return {
+      earnings: result.length > 0 ? result[0].totalEarning : 0,
+    };
   }
 }

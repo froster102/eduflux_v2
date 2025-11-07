@@ -162,17 +162,19 @@ export class PaymentService {
   async getPaymentsWithSummary(payload: GetPaymentSummaryPayload) {
     const { user, filter } = payload;
 
-    const queryFilter: Record<string, any> = {};
+    if (!user.hasRole(Role.ADMIN) && !user.hasRole(Role.INSTRUCTOR)) {
+      throw new ForbiddenException(
+        'You are not authorized to perform this action.',
+      );
+    }
 
-    if (user.hasRole(Role.INSTRUCTOR)) {
-      queryFilter.instructorId = user.id;
-    } else if (filter?.instructorId) {
-      queryFilter.instructorId = filter.instructorId;
+    if (user.hasRole(Role.INSTRUCTOR) && filter) {
+      filter.instructorId = user.id;
     }
 
     const summary = await this.paymentRepository.aggregatePaymentSummary(
       filter?.groupBy ?? PaymentSummaryGroup.MONTH,
-      queryFilter,
+      filter,
       filter?.startDate,
       filter?.endDate,
     );
@@ -191,5 +193,13 @@ export class PaymentService {
       totalPlatformRevenue,
       summary,
     };
+  }
+
+  async getInstructorTotalEarnings(
+    instructorId: string,
+  ): Promise<{ earnings: number }> {
+    const result =
+      await this.paymentRepository.getInstructorEarning(instructorId);
+    return result;
   }
 }

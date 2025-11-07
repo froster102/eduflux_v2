@@ -4,11 +4,11 @@ const events = [
   { time: '10:00', title: 'An event', date: 'Wednesday, 24 Aug' },
 ];
 
-export default function TaskManager() {
+export default function EventManager() {
   return (
     <Card className="p-4 bg-background border border-default-300" shadow="none">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">My Tasks</h3>
+        <h3 className="text-lg font-semibold">Events</h3>
         <Button size="sm" variant="ghost">
           View All
         </Button>
@@ -30,7 +30,7 @@ export default function TaskManager() {
         ))}
         <div className="flex justify-end mt-4">
           <Button color="primary" size="sm">
-            + Add task
+            + Add Event
           </Button>
         </div>
       </div>

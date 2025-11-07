@@ -1,4 +1,5 @@
 import { Role } from '@/shared/enums/Role';
+import { SessionStatus } from '@/shared/enums/SessionStatus';
 
 declare global {
   export type SessionSettings = {
@@ -40,6 +41,9 @@ declare global {
   export type GetUserSessionQueryParams = PaginationQueryParameters & {
     filter: {
       preferedRole: Role.INSTRUCTOR | Role.LEARNER;
+      status?: SessionStatus;
+      sort?: string;
+      search?: string;
     };
   };
 

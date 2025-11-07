@@ -96,6 +96,7 @@ export class SessionController {
                   number: parsedQuery.page.number,
                   size: parsedQuery.page.size,
                 }),
+                filter: parsedQuery.filter,
               },
             });
           return jsonApiResponse({

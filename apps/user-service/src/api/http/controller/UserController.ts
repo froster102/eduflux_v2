@@ -13,7 +13,6 @@ import { TaughtCourseViewDITokens } from '@application/views/taught-course/di/Ta
 import type { GetTaughtCourseViewsUseCase } from '@application/views/taught-course/usecase/GetTaughtCourseViewsUseCase';
 import { getTaughtCourseSchema } from '@api/http/validators/getTaughtCoursesSchema';
 import { updateUserSchema } from '@api/http/validators/user';
-import { paginationSchema } from '@api/http/validators/paginationSchema';
 import { getSubscribedCoursesSchema } from '@api/http/validators/getSubscribedCoursesSchema';
 import {
   jsonApiResponse,

@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Skeleton } from '@heroui/skeleton';
 
 import UpcomingSessionSection from '@/features/session/components/UpcomingSessionSection';
-import TaskManager from '@/features/task/components/TaskManager';
+import TaskManager from '@/features/event/components/EventManager';
 import StatsCard from '@/components/StatsCard';
 import { useAuthStore } from '@/store/auth-store';
 

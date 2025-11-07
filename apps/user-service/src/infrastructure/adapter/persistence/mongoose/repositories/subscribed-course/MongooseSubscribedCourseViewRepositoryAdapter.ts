@@ -49,7 +49,6 @@ export class MongooseSubscribedCourseViewRepositoryAdapter
     query?: SubscribedCourseViewQueryParameters,
   ): Promise<SubscribedCourseViewQueryResult> {
     const dbQuery: FilterQuery<MongooseSubscribedCourseView> = { userId };
-
     const limit = query?.limit || this.defaultLimit;
     const skip = query?.offset || this.defaultOffset;
 

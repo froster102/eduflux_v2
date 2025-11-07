@@ -2,24 +2,19 @@ import { Button } from '@heroui/button';
 import { Card, CardBody } from '@heroui/card';
 import { User } from '@heroui/user';
 import { Chip } from '@heroui/chip';
-import React from 'react';
 
 import { IMAGE_BASE_URL } from '@/config/image';
 import ClockIcon from '@/components/icons/ClockIcon';
 import { formatSessionDataTime } from '@/utils/date';
 import VideoIcon from '@/components/icons/VideoIcon';
 import { Role } from '@/shared/enums/Role';
-import { SessionStatus } from '@/shared/enums/SessionStatus';
+import { getSessionStatusColor } from '@/lib/utils';
 
 interface SessionCardProps {
   session: UserSession;
   onJoin: (session: UserSession) => void;
   role: Role;
 }
-
-const sessionSuccessState = ['BOOKED', 'CONFIRMED', 'COMPLETED'];
-const sessionWarnStates = ['IN_PROGRESS', 'PENDING_PAYMENT'];
-const sessionFailureStates = ['PAYMENT_EXPIRED'];
 
 export default function SessionCard({
   session,
@@ -31,19 +26,7 @@ export default function SessionCard({
     session.endTime,
   );
 
-  const getSessionStatusColor = React.useCallback((status: SessionStatus) => {
-    if (sessionSuccessState.includes(status)) {
-      return 'success';
-    }
-    if (sessionWarnStates.includes(status)) {
-      return 'warning';
-    }
-    if (sessionFailureStates.includes(status)) {
-      return 'danger';
-    }
-
-    return 'success';
-  }, []);
+  console.log('rendering session card', session);
 
   return (
     <div key={session.id} className={`pt-2`}>

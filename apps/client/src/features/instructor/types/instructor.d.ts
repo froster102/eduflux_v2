@@ -36,6 +36,7 @@ declare global {
   export type GetInstructorsQueryParameters = {
     filter: {
       isSchedulingEnabled: boolean;
+      name?: string;
     };
   } & PaginationQueryParameters;
 

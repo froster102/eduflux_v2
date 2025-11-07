@@ -57,6 +57,8 @@ const instructorViewSchema = new Schema(
   { timestamps: false, collection: 'instructor_views' },
 );
 
+instructorViewSchema.index({ 'profile.name': 'text' });
+
 export const InstructorViewModel = model<MongooseInstructorView>(
   'InstructorView',
   instructorViewSchema,

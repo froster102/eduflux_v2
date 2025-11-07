@@ -59,6 +59,9 @@ export class CreateEnrollmentSubsciberService
     if (!course) {
       return;
     }
+    await this.courseRepository.incrementCourseEnrollmentCount(course.id);
+
+    //emit events to create views
     const enrollmentCreateEvent = new EnrollmentCreatedEvent(enrollment.id, {
       courseId: enrollment.courseId,
       title: course.title,

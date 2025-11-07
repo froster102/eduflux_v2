@@ -5,6 +5,7 @@ import React from 'react';
 import { Tooltip } from '@heroui/tooltip';
 import { Skeleton } from '@heroui/skeleton';
 import { useDisclosure } from '@heroui/modal';
+import debounce from 'lodash.debounce';
 
 import { useGetUserSessions } from '@/features/session/hooks/useGetUserSessions';
 import PaginationWithNextAndPrevious from '@/components/Pagination';
@@ -17,12 +18,14 @@ import { useEnableSessions } from '@/features/session/hooks/useEnableSession';
 import { SessionSettingsFormData } from '@/features/session/validation/session-schema';
 import { useGetSessionSettings } from '@/features/session/hooks/useGetSessionSettings';
 import SessionCard from '@/features/session/components/SessionCard';
+import SearchBox from '@/components/SearchBox';
 
 export const Route = createFileRoute('/instructor/_layout/sessions/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const [search, setSearch] = React.useState('');
   const [page, setPage] = React.useState(1);
   const navigate = useNavigate();
   const { data: sessionsQueryResult } = useGetUserSessions({
@@ -31,6 +34,7 @@ function RouteComponent() {
     },
     filter: {
       preferedRole: Role.INSTRUCTOR,
+      search,
     },
   });
 
@@ -55,6 +59,15 @@ function RouteComponent() {
       onSuccess: () => onClose(),
     });
   };
+
+  const debouncedSearch = React.useMemo(
+    () =>
+      debounce((query: string) => {
+        setSearch(query);
+        setPage(1);
+      }, 300),
+    [setPage, setSearch],
+  );
 
   if (isSessionSettingsLoading) {
     return new Array(10).fill(0).map((_, i) => (
@@ -125,15 +138,23 @@ function RouteComponent() {
           />
         </Tooltip>
 
-        {sessionsQueryResult &&
-          sessionsQueryResult.data.map((session) => (
-            <SessionCard
-              key={session.id}
-              role={Role.INSTRUCTOR}
-              session={session}
-              onJoin={handlerJoinSession}
+        {sessionsQueryResult && (
+          <div>
+            <SearchBox
+              placeholder="Search by learner"
+              value={search}
+              onValueChange={debouncedSearch}
             />
-          ))}
+            {sessionsQueryResult.data.map((session) => (
+              <SessionCard
+                key={session.id}
+                role={Role.INSTRUCTOR}
+                session={session}
+                onJoin={handlerJoinSession}
+              />
+            ))}
+          </div>
+        )}
         {sessionsQueryResult && sessionsQueryResult.meta.totalPages > 1 && (
           <div className="pt-4 flex w-full justify-center">
             <PaginationWithNextAndPrevious

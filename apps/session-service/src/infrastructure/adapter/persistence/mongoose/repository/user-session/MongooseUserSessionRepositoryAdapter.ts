@@ -10,6 +10,7 @@ import {
 } from '@infrastructure/adapter/persistence/mongoose/model/user-session/MongooseUserSession';
 import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
 import type { FilterQuery } from 'mongoose';
+import { SortOrder } from '@eduflux-v2/shared/constants/SortOrder';
 
 export class MongooseUserSessionRepositoryAdapter
   extends MongooseBaseRepositoryAdapter<UserSession, MongooseUserSession>
@@ -32,19 +33,30 @@ export class MongooseUserSessionRepositoryAdapter
 
   async listUserSessions(
     userId: string,
-    preferedRole: Role,
     queryParameters?: UserSessionQueryParameters,
   ): Promise<UserSessionQueryResult> {
     const query: FilterQuery<MongooseUserSession> = {};
-
-    if (preferedRole === Role.LEARNER) {
-      query['learner.id'] = userId;
-    } else if (preferedRole === Role.INSTRUCTOR) {
-      query['instructor.id'] = userId;
-    }
-
-    if (queryParameters?.status) {
-      query.status = queryParameters.status;
+    const sortQuery: Record<string, 1 | -1> = {};
+    if (queryParameters?.filter) {
+      const { sort, status, preferedRole, search } = queryParameters.filter;
+      if (status) {
+        query.status = status;
+      }
+      if (search) {
+        query.$text = { $search: search };
+      }
+      if (preferedRole) {
+        if (preferedRole === Role.LEARNER) {
+          query['learner.id'] = userId;
+        } else if (preferedRole === Role.INSTRUCTOR) {
+          query['instructor.id'] = userId;
+        }
+      }
+      if (sort) {
+        for (const [field, order] of Object.entries(sort)) {
+          sortQuery[field] = order === SortOrder.ASC ? 1 : -1;
+        }
+      }
     }
 
     const totalCount = await UserSessionModel.countDocuments(query);

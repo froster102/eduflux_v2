@@ -27,4 +27,5 @@ export interface IPaymentRepository extends BaseRepositoryPort<Payment> {
     endDate?: Date,
   ): Promise<PaymentSummaryAggregation[]>;
   findMany(query?: PaymentQueryParameters): Promise<PaymentQueryResult>;
+  getInstructorEarning(instructorId: string): Promise<{ earnings: number }>;
 }

@@ -83,6 +83,12 @@ export class PaymentController {
             pageSize: parsedQuery.page.size,
           });
         })
+        .get('/instructor-earnings', async ({ user }) => {
+          const response = await this.paymentService.getInstructorTotalEarnings(
+            user.id,
+          );
+          return jsonApiResponse({ data: response });
+        })
         .get('/summary', async ({ user, query }) => {
           const jsonApiQuery = parseJsonApiQuery(query);
           const parsedQuery = getPaymentSummarySchema.parse(jsonApiQuery);

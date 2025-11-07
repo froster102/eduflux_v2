@@ -55,5 +55,7 @@ export const UserSessionSchema = new Schema<MongooseUserSession>(
   },
 );
 
+UserSessionSchema.index({ 'instructor.name': 'text', 'learner.name': 'text' });
+
 export const UserSessionModel: Model<MongooseUserSession> =
   mongoose.model<MongooseUserSession>('UserSession', UserSessionSchema);
