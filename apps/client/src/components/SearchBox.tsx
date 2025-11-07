@@ -1,30 +1,48 @@
 import { Input } from '@heroui/input';
+import React from 'react';
 
 import { SearchIcon } from '@/components/Icons';
 
 interface SearchBoxProps {
-  value?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  value: string;
 }
 
 export default function SearchBox({
-  value,
   onValueChange,
   placeholder,
+  value,
   className,
 }: SearchBoxProps) {
+  const [search, setSearch] = React.useState(value);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <Input
-      className={`max-w-lg ${className}`}
+      ref={inputRef}
+      isClearable
+      className={`max-w-lg ${className} h-full`}
+      classNames={{
+        inputWrapper:
+          'focus:outline-none focus:ring-0 focus:ring-offset-0 data-[focus=true]:ring-0 data-[focus=true]:outline-none',
+      }}
       labelPlacement="outside"
       placeholder={placeholder || 'Search here'}
       startContent={<SearchIcon />}
-      type="email"
-      value={value}
+      value={search}
       variant="faded"
-      onValueChange={onValueChange}
+      onValueChange={(v) => {
+        setSearch(v);
+        onValueChange(v.trim());
+      }}
     />
   );
 }

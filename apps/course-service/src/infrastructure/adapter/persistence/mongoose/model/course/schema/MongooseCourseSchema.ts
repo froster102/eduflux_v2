@@ -76,4 +76,6 @@ const CourseSchema = new Schema<MongooseCourse>(
   },
 );
 
+CourseSchema.index({ 'instructor.name': 'text', title: 'text' });
+
 export const CourseModel = model<MongooseCourse>('Course', CourseSchema);

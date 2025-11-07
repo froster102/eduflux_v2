@@ -4,6 +4,7 @@ import type { CourseQueryResult } from '@core/application/course/port/persistenc
 import type { Course } from '@core/domain/course/entity/Course';
 import { CourseStatus } from '@core/domain/course/enum/CourseStatus';
 import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { SortOrder } from '@eduflux-v2/shared/constants/SortOrder';
 import { MongooseCourseMapper } from '@infrastructure/adapter/persistence/mongoose/model/course/mapper/MongooseCourseMapper';
 import {
   CourseModel,
@@ -72,20 +73,43 @@ export class MongooseCourseRepositoryAdapter
 
   async findAllPublishedCourses(
     query?: CourseQueryParameters,
+    excludeInstructorId?: string,
   ): Promise<CourseQueryResult> {
-    const dbQuery: FilterQuery<MongooseCourse> = {
+    const filterQuery: FilterQuery<MongooseCourse> = {
       status: CourseStatus.PUBLISHED,
     };
 
-    // if (query?.filters?.catergory) {
-    //   await CategoryModel.fin
-    // }
+    if (excludeInstructorId) {
+      filterQuery['instructor.id'] = { $ne: excludeInstructorId };
+    }
+    const sortQuery: Record<string, 1 | -1> = {};
+
+    if (query?.filters) {
+      const { catergory, instructor, level, sort } = query.filters;
+      if (catergory) {
+        filterQuery.categoryId = catergory;
+      }
+      if (instructor) {
+        filterQuery.$text = { $search: instructor };
+      }
+      if (level) {
+        filterQuery['level'] = level;
+      }
+      if (sort) {
+        for (const [field, order] of Object.entries(sort)) {
+          sortQuery[field] = order === SortOrder.ASC ? 1 : -1;
+        }
+      }
+    }
 
     const limit = query?.limit || this.defaultLimit;
     const skip = query?.offset || this.defaultOffset;
 
-    const totalCount = await CourseModel.countDocuments(dbQuery);
-    const courses = await CourseModel.find(dbQuery).limit(limit).skip(skip);
+    const totalCount = await CourseModel.countDocuments(filterQuery);
+    const courses = await CourseModel.find(filterQuery)
+      .limit(limit)
+      .skip(skip)
+      .sort(sortQuery);
 
     return {
       totalCount,

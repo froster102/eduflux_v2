@@ -6,9 +6,9 @@ import z from 'zod/v4';
 const courseFilterSchema = z
   .object({
     filter: z.object({
-      status: z.enum(Object.values(CourseStatus)),
-      catergory: z.string(),
-      instructor: z.string(),
+      status: z.enum(Object.values(CourseStatus)).optional(),
+      catergory: z.string().optional(),
+      instructor: z.string().optional(),
     }),
     sort: z
       .string()

@@ -1,11 +1,9 @@
 import { Card, CardBody, CardFooter } from '@heroui/card';
 import { Image } from '@heroui/image';
-import { Chip } from '@heroui/chip';
 import { Button } from '@heroui/button';
 
 import { IMAGE_BASE_URL } from '@/config/image';
 import UsersIcon from '@/components/icons/UsersIcon';
-import { courseLevelMap } from '@/config/course-level';
 
 interface CourseCardProps {
   course: Course;
@@ -43,7 +41,7 @@ export default function CourseCard({
       />
 
       <CardBody className="p-4 space-y-1">
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
           <Chip
             className="capitalize text-xs"
             color={courseLevelMap[course.level] || 'default'}
@@ -52,7 +50,7 @@ export default function CourseCard({
           >
             {course.level}
           </Chip>
-        </div>
+        </div> */}
 
         <h3 className="font-semibold text-base line-clamp-2 leading-tight">
           {course.title}
@@ -86,8 +84,20 @@ export default function CourseCard({
             >
               Go to course
             </Button>
-          ) : course.isFree ? (
-            <span className="text-sm text-success-500 font-medium">Free</span>
+          ) : isInstructorCourse ? (
+            <Button
+              className="flex-1"
+              color="primary"
+              size="sm"
+              variant="solid"
+              onPress={() => {
+                if (onPress) {
+                  onPress(course);
+                }
+              }}
+            >
+              View course
+            </Button>
           ) : (
             <span className="text-lg font-bold text-foreground">
               ${course.price}

@@ -97,10 +97,21 @@ declare global {
 
   export type CurriculumItems = (Chapter | Lecture)[];
 
-  export type GetSubscribedCoursesQueryParams = PaginationQueryParameters;
+  export type GetSubscribedCoursesQueryParams = PaginationQueryParameters &
+    GetCoursesQueryParams;
 
   export type GetInstructorCoursesResponse = JsonApiResponse<Course[]> & {
     meta: Pagination;
+  };
+
+  export type GetCoursesQueryParams = {
+    filter?: {
+      status?: CourseStatus;
+      category?: string;
+      level?: CourseLevel;
+      sort?: string;
+      instructor?: string;
+    };
   };
 
   export type GetInstructorCourseCurriculumReponse =
