@@ -10,19 +10,24 @@ export function useUnbanUser() {
     onMutate: async (userId: string) => {
       await queryClient.cancelQueries({ queryKey: ['users'] });
 
-      const previousUsers = queryClient.getQueryData<ExtendedUser[]>(['users']);
+      const previousUsers = queryClient.getQueriesData<ExtendedUser[]>({
+        queryKey: ['user'],
+      });
 
       if (previousUsers) {
-        queryClient.setQueryData<ListUsersReponse>(['users'], (old) => {
-          if (!old) return old;
+        queryClient.setQueriesData<ListUsersReponse>(
+          { queryKey: ['users'] },
+          (old) => {
+            if (!old) return old;
 
-          return {
-            ...old,
-            users: old.users.map((user) =>
-              user.id === userId ? { ...user, banned: false } : user,
-            ),
-          };
-        });
+            return {
+              ...old,
+              users: old.users.map((user) =>
+                user.id === userId ? { ...user, banned: false } : user,
+              ),
+            };
+          },
+        );
       }
 
       return { previousUsers };

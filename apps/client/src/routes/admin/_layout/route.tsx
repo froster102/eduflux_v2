@@ -1,12 +1,26 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 import HomeIcon from '@/components/icons/HomeIcon';
 import DefaultLayout from '@/layout/DefaultLayout';
 import CashoutIcon from '@/components/icons/CashoutIcon';
 import UsersIcon from '@/components/icons/UsersIcon';
 import CourseIcon from '@/components/icons/CourseIcon';
+import { useAuthStore } from '@/store/auth-store';
+import { Role } from '@/shared/enums/Role';
 
 export const Route = createFileRoute('/admin/_layout')({
+  beforeLoad: ({ location }) => {
+    const user = useAuthStore.getState().user;
+
+    if (!user || !user.roles.includes(Role.ADMIN)) {
+      throw redirect({
+        to: '/auth/sign-in',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: RouteComponent,
 });
 

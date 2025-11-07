@@ -3,6 +3,7 @@ import { addToast, ToastProvider } from '@heroui/toast';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { AxiosError } from 'axios';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { NotificationProvider } from '@/context/NotificationContext.tsx';
 
@@ -48,6 +49,7 @@ export function Provider({ children }: { children?: React.ReactNode }) {
           <RouterProvider router={router} />
           {children}
         </NotificationProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </HeroUIProvider>
   );
