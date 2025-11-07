@@ -14,7 +14,7 @@ export class GetPublishedCoursesService implements GetPublishedCoursesUseCase {
   ) {}
 
   async execute(payload: GetPublishedCoursesPort): Promise<CourseQueryResult> {
-    const { query } = payload;
+    const { executor, query } = payload;
 
     if (query?.filters?.status) {
       if (query.filters.status !== CourseStatus.PUBLISHED) {
@@ -22,7 +22,10 @@ export class GetPublishedCoursesService implements GetPublishedCoursesUseCase {
       }
     }
 
-    const result = await this.courseRepository.findAllPublishedCourses(query);
+    const result = await this.courseRepository.findAllPublishedCourses(
+      query,
+      executor?.id,
+    );
 
     return result;
   }

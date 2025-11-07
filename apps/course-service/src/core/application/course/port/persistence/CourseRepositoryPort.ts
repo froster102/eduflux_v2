@@ -15,6 +15,7 @@ export interface CourseRepositoryPort extends BaseRepositoryPort<Course> {
   ): Promise<CourseQueryResult>;
   findAllPublishedCourses(
     query?: CourseQueryParameters,
+    excludeInstructorId?: string,
   ): Promise<CourseQueryResult>;
   incrementCourseEnrollmentCount(courseId: string): Promise<void>;
   findBySlug(slug: string): Promise<Course | null>;

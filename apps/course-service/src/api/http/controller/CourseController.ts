@@ -65,11 +65,12 @@ export class CourseController {
             const categories = await this.getCourseCategoriesUseCase.execute();
             return jsonApiResponse({ data: categories });
           })
-          .get('/', async ({ query }) => {
+          .get('/', async ({ query, user }) => {
             const jsonApiQuery = parseJsonApiQuery(query);
             const parsedQuery = getCoursesSchema.parse(jsonApiQuery);
             const { totalCount, courses } =
               await this.getPublishedCoursesUseCase.execute({
+                executor: user,
                 query: {
                   offset: calculateOffset({
                     number: parsedQuery.page.number,
@@ -77,7 +78,6 @@ export class CourseController {
                   }),
                   limit: parsedQuery.page.size,
                   filters: parsedQuery.filter,
-                  sort: parsedQuery.sort,
                 },
               });
             return jsonApiResponse({
