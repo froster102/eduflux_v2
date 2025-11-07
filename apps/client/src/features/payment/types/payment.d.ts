@@ -38,9 +38,7 @@ declare global {
     };
   } & PaginationQueryParameters;
 
-  export type GetPaymentQueryResult = JsonApiResponse<{
-    payments: Payment[];
-  }> & {
+  export type GetPaymentQueryResult = JsonApiResponse<Payment[]> & {
     meta: Pagination;
   };
 

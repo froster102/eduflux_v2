@@ -114,6 +114,7 @@ export class StripeService {
         itemId: payment.referenceId,
         itemType:
           payment.type === PaymentType.COURSE_PURCHASE ? 'course' : 'session',
+        platformFee: payment.platformFee,
       });
       await this.messageBroker.publish(paymentSuccessfullEvent);
     }

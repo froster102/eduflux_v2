@@ -38,6 +38,9 @@ const envSchema = z.object({
   CHECKOUT_SERVICE_BASE_URL: z.string({
     error: 'CHECKOUT_SERVICE_BASE_URL is required',
   }),
+  ANALYTICS_SERVICE_BASE_URL: z.string({
+    error: 'ANALYTICS_SERVICE_BASE_URL is required',
+  }),
   CLIENT_ORIGINS: z.string({
     error: 'CLIENT_ORIGINS is required',
   }),

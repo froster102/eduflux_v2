@@ -38,7 +38,7 @@ export default function LectureForm({
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<LectureFormData>({
-    resolver: zodResolver(lectureSchema),
+    resolver: zodResolver(lectureSchema as any),
     defaultValues: mode === 'edit' ? initialValue : {},
   });
   const [updateContent, setUpdateContent] = React.useState(false);

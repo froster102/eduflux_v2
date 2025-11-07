@@ -34,7 +34,7 @@ export default function ProfileForm({
     formState: { errors, isDirty },
   } = useForm<Partial<UserProfile>>({
     defaultValues: initialValue,
-    resolver: zodResolver(updateProfileSchema),
+    resolver: zodResolver(updateProfileSchema as any),
   });
 
   const [action, setAction] = React.useState<'edit' | 'view'>('view');

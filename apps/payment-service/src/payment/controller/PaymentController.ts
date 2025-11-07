@@ -40,7 +40,7 @@ export class PaymentController {
         .get('/me', async ({ user, query }) => {
           const jsonApiQuery = parseJsonApiQuery(query);
           const parsedQuery = getPaymentsSchema.parse(jsonApiQuery);
-          const { totalCount, ...result } =
+          const { totalCount, payments } =
             await this.paymentService.getPayments({
               executor: user,
               query: {
@@ -54,7 +54,7 @@ export class PaymentController {
             });
 
           return jsonApiResponse({
-            data: result,
+            data: payments,
             totalCount,
             pageNumber: parsedQuery.page.number,
             pageSize: parsedQuery.page.size,

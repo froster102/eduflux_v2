@@ -9,6 +9,7 @@ export interface PaymentSuccessfullEventPayload {
   readonly recieverId: string;
   readonly itemId: string;
   readonly itemType: 'course' | 'session';
+  readonly platformFee: number;
 }
 
 export class PaymentSuccessfullEvent extends Event<PaymentSuccessfullEventPayload> {

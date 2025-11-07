@@ -20,6 +20,7 @@ import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import { useLogout } from '@/hooks/useLogout';
 import RoleSwitcher from '@/components/RoleSwitcher';
+import { Role } from '@/shared/enums/Role';
 
 interface HeaderProps {
   onOpenSidebar: () => void;
@@ -90,7 +91,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
           />
           <div className="flex gap-4 items-center justify-center">
             <div className="hidden sm:block">
-              <RoleSwitcher />
+              {!user?.roles.includes(Role.ADMIN) && <RoleSwitcher />}
             </div>
             <ThemeSwitcher className="hidden sm:flex justify-center items-center bg-transparent" />
             <Notifications />

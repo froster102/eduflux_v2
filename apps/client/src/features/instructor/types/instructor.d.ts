@@ -37,6 +37,7 @@ declare global {
     filter: {
       isSchedulingEnabled: boolean;
       name?: string;
+      sort?: string;
     };
   } & PaginationQueryParameters;
 

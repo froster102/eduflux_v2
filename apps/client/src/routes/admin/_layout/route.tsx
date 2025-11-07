@@ -4,7 +4,7 @@ import HomeIcon from '@/components/icons/HomeIcon';
 import DefaultLayout from '@/layout/DefaultLayout';
 import CashoutIcon from '@/components/icons/CashoutIcon';
 import UsersIcon from '@/components/icons/UsersIcon';
-import CourseIcon from '@/components/icons/CourseIcon';
+import InstructorIcon from '@/components/icons/InstructorIcon';
 import { useAuthStore } from '@/store/auth-store';
 import { Role } from '@/shared/enums/Role';
 
@@ -37,9 +37,9 @@ function RouteComponent() {
       label: 'Users',
     },
     {
-      path: '/admin/courses',
-      icon: <CourseIcon width={24} />,
-      label: 'Courses',
+      path: '/admin/instructors',
+      icon: <InstructorIcon width={24} />,
+      label: 'Instructors',
     },
     {
       path: '/admin/payments',

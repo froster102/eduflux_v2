@@ -35,7 +35,7 @@ export default function CourseForm({
     control,
   } = useForm<UpdateCourseFormData>({
     defaultValues: initialValues,
-    resolver: zodResolver(updateCourseSchema),
+    resolver: zodResolver(updateCourseSchema as any),
   });
   const { data: courseCategories, isLoading: isCourseCategoriesLoading } =
     useGetCourseCategories();

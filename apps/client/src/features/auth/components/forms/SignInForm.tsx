@@ -26,7 +26,7 @@ export default function SignInForm({
     reset,
     formState: { errors },
   } = useForm<SignInFormData>({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(signInSchema as any),
   });
 
   const googleLogin = async () => {

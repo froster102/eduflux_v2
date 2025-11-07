@@ -7,6 +7,7 @@ import type { InstructorViewQueryResult } from '@application/views/instructor-vi
 import type { InstructorViewQueryParameters } from '@application/views/instructor-view/port/persistence/types/InstructorViewQueryParameters';
 import type { UpdateUserViewPayload } from '@application/views/instructor-view/port/persistence/types/UpdateUserViewPayload';
 import { MongooseBaseRepositoryAdapter } from '@eduflux-v2/shared/adapters/persistence/mongoose/repository/base/MongooseBaseRepositoryAdapter';
+import { SortOrder } from '@eduflux-v2/shared/constants/SortOrder';
 import { MongooseInstructorViewMapper } from '@infrastructure/adapter/persistence/mongoose/models/instructor-view/mapper/MongooseInstructorViewMapper';
 import {
   InstructorViewModel,
@@ -43,7 +44,7 @@ export class MongooseInstructorRepositoryViewAdapter
   ): Promise<InstructorViewQueryResult> {
     const limit = queryParameters.limit || this.defaultLimit;
     const offset = queryParameters.offset || this.defaultOffset;
-
+    const sortQuery: Record<string, 1 | -1> = {};
     const filterQuery: FilterQuery<InstructorView> = {};
 
     if (excludeId) {
@@ -51,13 +52,18 @@ export class MongooseInstructorRepositoryViewAdapter
     }
 
     if (queryParameters.filter) {
-      const { name, isSchedulingEnabled } = queryParameters.filter;
+      const { name, isSchedulingEnabled, sort } = queryParameters.filter;
       if (isSchedulingEnabled) {
         filterQuery['pricing.isSchedulingEnabled'] =
           queryParameters.filter.isSchedulingEnabled;
       }
       if (name) {
         filterQuery.$text = { $search: name };
+      }
+      if (sort) {
+        for (const [field, order] of Object.entries(sort)) {
+          sortQuery[field] = order === SortOrder.ASC ? 1 : -1;
+        }
       }
     }
 
@@ -66,7 +72,7 @@ export class MongooseInstructorRepositoryViewAdapter
     const documents = await InstructorViewModel.find(filterQuery)
       .skip(offset)
       .limit(limit)
-      .exec();
+      .sort(sortQuery);
 
     const instructors =
       MongooseInstructorViewMapper.toDomainEntities(documents);

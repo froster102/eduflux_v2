@@ -18,8 +18,7 @@ function RouteComponent() {
   const { user } = useAuthStore();
   const { data: instructorStats, isPending: isInstructorStatsPending } =
     useGetInstructorStats();
-  const { data: instructorEarnings, isPending: isInstructorEarningsLoading } =
-    useGetInstructorEarnings();
+  const { data: instructorEarnings } = useGetInstructorEarnings();
   const navigate = useNavigate();
 
   const onViewAllSession = () => {

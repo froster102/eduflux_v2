@@ -80,7 +80,7 @@ export default function SessionSettingsForm({
     formState: { errors, isDirty },
   } = useForm<SessionSettingsFormData>({
     defaultValues: normalizedInitialValue,
-    resolver: zodResolver(sessionSettingsSchema),
+    resolver: zodResolver(sessionSettingsSchema as any),
   });
 
   const watchedDays = watch('weeklySchedules');

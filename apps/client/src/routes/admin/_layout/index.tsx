@@ -1,10 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Skeleton } from '@heroui/skeleton';
 
-import UpcomingSessionSection from '@/features/session/components/UpcomingSessionSection';
-import TaskManager from '@/features/event/components/EventManager';
 import StatsCard from '@/components/StatsCard';
+import UserGrowthRadarChart from '@/features/analytics/components/UserGrowthRadarChart';
+import RevenueTrendsLineChart from '@/features/analytics/components/RevenueTrendsLineChart';
+import TopCoursesCard from '@/features/analytics/components/TopCoursesCard';
+import TopInstructorsCard from '@/features/analytics/components/TopInstructorsCard';
 import { useAuthStore } from '@/store/auth-store';
+import { useGetApplicationStats } from '@/features/analytics/hooks/useGetApplicatoinStats';
 
 export const Route = createFileRoute('/admin/_layout/')({
   component: RouteComponent,
@@ -12,8 +15,8 @@ export const Route = createFileRoute('/admin/_layout/')({
 
 function RouteComponent() {
   const { user } = useAuthStore();
-
-  console.log('called');
+  const { data: applicationStats, isPending: isApplicationStatsPending } =
+    useGetApplicationStats();
 
   return (
     <div className="flex flex-col gap-6 w-full h-full p-4">
@@ -24,7 +27,7 @@ function RouteComponent() {
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {false ? (
+        {isApplicationStatsPending ? (
           <>
             <Skeleton className="h-20 rounded-lg !bg-default-200" />
             <Skeleton className="h-20 rounded-lg !bg-default-200" />
@@ -34,19 +37,33 @@ function RouteComponent() {
         ) : (
           true && (
             <>
-              <StatsCard title="Learners" value={12} />
-              <StatsCard title="Courses" value={2323} />
-              <StatsCard title="Total Revenue" value="$14" />
-              <StatsCard title="Instructors" value={323} />
+              <StatsCard
+                title="Learners"
+                value={applicationStats?.data?.totalLearners + ''}
+              />
+              <StatsCard
+                title="Courses"
+                value={applicationStats?.data?.totalCourses + ''}
+              />
+              <StatsCard
+                title="Platform Earnings"
+                value={`$${applicationStats?.data?.platformEarnings}`}
+              />
+              <StatsCard
+                title="Instructors"
+                value={applicationStats?.data?.totalInstructors + ''}
+              />
             </>
           )
         )}
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TaskManager />
-
-        <UpcomingSessionSection />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+        <UserGrowthRadarChart />
+        <RevenueTrendsLineChart />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+        <TopCoursesCard />
+        <TopInstructorsCard />
       </div>
     </div>
   );

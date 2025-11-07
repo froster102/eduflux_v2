@@ -34,6 +34,7 @@ const SERVICES: Record<string, string> = {
   notifications: envVariables.NOTIFICATION_SERVICE_BASE_URL,
   uploads: envVariables.UPLOAD_SERVICE_BASE_URL,
   checkout: envVariables.CHECKOUT_SERVICE_BASE_URL,
+  analytics: envVariables.ANALYTICS_SERVICE_BASE_URL,
 };
 
 for (const [name, target] of Object.entries(SERVICES)) {

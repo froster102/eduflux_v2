@@ -25,7 +25,7 @@ export default function ResetPasswordForm({
     formState: { errors },
     handleSubmit,
   } = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(resetPasswordFormSchema),
+    resolver: zodResolver(resetPasswordFormSchema as any),
   });
   const [isVisible, setIsVisible] = React.useState({
     newPassword: false,

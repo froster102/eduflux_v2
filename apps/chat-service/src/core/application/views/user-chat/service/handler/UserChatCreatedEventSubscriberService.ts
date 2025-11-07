@@ -28,7 +28,7 @@ export class UserChatCreatedEventSubscriberService
   }
 
   async on(event: UserChatCreatedEvent): Promise<void> {
-    const { id, participants, lastMessageAt, createdAt } = event.payload;
+    const { participants, lastMessageAt, createdAt } = event.payload;
     try {
       const participantsData = await Promise.all(
         participants.map(async (participant) => {
@@ -47,7 +47,7 @@ export class UserChatCreatedEventSubscriberService
       );
       const validParticipants = participantsData.filter((p) => p !== null);
       const userChat = UserChat.new({
-        id,
+        id: event.id,
         lastMessageAt,
         createdAt,
         participants: validParticipants,
@@ -55,11 +55,11 @@ export class UserChatCreatedEventSubscriberService
       });
       await this.userChatRepository.save(userChat);
       this.logger.info(
-        `Successfully created UserChat read model for chatId: ${id}`,
+        `Successfully created UserChat read model for chatId: ${event.id}`,
       );
     } catch (error) {
       this.logger.error(
-        `Failed to handle UserChatCreatedEvent for chatId ${id}: ${
+        `Failed to handle UserChatCreatedEvent for chatId ${event.id}: ${
           (error as Error)?.message
         }`,
         error as Record<string, any>,

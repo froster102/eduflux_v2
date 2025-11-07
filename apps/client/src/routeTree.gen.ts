@@ -34,6 +34,7 @@ import { Route as LayoutChatsIndexRouteImport } from './routes/_layout/chats/ind
 import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
 import { Route as AdminLayoutUsersRouteImport } from './routes/admin/_layout/users'
 import { Route as AdminLayoutPaymentsRouteImport } from './routes/admin/_layout/payments'
+import { Route as AdminLayoutInstructorsRouteImport } from './routes/admin/_layout/instructors'
 import { Route as AdminLayoutCoursesRouteImport } from './routes/admin/_layout/courses'
 import { Route as InstructorLayoutSessionsIndexRouteImport } from './routes/instructor/_layout/sessions/index'
 import { Route as InstructorLayoutPaymentsIndexRouteImport } from './routes/instructor/_layout/payments/index'
@@ -169,6 +170,11 @@ const AdminLayoutPaymentsRoute = AdminLayoutPaymentsRouteImport.update({
   path: '/payments',
   getParentRoute: () => AdminLayoutRouteRoute,
 } as any)
+const AdminLayoutInstructorsRoute = AdminLayoutInstructorsRouteImport.update({
+  id: '/instructors',
+  path: '/instructors',
+  getParentRoute: () => AdminLayoutRouteRoute,
+} as any)
 const AdminLayoutCoursesRoute = AdminLayoutCoursesRouteImport.update({
   id: '/courses',
   path: '/courses',
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
   '/admin/courses': typeof AdminLayoutCoursesRoute
+  '/admin/instructors': typeof AdminLayoutInstructorsRoute
   '/admin/payments': typeof AdminLayoutPaymentsRoute
   '/admin/users': typeof AdminLayoutUsersRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
@@ -267,6 +274,7 @@ export interface FileRoutesByTo {
   '/auth/verify': typeof AuthVerifyRoute
   '/auth': typeof AuthIndexRoute
   '/admin/courses': typeof AdminLayoutCoursesRoute
+  '/admin/instructors': typeof AdminLayoutInstructorsRoute
   '/admin/payments': typeof AdminLayoutPaymentsRoute
   '/admin/users': typeof AdminLayoutUsersRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
@@ -302,6 +310,7 @@ export interface FileRoutesById {
   '/auth/verify': typeof AuthVerifyRoute
   '/auth/': typeof AuthIndexRoute
   '/admin/_layout/courses': typeof AdminLayoutCoursesRoute
+  '/admin/_layout/instructors': typeof AdminLayoutInstructorsRoute
   '/admin/_layout/payments': typeof AdminLayoutPaymentsRoute
   '/admin/_layout/users': typeof AdminLayoutUsersRoute
   '/auth/google/callback': typeof AuthGoogleCallbackRoute
@@ -337,6 +346,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/auth/'
     | '/admin/courses'
+    | '/admin/instructors'
     | '/admin/payments'
     | '/admin/users'
     | '/auth/google/callback'
@@ -369,6 +379,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/auth'
     | '/admin/courses'
+    | '/admin/instructors'
     | '/admin/payments'
     | '/admin/users'
     | '/auth/google/callback'
@@ -403,6 +414,7 @@ export interface FileRouteTypes {
     | '/auth/verify'
     | '/auth/'
     | '/admin/_layout/courses'
+    | '/admin/_layout/instructors'
     | '/admin/_layout/payments'
     | '/admin/_layout/users'
     | '/auth/google/callback'
@@ -611,6 +623,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutPaymentsRouteImport
       parentRoute: typeof AdminLayoutRouteRoute
     }
+    '/admin/_layout/instructors': {
+      id: '/admin/_layout/instructors'
+      path: '/instructors'
+      fullPath: '/admin/instructors'
+      preLoaderRoute: typeof AdminLayoutInstructorsRouteImport
+      parentRoute: typeof AdminLayoutRouteRoute
+    }
     '/admin/_layout/courses': {
       id: '/admin/_layout/courses'
       path: '/courses'
@@ -732,6 +751,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface AdminLayoutRouteRouteChildren {
   AdminLayoutCoursesRoute: typeof AdminLayoutCoursesRoute
+  AdminLayoutInstructorsRoute: typeof AdminLayoutInstructorsRoute
   AdminLayoutPaymentsRoute: typeof AdminLayoutPaymentsRoute
   AdminLayoutUsersRoute: typeof AdminLayoutUsersRoute
   AdminLayoutIndexRoute: typeof AdminLayoutIndexRoute
@@ -739,6 +759,7 @@ interface AdminLayoutRouteRouteChildren {
 
 const AdminLayoutRouteRouteChildren: AdminLayoutRouteRouteChildren = {
   AdminLayoutCoursesRoute: AdminLayoutCoursesRoute,
+  AdminLayoutInstructorsRoute: AdminLayoutInstructorsRoute,
   AdminLayoutPaymentsRoute: AdminLayoutPaymentsRoute,
   AdminLayoutUsersRoute: AdminLayoutUsersRoute,
   AdminLayoutIndexRoute: AdminLayoutIndexRoute,

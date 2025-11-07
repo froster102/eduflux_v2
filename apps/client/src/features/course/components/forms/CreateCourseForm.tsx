@@ -22,7 +22,7 @@ export default function CreateCourseForm({
     control,
     formState: { errors },
   } = useForm<CreateCourseFormData>({
-    resolver: zodResolver(createCourseSchema),
+    resolver: zodResolver(createCourseSchema as any),
     defaultValues: mode === 'edit' ? initialValue : {},
   });
 

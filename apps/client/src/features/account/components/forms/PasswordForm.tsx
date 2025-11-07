@@ -20,7 +20,7 @@ export default function PasswordForm({
     handleSubmit,
     formState: { errors, isDirty },
   } = useForm<UpdatePasswordFormData>({
-    resolver: zodResolver(updatePasswordSchema),
+    resolver: zodResolver(updatePasswordSchema as any),
     defaultValues: {
       confirmNewPassword: '',
       currentPassword: '',

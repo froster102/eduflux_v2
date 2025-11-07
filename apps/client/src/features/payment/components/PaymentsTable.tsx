@@ -22,6 +22,7 @@ interface PaymentsTableProps {
   setPage: (page: number) => void;
   setPageSize: (size: number) => void;
   onSearchValueChange: (value: string) => void;
+  totalCount?: number;
 }
 
 export default function PaymentsTable({
@@ -32,6 +33,7 @@ export default function PaymentsTable({
   setPage,
   setPageSize,
   onSearchValueChange,
+  totalCount,
 }: PaymentsTableProps) {
   const PaymentTypeMap: Record<PaymentType, string> = {
     course_purchase: 'Course Purchase',
@@ -83,7 +85,7 @@ export default function PaymentsTable({
       renderCell={renderCell}
       searchKey="referenceId"
       tableName="Payments"
-      totalCount={payments.length}
+      totalCount={totalCount ?? payments.length}
       onPaginationChange={setPage}
       onRowsPerPageChange={(rows) => {
         setPageSize(rows);

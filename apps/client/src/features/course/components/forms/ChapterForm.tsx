@@ -18,7 +18,7 @@ export default function ChapterForm({
     handleSubmit,
     formState: { errors },
   } = useForm<ChapterFormData>({
-    resolver: zodResolver(sectionSchema),
+    resolver: zodResolver(sectionSchema as any),
     defaultValues: mode === 'edit' ? initialValue : {},
   });
 

@@ -19,7 +19,7 @@ export default function SignUpForm({
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signUpSchema as any),
   });
 
   const googleLogin = async () => {

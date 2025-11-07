@@ -13,6 +13,9 @@ import type { CreateUserPort } from '@application/user/port/usecase/CreateUserPo
 import type { CreateUserUseCase } from '@application/user/usecase/CreateUserUseCase';
 import { UserUseCaseDto } from '@application/user/usecase/dto/UserUseCaseDto';
 import { inject } from 'inversify';
+import { UserCreatedEvent } from '@eduflux-v2/shared/events/user/UserCreatedEvent';
+import { SharedCoreDITokens } from '@eduflux-v2/shared/di/SharedCoreDITokens';
+import type { MessageBrokerPort } from '@eduflux-v2/shared/ports/message/MessageBrokerPort';
 
 export class CreateUserService implements CreateUserUseCase {
   constructor(
@@ -22,6 +25,8 @@ export class CreateUserService implements CreateUserUseCase {
     private readonly instructorRepository: InstructorRepositoryPort,
     @inject(LearnerStatsDITokens.LearnerStatsRepository)
     private readonly learnerStatsRepository: LearnerStatsRepositoryPort,
+    @inject(SharedCoreDITokens.MessageBroker)
+    private readonly messageBroker: MessageBrokerPort,
   ) {}
 
   async execute(payload: CreateUserPort): Promise<UserUseCaseDto> {
@@ -58,6 +63,14 @@ export class CreateUserService implements CreateUserUseCase {
     await this.userRepository.save(newUser);
     await this.learnerStatsRepository.save(learnerStats);
 
+    const userCreatedEvent = new UserCreatedEvent(newUser.id, {
+      id: newUser.id,
+      firstName: newUser.getFirstName(),
+      lastName: newUser.getLastName(),
+      email: newUser.getEmail(),
+      roles: newUser.getRoles(),
+    });
+    await this.messageBroker.publish(userCreatedEvent);
     return UserUseCaseDto.fromEntity(newUser);
   }
 }

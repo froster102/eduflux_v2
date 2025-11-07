@@ -68,7 +68,7 @@ function RouteComponent() {
           isLoading={isPaymentsPending}
           page={page}
           pageSize={pageSize}
-          payments={instructorPayments?.data.payments ?? []}
+          payments={instructorPayments?.data ?? []}
           setPage={setPage}
           setPageSize={setPageSize}
           onSearchValueChange={(value) => {
