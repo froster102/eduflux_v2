@@ -17,8 +17,6 @@ export function useGetChatMessages(chatId: string) {
 
   const queryResult = useSuspenseInfiniteQuery({
     queryFn: async ({ pageParam }) => {
-      console.log(pageParam);
-
       return await getMessages(chatId, {
         page: { cursor: pageParam, size: 20 },
       });

@@ -33,7 +33,6 @@ export default function RoleSwitcher() {
       setShowErrorModal(true);
       const parsedErrors = JSON.parse(error) as { errors: string[] };
 
-      console.log(parsedErrors.errors);
       setErrors(parsedErrors.errors || ['An unknown error occurred']);
     },
   });

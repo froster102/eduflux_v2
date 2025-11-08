@@ -22,8 +22,6 @@ const HLSPlayer: React.FC<VideoJsPlayerProps> = ({ options, onReady }) => {
   const videoRef = React.useRef<HTMLDivElement | null>(null);
   const playerRef = React.useRef<Player | null>(null);
 
-  console.log('render');
-
   React.useEffect(() => {
     if (!playerRef.current && videoRef.current) {
       const videoElement = document.createElement('video-js');

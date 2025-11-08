@@ -26,8 +26,6 @@ export default function SessionCard({
     session.endTime,
   );
 
-  console.log('rendering session card', session);
-
   return (
     <div key={session.id} className={`pt-2`}>
       <Card className="border bg-background border-default-300 " shadow="none">
