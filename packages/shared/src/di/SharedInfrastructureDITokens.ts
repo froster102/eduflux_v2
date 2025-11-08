@@ -3,5 +3,6 @@ export class SharedInfrastructureDITokens {
     Symbol('MongooseConnection');
   static readonly RabbitMQConnection: unique symbol =
     Symbol('RabbitMQConnection');
+  static readonly CacheClient: unique symbol = Symbol('CacheClient');
   static readonly UnitOfWork: unique symbol = Symbol('UnitOfWork');
 }

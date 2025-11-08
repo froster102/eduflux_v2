@@ -17,6 +17,9 @@ import { asyncLocalStorage } from '@shared/utils/async-store';
 import { USER_SERVICE } from '@shared/constants/services';
 import { WinstonLoggerAdapter } from '@eduflux-v2/shared/adapters/logger/WinstonLoggerAdapter';
 import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
+import type { CacheClientPort } from '@eduflux-v2/shared/ports/cache/CacheClientPort';
+import { RedisCacheClientAdapter } from '@eduflux-v2/shared/adapters/cache/RedisCacheClientAdapter';
+import { RedisConfig } from '@shared/config/RedisConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -79,5 +82,15 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind(SharedConfigDITokens.MongooseConnectionConfig)
       .toConstantValue(MongooseConnectionConfig);
+
+    //Redis Cache Client
+    options
+      .bind(SharedConfigDITokens.RedisConfig)
+      .toConstantValue(new RedisConfig());
+
+    options
+      .bind<CacheClientPort>(SharedInfrastructureDITokens.CacheClient)
+      .to(RedisCacheClientAdapter)
+      .inSingletonScope();
   },
 );

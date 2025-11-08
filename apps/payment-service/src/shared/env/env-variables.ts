@@ -53,6 +53,13 @@ const envSchema = z.object({
   JWT_ISS: z.url({ error: 'JWT_ISS must be a valid URL' }),
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),
   JWKS_URL: z.string({ error: 'JWKS_URL must be a valid URL' }),
+
+  REDIS_HOST: z.string({ error: 'REDIS_HOST is required' }).default('localhost'),
+  REDIS_PORT: z.coerce.number({ error: 'REDIS_PORT is required' }).default(6379),
+  REDIS_PASSWORD: z.string().optional(),
+  REDIS_DB: z.coerce.number().optional().default(0),
+  REDIS_TLS: z.string().optional(),
+  REDIS_CONNECTION_TIMEOUT: z.coerce.number().optional().default(10000),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;

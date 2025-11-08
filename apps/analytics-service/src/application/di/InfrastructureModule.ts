@@ -17,6 +17,9 @@ import { MongooseConfig } from '@shared/config/MongooseConfig';
 import { RabbitMQConfig } from '@shared/config/RabbitMQConfig';
 import { AnalyticsController } from '@analytics/controller/AnalyticsController';
 import { AnalyticsDITokens } from '@analytics/di/AnalyticsDITokens';
+import type { CacheClientPort } from '@eduflux-v2/shared/ports/cache/CacheClientPort';
+import { RedisCacheClientAdapter } from '@eduflux-v2/shared/adapters/cache/RedisCacheClientAdapter';
+import { RedisConfig } from '@shared/config/RedisConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -77,5 +80,15 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind(SharedConfigDITokens.MongooseConnectionConfig)
       .toConstantValue(MongooseConfig);
+
+    //Redis Cache Client config
+    options
+      .bind(SharedConfigDITokens.RedisConfig)
+      .toConstantValue(new RedisConfig());
+
+    options
+      .bind<CacheClientPort>(SharedInfrastructureDITokens.CacheClient)
+      .to(RedisCacheClientAdapter)
+      .inSingletonScope();
   },
 );

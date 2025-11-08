@@ -18,6 +18,9 @@ import type { LoggerConfig } from '@eduflux-v2/shared/config/LoggerConfig';
 import { MongooseConnection } from '@eduflux-v2/shared/infrastructure/database/mongoose/MongooseConnection';
 import { MongooseConfig } from '@shared/config/MongooseConfig';
 import { GrpcPaymentServiceController } from '@application/api/grpc/controller/GrpcPaymentServiceController';
+import type { CacheClientPort } from '@eduflux-v2/shared/ports/cache/CacheClientPort';
+import { RedisCacheClientAdapter } from '@eduflux-v2/shared/adapters/cache/RedisCacheClientAdapter';
+import { RedisConfig } from '@shared/config/RedisConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -86,5 +89,15 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind(SharedConfigDITokens.MongooseConnectionConfig)
       .toConstantValue(MongooseConfig);
+
+    //Redis Cache Client
+    options
+      .bind(SharedConfigDITokens.RedisConfig)
+      .toConstantValue(new RedisConfig());
+
+    options
+      .bind<CacheClientPort>(SharedInfrastructureDITokens.CacheClient)
+      .to(RedisCacheClientAdapter)
+      .inSingletonScope();
   },
 );

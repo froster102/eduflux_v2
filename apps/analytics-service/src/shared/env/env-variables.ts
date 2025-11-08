@@ -27,6 +27,13 @@ const envSchema = z.object({
   RABBITMQ_MAX_RETRIES: z.coerce.number({
     error: 'RABBITMQ_MAX_RETRIES is required',
   }),
+
+  REDIS_HOST: z.string({ error: 'REDIS_HOST is required' }),
+  REDIS_PORT: z.coerce.number({ error: 'REDIS_PORT is required' }),
+  REDIS_PASSWORD: z.string().optional(),
+  REDIS_DB: z.coerce.number().optional().default(0),
+  REDIS_TLS: z.string().optional(),
+  REDIS_CONNECTION_TIMEOUT: z.coerce.number().optional().default(10000),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;

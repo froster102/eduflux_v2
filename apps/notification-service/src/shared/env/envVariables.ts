@@ -40,6 +40,13 @@ const envSchema = z.object({
   SMTP_PASS: z.string({ error: 'SMTP_PASS is required' }),
   SMTP_HOST: z.string({ error: 'SMTP_HOST is required' }),
   SMTP_PORT: z.coerce.number({ error: 'SMTP_PORT is required' }),
+
+  REDIS_HOST: z.string({ error: 'REDIS_HOST is required' }).default('localhost'),
+  REDIS_PORT: z.coerce.number({ error: 'REDIS_PORT is required' }).default(6379),
+  REDIS_PASSWORD: z.string().optional(),
+  REDIS_DB: z.coerce.number().optional().default(0),
+  REDIS_TLS: z.string().optional(),
+  REDIS_CONNECTION_TIMEOUT: z.coerce.number().optional().default(10000),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;

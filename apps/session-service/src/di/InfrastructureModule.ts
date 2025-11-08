@@ -27,6 +27,9 @@ import { GrpcUserServiceConfig } from '@shared/config/GrpcUserServiceConfig';
 import { RabbitMQqueueFormatter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMQqueueFormatter';
 import { RabbitMQMessageBrokerAdapter } from '@eduflux-v2/shared/infrastructure/messaging/rabbitmq/RabbitMqMessageBrokerAdapter';
 import { MongooseConfig } from '@shared/config/MongooseConfig';
+import type { CacheClientPort } from '@eduflux-v2/shared/ports/cache/CacheClientPort';
+import { RedisCacheClientAdapter } from '@eduflux-v2/shared/adapters/cache/RedisCacheClientAdapter';
+import { RedisConfig } from '@shared/config/RedisConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -109,5 +112,15 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<UnitOfWork>(SharedCoreDITokens.UnitOfWork)
       .to(MongooseUnitOfWork);
+
+    //Redis Cache Client
+    options
+      .bind(SharedConfigDITokens.RedisConfig)
+      .toConstantValue(new RedisConfig());
+
+    options
+      .bind<CacheClientPort>(SharedInfrastructureDITokens.CacheClient)
+      .to(RedisCacheClientAdapter)
+      .inSingletonScope();
   },
 );

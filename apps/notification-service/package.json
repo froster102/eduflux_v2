@@ -22,7 +22,8 @@
     "uuid": "^13.0.0",
     "winston": "^3.17.0",
     "zod": "^4.1.9",
-    "amqplib": "^0.10.9"
+    "amqplib": "^0.10.9",
+    "ioredis": "^5.4.1"
   },
   "devDependencies": {
     "@types/nodemailer": "^7.0.2",

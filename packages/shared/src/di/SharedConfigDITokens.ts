@@ -18,4 +18,5 @@ export class SharedConfigDITokens {
   static readonly RabbitMQConnectionConfig: unique symbol = Symbol(
     'RabbitMQConnectionConfig',
   );
+  static readonly RedisConfig: unique symbol = Symbol('RedisConfig');
 }

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { addToast } from '@heroui/toast';
 
 import { useAuthStore } from '@/store/auth-store';
 
@@ -74,6 +75,19 @@ api.interceptors.response.use(
       } finally {
         isRefreshing = false;
       }
+    }
+
+    if (error.response?.status === 403) {
+      addToast({
+        description:
+          'Access denied. Your account may be blocked or restricted.',
+        color: 'danger',
+      });
+
+      useAuthStore.getState().signout();
+      window.location.replace('/auth/sign-in');
+
+      return Promise.reject(error);
     }
 
     return Promise.reject(error);

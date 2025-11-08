@@ -14,6 +14,7 @@ import { emailOTP, jwt, admin } from 'better-auth/plugins';
 import { getJwtToken } from 'better-auth/plugins';
 import { userService } from '@/grpc/grpcUserServiceAdapter';
 import { Role } from '@eduflux-v2/shared/constants/Role';
+import { cacheClient } from '@/lib/cache/cacheClient';
 
 export const auth = betterAuth({
   secret: betterAuthConfig.BETTER_AUTH_SECRET,
@@ -129,6 +130,12 @@ export const auth = betterAuth({
             path: '/',
           });
         }
+      }
+      if (ctx.path === '/admin/ban-user') {
+        await cacheClient.blockUser((ctx.body as { userId: string })?.userId);
+      }
+      if (ctx.path === '/admin/unban-user') {
+        await cacheClient.unblockUser((ctx.body as { userId: string })?.userId);
       }
     }),
   },

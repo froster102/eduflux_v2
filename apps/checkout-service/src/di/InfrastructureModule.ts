@@ -25,6 +25,9 @@ import { GrpcCourseServiceConfig } from '@shared/config/GrpcCourseServiceConfig'
 import { GrpcUserServiceConfig } from '@shared/config/GrpcUserServiceConfig';
 import { GrpcSessionServiceConfig } from '@shared/config/GrpcSessionServiceConfig';
 import { GrpcPaymentServiceConfig } from '@shared/config/GrpcPaymentServiceConfig';
+import type { CacheClientPort } from '@eduflux-v2/shared/ports/cache/CacheClientPort';
+import { RedisCacheClientAdapter } from '@eduflux-v2/shared/adapters/cache/RedisCacheClientAdapter';
+import { RedisConfig } from '@shared/config/RedisConfig';
 
 export const InfrastructureModule: ContainerModule = new ContainerModule(
   (options) => {
@@ -100,6 +103,16 @@ export const InfrastructureModule: ContainerModule = new ContainerModule(
     options
       .bind<PaymentServicePort>(SharedCoreDITokens.PaymentService)
       .to(GrpcPaymentServiceAdapter)
+      .inSingletonScope();
+
+    //Redis Cache Client
+    options
+      .bind(SharedConfigDITokens.RedisConfig)
+      .toConstantValue(new RedisConfig());
+
+    options
+      .bind<CacheClientPort>(SharedInfrastructureDITokens.CacheClient)
+      .to(RedisCacheClientAdapter)
       .inSingletonScope();
   },
 );
