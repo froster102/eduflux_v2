@@ -8,16 +8,20 @@
   "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./build.sh",
+    "build": "bun run ./build.ts",
     "dev": "tsx watch ./src/main.ts",
     "typecheck": "tsc --watch --noEmit",
     "start": "node ./build/src/main.js",
     "lint": "eslint ./src --ext .ts --fix"
   },
   "dependencies": {
+    "@eduflux-v2/shared": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "winston": "^3.17.0",
+    "inversify": "^7.0.0-alpha.5",
+    "reflect-metadata": "^0.2.2",
     "http-proxy-middleware": "^3.0.5",
     "http-status": "^2.1.0",
     "zod": "^4.1.12"

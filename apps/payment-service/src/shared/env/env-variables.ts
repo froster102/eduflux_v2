@@ -15,22 +15,6 @@ const envSchema = z.object({
     .min(1000)
     .max(65535, 'GRPC_SERVER_PORT must be between 1000 and 65535'),
 
-  GRPC_COURSE_SERVICE_URL: z.string({
-    error: 'GRPC_COURSE_SERVICE_URL is required ',
-  }),
-  GRPC_SESSION_SERVICE_URL: z.string({
-    error: 'GRPC_SESSION_SERVICE_URL is required ',
-  }),
-  SESSION_PAYMENT_SUCCESS_URL: z.string({
-    error: 'SESSION_PAYMENT_SUCCESS_URL is required.',
-  }),
-  COURSE_PAYMENT_SUCCESS_URL: z.string({
-    error: 'COURSE_PAYMENT_SUCCESS_URL is required.',
-  }),
-  PAYMENT_CANCEL_URL: z.string({
-    error: 'PAYMENT_CANCEL_URL is required.',
-  }),
-
   MONGO_URI: z.string({
     error: 'MONGO_URI must be a valid URL',
   }),
@@ -54,8 +38,12 @@ const envSchema = z.object({
   JWT_AUD: z.string({ error: 'JWT_AUD is required' }),
   JWKS_URL: z.string({ error: 'JWKS_URL must be a valid URL' }),
 
-  REDIS_HOST: z.string({ error: 'REDIS_HOST is required' }).default('localhost'),
-  REDIS_PORT: z.coerce.number({ error: 'REDIS_PORT is required' }).default(6379),
+  REDIS_HOST: z
+    .string({ error: 'REDIS_HOST is required' })
+    .default('localhost'),
+  REDIS_PORT: z.coerce
+    .number({ error: 'REDIS_PORT is required' })
+    .default(6379),
   REDIS_PASSWORD: z.string().optional(),
   REDIS_DB: z.coerce.number().optional().default(0),
   REDIS_TLS: z.string().optional(),

@@ -4,12 +4,14 @@
   "scripts": {
     "typecheck": "tsc --watch --noEmit",
     "dev": "bun --watch src/main.ts",
-    "build": "bun ./build.sh",
+    "build": "bun run ./build.ts",
     "start": "node ./build/src/main.js",
     "lint": "eslint ./src --ext .ts --fix"
   },
   "dependencies": {
+    "@eduflux-v2/shared": "workspace:*",
     "@grpc/grpc-js": "^1.13.4",
+    "@bufbuild/protobuf": "^2.6.0",
     "@grpc/proto-loader": "^0.7.15",
     "@hono/node-server": "^1.19.0",
     "amqplib": "^0.10.9",

@@ -10,7 +10,10 @@
   "dependencies": {
     "elysia": "latest",
     "cloudinary": "^2.6.1",
+    "@grpc/grpc-js": "^1.13.4",
     "http-status": "^2.1.0",
+    "inversify": "^7.0.0-alpha.5",
+    "reflect-metadata": "^0.2.2",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
     "zod": "^3.25.64",

@@ -10,6 +10,8 @@
     "proto:gen": "grpc_tools_node_protoc  --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto   --ts_proto_out=./src/api/grpc/generated  --ts_proto_opt=outputServices=grpc-js,snakeToCamel=true  --proto_path=./src/api/grpc/proto  ./src/api/grpc/proto/session.proto"
   },
   "dependencies": {
+    "@eduflux-v2/shared": "workspace:*",
+    "@bufbuild/protobuf": "^2.6.0",
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.7.15",
     "@internationalized/date": "^3.8.2",
