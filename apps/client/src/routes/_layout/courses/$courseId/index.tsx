@@ -1,0 +1,304 @@
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Skeleton } from '@heroui/skeleton';
+import { Card, CardBody, CardFooter, CardHeader } from '@heroui/card';
+import Dompurify from 'dompurify';
+import { Button } from '@heroui/button';
+import React from 'react';
+import { Avatar } from '@heroui/avatar';
+import { Image } from '@heroui/image';
+import { VideoIcon } from 'lucide-react';
+
+import CourseIcon from '@/components/icons/CourseIcon';
+import PlayIcon from '@/components/icons/PlayIcon';
+import PreviewLectureModal from '@/features/course/components/PreviewLectureModal';
+import { tryCatch } from '@/utils/try-catch';
+import { IMAGE_BASE_URL } from '@/config/image';
+import NoteIcon from '@/components/icons/NoteIcon';
+import MessageIcon from '@/components/icons/MessageIcon';
+import { useGetCourseInfo } from '@/features/course/hooks/useGetCourseInfo';
+import { useGetPublishedCourseCurriculum } from '@/features/course/hooks/useGetPublishedCourseCurriculum';
+import { useGetInstructorProfile } from '@/features/instructor/hooks/useGetInstructorProfile';
+import { useCheckout } from '@/features/payment/hooks/useCheckout';
+
+export const Route = createFileRoute('/_layout/courses/$courseId/')({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const { courseId } = Route.useParams();
+  const navigate = useNavigate();
+  const { data: courseInfo, isLoading: isCourseInfoLoading } =
+    useGetCourseInfo(courseId);
+  const { data: courseCurriculum, isLoading: isCourseCurriculumLoading } =
+    useGetPublishedCourseCurriculum(courseId);
+  const { data: instructor, isLoading: isInstructorProfileLoading } =
+    useGetInstructorProfile(courseInfo?.data?.instructor.id!);
+  const [openPreviewModal, setOpenPreviewModal] = React.useState(false);
+  const [selectedPreviewLecture, setSelectedPreviewLecture] =
+    React.useState<Lecture | null>(null);
+  const checkout = useCheckout();
+
+  const descriptionHtml = {
+    __html: Dompurify.sanitize(
+      (courseInfo?.data && courseInfo.data.description) as string,
+    ),
+  };
+
+  const curriculumItemsLength: {
+    totalChapters: number;
+    totalLectures: number;
+  } = React.useMemo(() => {
+    if (isCourseCurriculumLoading || !courseCurriculum) {
+      return { totalChapters: 0, totalLectures: 0 };
+    }
+
+    return courseCurriculum.data.reduce(
+      (acc, el) => {
+        if (el._class === 'chapter') {
+          acc.totalChapters++;
+        } else if (el._class === 'lecture') {
+          acc.totalLectures++;
+        }
+
+        return acc;
+      },
+      { totalChapters: 0, totalLectures: 0 },
+    );
+  }, [isCourseCurriculumLoading, courseCurriculum]);
+
+  const previewLectures: Lecture[] = React.useMemo(() => {
+    if (isCourseCurriculumLoading || !courseCurriculum) {
+      return [];
+    }
+
+    return courseCurriculum.data.filter(
+      (curriculum): curriculum is Lecture =>
+        curriculum._class === 'lecture' && !!curriculum.asset,
+    );
+  }, [isCourseCurriculumLoading, courseCurriculum]);
+
+  function handleLecturePreview(lecture: Lecture) {
+    setSelectedPreviewLecture(lecture);
+    setOpenPreviewModal(true);
+  }
+
+  async function handleCheckout() {
+    const { data: checkoutReponse } = await tryCatch(
+      checkout.mutateAsync({ item: { itemId: courseId, itemType: 'course' } }),
+    );
+
+    if (checkoutReponse) {
+      window.location.replace(checkoutReponse.data.checkoutUrl);
+    }
+  }
+
+  return (
+    <>
+      {isCourseInfoLoading ? (
+        <Skeleton className="h-[5vh] rounded-lg w-full">course info</Skeleton>
+      ) : (
+        <p className="text-2xl font-semibold pt-4">{courseInfo?.data?.title}</p>
+      )}
+      <div className="flex flex-col lg:flex-row gap-4 w-full pt-4">
+        <div className="flex flex-col gap-2 max-w-4xl">
+          <Card
+            className="w-full h-fit bg-background border border-default-200"
+            shadow="none"
+          >
+            <CardBody className="flex lg:flex-row w-full gap-4">
+              <div>
+                {' '}
+                <Image
+                  className="w-full object-cover"
+                  isLoading={isCourseInfoLoading}
+                  src={
+                    !isCourseInfoLoading
+                      ? `${IMAGE_BASE_URL}${courseInfo?.data?.thumbnail}`
+                      : ''
+                  }
+                  width="100%"
+                />
+              </div>
+              <div className="max-w-md w-full h-full flex flex-col justify-center">
+                <div>
+                  <p className="font-semibold pb-2">This course includes:</p>
+                  <ul className="flex flex-col gap-2 text-default-600">
+                    <li className="flex gap-2 items-center">
+                      <NoteIcon width={18} />
+                      {courseCurriculum?.data.length} Modules
+                    </li>
+                    <li className="flex gap-2 items-center">
+                      <VideoIcon width={18} />
+                      {curriculumItemsLength.totalLectures} Video lessons
+                    </li>
+                  </ul>
+                </div>
+                <div className="mt-auto w-fit">
+                  {courseInfo?.data && !courseInfo.data.isEnrolled ? (
+                    <p className="text-2xl font-semibold py-4">
+                      ${courseInfo.data?.price}
+                    </p>
+                  ) : null}
+                  <Button
+                    className="mt-2"
+                    color="primary"
+                    isLoading={
+                      isCourseInfoLoading ||
+                      checkout.isPending ||
+                      checkout.isPending
+                    }
+                    onPress={
+                      courseInfo?.data && courseInfo.data.isEnrolled
+                        ? () =>
+                            navigate({
+                              to: `/courses/${courseId}/learn`,
+                            })
+                        : handleCheckout
+                    }
+                  >
+                    {courseInfo?.data && courseInfo.data.isEnrolled
+                      ? 'Go to course'
+                      : 'Buy course now'}
+                  </Button>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+          {isCourseInfoLoading ? (
+            <Skeleton className="h-[30vh] rounded-lg w-full">
+              course info
+            </Skeleton>
+          ) : (
+            <div>
+              <p className="font-semibold text-xl pt-4">
+                What you&apos;ll learn in this course
+              </p>
+              <div dangerouslySetInnerHTML={descriptionHtml} className="pt-2" />
+            </div>
+          )}
+          <Card
+            className="bg-transparent flex flex-col gap-4 w-full"
+            shadow="none"
+          >
+            {isInstructorProfileLoading ? (
+              <Skeleton className="w-full h-[40vh] rounded-md">
+                Instructor Profile
+              </Skeleton>
+            ) : (
+              <Card className="w-full h-fit bg-background border border-default-200">
+                <CardHeader className="text-lg font-medium flex pb-0">
+                  <div>
+                    <p>Instructor</p>
+                    <div className="flex items-center gap-2 py-2">
+                      <Avatar
+                        isBordered
+                        radius="full"
+                        size="md"
+                        src={`${IMAGE_BASE_URL}${instructor?.data?.profile.image}`}
+                      />
+                      <p className="text-xl font-semibold">
+                        {instructor?.data?.profile.name}
+                      </p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardBody className="pt-0">
+                  <p className="text-sm">{instructor?.data?.profile?.bio}</p>
+                </CardBody>
+                <CardFooter className="pt-0">
+                  {courseInfo?.data && courseInfo.data.isEnrolled && (
+                    <Button startContent={<MessageIcon />} variant="bordered">
+                      Send a message to instructor
+                    </Button>
+                  )}
+                </CardFooter>
+              </Card>
+            )}
+          </Card>
+        </div>
+        {isCourseCurriculumLoading ? (
+          <Skeleton className="rounded-lg h-[50vh] w-full">
+            Course curriculum
+          </Skeleton>
+        ) : (
+          <div className="w-full">
+            <p className="text-xl font-semibold">Course Curriculum</p>
+            <Skeleton isLoaded={!isCourseCurriculumLoading}>
+              <div className="pt-2">
+                <Card
+                  className="bg-transparent border border-default-200"
+                  shadow="none"
+                >
+                  <CardBody>
+                    {courseCurriculum &&
+                      courseCurriculum.data.map((curriculum, index) => (
+                        <div
+                          key={curriculum.id}
+                          className={`capitalize py-2  ${curriculum._class === 'lecture' ? 'pl-8' : 'pl-4'}  ${curriculum._class === 'chapter' && index !== 0 ? 'border-t border-secondary-100 pt-4 mt-4' : ''} `}
+                        >
+                          {curriculum._class === 'chapter' ? (
+                            <p className="font-bold text-lg">
+                              {`${curriculum._class} ${curriculum.objectIndex}: ${curriculum.title}`}
+                            </p>
+                          ) : (
+                            <div className="flex items-center gap-3">
+                              <div className="flex items-center justify-center bg-primary text-black h-6 w-6 text-sm rounded-full flex-shrink-0">
+                                {curriculum.objectIndex}
+                              </div>
+                              <CourseIcon
+                                className="flex-shrink-0"
+                                width={14}
+                              />
+                              <p className="flex-grow">{curriculum.title}</p>
+                              {curriculum._class === 'lecture' &&
+                              curriculum.preview ? (
+                                <Button
+                                  className="bg-transparent flex text-xs items-center gap-2"
+                                  size="sm"
+                                  onPress={() =>
+                                    handleLecturePreview(curriculum)
+                                  }
+                                >
+                                  <span>
+                                    <PlayIcon width={12} />
+                                  </span>{' '}
+                                  Preview{' '}
+                                </Button>
+                              ) : null}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                  </CardBody>
+                </Card>
+              </div>
+            </Skeleton>
+          </div>
+        )}
+      </div>
+      {!isCourseInfoLoading && (
+        <PreviewLectureModal
+          isOpen={openPreviewModal}
+          lectures={previewLectures}
+          selectedLecture={selectedPreviewLecture}
+          onClose={() => {
+            setOpenPreviewModal(false);
+          }}
+        />
+      )}
+
+      {/* <PaymentModal
+        checkoutItem={enrollmentResponse!}
+        isCheckoutItemLoading={enrollForCourse.isPending}
+        isOpen={openPaymentModal}
+        paymentType={PaymentType.COURSE_PURCHASE}
+        onClose={() => {
+          setOpenPaymentModal(false);
+        }}
+        onPayment={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      /> */}
+    </>
+  );
+}

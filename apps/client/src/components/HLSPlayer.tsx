@@ -1,0 +1,66 @@
+import 'video.js/dist/video-js.css';
+import React from 'react';
+import videojs from 'video.js';
+import Player from 'video.js/dist/types/player';
+import 'video.js/dist/video-js.css';
+
+interface VideoJsPlayerProps {
+  options: {
+    sources: { src: string; type: string }[];
+    poster?: string;
+    loop?: boolean;
+    muted?: boolean;
+    autoplay?: boolean;
+    controls?: boolean;
+    responsive?: boolean;
+    fluid?: boolean;
+  };
+  onReady?: (player: Player) => void;
+}
+
+const HLSPlayer: React.FC<VideoJsPlayerProps> = ({ options, onReady }) => {
+  const videoRef = React.useRef<HTMLDivElement | null>(null);
+  const playerRef = React.useRef<Player | null>(null);
+
+  React.useEffect(() => {
+    if (!playerRef.current && videoRef.current) {
+      const videoElement = document.createElement('video-js');
+
+      videoElement.classList.add('vjs-big-play-centered');
+      videoElement.style.width = '100%';
+      videoRef.current.appendChild(videoElement);
+
+      const player = (playerRef.current = videojs(videoElement, options, () => {
+        videojs.log('player is ready');
+        onReady && onReady(player);
+      }));
+    } else {
+      const player = playerRef.current;
+
+      if (player) {
+        player.autoplay(options.autoplay);
+        player.src(options.sources);
+      }
+    }
+  }, [options, videoRef]);
+
+  React.useEffect(() => {
+    const player = playerRef.current;
+
+    return () => {
+      if (player && !player.isDisposed()) {
+        player.dispose();
+        playerRef.current = null;
+        // setIsPlayerReady(false);
+      }
+    };
+  }, []);
+
+  return (
+    <div data-vjs-player>
+      <div ref={videoRef} />
+    </div>
+  );
+};
+
+export default React.memo(HLSPlayer);

@@ -1,0 +1,23 @@
+{
+  "root": "apps/chat-service",
+  "sourceRoot": "apps/chat-service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "command": "cd apps/chat-service && bun run build"
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "command": "cd apps/chat-service && bun run dev"
+      }
+    }
+  }
+}
