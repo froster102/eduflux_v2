@@ -1,0 +1,3 @@
+export const PAYMENTS_TOPIC = 'PAYMENTS_TOPIC';
+export const SESSION_TOPIC = 'SESSION_TOPIC';
+export const USERS_TOPIC = 'USERS_TOPIC';

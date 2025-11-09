@@ -1,0 +1,14 @@
+import { useQuery } from '@tanstack/react-query';
+
+import { useAuthStore } from '@/store/auth-store';
+
+import { getUserProfile } from '../../service/profile';
+
+export function useGetUserProfile() {
+  const { user } = useAuthStore();
+
+  return useQuery({
+    queryKey: [`user-${user!.id}-profile`],
+    queryFn: getUserProfile,
+  });
+}

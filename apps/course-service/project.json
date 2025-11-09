@@ -1,0 +1,24 @@
+{
+  "root": "apps/course-service",
+  "sourceRoot": "apps/course-service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "command": "cd apps/course-service && bun run build",
+        "outputPath": "apps/course-service/build"
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "command": "cd apps/course-service && bun run dev"
+      }
+    }
+  }
+}

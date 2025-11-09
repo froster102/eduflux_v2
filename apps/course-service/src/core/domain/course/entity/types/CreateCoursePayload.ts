@@ -1,0 +1,11 @@
+export interface Instructor {
+  readonly id: string;
+  readonly name: string;
+}
+
+export interface CreateCoursePayload {
+  title: string;
+  categoryId: string;
+  slug: string;
+  instructor: Instructor;
+}

@@ -1,0 +1,21 @@
+declare global {
+  type ClassType = 'chapter' | 'lecture' | 'asset';
+
+  type UserProfile = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    image: string;
+    bio: string;
+    socialLinks: SocialLinks[];
+    createdAt: string;
+    updatedAt: string;
+  };
+
+  type SocialLinks = {
+    platform: string;
+    url: string;
+  };
+}
+
+export {};

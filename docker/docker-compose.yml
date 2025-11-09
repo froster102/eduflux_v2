@@ -1,0 +1,78 @@
+name: eduflux
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:4.1.4-management
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    ports:
+      - 15672:15672
+      - 5672:5672
+    restart: on-failure
+
+  eduflux_auth_db:
+    container_name: eduflux_auth_db
+    image: postgres:17
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespass
+      - POSTGRES_DB=eduflux_auth_db
+    ports:
+      - 5432:5432
+    networks:
+      - eduflux-network
+    volumes:
+      - authdb_data:/var/lib/postgresql/data
+
+  eduflux_db:
+    container_name: eduflux_db
+    image: mongo:8.0
+    volumes:
+      - eduflux_db_data:/data/db
+    ports:
+      - "27017:27017"
+    command: [ "--replSet", "rs0" ]
+    networks:
+      - eduflux-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  mongo-init:
+    image: mongo:8.0
+    restart: "no"
+    depends_on:
+      eduflux_db:
+        condition: service_healthy
+    command: >
+      mongosh --host eduflux_db:27017 --eval ' rs.initiate( {
+         _id : "rs0",
+         members: [
+            { _id: 0, host: "localhost:27017" }
+         ]
+      }) '
+
+  redis:
+    container_name: redis
+    image: redis:8.0-M04-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - eduflux-network
+
+volumes:
+  authdb_data:
+  eduflux_db_data:
+  eduflux_auth_db_data:
+  redis_data:
+
+
+networks:
+  eduflux-network:
+    driver: bridge
